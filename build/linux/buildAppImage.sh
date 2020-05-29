@@ -5,7 +5,7 @@ apt-get update; apt-get -y install python3-pip
 pip3 install --upgrade --user pip setuptools virtualenv
 python3 -m virtualenv /tmp/kivy_venv
 
-curl -o /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
+wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
 chmod +x /tmp/python3.7.AppImage
 /tmp/python3.7.AppImage --appimage-extract
 mv squashfs-root /tmp/kivy_extracted
@@ -25,7 +25,7 @@ from kivy.uix.label import Label
 class MyApp(App):
 
   def build(self):
-    return Label(text='Hello world -BusKill')
+    return Label(text='Hello world!')
 
 
 if __name__ == '__main__':
@@ -79,7 +79,7 @@ EOF
 chmod +x /tmp/kivy_extracted/AppRun
 
 # create the AppImage from kivy AppDir
-curl -o /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
+wget -O /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
 chmod +x /tmp/appimagetool.AppImage
 /tmp/appimagetool.AppImage /tmp/kivy_extracted
 
