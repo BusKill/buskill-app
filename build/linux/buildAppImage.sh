@@ -3,10 +3,6 @@
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
 
-# this is gonna fail
-lsmod
-modprobe fuse
-
 pip3 install --upgrade --user pip setuptools virtualenv
 python3 -m virtualenv /tmp/kivy_venv
 
