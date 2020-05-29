@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# get info
+pwd
+ls -lah
+ls -lah /builds/
+
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
 
