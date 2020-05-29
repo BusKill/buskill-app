@@ -5,7 +5,7 @@ linux:
   script: "build/linux/buildAppImage.sh"
   artifacts:
     paths:
-    - /builds/
+    - dist/
   only:
   - master
 

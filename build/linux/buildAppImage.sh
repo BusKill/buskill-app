@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# get info
-pwd
-ls -lah
-ls -lah /builds/
-ls -lah /builds/maltfield
-ls -lah /builds/maltfield/cross-platform-python-gui
-
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
 
@@ -91,3 +84,10 @@ wget -O /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/relea
 chmod +x /tmp/appimagetool.AppImage
 /tmp/appimagetool.AppImage /tmp/kivy_extracted
 
+# create the dist dir for our result to be uploaded as an artifact
+# note tha gitlab will only accept artifacts that are in the build dir (cwd)
+mkdir dist
+
+# TODO fix our hack of an AppImage to actually have our name in it, then update
+#      this to that one file
+cp /tmp/*.AppImage dist/
