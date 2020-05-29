@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install depends
-apt-get update; apt-get -y install python3-pip wget
+apt-get update; apt-get -y install python3-pip wget rsync
 pip3 install --upgrade --user pip setuptools virtualenv
 python3 -m virtualenv /tmp/kivy_venv
 
