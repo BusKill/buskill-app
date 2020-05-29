@@ -6,6 +6,9 @@ apt-get update; apt-get -y install python3-pip wget rsync fuse
 pip3 install --upgrade --user pip setuptools virtualenv
 python3 -m virtualenv /tmp/kivy_venv
 
+python3 -m virtualenv /tmp/kivy_venv
+source /tmp/kivy_venv/bin/activate; python3 -m pip install kivy
+
 wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
 chmod +x /tmp/python3.7.AppImage
 /tmp/python3.7.AppImage --appimage-extract
@@ -82,12 +85,9 @@ chmod +x /tmp/kivy_extracted/AppRun
 # create the AppImage from kivy AppDir
 wget -O /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
 chmod +x /tmp/appimagetool.AppImage
-/tmp/appimagetool.AppImage /tmp/kivy_extracted
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-
-# TODO fix our hack of an AppImage to actually have our name in it, then update
-#      this to that one file
-cp /tmp/*.AppImage dist/
+pushd dist
+/tmp/appimagetool.AppImage /tmp/kivy_extracted
