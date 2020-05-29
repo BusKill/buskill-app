@@ -1,4 +1,4 @@
-#image: debian:buster-slim
+image: debian:buster-slim
 
 linux:
   stage: build
