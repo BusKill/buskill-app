@@ -4,6 +4,8 @@
 pwd
 ls -lah
 ls -lah /builds/
+ls -lah /builds/maltfield
+ls -lah /builds/maltfield/cross-platform-python-gui
 
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
