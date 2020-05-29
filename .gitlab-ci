@@ -1,0 +1,16 @@
+image: debian:buster-slim
+
+linux:
+  stage: build
+  script:
+  - sudo apt-get update; sudo apt-get install python3-pip
+  - pip3 install --upgrade --user pip setuptools virtualenv
+  - python3 -m virtualenv /tmp/kivy_venv
+  artifacts:
+    paths:
+    - /tmp/kivy_venv
+  only:
+  - master
+
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
