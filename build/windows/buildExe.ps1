@@ -35,13 +35,14 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 k
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy | Out-String
 
 Write-Output 'INFO: Prepare our exe'
-#C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller
-#New-Item -Path dist -Type Directory
-#cd dist
-#C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller
+New-Item -Path dist -Type Directory
+cd dist
 
 # First let's confirm that we can get the example in the docs to work
 #  * https://kivy.org/doc/stable/guide/packaging-windows.html
+#C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
+
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy_examples | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name touchtracer C:\tmp\kivy_venv\share\kivy-examples\demo\touchtracer\main.py | Out-String
 
