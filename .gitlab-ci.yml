@@ -10,10 +10,10 @@
 
 windows:
   stage: build
-  script: "build\windows\buildExe.ps1"
-  artifacts:
-    paths:
-    - dist\
+  script: "build/windows/buildExe.ps1"
+#  artifacts:
+#    paths:
+#    - dist\
   tags:
     - shared-windows
     - windows
