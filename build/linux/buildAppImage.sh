@@ -10,16 +10,14 @@
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-05-30
-# Version: 0.1
+# Updated: 2020-05-31
+# Version: 0.2
 ################################################################################
 
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
 
 pip3 install --upgrade --user pip setuptools virtualenv
-python3 -m virtualenv /tmp/kivy_venv
-
 python3 -m virtualenv /tmp/kivy_venv
 source /tmp/kivy_venv/bin/activate; python3 -m pip install kivy
 
