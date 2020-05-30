@@ -1,12 +1,12 @@
-Write-Host "listing contents of C drive root"
+Write-Output "listing contents of C drive root"
 Get-ChildItem -Path C:\ -Force
 
-Write-Host "listing contents of cwd"
+Write-Output "listing contents of cwd"
 Get-ChildItem -Force
 
-Write-Host 'INFO: Beginning execution'
+Write-Output 'INFO: Beginning execution'
 
-Write-Host 'INFO: First check if GCP already has python?'
+Write-Output 'INFO: First check if GCP already has python?'
 python --version
 python.exe --version
 
@@ -14,25 +14,25 @@ python.exe --version
 #curl -OutFile python3.7.zip https://www.python.org/ftp/python/3.7.7/python-3.7.7-embed-amd64.zip
 #Expand-Archive .\python3.7.zip
 
-Write-Host 'INFO: Downloading python3.7'
+Write-Output 'INFO: Downloading python3.7'
 curl -OutFile python3.7.exe https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe
 
-Write-Host 'INFO: Installing python'
+Write-Output 'INFO: Installing python'
 New-Item -Path C:\tmp -Type Directory
 New-Item -Path C:\tmp\python -Type Directory
 .\python3.7.exe /passive TargetDir=C:\tmp\python IncludePip=1
 
-Write-Host 'INFO: Installing pip, setuptools, and virtualenv'
+Write-Output 'INFO: Installing pip, setuptools, and virtualenv'
 C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv
 
-Write-Host 'INFO: Installing kivy'
+Write-Output 'INFO: Installing kivy'
 New-Item -Path C:\tmp\kivy_venv -Type Directory
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv
 C:\tmp\kivy_venv\Scripts\activate.ps1
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy
 
-Write-Host 'INFO: Prepare our exe'
+Write-Output 'INFO: Prepare our exe'
 #C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller
 #New-Item -Path dist -Type Directory
 #cd dist
