@@ -46,11 +46,11 @@ Write-Output 'INFO: Installing kivy'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv | Out-String
 C:\tmp\kivy_venv\Scripts\activate.ps1 | Out-String
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade docutils pygments pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy | Out-String
 
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==3.5 | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller==3.5 | Out-String
 New-Item -Path dist -Type Directory | Out-String
 cd dist | Out-String
 
@@ -58,7 +58,7 @@ cd dist | Out-String
 #  * https://kivy.org/doc/stable/guide/packaging-windows.html
 #C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
 
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy_examples | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy_examples | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name touchtracer C:\tmp\kivy_venv\share\kivy-examples\demo\touchtracer\main.py | Out-String
 
 # replace spec file
@@ -73,7 +73,8 @@ a = Analysis(['C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\main
              pathex=['C:\\Users\\user\\Documents\\build-exaple'],
              binaries=[],
              datas=[],
-             hiddenimports=['pkg_resources.py2_warn'],
+             #hiddenimports=['pkg_resources.py2_warn'],
+             hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
