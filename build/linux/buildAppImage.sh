@@ -24,13 +24,13 @@ source /tmp/kivy_venv/bin/activate; python3 -m pip install kivy
 wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
 chmod +x /tmp/python3.7.AppImage
 /tmp/python3.7.AppImage --appimage-extract
-mv squashfs-root /tmp/kivy_extracted
+mv squashfs-root /tmp/kivy_appdir
 
 # copy depends that were installed with kivy into our kivy AppDir
-rsync -a /tmp/kivy_venv/ /tmp/kivy_extracted/opt/python3.7
+rsync -a /tmp/kivy_venv/ /tmp/kivy_appdir/opt/python3.7
 
 # add our code to the AppDir
-cat > /tmp/kivy_extracted/opt/main.py <<'EOF'
+cat > /tmp/kivy_appdir/opt/main.py <<'EOF'
 import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
 
@@ -49,8 +49,8 @@ if __name__ == '__main__':
 EOF
 
 # change AppRun so it executes our app
-mv /tmp/kivy_extracted/AppRun /tmp/kivy_extracted/AppRun.orig
-cat > /tmp/kivy_extracted/AppRun <<'EOF'
+mv /tmp/kivy_appdir/AppRun /tmp/kivy_extracted/AppRun.orig
+cat > /tmp/kivy_appdir/AppRun <<'EOF'
 #! /bin/bash
 
 # Export APPRUN if running from an extracted image
@@ -92,7 +92,7 @@ exit "$?"
 EOF
 
 # make it executable
-chmod +x /tmp/kivy_extracted/AppRun
+chmod +x /tmp/kivy_appdir/AppRun
 
 # create the AppImage from kivy AppDir
 wget -O /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
@@ -101,4 +101,4 @@ chmod +x /tmp/appimagetool.AppImage
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-/tmp/appimagetool.AppImage /tmp/kivy_extracted dist/helloWorld.AppImage
+/tmp/appimagetool.AppImage /tmp/kivy_appdir dist/helloWorld.AppImage
