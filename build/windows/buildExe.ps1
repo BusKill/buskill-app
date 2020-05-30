@@ -95,3 +95,6 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 
 # build it from the spec file
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
+
+# attempt to execute it?
+.\dist\touchtracer\touchtracer.exe
