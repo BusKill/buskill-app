@@ -70,7 +70,7 @@ if __name__ == '__main__':
 EOF
 
 # change AppRun so it executes our app
-mv /tmp/kivy_appdir/AppRun /tmp/kivy_extracted/AppRun.orig
+mv /tmp/kivy_appdir/AppRun /tmp/kivy_appdir/AppRun.orig
 cat > /tmp/kivy_appdir/AppRun <<'EOF'
 #! /bin/bash
 
