@@ -50,7 +50,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 k
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy | Out-String
 
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==1.35 | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==3.5 | Out-String
 New-Item -Path dist -Type Directory | Out-String
 cd dist | Out-String
 
