@@ -19,7 +19,7 @@ apt-get update; apt-get -y install python3-pip wget rsync fuse
 
 pip3 install --upgrade --user pip setuptools virtualenv
 python3 -m virtualenv /tmp/kivy_venv
-source /tmp/kivy_venv/bin/activate; python3 -m pip install kivy
+source /tmp/kivy_venv/bin/activate; python3 -m pip install -r requirements.txt
 
 wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
 chmod +x /tmp/python3.7.AppImage
