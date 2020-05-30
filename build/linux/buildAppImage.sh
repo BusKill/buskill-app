@@ -52,23 +52,7 @@ mv squashfs-root /tmp/kivy_appdir
 rsync -a /tmp/kivy_venv/ /tmp/kivy_appdir/opt/python3.7/
 
 # add our code to the AppDir
-cat > /tmp/kivy_appdir/opt/main.py <<'EOF'
-import kivy
-#kivy.require('1.0.6') # replace with your current kivy version !
-
-from kivy.app import App
-from kivy.uix.label import Label
-
-
-class MyApp(App):
-
-  def build(self):
-    return Label(text='Hello world!')
-
-
-if __name__ == '__main__':
-  MyApp().run()
-EOF
+rsync -a src /tmp/kivy_appdir/opt/
 
 # change AppRun so it executes our app
 mv /tmp/kivy_appdir/AppRun /tmp/kivy_appdir/AppRun.orig
@@ -92,14 +76,14 @@ do
     if [[ "${opt}" =~ "I" ]] || [[ "${opt}" =~ "E" ]]; then
         # Environment variables are disabled ($PYTHONHOME). Let's run in a safe
         # mode from the raw Python binary inside the AppImage
-        "$APPDIR/opt/python3.7/bin/python3.7 $APPDIR/opt/main.py" "$@"
+        "$APPDIR/opt/python3.7/bin/python3.7 $APPDIR/opt/src/main.py" "$@"
         exit "$?"
     fi
 done
 
 # Get the executable name, i.e. the AppImage or the python binary if running from an
 # extracted image
-executable="${APPDIR}/opt/python3.7/bin/python3.7 ${APPDIR}/opt/main.py"
+executable="${APPDIR}/opt/python3.7/bin/python3.7 ${APPDIR}/opt/src/main.py"
 if [[ "${ARGV0}" =~ "/" ]]; then
     executable="$(cd $(dirname ${ARGV0}) && pwd)/$(basename ${ARGV0})"
 elif [[ "${ARGV0}" != "" ]]; then
@@ -109,7 +93,7 @@ fi
 # Wrap the call to Python in order to mimic a call from the source
 # executable ($ARGV0), but potentially located outside of the Python
 # install ($PYTHONHOME)
-(PYTHONHOME="${APPDIR}/opt/python3.7" exec -a "${executable}" "$APPDIR/opt/python3.7/bin/python3.7" "$APPDIR/opt/main.py" "$@")
+(PYTHONHOME="${APPDIR}/opt/python3.7" exec -a "${executable}" "$APPDIR/opt/python3.7/bin/python3.7" "$APPDIR/opt/src/main.py" "$@")
 exit "$?"
 EOF
 
