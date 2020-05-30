@@ -1,6 +1,6 @@
-image: debian:buster-slim
 
 linux:
+  image: debian:buster-slim
   stage: build
   script: "build/linux/buildAppImage.sh"
   artifacts:
