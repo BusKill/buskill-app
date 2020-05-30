@@ -1,3 +1,5 @@
+Set-PSDebug -Trace 1
+
 Write-Output "listing contents of C drive root"
 Get-ChildItem -Path C:\ -Force
 
