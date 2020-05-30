@@ -11,7 +11,7 @@ It includes the CI pipeline to automatically build self-contained executables fo
 1. Fork this repo
 2. Edit [src/main.py](/src/main.py) as needed
 3. Add any required python modules to [requirements.txt](/requirements.txt)
-4. Go to Settings -> CI/CD and make sure that you have defined a a "General pipeline." The default settings should be fine.
+4. Go to Settings -> CI/CD and make sure that you have defined a "General pipeline." The default settings should be fine.
 
 When you push the above changes to master, gitlab will automatically spin up containers in GCP and build your application's executables for all target platforms.
 
