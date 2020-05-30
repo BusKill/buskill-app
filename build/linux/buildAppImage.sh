@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 ################################################################################
 # File:    linux/buildAppImage.sh
 # Purpose: Builds a self-contained AppImage executable for a simple Hello World
