@@ -1,4 +1,18 @@
 #!/bin/bash
+################################################################################
+# File:    linux/buildAppImage.sh
+# Purpose: Builds a self-contained AppImage executable for a simple Hello World
+#          GUI app using kivy. See also:
+#
+#          * https://kivy.org/doc/stable/installation/installation-linux.html
+#          * https://kivy.org/doc/stable/guide/basic.html
+#          * https://github.com/AppImage/AppImageKit/wiki/Bundling-Python-apps
+#
+# Authors: Michael Altfield <michael@buskill.in>
+# Created: 2020-05-30
+# Updated: 2020-05-30
+# Version: 0.1
+################################################################################
 
 # install depends
 apt-get update; apt-get -y install python3-pip wget rsync fuse
