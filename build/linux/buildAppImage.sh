@@ -33,7 +33,7 @@ ${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
 
 # install kivy and all other python dependencies with pip into our virtual env
 # we'll later add these to our AppDir for building the AppImage
-source /tmp/kivy_venv/bin/activate; ${PYTHON_PATH} -m pip install -r requirements.txt
+source /tmp/kivy_venv/bin/activate; python -m pip install -r requirements.txt
 
 ##################
 # PREPARE APPDIR #
@@ -48,7 +48,7 @@ chmod +x /tmp/python3.7.AppImage
 mv squashfs-root /tmp/kivy_appdir
 
 # copy depends that were installed with kivy into our kivy AppDir
-rsync -a /tmp/kivy_venv/ /tmp/kivy_appdir/opt/python3.7
+rsync -a /tmp/kivy_venv/ /tmp/kivy_appdir/opt/python3.7/
 
 # add our code to the AppDir
 cat > /tmp/kivy_appdir/opt/main.py <<'EOF'
