@@ -8,9 +8,13 @@ Get-ChildItem -Force | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
-Write-Output 'INFO: First check if GCP already has python?'
-python --version | Out-String
-python.exe --version | Out-String
+Write-Output 'INFO: Inspect gitlab's python version'
+Get-ChildItem -Path C:\Users\gitlab_runner -Force | Out-String
+Get-ChildItem -Path C:\Users\gitlab_runner\AppData -Force | Out-String
+Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming -Force | Out-String
+Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python -Force | Out-String
+Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37 -Force | Out-String
+Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37\Scripts -Force | Out-String
 
 # it looks like we can't use the smaller embeddable zip file as it lacks pip
 #curl -OutFile python3.7.zip https://www.python.org/ftp/python/3.7.7/python-3.7.7-embed-amd64.zip
