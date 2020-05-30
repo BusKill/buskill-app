@@ -29,7 +29,7 @@ New-Item -Path C:\tmp\python -Type Directory | Out-String
 .\python3.7.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
 
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
-C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv | Out-String
+C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools<45.0.0 virtualenv | Out-String
 
 Write-Output 'INFO: Installing kivy'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
@@ -39,7 +39,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 k
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy | Out-String
 
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==1.35
 New-Item -Path dist -Type Directory
 cd dist
 
@@ -97,4 +97,4 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
 
 # attempt to execute it?
-.\dist\touchtracer\touchtracer.exe
+.\dist\touchtracer\touchtracer.exe | Out-String
