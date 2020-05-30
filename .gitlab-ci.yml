@@ -1,11 +1,25 @@
+#linux:
+#  image: debian:buster-slim
+#  stage: build
+#  script: "build/linux/buildAppImage.sh"
+#  artifacts:
+#    paths:
+#    - dist/
+#  only:
+#  - master
 
-linux:
-  image: debian:buster-slim
+windows:
   stage: build
-  script: "build/linux/buildAppImage.sh"
+  script: "build\windows\buildExe.ps1"
   artifacts:
     paths:
-    - dist/
+    - dist\
+  tags:
+    - shared-windows
+    - windows
+    - windows-1809
+  variables:
+    msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
   only:
   - master
 
