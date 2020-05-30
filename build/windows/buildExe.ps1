@@ -1,5 +1,16 @@
 Set-PSDebug -Trace 1
 
+######################################
+#### A Note about ' | Out-String' ####
+######################################
+# Straingely, when PowerShell calls any '.exe', it appears to have an implicit
+# amp-off effect where that .exe is executed in the background and the next
+# command is initiated without waiting. This creates tons of undeterministic
+# and undesired behaviour. The fix is a hack: just append ' | Out-String' to the
+# end of an .exe call, and it will prevent it from running in the backgound,
+# delaying the subsequent line from running until the current line finishes
+######################################
+
 Write-Output "listing contents of C drive root"
 Get-ChildItem -Path C:\ -Force | Out-String
 
@@ -39,9 +50,9 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install docutils pygments pypiwin32 k
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install kivy | Out-String
 
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==1.35
-New-Item -Path dist -Type Directory
-cd dist
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install pyinstaller==1.35 | Out-String
+New-Item -Path dist -Type Directory | Out-String
+cd dist | Out-String
 
 # First let's confirm that we can get the example in the docs to work
 #  * https://kivy.org/doc/stable/guide/packaging-windows.html
