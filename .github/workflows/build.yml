@@ -31,7 +31,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Execute script to build linux AppImage
+    - name: Execute script to .exe in Windows
       run: "build/windows/buildExe.ps1"
       shell: powershell
 

@@ -33,14 +33,6 @@ Get-ChildItem -Force | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
-Write-Output "INFO: Inspect gitlab's python version"
-Get-ChildItem -Path C:\Users\gitlab_runner -Force | Out-String
-Get-ChildItem -Path C:\Users\gitlab_runner\AppData -Force | Out-String
-Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming -Force | Out-String
-Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python -Force | Out-String
-Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37 -Force | Out-String
-Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37\Scripts -Force | Out-String
-
 ###################
 # INSTALL DEPENDS #
 ###################
