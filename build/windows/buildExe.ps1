@@ -54,10 +54,58 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller==3.5 | 
 New-Item -Path dist -Type Directory | Out-String
 cd dist | Out-String
 
-# First let's confirm that we can get the example in the docs to work
-#  * https://kivy.org/doc/stable/guide/packaging-windows.html
-#C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
+C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
 
+# replace spec file
+mv touchtracer.spec touchtracer.orig | Out-String
+echo "# -*- mode: python ; coding: utf-8 -*-
+from kivy_deps import angle, glew, sdl2
+#from kivy.tools.packaging.pyinstaller_hooks import get_deps_minimal, get_deps_all, hookspath, runtime_hooks
+
+block_cipher = None
+
+
+a = Analysis(['..\\src\\main.py'],
+             pathex=['C:\\Users\\user\\Documents\\build\\dist'],
+             binaries=[],
+             datas=[],
+             hiddenimports=['pkg_resources.py2_warn', 'kivy', 'kivy.core.image'],
+             hookspath=[],
+             #hookspath=hookspath(),
+             runtime_hooks=[],
+             #runtime_hooks=runtime_hooks(),
+             excludes=['main.py'],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+             #noarchive=False,
+             #**get_deps_minimal( video=None, audio=None, image=None ))
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+exe = EXE(pyz,
+          a.scripts,
+          [],
+          exclude_binaries=True,
+          name='helloWorld',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          console=True )
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               *[Tree(p) for p in (glew.dep_bins + angle.dep_bins + sdl2.dep_bins)],
+               strip=False,
+               upx=True,
+               upx_exclude=[],
+               name='helloWorld')
+" | tee helloWorld.spec
+
+# Let's also confirm that we can get the example in the docs to work
+#  * https://kivy.org/doc/stable/guide/packaging-windows.html
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy_examples | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name touchtracer C:\tmp\kivy_venv\share\kivy-examples\demo\touchtracer\main.py | Out-String
 
@@ -106,9 +154,11 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 
 # build it from the spec file
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
 
 # attempt to execute it?
 .\dist\touchtracer\touchtracer.exe | Out-String
+.\dist\helloWorld\helloWorld.exe | Out-String
 
 Write-Output 'INFO: Python versions info'
 # before exiting, output the versions of software installed
