@@ -199,16 +199,19 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spe
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
 
 # attempt to execute it?
-.\pyinstaller\touchtracer\touchtracer.exe | Out-String
-.\pyinstaller\helloWorld\helloWorld.exe | Out-String
+.\dist\touchtracer\touchtracer.exe | Out-String
+.\dist\helloWorld\helloWorld.exe | Out-String
 
 #####################
 # PREPARE ARTIFACTS #
 #####################
 
+# return to the root of our build dir
+cd .. | Out-String
+
 New-Item -Path dist -Type Directory | Out-String
-cp .\pyinstaller\touchtracer\touchtracer.exe dist/touchtracer-x86_64.exe | Out-String
-cp .\pyinstaller\helloWorld\helloWorld.exe dist/helloWorld-x86_64.exe | Out-String
+cp .\pyinstaller\dist\touchtracer\touchtracer.exe dist/touchtracer-x86_64.exe | Out-String
+cp .\pyinstaller\dist\helloWorld\helloWorld.exe dist/helloWorld-x86_64.exe | Out-String
 
 #######################
 # OUTPUT VERSION INFO #
