@@ -21,6 +21,10 @@ set -x
 
 PYTHON_PATH='/usr/bin/python3.7'
 
+# CHECKOUT (TODO: maybe remove?)
+git clone https://github.com/maltfield/cross-platform-python-gui.git
+pushd cross-platform-python-gui
+
 ###################
 # INSTALL DEPENDS #
 ###################
