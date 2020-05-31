@@ -154,6 +154,17 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
                name='touchtracer')
 " | tee touchtracer.spec
 
+# PyInstaller in windows chokes on null bytes added to .spec files; remove them
+# to prevent "ValueError: source code string cannot contain null bytes"
+(Get-Content .\helloWorld.spec) -replace "`0", "" | Set-Content .\helloWorld.spec
+(Get-Content .\touchtracer.spec) -replace "`0", "" | Set-Content .\touchtracer.spec
+
+# VMs need to use angle, and apparently PyInstaller doesn't see the os.environ
+# call in the code itself, so we have to set it in PowerShell directly. This
+# fixes the error:
+#   "[CRITICAL] [App         ] Unable to get any Image provider, abort.
+$env:KIVY_GL_BACKEND="angle_sdl2
+
 # build it from the spec file
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
