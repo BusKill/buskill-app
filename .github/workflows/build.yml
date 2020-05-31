@@ -29,7 +29,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: docker://debian:buster-slim
     - uses: actions/checkout@v2
 
     - name: Execute script to build linux AppImage
