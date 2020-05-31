@@ -76,8 +76,8 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt
 
 Write-Output 'INFO: Prepare our exe'
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller==3.5 | Out-String
-New-Item -Path dist -Type Directory | Out-String
-cd dist | Out-String
+New-Item -Path pyinstaller -Type Directory | Out-String
+cd pyinstaller | Out-String
 
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
 
@@ -91,8 +91,8 @@ block_cipher = None
 
 
 a = Analysis(['..\\src\\main.py'],
-             #pathex=['C:\\Users\\user\\Documents\\build\\dist'],
-             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\dist'],
+             #pathex=['C:\\Users\\user\\Documents\\build\\pyinstaller'],
+             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\pyinstaller'],
              binaries=[],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn', 'kivy', 'kivy.core.image'],
@@ -145,7 +145,7 @@ block_cipher = None
 
 a = Analysis(['C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\main.py'],
              #pathex=['C:\\Users\\user\\Documents\\build-exaple'],
-             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\dist'],
+             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\pyinstaller'],
              binaries=[],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn'],
@@ -199,8 +199,16 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spe
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
 
 # attempt to execute it?
-.\dist\touchtracer\touchtracer.exe | Out-String
-.\dist\helloWorld\helloWorld.exe | Out-String
+.\pyinstaller\touchtracer\touchtracer.exe | Out-String
+.\pyinstaller\helloWorld\helloWorld.exe | Out-String
+
+#####################
+# PREPARE ARTIFACTS #
+#####################
+
+New-Item -Path dist -Type Directory | Out-String
+cp .\pyinstaller\touchtracer\touchtracer.exe dist/touchtracer-x86_64.exe | Out-String
+cp .\pyinstaller\helloWorld\helloWorld.exe dist/helloWorld-x86_64.exe | Out-String
 
 #######################
 # OUTPUT VERSION INFO #
