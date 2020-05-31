@@ -26,18 +26,18 @@ jobs:
         name: Linux AppImage (x86_64)
         path: dist/
 
-  windows:
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Execute script to .exe in Windows
-      run: "build/windows/buildExe.ps1"
-      shell: powershell -Command "& '{0}'"
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Windows executable (x86_64)
-        path: dist/
+#  windows:
+#    runs-on: windows-latest
+#
+#    steps:
+#    - uses: actions/checkout@v2
+#
+#    - name: Execute script to .exe in Windows
+#      run: "build/windows/buildExe.ps1"
+#      shell: powershell -Command "& '{0}'"
+#
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: Windows executable (x86_64)
+#        path: dist/
 
