@@ -8,20 +8,20 @@ linux:
   only:
   - master
 
-windows:
-  stage: build
-  script: "build/windows/buildExe.ps1"
-  artifacts:
-    paths:
-    - dist
-  tags:
-    - shared-windows
-    - windows
-    - windows-1809
-  variables:
-    msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
-  only:
-  - master
+#windows:
+#  stage: build
+#  script: "build/windows/buildExe.ps1"
+#  artifacts:
+#    paths:
+#    - dist
+#  tags:
+#    - shared-windows
+#    - windows
+#    - windows-1809
+#  variables:
+#    msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
+#  only:
+#  - master
 
 variables:
   GIT_SUBMODULE_STRATEGY: normal
