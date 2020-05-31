@@ -66,7 +66,8 @@ block_cipher = None
 
 
 a = Analysis(['..\\src\\main.py'],
-             pathex=['C:\\Users\\user\\Documents\\build\\dist'],
+             #pathex=['C:\\Users\\user\\Documents\\build\\dist'],
+             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\dist'],
              binaries=[],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn', 'kivy', 'kivy.core.image'],
@@ -118,7 +119,8 @@ block_cipher = None
 
 
 a = Analysis(['C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\main.py'],
-             pathex=['C:\\Users\\user\\Documents\\build-exaple'],
+             #pathex=['C:\\Users\\user\\Documents\\build-exaple'],
+             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\dist'],
              binaries=[],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn'],
