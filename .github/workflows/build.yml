@@ -43,7 +43,7 @@ jobs:
 
     - name: Execute script to .exe in Windows
       run: "build/windows/buildExe.ps1"
-      shell: powershell
+      shell: powershell -Command "& '{0}'"
 
     - uses: actions/upload-artifact@v2
       with:
