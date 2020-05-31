@@ -210,8 +210,8 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp .\pyinstaller\dist\touchtracer\touchtracer.exe dist/touchtracer-x86_64.exe | Out-String
-cp .\pyinstaller\dist\helloWorld\helloWorld.exe dist/helloWorld-x86_64.exe | Out-String
+cp -r .\pyinstaller\dist\touchtracer dist/touchtracer-x86_64 | Out-String
+cp -r .\pyinstaller\dist\helloWorld dist/helloWorld-x86_64 | Out-String
 
 #######################
 # OUTPUT VERSION INFO #
