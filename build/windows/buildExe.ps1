@@ -109,3 +109,8 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spe
 
 # attempt to execute it?
 .\dist\touchtracer\touchtracer.exe | Out-String
+
+Write-Output 'INFO: Python versions info'
+# before exiting, output the versions of software installed
+C:\tmp\kivy_venv\Scripts\python.exe --version | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip list | Out-String
