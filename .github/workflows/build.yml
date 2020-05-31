@@ -22,8 +22,12 @@ jobs:
         sudo lsmod
       shell: bash
 
+    - name: Enter a docker environment
+      uses: docker://debian:buster-slim
+
+    - uses: actions/checkout@v2
+
     - name: Execute script to build linux AppImage
-      container: debian:buster-slim
       run: "build/linux/buildAppImage.sh"
       shell: bash
 
