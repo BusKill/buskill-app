@@ -57,7 +57,7 @@ cd dist | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
 
 # replace spec file
-mv touchtracer.spec touchtracer.orig | Out-String
+mv helloWorld.spec helloWorld.spec.orig | Out-String
 echo "# -*- mode: python ; coding: utf-8 -*-
 from kivy_deps import angle, glew, sdl2
 #from kivy.tools.packaging.pyinstaller_hooks import get_deps_minimal, get_deps_all, hookspath, runtime_hooks
@@ -111,7 +111,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy_examples | Out
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name touchtracer C:\tmp\kivy_venv\share\kivy-examples\demo\touchtracer\main.py | Out-String
 
 # replace spec file
-mv touchtracer.spec touchtracer.orig | Out-String
+mv touchtracer.spec touchtracer.spec.orig | Out-String
 echo "# -*- mode: python ; coding: utf-8 -*-
 from kivy_deps import glew, sdl2
 
