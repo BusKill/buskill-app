@@ -17,8 +17,7 @@ When you push the above changes to master, gitlab will automatically spin up con
 
 # TODO
 
-1. Add Windows CI job for building a Windows .exe
-2. Figure out how to build a Mac release on gitlab shared runners in GCP (vagrant with libvirt?)
+1. Figure out how to build a Mac release on gitlab shared runners in GCP (vagrant with libvirt?)
 
 # License
 
