@@ -23,7 +23,7 @@ jobs:
       shell: bash
 
     - name: Execute script to build linux AppImage
-      uses: docker://debian:buster-slim
+      container: debian:buster-slim
       run: "build/linux/buildAppImage.sh"
       shell: bash
 
