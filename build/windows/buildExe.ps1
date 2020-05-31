@@ -59,7 +59,7 @@ New-Item -Path C:\tmp\python -Type Directory | Out-String
 .\python3.7.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
 
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
-C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools<45.0.0 virtualenv | Out-String
+C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv | Out-String
 
 Write-Output 'INFO: Installing Python Depends'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
@@ -75,7 +75,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt
 ##################################
 
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller==3.5 | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller | Out-String
 New-Item -Path pyinstaller -Type Directory | Out-String
 cd pyinstaller | Out-String
 
