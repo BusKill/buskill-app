@@ -131,7 +131,7 @@ $env:KIVY_GL_BACKEND="angle_sdl2"
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
 
 # attempt to execute it?
-.\dist\helloWorld\helloWorld.exe | Out-String
+#.\dist\helloWorld\helloWorld.exe | Out-String
 
 #####################
 # PREPARE ARTIFACTS #
