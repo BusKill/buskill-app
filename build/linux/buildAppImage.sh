@@ -21,16 +21,17 @@ set -x
 
 PYTHON_PATH='/usr/bin/python3.7'
 
-# CHECKOUT (TODO: maybe remove?)
-git clone https://github.com/maltfield/cross-platform-python-gui.git
-pushd cross-platform-python-gui
-
 ###################
 # INSTALL DEPENDS #
 ###################
 
 # install os-level depends
-apt-get update; apt-get -y install python3.7 python3-pip wget rsync fuse
+sudo apt-get update; sudo apt-get -y install python3.7 python3-pip wget rsync fuse
+
+uname -a
+cat /etc/issue
+which python
+which python3.7
 
 # setup a virtualenv to isolate our app's python depends
 ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools virtualenv

@@ -14,16 +14,10 @@ jobs:
 #    container: debian:buster-slim
 
     steps:
-    - name: First setup fuse on the docker host
-      run: |
-        sudo apt-get install fuse
-        sudo lsmod
-        sudo modprobe fuse
-        sudo lsmod
-      shell: bash
+
+    - uses: actions/checkout@v2
 
     - name: Execute script to build linux AppImage
-      container: debian:buster-slim
       run: "build/linux/buildAppImage.sh"
       shell: bash
 
