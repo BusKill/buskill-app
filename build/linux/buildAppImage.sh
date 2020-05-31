@@ -113,5 +113,19 @@ chmod +x /tmp/appimagetool.AppImage
 mkdir dist
 /tmp/appimagetool.AppImage /tmp/kivy_appdir dist/helloWorld.AppImage
 
+#######################
+# OUTPUT VERSION INFO #
+#######################
+
+uname -a
+cat /etc/issue
+which python
+python --version
+python -m pip list
+
+##################
+# CLEANUP & EXIT #
+##################
+
 # exit cleanly
 exit 0

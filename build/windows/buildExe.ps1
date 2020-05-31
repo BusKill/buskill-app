@@ -1,4 +1,18 @@
 Set-PSDebug -Trace 1
+################################################################################
+# File:    windows/buildExe.ps1
+# Purpose: Builds a windows executable for a simple Hello World GUI app using
+#          using kivy. See also:
+#
+#          * https://kivy.org/doc/stable/installation/installation-windows.html
+#          * https://kivy.org/doc/stable/guide/packaging-windows.html
+#          * https://github.com/kivy/kivy/issues/6906
+#
+# Authors: Michael Altfield <michael@buskill.in>
+# Created: 2020-05-31
+# Updated: 2020-05-31
+# Version: 0.1
+################################################################################
 
 ######################################
 #### A Note about ' | Out-String' ####
@@ -27,10 +41,15 @@ Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python -Force | Out-S
 Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37 -Force | Out-String
 Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming\Python\Python37\Scripts -Force | Out-String
 
+###################
+# INSTALL DEPENDS #
+###################
+
 # it looks like we can't use the smaller embeddable zip file as it lacks pip
 #curl -OutFile python3.7.zip https://www.python.org/ftp/python/3.7.7/python-3.7.7-embed-amd64.zip
 #Expand-Archive .\python3.7.zip
 
+# See https://docs.python.org/3.7/using/windows.html#installing-without-ui
 Write-Output 'INFO: Downloading python3.7'
 curl -OutFile python3.7.exe https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe | Out-String
 
@@ -42,12 +61,18 @@ New-Item -Path C:\tmp\python -Type Directory | Out-String
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
 C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools<45.0.0 virtualenv | Out-String
 
-Write-Output 'INFO: Installing kivy'
+Write-Output 'INFO: Installing Python Depends'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv | Out-String
 C:\tmp\kivy_venv\Scripts\activate.ps1 | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade docutils pygments pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy | Out-String
+
+# install kivy and all other python dependencies with pip into our virtual env
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt | Out-String
+
+##################################
+# PREPARE BUILD WITH PYINSTALLER #
+##################################
 
 Write-Output 'INFO: Prepare our exe'
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller==3.5 | Out-String
@@ -159,6 +184,10 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 (Get-Content .\helloWorld.spec) -replace "`0", "" | Set-Content .\helloWorld.spec
 (Get-Content .\touchtracer.spec) -replace "`0", "" | Set-Content .\touchtracer.spec
 
+#############
+# BUILD EXE #
+#############
+
 # VMs need to use angle, and apparently PyInstaller doesn't see the os.environ
 # call in the code itself, so we have to set it in PowerShell directly. This
 # fixes the error:
@@ -173,7 +202,17 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec
 .\dist\touchtracer\touchtracer.exe | Out-String
 .\dist\helloWorld\helloWorld.exe | Out-String
 
+#######################
+# OUTPUT VERSION INFO #
+#######################
+
 Write-Output 'INFO: Python versions info'
 # before exiting, output the versions of software installed
 C:\tmp\kivy_venv\Scripts\python.exe --version | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip list | Out-String
+
+##################
+# CLEANUP & EXIT #
+##################
+
+# TODO?
