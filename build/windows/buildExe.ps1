@@ -1,3 +1,4 @@
+$ErrorActionPreference = 'continue'
 Set-PSDebug -Trace 1
 ################################################################################
 # File:    windows/buildExe.ps1
