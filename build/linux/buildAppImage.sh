@@ -26,7 +26,7 @@ PYTHON_PATH='/usr/bin/python3.7'
 ###################
 
 # install os-level depends
-sudo apt-get update; sudo apt-get -y install python3.7 python3-pip wget rsync fuse
+sudo apt-get update; sudo apt-get -y install python3.7 python3-pip python3-setuptools wget rsync fuse
 
 uname -a
 cat /etc/issue
@@ -34,7 +34,8 @@ which python
 which python3.7
 
 # setup a virtualenv to isolate our app's python depends
-${PYTHON_PATH} -m pip install --upgrade --user pip setuptools virtualenv
+${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
+${PYTHON_PATH} -m pip install --upgrade --user virtualenv
 ${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
 
 # install kivy and all other python dependencies with pip into our virtual env
