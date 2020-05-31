@@ -163,7 +163,7 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 # call in the code itself, so we have to set it in PowerShell directly. This
 # fixes the error:
 #   "[CRITICAL] [App         ] Unable to get any Image provider, abort.
-$env:KIVY_GL_BACKEND="angle_sdl2
+$env:KIVY_GL_BACKEND="angle_sdl2"
 
 # build it from the spec file
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
