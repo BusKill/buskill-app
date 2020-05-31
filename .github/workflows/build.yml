@@ -11,19 +11,29 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
-    container: debian:buster-slim
-
+#    container: debian:buster-slim
+#
     steps:
     - uses: actions/checkout@v2
-
     - name: Execute script to build linux AppImage
-      run: "build/linux/buildAppImage.sh"
+      run: |
+        sudo apt-get install fuse
+        sudo lsmod
+        sudo modprobe fuse
+        sudo lsmod
+        wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
+        chmod +x /tmp/python3.7.AppImage
+        /tmp/python3.7.AppImage -c 'print("hello")'
       shell: bash
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Linux AppImage (x86_64)
-        path: dist/
+#
+#    - name: Execute script to build linux AppImage
+#      run: "build/linux/buildAppImage.sh"
+#      shell: bash
+#
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: Linux AppImage (x86_64)
+#        path: dist/
 
   windows:
     runs-on: windows-latest
