@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/maltfield/cross-platform-python-gui/badges/master/pipeline.svg)](https://gitlab.com/maltfield/cross-platform-python-gui/-/commits/master)
+![](https://github.com/maltfield/cross-platform-python-gui/workflows/build/badge.svg)
 
 # Cross Platform Python GUI
 
@@ -11,13 +11,13 @@ It includes the CI pipeline to automatically build self-contained executables fo
 1. Fork this repo
 2. Edit [src/main.py](/src/main.py) as needed
 3. Add any required python modules to [requirements.txt](/requirements.txt)
-4. Go to Settings -> CI/CD and make sure that you have defined a "General pipeline." The default settings should be fine.
 
-When you push git commits to gitlab on master, gitlab will automatically spin up containers in GCP and build your application's executables for all target platforms.
+When you push git commits to github on master, github will automatically spin up containers in the cloud and build your application's executables for all target platforms.
 
 # TODO
 
-1. Figure out how to build a Mac release on gitlab shared runners in GCP (vagrant with libvirt?)
+1. Finish migration from gitlab to github (get workflows working for linux & mac builds)
+2. Add CI workflow for building MacOS binaries
 
 # License
 

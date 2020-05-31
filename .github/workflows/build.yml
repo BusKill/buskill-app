@@ -1,0 +1,43 @@
+name: build
+
+# execute this workflow automatically, but only when pushing to master
+on:
+  push:
+    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+
+jobs:
+
+  linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: docker://debian:buster-slim
+    - uses: actions/checkout@v2
+
+    - name: Execute script to build linux AppImage
+      run: "build/linux/buildAppImage.sh"
+      shell: bash
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Linux AppImage (x86_64)
+        path: dist/
+
+  windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: docker://debian:buster-slim
+    - uses: actions/checkout@v2
+
+    - name: Execute script to build linux AppImage
+      run: "build/windows/buildExe.ps1"
+      shell: powershell
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Windows executable (x86_64)
+        path: dist/
+
