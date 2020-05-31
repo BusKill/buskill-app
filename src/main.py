@@ -9,11 +9,6 @@ import kivy
 from kivy.app import App
 from kivy.uix.label import Label
 
-# these next two lines aren't necessary; I'm just testing something for the
-# Windows build
-from kivy.uix.floatlayout import FloatLayout
-from kivy.graphics import Color, Rectangle, Point, GraphicException
-
 class MyApp(App):
 
     def build(self):
