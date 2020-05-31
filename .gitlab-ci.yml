@@ -1,12 +1,12 @@
-#linux:
-#  image: debian:buster-slim
-#  stage: build
-#  script: "build/linux/buildAppImage.sh"
-#  artifacts:
-#    paths:
-#    - dist/
-#  only:
-#  - master
+linux:
+  image: debian:buster-slim
+  stage: build
+  script: "build/linux/buildAppImage.sh"
+  artifacts:
+    paths:
+    - dist/
+  only:
+  - master
 
 windows:
   stage: build
