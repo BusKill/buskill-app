@@ -9,21 +9,21 @@ on:
 
 jobs:
 
-  linux:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: docker://debian:buster-slim
-    - uses: actions/checkout@v2
-
-    - name: Execute script to build linux AppImage
-      run: "build/linux/buildAppImage.sh"
-      shell: bash
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Linux AppImage (x86_64)
-        path: dist/
+#  linux:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - uses: docker://debian:buster-slim
+#    - uses: actions/checkout@v2
+#
+#    - name: Execute script to build linux AppImage
+#      run: "build/linux/buildAppImage.sh"
+#      shell: bash
+#
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: Linux AppImage (x86_64)
+#        path: dist/
 
   windows:
     runs-on: windows-latest
