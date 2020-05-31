@@ -19,7 +19,7 @@ Set-PSDebug -Trace 1
 ######################################
 # Straingely, when PowerShell calls any '.exe', it appears to have an implicit
 # amp-off effect where that .exe is executed in the background and the next
-# command is initiated without waiting. This creates tons of undeterministic
+# command is initiated without waiting. This creates tons of nondeterministic
 # and undesired behaviour. The fix is a hack: just append ' | Out-String' to the
 # end of an .exe call, and it will prevent it from running in the backgound,
 # delaying the subsequent line from running until the current line finishes
@@ -33,7 +33,7 @@ Get-ChildItem -Force | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
-Write-Output 'INFO: Inspect gitlab's python version'
+Write-Output "INFO: Inspect gitlab's python version"
 Get-ChildItem -Path C:\Users\gitlab_runner -Force | Out-String
 Get-ChildItem -Path C:\Users\gitlab_runner\AppData -Force | Out-String
 Get-ChildItem -Path C:\Users\gitlab_runner\AppData\Roaming -Force | Out-String
@@ -79,34 +79,24 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller | Out-S
 New-Item -Path pyinstaller -Type Directory | Out-String
 cd pyinstaller | Out-String
 
-#C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name helloWorld ..\src\main.py
-
-# replace spec file
-#mv helloWorld.spec helloWorld.spec.orig | Out-String
 echo "# -*- mode: python ; coding: utf-8 -*-
 from kivy_deps import angle, glew, sdl2
-#from kivy.tools.packaging.pyinstaller_hooks import get_deps_minimal, get_deps_all, hookspath, runtime_hooks
 
 block_cipher = None
 
 
 a = Analysis(['..\\src\\main.py'],
-             #pathex=['C:\\Users\\user\\Documents\\build\\pyinstaller'],
-             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\pyinstaller'],
+             pathex=['.\\'],
              binaries=[],
              datas=[],
-             hiddenimports=['pkg_resources.py2_warn', 'kivy', 'kivy.core.image'],
+             hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
-             #hookspath=hookspath(),
              runtime_hooks=[],
-             #runtime_hooks=runtime_hooks(),
-             excludes=['main.py'],
+             excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-             #noarchive=False,
-             #**get_deps_minimal( video=None, audio=None, image=None ))
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
@@ -133,10 +123,8 @@ coll = COLLECT(exe,
 # Let's also confirm that we can get the example in the docs to work
 #  * https://kivy.org/doc/stable/guide/packaging-windows.html
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy_examples | Out-String
-#C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --name touchtracer C:\tmp\kivy_venv\share\kivy-examples\demo\touchtracer\main.py | Out-String
 
 # replace spec file
-#mv touchtracer.spec touchtracer.spec.orig | Out-String
 echo "# -*- mode: python ; coding: utf-8 -*-
 from kivy_deps import glew, sdl2
 
@@ -144,8 +132,7 @@ block_cipher = None
 
 
 a = Analysis(['C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\main.py'],
-             #pathex=['C:\\Users\\user\\Documents\\build-exaple'],
-             pathex=['C:\\GitLab-Runner\\builds\\maltfield\\cross-platform-python-gui\\pyinstaller'],
+             pathex=['.\\'],
              binaries=[],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn'],

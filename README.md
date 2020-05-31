@@ -13,7 +13,7 @@ It includes the CI pipeline to automatically build self-contained executables fo
 3. Add any required python modules to [requirements.txt](/requirements.txt)
 4. Go to Settings -> CI/CD and make sure that you have defined a "General pipeline." The default settings should be fine.
 
-When you push the above changes to master, gitlab will automatically spin up containers in GCP and build your application's executables for all target platforms.
+When you push git commits to gitlab on master, gitlab will automatically spin up containers in GCP and build your application's executables for all target platforms.
 
 # TODO
 
