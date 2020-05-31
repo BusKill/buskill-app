@@ -120,56 +120,9 @@ coll = COLLECT(exe,
                name='helloWorld')
 " | tee helloWorld.spec
 
-# Let's also confirm that we can get the example in the docs to work
-#  * https://kivy.org/doc/stable/guide/packaging-windows.html
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade kivy_examples | Out-String
-
-# replace spec file
-echo "# -*- mode: python ; coding: utf-8 -*-
-from kivy_deps import glew, sdl2
-
-block_cipher = None
-
-
-a = Analysis(['C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\main.py'],
-             pathex=['.\\'],
-             binaries=[],
-             datas=[],
-             hiddenimports=['pkg_resources.py2_warn'],
-             hookspath=[],
-             runtime_hooks=[],
-             excludes=[],
-             win_no_prefer_redirects=False,
-             win_private_assemblies=False,
-             cipher=block_cipher,
-             noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
-exe = EXE(pyz,
-          a.scripts,
-          [],
-          exclude_binaries=True,
-          name='touchtracer',
-          debug=False,
-          bootloader_ignore_signals=False,
-          strip=False,
-          upx=True,
-          console=True )
-coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\touchtracer\\'),
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
-               strip=False,
-               upx=True,
-               upx_exclude=[],
-               name='touchtracer')
-" | tee touchtracer.spec
-
 # PyInstaller in windows chokes on null bytes added to .spec files; remove them
 # to prevent "ValueError: source code string cannot contain null bytes"
 (Get-Content .\helloWorld.spec) -replace "`0", "" | Set-Content .\helloWorld.spec
-(Get-Content .\touchtracer.spec) -replace "`0", "" | Set-Content .\touchtracer.spec
 
 #############
 # BUILD EXE #
@@ -182,11 +135,9 @@ coll = COLLECT(exe, Tree('C:\\tmp\\kivy_venv\\share\\kivy-examples\\demo\\toucht
 $env:KIVY_GL_BACKEND="angle_sdl2"
 
 # build it from the spec file
-C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\touchtracer.spec | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
 
 # attempt to execute it?
-.\dist\touchtracer\touchtracer.exe | Out-String
 .\dist\helloWorld\helloWorld.exe | Out-String
 
 #####################
@@ -197,7 +148,6 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\touchtracer dist/touchtracer-x86_64 | Out-String
 cp -r .\pyinstaller\dist\helloWorld dist/helloWorld-x86_64 | Out-String
 
 #######################
@@ -205,6 +155,7 @@ cp -r .\pyinstaller\dist\helloWorld dist/helloWorld-x86_64 | Out-String
 #######################
 
 Write-Output 'INFO: Python versions info'
+
 # before exiting, output the versions of software installed
 C:\tmp\kivy_venv\Scripts\python.exe --version | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip list | Out-String
