@@ -26,7 +26,7 @@ PYTHON_PATH='/usr/bin/python3.7'
 ###################
 
 # install os-level depends
-sudo apt-get update; sudo apt-get -y install python3.7 python3-pip wget rsync fuse
+apt-get update; apt-get -y install python3.7 python3-pip wget rsync fuse
 
 # setup a virtualenv to isolate our app's python depends
 ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools virtualenv

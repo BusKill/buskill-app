@@ -11,9 +11,9 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
+    container: debian:buster-slim
 
     steps:
-    - uses: docker://debian:buster-slim
     - uses: actions/checkout@v2
 
     - name: Execute script to build linux AppImage
