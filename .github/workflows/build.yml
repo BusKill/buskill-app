@@ -27,7 +27,7 @@ jobs:
         path: dist/
 
     - name: Create dist tarball
-      run: 'tar -czvf helloWorld-linux-x86_64.`date "+%Y%m%d_%H%M%S"`.tar.bz2 dist/*'
+      run: 'tar -czvf helloWorld-linux-x86_64.${{ github.sha }}.tar.bz2 dist/*'
       shell: bash
 
     - name: Create Release
@@ -36,8 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Public Build Artifact ${{ github.ref }}
+        tag_name: ${{ github.sha }}
+        release_name: Public Build Artifact ${{ github.sha }}
         draft: false
         prerelease: true
 
@@ -49,7 +49,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./
-        asset_name: helloWorld-linux*.tar.bz2
+        asset_name: helloWorld-linux-x86_64.${{ github.sha }}.tar.bz2
         asset_content_type: application/x-bzip2
 
 #  windows:
