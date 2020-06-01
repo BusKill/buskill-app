@@ -27,7 +27,7 @@ jobs:
         path: dist/
 
     - name: Create dist tarball
-      run: 'tar -czvf helloWorld-linux-x86_64.${{ github.job }}.tar.bz2 dist/*'
+      run: 'tar -czvf helloWorld-linux-x86_64.${{ github.run_id }}.tar.bz2 dist/*'
       shell: bash
 
     - name: Create Release
@@ -36,8 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.job }}
-        release_name: Public Build Artifact ${{ github.job }}
+        tag_name: ${{ github.run_id }}
+        release_name: Public Build Artifact ${{ github.run_id }}
         draft: false
         prerelease: true
 
@@ -48,7 +48,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./
+        asset_path: helloWorld-linux-x86_64.${{ github.job }}.tar.bz2
         asset_name: helloWorld-linux-x86_64.${{ github.job }}.tar.bz2
         asset_content_type: application/x-bzip2
 
