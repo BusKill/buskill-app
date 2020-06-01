@@ -36,7 +36,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: linux_${{ github.run_id }}
+        tag_name: ${{ github.run_id }}_linux
         release_name: 'Public Build Artifact: Linux ${{ github.run_id }}'
         draft: false
         prerelease: true
@@ -82,7 +82,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: windows_${{ github.run_id }}
+        tag_name: ${{ github.run_id }}_windows
         release_name: 'Public Build Artifact: Windows ${{ github.run_id }}'
         draft: false
         prerelease: true
