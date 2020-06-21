@@ -242,14 +242,22 @@ rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 # BUILD DMG #
 #############
 
+# TODO: remove this after fixing .dmg generation
+# the dmg generation below fails on headless builds because you have to click
+# a button in a dialog granting finder some permissions from the apple script.
+# for now we include the .app
+mkdir -p ../../../../../dist
+cp "${APP_NAME}.app" ../../../../../dist/
+
 # create a .dmg file from the .app file
-./create-osx-dmg.sh "${APP_NAME}.app"
+sudo ./create-osx-dmg.sh "${APP_NAME}.app"
 
 # create the dist dir for our result to be uploaded as an artifact
-mkdir ../../../../../dist
+mkdir -p ../../../../../dist
 cp "${APP_NAME}.dmg" ../../../../../dist/
-popd
-pwd
+
+popd # return to the buildozer dir in the sandbox root
+popd # return to the sandbox root dir
 
 #######################
 # OUTPUT VERSION INFO #
