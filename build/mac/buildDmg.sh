@@ -203,7 +203,9 @@ rm -Rf Kivy3.dmg
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" create-osx-bundle.sh
 sed -i '' "s;python3.5;$PYTHON_EXEC_VERSION;g" create-osx-bundle.sh
 sed -i '' "s;rm {};rm -f {};g" create-osx-bundle.sh
+
 ./create-osx-bundle.sh ${kivyVersion} ${PYTHON_VERSION}
+
 # Repair symlink
 pushd Kivy.app/Contents/Resources/venv/bin/
 rm ./python3
@@ -211,7 +213,6 @@ ln -s ../../../Frameworks/python/$PYTHON_VERSION/bin/python3 .
 popd
 
 # Go into kivy sdk directory and fix the script package_app.py to use the specified python version.
-pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" package_app.py
 # Make it python3 compatible by removing decode(...) calls.
 sed -i '' "s;\.decode('utf-8');;g" package_app.py
@@ -228,6 +229,7 @@ buildozer osx debug
 # THIN APP #
 ############
 
+pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
 # remove unnecessary libs, such as the 141M GStreamer framework
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 
@@ -239,8 +241,8 @@ rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 ./create-osx-dmg.sh "${APP_NAME}.app"
 
 # create the dist dir for our result to be uploaded as an artifact
-mkdir dist
-cp "${APP_NAME}.dmg" dist/
+mkdir ../../../../../dist
+cp "${APP_NAME}.dmg" ../../../../../dist/
 
 #######################
 # OUTPUT VERSION INFO #
