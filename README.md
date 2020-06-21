@@ -16,8 +16,7 @@ When you push git commits to github on master, github will automatically spin up
 
 # TODO
 
-1. Finish migration from gitlab to github (get workflows working for linux & mac builds)
-2. Add CI workflow for building MacOS binaries
+1. Finish CI workflow for building MacOS .dmg apps
 
 # License
 
