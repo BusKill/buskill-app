@@ -247,7 +247,7 @@ rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 # a button in a dialog granting finder some permissions from the apple script.
 # for now we include the .app
 mkdir -p ../../../../../dist
-cp "${APP_NAME}.app" ../../../../../dist/
+cp -r "${APP_NAME}.app" ../../../../../dist/
 
 # create a .dmg file from the .app file
 sudo ./create-osx-dmg.sh "${APP_NAME}.app"
