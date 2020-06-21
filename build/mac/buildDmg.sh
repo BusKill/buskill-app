@@ -19,10 +19,11 @@ set -x
 # SETTINGS #
 ############
 
-PYTHON_VERSION="3.7.3"
-PYTHON_EXEC_VERSION="python3.7"
 PYTHON_PATH='/usr/bin/python3'
 APP_NAME='helloWorld'
+
+PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
+PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 
 ###################
 # INSTALL DEPENDS #
@@ -211,8 +212,6 @@ pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" package_app.py
 # Make it python3 compatible by removing decode(...) calls.
 sed -i '' "s;\.decode('utf-8');;g" package_app.py
-popd
-
 popd
 
 #############
