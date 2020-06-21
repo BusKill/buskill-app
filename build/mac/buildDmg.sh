@@ -161,6 +161,10 @@ fi
 # create and enter our new dir for buildozer
 mkdir buildozer
 cp requirements.txt buildozer/
+
+# hack to fix "ERROR: You must give at least one requirement to install"
+echo "pip" >> buildozer/requirements.txt
+
 pushd buildozer
 
 # create buildozer.spec file
@@ -230,8 +234,8 @@ buildozer osx debug
 # THIN APP #
 ############
 
-pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
 # remove unnecessary libs, such as the 141M GStreamer framework
+pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 
 #############
@@ -244,6 +248,8 @@ rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
 # create the dist dir for our result to be uploaded as an artifact
 mkdir ../../../../../dist
 cp "${APP_NAME}.dmg" ../../../../../dist/
+popd
+pwd
 
 #######################
 # OUTPUT VERSION INFO #
