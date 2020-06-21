@@ -234,9 +234,24 @@ buildozer osx debug
 # THIN APP #
 ############
 
-# remove unnecessary libs, such as the 141M GStreamer framework
+# remove unnecessary libs
 pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
+
+# GStreamer is the easiest; ~150M gone
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
+
+# kivy build, doc, and examples dirs total to ~50M
+rm -rf "${APP_NAME}.app/Contents/Resources/kivy/build/"
+rm -rf "${APP_NAME}.app/Contents/Resources/kivy/doc/"
+rm -rf "${APP_NAME}.app/Contents/Resources/kivy/examples/"
+
+# somehow it still works for me with this gone, but I wonder if it's because it
+# finds python outside the .app dir? Anyway, this python dir is ~150M
+rm -rf "${APP_NAME}.app/Contents/Frameworks/python"
+
+# the whole lib dir isn't necessary for our simple kivy app; I imagine if your
+# app has more depends, you'll have to be more selective here
+rm -rf "${APP_NAME}.app/Contents/Resources/venv/lib"
 
 #############
 # BUILD DMG #
