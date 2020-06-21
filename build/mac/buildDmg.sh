@@ -58,7 +58,10 @@ ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
 #${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
 
 # install kivy and all other python dependencies with pip into our virtual env
-#source /tmp/kivy_venv/bin/activate; python -m pip install -r requirements.txt
+#source /tmp/kivy_venv/bin/activate
+${PYTHON_PATH} -m pip install -r requirements.txt
+
+kivyVersion="`${PYTHON_PATH} -m pip list | grep -i 'kivy ' | awk '{print $2}'`"
 
 # install buildozer
 ${PYTHON_PATH} -m pip install --upgrade git+http://github.com/kivy/buildozer
@@ -200,7 +203,7 @@ rm -Rf Kivy3.dmg
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" create-osx-bundle.sh
 sed -i '' "s;python3.5;$PYTHON_EXEC_VERSION;g" create-osx-bundle.sh
 sed -i '' "s;rm {};rm -f {};g" create-osx-bundle.sh
-./create-osx-bundle.sh python3
+./create-osx-bundle.sh ${kivyVersion} ${PYTHON_VERSION}
 # Repair symlink
 pushd Kivy.app/Contents/Resources/venv/bin/
 rm ./python3
