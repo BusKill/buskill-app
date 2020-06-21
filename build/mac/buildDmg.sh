@@ -38,8 +38,12 @@ which python2
 python2 --version
 which python3
 python3 --version
+echo $PATH
 pwd
 ls -lah
+
+# first update our PATH so installed depends can be executed
+PATH=${PATH}:/Users/runner/Library/Python/${PYTHON_EXEC_VERSION}/bin
 
 # everything here is python3, except these bits. python2 is used in
 # package_app.py, which is used by buildozer and has a few depends
@@ -155,8 +159,6 @@ mkdir buildozer
 pushd buildozer
 
 # create buildozer.spec file
-buildozer init
-
 cat > buildozer.spec << EOF
 [app]
 title = Hello World
@@ -249,6 +251,8 @@ python2 --version
 which python3
 python3 --version
 pwd
+echo $PATH
+ls -lah /Users/runner/Library/Python/3.7/bin
 ls -lah
 ls -lah dist
 
