@@ -178,15 +178,15 @@ log_level = 2
 warn_on_root = 1
 EOF
 
-# Change buildozer to use a python3.7 virtual environment instead of python2.7
-pushd /usr/local/lib/$PYTHON_EXEC_VERSION/site-packages/buildozer
-sed -i '' 's;virtualenv --python=python2.7;virtualenv --python=python3.7;g' __init__.py
-popd
-
-# Change the osx target to use python3 to run the package_app.py script.
-pushd /usr/local/lib/$PYTHON_EXEC_VERSION/site-packages/buildozer/targets
-sed -i '' "s;'python', 'package_app.py';'python3', 'package_app.py';g" osx.py
-popd
+## Change buildozer to use a python3.7 virtual environment instead of python2.7
+#pushd /usr/local/lib/$PYTHON_EXEC_VERSION/site-packages/buildozer
+#sed -i '' 's;virtualenv --python=python2.7;virtualenv --python=python3.7;g' __init__.py
+#popd
+#
+## Change the osx target to use python3 to run the package_app.py script.
+#pushd /usr/local/lib/$PYTHON_EXEC_VERSION/site-packages/buildozer/targets
+#sed -i '' "s;'python', 'package_app.py';'python3', 'package_app.py';g" osx.py
+#popd
 
 # First run fails but is necessary to create the directory .buildozer
 buildozer osx debug
