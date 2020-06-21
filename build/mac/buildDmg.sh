@@ -218,9 +218,14 @@ ln -s ../../../Frameworks/python/$PYTHON_VERSION/bin/python3 .
 popd
 
 # Go into kivy sdk directory and fix the script package_app.py to use the specified python version.
+cp package_app.py pakage_app.py.orig
+echo "===package_app.py======================================================="
+cat package_app.py
+echo "===package_app.py======================================================="
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" package_app.py
-# Make it python3 compatible by removing decode(...) calls.
-sed -i '' "s;\.decode('utf-8');;g" package_app.py
+## Make it python3 compatible by removing decode(...) calls.
+#sed -i '' "s;\.decode('utf-8');;g" package_app.py
+diff package_app.py.orig package_app.py
 popd
 
 #############
