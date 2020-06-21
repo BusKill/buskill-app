@@ -48,11 +48,11 @@ PATH=${PATH}:/Users/runner/Library/Python/${PYTHON_EXEC_VERSION}/bin
 
 # everything here is python3, except these bits. python2 is used in
 # package_app.py, which is used by buildozer and has a few depends
-/usr/bin/python2 -m ensurepip
+sudo /usr/bin/python2 -m ensurepip
 /usr/bin/python2 -m pip install --upgrade --user docopt sh
 
 # setup a virtualenv to isolate our app's python depends
-${PYTHON_PATH} -m ensurepip
+sudo ${PYTHON_PATH} -m ensurepip
 ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
 #${PYTHON_PATH} -m pip install --upgrade --user virtualenv
 #${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
