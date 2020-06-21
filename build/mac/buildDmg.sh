@@ -160,6 +160,7 @@ fi
 
 # create and enter our new dir for buildozer
 mkdir buildozer
+cp requirements.txt buildozer/
 pushd buildozer
 
 # create buildozer.spec file
