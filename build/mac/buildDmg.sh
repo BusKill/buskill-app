@@ -15,6 +15,13 @@ set -x
 # Version: 0.1
 ################################################################################
 
+# TODO: remove this after testing replacement with other python binaries that are available
+mkdir -p buildozer/dist
+cp /usr/bin/python3 buildozer/dist/usr-bin-python3
+cp /usr/local/bin/python3 buildozer/dist/usr-local-bin-python3
+
+exit 0
+
 ############
 # SETTINGS #
 ############
@@ -295,6 +302,8 @@ ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python
 ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
 md5 Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
 Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7 --version
+cp /usr/bin/python3 helloWorld.app/Contents/usr-bin-python3
+cp /usr/local/bin/python3 helloWorld.app/Contents/usr-local-bin-python3
 
 # GStreamer is the easiest; ~150M gone
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
