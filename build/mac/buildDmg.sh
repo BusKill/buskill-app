@@ -55,7 +55,7 @@ echo "INFO: list of python* in /usr/local/bin/"
 ls -lah /usr/local/bin/python*
 find /usr/local/bin -type f -name python | xargs --version
 find /usr/local/bin -type f -name python3 | xargs --version
-md5 /usr/bin/python*
+md5 /usr/local/bin/python*
 
 ###################
 # INSTALL DEPENDS #
@@ -261,6 +261,7 @@ popd
 # buildozer should now be able to build our .app file
 buildozer osx debug
 
+# TODO: remove this after you fix the python binary issues
 echo "INFO: list of python binaries in the new .app dir"
 find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python
 find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python | xargs --version
@@ -275,6 +276,17 @@ find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name
 
 # remove unnecessary libs
 pushd .buildozer/osx/platform/kivy-sdk-packager-master/osx
+
+# TODO: remove this after you fix the python binary issues
+ls -lah Kivy.app/Contents/Resources/
+ls -lah Kivy.app/Contents/Resources/python 
+ls -lah Kivy.app/Contents/Resources/venv/bin/
+ls -lah Kivy.app/Contents/Resources/venv/bin/python
+ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/
+ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python
+ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
+md5 Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
+Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7 --version
 
 # GStreamer is the easiest; ~150M gone
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
