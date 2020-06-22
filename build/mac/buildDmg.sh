@@ -64,7 +64,8 @@ md5 /usr/local/bin/python*
 
 # install os-level depends
 brew install wget
-brew reinstall --build-bottle sdl2 sdl2_image sdl2_ttf sdl2_mixer
+#brew reinstall --build-bottle sdl2 sdl2_image sdl2_ttf sdl2_mixer
+brew reinstall sdl2 sdl2_image sdl2_ttf sdl2_mixer
 
 # setup a virtualenv to isolate our app's python depends
 sudo ${PYTHON_PATH} -m ensurepip
