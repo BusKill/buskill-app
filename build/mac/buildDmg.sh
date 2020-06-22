@@ -176,7 +176,7 @@ package.domain = org.test
 source.dir = ../src/
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
-requirements = kivy
+requirements = python3,kivy
 orientation = portrait
 osx.python_version = 3
 osx.kivy_version = 1.9.1
@@ -218,7 +218,7 @@ ln -s ../../../Frameworks/python/$PYTHON_VERSION/bin/python3 .
 popd
 
 # Go into kivy sdk directory and fix the script package_app.py to use the specified python version.
-cp package_app.py pakage_app.py.orig
+cp package_app.py package_app.py.orig
 echo "===package_app.py======================================================="
 cat package_app.py
 echo "===package_app.py======================================================="
