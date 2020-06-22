@@ -53,8 +53,6 @@ find /usr/local/bin -type f -name python -exec '{}' --version \;
 find /usr/local/bin -type f -name python3 -exec '{}' --version \;
 md5 /usr/bin/python*
 
-exit 0
-
 ###################
 # INSTALL DEPENDS #
 ###################
@@ -258,6 +256,14 @@ popd
 
 # buildozer should now be able to build our .app file
 buildozer osx debug
+
+echo "INFO: list of python binaries in the new .app dir"
+find . -type f -name python
+find . -type f -name python -exec '{}' --version \;
+find . -type f -name python -exec md5 '{}' \;
+find . -type f -name python3
+find . -type f -name python3 -exec '{}' --version \;
+find . -type f -name python3 -exec md5 '{}' \;
 
 ############
 # THIN APP #
