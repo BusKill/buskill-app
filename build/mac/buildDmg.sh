@@ -25,6 +25,9 @@ APP_NAME='helloWorld'
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 
+# attempt to overwrite brew's /usr/local/bin/python3 with /usr/bin/python3
+alias python3='${PYTHON_PATH}'
+
 ########
 # INFO #
 ########
@@ -37,20 +40,21 @@ which python2
 python2 --version
 which python3
 python3 --version
+${PYTHON_PATH} --version
 echo $PATH
 pwd
 ls -lah
 
 echo "INFO: list of python* in /usr/bin/"
 ls -lah /usr/bin/python*
-find /usr/bin -type f -name python -exec '{}' --version \;
-find /usr/bin -type f -name python3 -exec '{}' --version \;
+find /usr/bin -type f -name python | xargs --version
+find /usr/bin -type f -name python3 | xargs --version
 md5 /usr/bin/python*
 
 echo "INFO: list of python* in /usr/local/bin/"
 ls -lah /usr/local/bin/python*
-find /usr/local/bin -type f -name python -exec '{}' --version \;
-find /usr/local/bin -type f -name python3 -exec '{}' --version \;
+find /usr/local/bin -type f -name python | xargs --version
+find /usr/local/bin -type f -name python3 | xargs --version
 md5 /usr/bin/python*
 
 ###################
@@ -258,12 +262,12 @@ popd
 buildozer osx debug
 
 echo "INFO: list of python binaries in the new .app dir"
-find . -type f -name python
-find . -type f -name python -exec '{}' --version \;
-find . -type f -name python -exec md5 '{}' \;
-find . -type f -name python3
-find . -type f -name python3 -exec '{}' --version \;
-find . -type f -name python3 -exec md5 '{}' \;
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python | xargs --version
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python | xargs md5
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python3
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python3 | xargs --version
+find /Users/runner/runners/2.263.0/work/cross-platform-python-gui/ -type f -name python3 | xargs md5
 
 ############
 # THIN APP #
@@ -320,6 +324,7 @@ which python2
 python2 --version
 which python3
 python3 --version
+${PYTHON_PATH} --version
 pwd
 echo $PATH
 ls -lah /Users/runner/Library/Python/3.7/bin
