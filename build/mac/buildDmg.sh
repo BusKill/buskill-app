@@ -20,7 +20,7 @@ set -x
 # SETTINGS #
 ############
 
-PYTHON_PATH='/usr/bin/python3'
+PYTHON_PATH='/usr/local/bin/python3'
 APP_NAME='helloWorld'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
@@ -62,8 +62,12 @@ md5 /usr/local/bin/python*
 # INSTALL DEPENDS #
 ###################
 
+# first update brew
+#  * https://blog.fossasia.org/deploying-a-kivy-application-with-pyinstaller-for-mac-osx-to-github/
+brew update
+
 # install os-level depends
-brew install wget
+brew install wget python3
 #brew reinstall --build-bottle sdl2 sdl2_image sdl2_ttf sdl2_mixer
 brew reinstall sdl2 sdl2_image sdl2_ttf sdl2_mixer
 
@@ -75,8 +79,9 @@ ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
 
 # install kivy and all other python dependencies with pip into our virtual env
 #source /tmp/kivy_venv/bin/activate
-${PYTHON_PATH} -m pip install Cython==0.29.10
-${PYTHON_PATH} -m pip install -r requirements.txt
+${PYTHON_PATH} -m pip install --upgrade --user Cython==0.29.10
+${PYTHON_PATH} -m pip install --upgrade --user -r requirements.txt
+${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
 
 #######################
 # PREPARE PYINSTALLER #
@@ -86,7 +91,8 @@ mkdir pyinstaller
 pushd pyinstaller
 
 # TODO: change this to cat
-pyinstaller -y --clean --windowed --name ${APP_NAME} \
+${PYTHON_PATH} -m PyInstaller -y --clean --windowed --name ${APP_NAME} \
+  --hidden-import 'pkg_resources.py2_warn' \
   --exclude-module _tkinter \
   --exclude-module Tkinter \
   --exclude-module enchant \
@@ -97,7 +103,7 @@ pyinstaller -y --clean --windowed --name ${APP_NAME} \
 # BUILD #
 #########
 
-pyinstaller -y --clean --windowed ${APP_NAME}.spec
+#pyinstaller -y --clean --windowed ${APP_NAME}.spec
 
 pushd dist
 hdiutil create ./${APP_NAME}.dmg -srcfolder ${APP_NAME}.app -ov
