@@ -234,12 +234,12 @@ sed -i '' "s;rm {};rm -f {};g" create-osx-bundle.sh
 ./create-osx-bundle.sh ${kivyVersion} ${PYTHON_VERSION}
 
 # TODO: remove this after you fix the python binary issues
-ls -lah /Users/runner/.pyenv/versions/bin/pyenv
-ls -lah /Users/runner/.pyenv/versions/bin/pyenv/bin/
-md5 /Users/runner/.pyenv/bin/pyenv/bin/*
+ls -lah /Users/runner/.pyenv/versions/
+ls -lah /Users/runner/.pyenv/versions/*/bin/
+md5 /Users/runner/.pyenv/versions/*/bin/*
 ls -lah Kivy.app/Contents/Resources/venv/bin/
-ls -lah Kivy.app/Contents/Frameworks/${PYTHON_VERSION}/bin
-md5 Kivy.app/Contents/Frameworks/${PYTHON_VERSION}/bin/*
+ls -lah Kivy.app/Contents/Frameworks/python/${PYTHON_VERSION}/bin
+md5 Kivy.app/Contents/Frameworks/python/${PYTHON_VERSION}/bin/*
 
 # Repair symlink
 pushd Kivy.app/Contents/Resources/venv/bin/
