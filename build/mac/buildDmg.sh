@@ -25,13 +25,11 @@ APP_NAME='helloWorld'
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 
-###################
-# INSTALL DEPENDS #
-###################
+########
+# INFO #
+########
 
-# install os-level depends
-brew install wget
-brew cask install platypus
+# print some info for debugging failed builds
 
 uname -a
 sw_vers
@@ -42,6 +40,28 @@ python3 --version
 echo $PATH
 pwd
 ls -lah
+
+echo "INFO: list of python* in /usr/bin/"
+ls -lah /usr/bin/python*
+find /usr/bin -type f -name python -exec '{}' --version \;
+find /usr/bin -type f -name python3 -exec '{}' --version \;
+md5 /usr/bin/python*
+
+echo "INFO: list of python* in /usr/local/bin/"
+ls -lah /usr/local/bin/python*
+find /usr/local/bin -type f -name python -exec '{}' --version \;
+find /usr/local/bin -type f -name python3 -exec '{}' --version \;
+md5 /usr/bin/python*
+
+exit 0
+
+###################
+# INSTALL DEPENDS #
+###################
+
+# install os-level depends
+brew install wget
+brew cask install platypus
 
 # first update our PATH so installed depends can be executed
 PATH=${PATH}:/Users/runner/Library/Python/${PYTHON_EXEC_VERSION}/bin
