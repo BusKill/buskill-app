@@ -10,8 +10,8 @@ set -x
 #          * https://github.com/kivy/buildozer/issues/494#issuecomment-390262889
 #
 # Authors: Michael Altfield <michael@buskill.in>
-# Created: 2020-06-21
-# Updated: 2020-06-21
+# Created: 2020-06-22
+# Updated: 2020-06-22
 # Version: 0.1
 ################################################################################
 
@@ -176,7 +176,7 @@ package.domain = org.test
 source.dir = ../src/
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
-requirements = python3,kivy
+requirements = kivy
 orientation = portrait
 osx.python_version = 3
 osx.kivy_version = 1.9.1
@@ -219,10 +219,14 @@ popd
 
 # Go into kivy sdk directory and fix the script package_app.py to use the specified python version.
 cp package_app.py package_app.py.orig
-echo "===package_app.py======================================================="
-cat package_app.py
-echo "===package_app.py======================================================="
+echo "===package_app.py.orig======================================================="
+cat package_app.py.orig
+echo "===package_app.py.orig======================================================="
 sed -i '' "s;3.5.0;$PYTHON_VERSION;g" package_app.py
+
+# prevent auto-thinning
+sed -i '' "s;if not strip:;if True:;g" package_app.py
+
 ## Make it python3 compatible by removing decode(...) calls.
 #sed -i '' "s;\.decode('utf-8');;g" package_app.py
 diff package_app.py.orig package_app.py
