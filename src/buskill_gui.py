@@ -9,6 +9,8 @@
 # Version: 0.1
 ################################################################################
 
+import buskill
+
 import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
 
@@ -22,24 +24,21 @@ Window.size = ( 480, 800 )
 
 class MainWindow(GridLayout):
 
+	buskill.init()
+
 	toggle_btn = ObjectProperty(None)
-	buskill_is_armed = False
 
 	def toggleBusKill(self):
-		if self.buskill_is_armed == True:
-			self.toggle_btn.text = 'BusKill is currently armed\n(click to disarm)'
-			self.toggle_btn.background_color = [1,0,0,1]
-			self.buskill_is_armed = False
-		else:
+		if buskill.isArmed():
 			self.toggle_btn.text = 'BusKill is currently disarmed\n(click to arm)'
 			self.toggle_btn.background_color = [1,1,1,1]
-			self.buskill_is_armed = True
+			buskill.buskill_is_armed = False
+		else:
+			self.toggle_btn.text = 'BusKill is currently armed\n(click to disarm)'
+			self.toggle_btn.background_color = [1,0,0,1]
+			buskill.buskill_is_armed = True
 
 class BusKill(App):
 
 	def build(self):
 		return MainWindow()
-
-
-BusKill().run()
-
