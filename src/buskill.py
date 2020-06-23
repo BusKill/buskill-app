@@ -11,6 +11,9 @@
 
 import platform
 
+import logging
+logger = logging.getLogger( __name__ )
+
 def init():
 	global buskill_is_armed
 	buskill_is_armed = False
@@ -55,19 +58,25 @@ def toggle():
 		buskill_is_armed = True
 
 def armMac():
-	print( "placeholder for arming buskill on a mac" )
+	msg = "placeholder for arming buskill on a mac"
+	print( msg ); logger.info( msg )
 
 def armWin():
-	print( "placeholder for arming buskill on windows" )
+	msg = "placeholder for arming buskill on windows"
+	print( msg ); logger.info( msg )
 
 def armLin():
-	print( "placeholder for arming buskill on linux" )
+	msg = "placeholder for arming buskill on linux"
+	print( msg ); logger.info( msg )
 
 def disarmMac():
-	print( "placeholder for disarming buskill on a mac" )
+	msg = "placeholder for disarming buskill on a mac"
+	print( msg ); logger.info( msg )
 
 def disarmWin():
-	print( "placeholder for disarming buskill on windows" )
+	msg = "placeholder for disarming buskill on windows"
+	print( msg ); logger.info( msg )
 
 def disarmLin():
-	print( "placeholder for disarming buskill on linux" )
+	msg = "placeholder for disarming buskill on linux"
+	print( msg ); logger.info( msg )
