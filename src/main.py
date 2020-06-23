@@ -10,13 +10,13 @@ import kivy
 from kivy.app import App
 from kivy.uix.label import Label
 
-class MyApp(App):
+class BusKill(App):
 
     def build(self):
         return Label(text='Hello world!')
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    BusKill().run()
 
 
