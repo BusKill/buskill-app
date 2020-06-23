@@ -19,7 +19,7 @@ if platform.system() == 'Windows':
 #                                   IMPORTS                                    #
 ################################################################################
 
-import argparse, logging
+import argparse, logging, sys
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -54,31 +54,24 @@ logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 
 if __name__ == '__main__':
 
-	logging.debug( "entered main" )
-
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
 
-	####################
-	# HANDLE ARGUMENTS #
-	####################
-
-	# we use ArgmentParser to handle the user's command-line arguents
-	parser = argparse.ArgumentParser(
-	 prog = "buskill",
-	 description  = 'App for arming and configuring BusKill.'
-	)
-
-	# process command-line arguments
-	args = parser.parse_args()
-
 	# did we get any command-line arguments?
-	if args == argparse.Namespace():
+	if len(sys.argv) < 2:
 		# we were given 0 command line arguments; just launch the GUI
 
 		print( "No command-line arguments detected. Launching GUI" )
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
 		from buskill_gui import *
-		BusKill().run()
+		BusKillGUI().run()
+
+	else:
+		# the user passed-in arguments; give 'em the cli
+
+		from buskill_cli import *
+		ret = BusKillCLI()
+
+		sys.exit( ret )
 

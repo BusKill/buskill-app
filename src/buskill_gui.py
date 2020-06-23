@@ -9,6 +9,10 @@
 # Version: 0.1
 ################################################################################
 
+################################################################################
+#                                   IMPORTS                                    #
+################################################################################
+
 import buskill
 import webbrowser
 
@@ -23,6 +27,16 @@ from kivy.properties import ObjectProperty
 
 from kivy.core.window import Window
 Window.size = ( 480, 800 )
+
+################################################################################
+#                                  SETTINGS                                    #
+################################################################################
+
+# n/a
+
+################################################################################
+#                                   CLASSES                                    #
+################################################################################
 
 class MainWindow(GridLayout):
 
@@ -52,7 +66,7 @@ class CriticalError(GridLayout):
 		#       to github.com
 		webbrowser.open( 'https://github.com/BusKill/buskill-app/issues' )
 
-class BusKill(App):
+class BusKillGUI(App):
 
 	buskill.init()
 

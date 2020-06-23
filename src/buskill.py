@@ -57,26 +57,27 @@ def toggle():
 
 		buskill_is_armed = True
 
-def armMac():
-	msg = "placeholder for arming buskill on a mac"
+def armLin():
+	msg = "placeholder for arming buskill on linux"
 	print( msg ); logger.info( msg )
 
 def armWin():
 	msg = "placeholder for arming buskill on windows"
 	print( msg ); logger.info( msg )
 
-def armLin():
-	msg = "placeholder for arming buskill on linux"
+def armMac():
+	msg = "placeholder for arming buskill on a mac"
 	print( msg ); logger.info( msg )
 
-def disarmMac():
-	msg = "placeholder for disarming buskill on a mac"
+def disarmLin():
+	msg = "placeholder for disarming buskill on linux"
 	print( msg ); logger.info( msg )
 
 def disarmWin():
 	msg = "placeholder for disarming buskill on windows"
 	print( msg ); logger.info( msg )
 
-def disarmLin():
-	msg = "placeholder for disarming buskill on linux"
+def disarmMac():
+	msg = "placeholder for disarming buskill on a mac"
 	print( msg ); logger.info( msg )
+
