@@ -41,7 +41,7 @@ def toggle():
 			disarmLin()
 		if platform.system() == 'Windows':
 			disarmWin()
-		if platform.system() == 'Mac':
+		if platform.system() == 'Darwin':
 			disarmMac()
 
 		buskill_is_armed = False
@@ -52,7 +52,7 @@ def toggle():
 			armLin()
 		if platform.system() == 'Windows':
 			armWin()
-		if platform.system() == 'Mac':
+		if platform.system() == 'Darwin':
 			armMac()
 
 		buskill_is_armed = True
