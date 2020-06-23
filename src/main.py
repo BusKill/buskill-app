@@ -36,7 +36,7 @@ BUSKILL_VERSION = '0.1'
 #################
 
 logging.basicConfig(
- filename='buskill.log',
+ filename = os.path.join( os.sep, 'tmp', 'buskill.log'),
  filemode='a',
  format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
  datefmt='%H:%M:%S',
