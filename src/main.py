@@ -65,6 +65,7 @@ if __name__ == '__main__':
 
 	# we use ArgmentParser to handle the user's command-line arguents
 	parser = argparse.ArgumentParser(
+	 prog = "buskill",
 	 description  = 'App for arming and configuring BusKill.'
 	)
 

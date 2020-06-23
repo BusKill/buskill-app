@@ -95,7 +95,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='helloWorld',
+          name='${APP_NAME}',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -108,9 +108,9 @@ coll = COLLECT(exe, Tree('../src/'),
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='helloWorld')
+               name='${APP_NAME}')
 app = BUNDLE(coll,
-             name='helloWorld.app',
+             name='${APP_NAME}.app',
              icon=None,
              bundle_identifier=None)
 EOF

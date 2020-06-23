@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.7
 ################################################################################
-# File:    main.py
+# File:    buskill_gui.py
 # Purpose: This is the code to launch the BusKill GUI app
 #          For more info, see: https://buskill.in/
 # Authors: Michael Altfield <michael@buskill.in>
