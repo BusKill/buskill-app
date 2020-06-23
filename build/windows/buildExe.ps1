@@ -96,7 +96,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='helloWorld',
+          name='buskill',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -110,12 +110,12 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='helloWorld')
-" | tee helloWorld.spec
+               name='buskill')
+" | tee buskill.spec
 
 # PyInstaller in windows chokes on null bytes added to .spec files; remove them
 # to prevent "ValueError: source code string cannot contain null bytes"
-(Get-Content .\helloWorld.spec) -replace "`0", "" | Set-Content .\helloWorld.spec
+(Get-Content .\buskill.spec) -replace "`0", "" | Set-Content .\buskill.spec
 
 #############
 # BUILD EXE #
@@ -128,10 +128,10 @@ coll = COLLECT(exe,
 $env:KIVY_GL_BACKEND="angle_sdl2"
 
 # build it from the spec file
-C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\buskill.spec | Out-String
 
 # attempt to execute it?
-#.\dist\helloWorld\helloWorld.exe | Out-String
+#.\dist\buskill\buskill.exe | Out-String
 
 #####################
 # PREPARE ARTIFACTS #
@@ -141,7 +141,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\helloWorld.spec
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\helloWorld dist/helloWorld-x86_64 | Out-String
+cp -r .\pyinstaller\dist\buskill dist/buskill-x86_64 | Out-String
 
 #######################
 # OUTPUT VERSION INFO #

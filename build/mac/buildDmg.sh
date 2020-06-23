@@ -21,7 +21,7 @@ set -x
 ############
 
 PYTHON_PATH='/usr/local/bin/python3'
-APP_NAME='helloWorld'
+APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"

@@ -23,11 +23,11 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: helloWorld-linux-x86_64
+        name: buskill-linux-x86_64
         path: dist/
 
     - name: Create dist tarball
-      run: 'tar -cjvf helloWorld-linux-x86_64.${{ github.run_id }}.tar.bz2 dist/*'
+      run: 'tar -cjvf buskill-linux-x86_64.${{ github.run_id }}.tar.bz2 dist/*'
       shell: bash
 
     - name: Create Release
@@ -48,8 +48,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: helloWorld-linux-x86_64.${{ github.run_id }}.tar.bz2
-        asset_name: helloWorld-linux-x86_64.${{ github.run_id }}.tar.bz2
+        asset_path: buskill-linux-x86_64.${{ github.run_id }}.tar.bz2
+        asset_name: buskill-linux-x86_64.${{ github.run_id }}.tar.bz2
         asset_content_type: application/x-bzip2
 
   windows:
@@ -69,11 +69,11 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: helloWorld-windows-x86_64
+        name: buskill-windows-x86_64
         path: dist/
 
     - name: Create Release .zip
-      run: 'Compress-Archive -DestinationPath helloWorld-windows-x86_64.${{ github.run_id }}.zip -Path dist\*'
+      run: 'Compress-Archive -DestinationPath buskill-windows-x86_64.${{ github.run_id }}.zip -Path dist\*'
       shell: powershell
 
     - name: Create Release
@@ -94,8 +94,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: helloWorld-windows-x86_64.${{ github.run_id }}.zip
-        asset_name: helloWorld-windows-x86_64.${{ github.run_id }}.zip
+        asset_path: buskill-windows-x86_64.${{ github.run_id }}.zip
+        asset_name: buskill-windows-x86_64.${{ github.run_id }}.zip
         asset_content_type: application/zip
 
   mac:
@@ -111,11 +111,11 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: helloWorld-mac-x86_64
+        name: buskill-mac-x86_64
         path: dist/
 
     - name: Create dist tarball
-      run: 'tar -cjvf helloWorld-mac-x86_64.${{ github.run_id }}.tar.bz2 dist/*'
+      run: 'tar -cjvf buskill-mac-x86_64.${{ github.run_id }}.tar.bz2 dist/*'
       shell: bash
 
     - name: Create Release
@@ -136,6 +136,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: helloWorld-mac-x86_64.${{ github.run_id }}.tar.bz2
-        asset_name: helloWorld-mac-x86_64.${{ github.run_id }}.tar.bz2
+        asset_path: buskill-mac-x86_64.${{ github.run_id }}.tar.bz2
+        asset_name: buskill-mac-x86_64.${{ github.run_id }}.tar.bz2
         asset_content_type: application/x-bzip2

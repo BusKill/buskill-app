@@ -27,7 +27,7 @@ exit 0
 ############
 
 PYTHON_PATH='/usr/bin/python3'
-APP_NAME='helloWorld'
+APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
@@ -302,8 +302,8 @@ ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python
 ls -lah Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
 md5 Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7
 Kivy.app/Contents/Frameworks/python/3.7.3/bin/python3.7 --version
-cp /usr/bin/python3 helloWorld.app/Contents/usr-bin-python3
-cp /usr/local/bin/python3 helloWorld.app/Contents/usr-local-bin-python3
+cp /usr/bin/python3 buskill.app/Contents/usr-bin-python3
+cp /usr/local/bin/python3 buskill.app/Contents/usr-local-bin-python3
 
 # GStreamer is the easiest; ~150M gone
 rm -rf "${APP_NAME}.app/Contents/Frameworks/GStreamer.framework"
