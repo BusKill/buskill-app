@@ -35,14 +35,23 @@ BUSKILL_VERSION = '0.1'
 # SETUP LOGGING #
 #################
 
+# TODO: disable logging by default; enable it with an argument
+
+# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
+if platform.system() == 'Windows':
+	log_file_path = os.path.join( 'buskill.log' )
+else:
+	log_file_path = os.path.join( os.sep, 'tmp', 'buskill.log' )
+
 logging.basicConfig(
- filename = os.path.join( os.sep, 'tmp', 'buskill.log'),
- filemode='a',
- format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
- datefmt='%H:%M:%S',
- level=logging.DEBUG
+ filename = log_file_path,
+ filemode = 'a',
+ format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+ datefmt = '%H:%M:%S',
+ level = logging.DEBUG
 )
 logging.debug("===============================================================================")
+logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 
 if __name__ == '__main__':
 
