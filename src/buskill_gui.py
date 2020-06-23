@@ -30,6 +30,7 @@ class MainWindow(GridLayout):
 	status = ObjectProperty(None)
 
 	def toggleBusKill(self):
+		buskill.toggle()
 		if buskill.isArmed():
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'

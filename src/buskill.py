@@ -16,18 +16,44 @@ def isPlatformSupported():
 def isArmed():
 	return buskill_is_armed
 
-def toggleBusKill():
+def toggle():
 
 	if isArmed():
+
+		if platform.system() == 'Linux':
+			disarmLin()
+		if platform.system() == 'Windows':
+			disarmWin()
+		if platform.system() == 'Mac':
+			disarmMac()
+
 		busKill_is_armed = False
+
 	else:
+
+		if platform.system() == 'Linux':
+			armLin()
+		if platform.system() == 'Windows':
+			armWin()
+		if platform.system() == 'Mac':
+			armMac()
+
 		buskill_is_armed = True
 
 def armMac():
 	print( "placeholder for arming buskill on a mac" )
 
-def armWindows():
+def armWin():
 	print( "placeholder for arming buskill on windows" )
 
-def armLinux():
+def armLin():
 	print( "placeholder for arming buskill on linux" )
+
+def disarmMac():
+	print( "placeholder for disarming buskill on a mac" )
+
+def disarmWin():
+	print( "placeholder for disarming buskill on windows" )
+
+def disarmLin():
+	print( "placeholder for disarming buskill on linux" )
