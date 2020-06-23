@@ -7,7 +7,7 @@ set -x
 #
 #          * https://kivy.org/doc/stable/installation/installation-osx.html
 #          * https://kivy.org/doc/stable/guide/packaging-osx.html
-#          * https://github.com/kivy/buildozer/issues/494#issuecomment-390262889
+#          * https://blog.fossasia.org/deploying-a-kivy-application-with-pyinstaller-for-mac-osx-to-github/
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-22
@@ -26,15 +26,11 @@ APP_NAME='helloWorld'
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 
-# attempt to overwrite brew's /usr/local/bin/python3 with /usr/bin/python3
-#alias python3='${PYTHON_PATH}'
-
 ########
 # INFO #
 ########
 
 # print some info for debugging failed builds
-
 uname -a
 sw_vers
 which python2
@@ -46,18 +42,6 @@ echo $PATH
 pwd
 ls -lah
 
-echo "INFO: list of python* in /usr/bin/"
-ls -lah /usr/bin/python*
-find /usr/bin -type f -name python | xargs --version
-find /usr/bin -type f -name python3 | xargs --version
-md5 /usr/bin/python*
-
-echo "INFO: list of python* in /usr/local/bin/"
-ls -lah /usr/local/bin/python*
-find /usr/local/bin -type f -name python | xargs --version
-find /usr/local/bin -type f -name python3 | xargs --version
-md5 /usr/local/bin/python*
-
 ###################
 # INSTALL DEPENDS #
 ###################
@@ -68,7 +52,6 @@ brew update
 
 # install os-level depends
 brew install wget python3
-#brew reinstall --build-bottle sdl2 sdl2_image sdl2_ttf sdl2_mixer
 brew reinstall sdl2 sdl2_image sdl2_ttf sdl2_mixer
 
 # setup a virtualenv to isolate our app's python depends
@@ -83,14 +66,13 @@ ${PYTHON_PATH} -m pip install --upgrade --user Cython==0.29.10
 ${PYTHON_PATH} -m pip install --upgrade --user -r requirements.txt
 ${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
 
-#######################
-# PREPARE PYINSTALLER #
-#######################
+#####################
+# PYINSTALLER BUILD #
+#####################
 
 mkdir pyinstaller
 pushd pyinstaller
 
-# TODO: change this to cat
 ${PYTHON_PATH} -m PyInstaller -y --clean --windowed --name ${APP_NAME} \
   --hidden-import 'pkg_resources.py2_warn' \
   --exclude-module _tkinter \
@@ -99,12 +81,6 @@ ${PYTHON_PATH} -m PyInstaller -y --clean --windowed --name ${APP_NAME} \
   --exclude-module twisted \
   ../src/main.py
 
-#########
-# BUILD #
-#########
-
-#pyinstaller -y --clean --windowed ${APP_NAME}.spec
-
 pushd dist
 hdiutil create ./${APP_NAME}.dmg -srcfolder ${APP_NAME}.app -ov
 popd
@@ -112,13 +88,6 @@ popd
 #####################
 # PREPARE ARTIFACTS #
 #####################
-
-# TODO: remove this after fixing .dmg generation
-# the dmg generation below fails on headless builds because you have to click
-# a button in a dialog granting finder some permissions from the apple script.
-# for now we include the .app
-mkdir -p ../dist
-cp -r "${APP_NAME}.app" ../dist/
 
 # create the dist dir for our result to be uploaded as an artifact
 mkdir -p ../dist
@@ -135,9 +104,8 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
-pwd
 echo $PATH
-ls -lah /Users/runner/Library/Python/3.7/bin
+pwd
 ls -lah
 ls -lah dist
 
