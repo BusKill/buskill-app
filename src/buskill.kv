@@ -1,8 +1,14 @@
-<MainWindow>:
+<MainWindow>
+	cols: 1
+	size: (20,500)
+	padding: [100,100]
+	orientation: 'vertical'
+
 	Button:
-		text: 'press me'
-		on_press: print("ouch! More gently please")
-		on_release: print("ahhh")
-		on_state:
-			print("my current state is {}".format(self.state))
+		text: "BusKill is currently disarmed\n(click to arm)"
+		#size: self.texture_size
+		size_hint: (1,1)
+		halign: 'center'
+		valign: 'middle'
+		on_release: root.toggleBusKill()
 

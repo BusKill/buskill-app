@@ -14,15 +14,21 @@ import kivy
 
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.uix.gridlayout import GridLayout
 
-class MainWindow(Widget):
-	pass
+from kivy.core.window import Window
+Window.size = ( 480, 800 )
+
+class MainWindow(GridLayout):
+
+	def toggleBusKill(self):
+		print( 'hi' )
 
 class BusKill(App):
 
 	def build(self):
-
 		return MainWindow()
+
 
 BusKill().run()
 
