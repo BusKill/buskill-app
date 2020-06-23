@@ -2,9 +2,11 @@
 
 # Cross Platform Python GUI
 
-This repo is a fork-ready base for new your cross-platform, python-based GUI application.
+This repo is a fork-ready base for your new cross-platform, python-based GUI application.
 
 It includes the CI pipeline to automatically build self-contained executables for Linux (AppImage), Windows (exe), and MacOS (dmg).
+
+This project uses [kivy](https://kivy.org/), which also supports android and iOS--though building apps for these platforms hasn't been automated into GitHub Actions (yet). PRs Welcome! ;)
 
 # How to use this repo
 
@@ -13,10 +15,6 @@ It includes the CI pipeline to automatically build self-contained executables fo
 3. Add any required python modules to [requirements.txt](/requirements.txt)
 
 When you push git commits to github on master, github will automatically spin up containers in the cloud and build your application's executables for all target platforms.
-
-# TODO
-
-1. Finish CI workflow for building MacOS .dmg apps
 
 # License
 
