@@ -1,21 +1,27 @@
 ![](https://github.com/maltfield/cross-platform-python-gui/workflows/build/badge.svg)
 
-# Cross Platform Python GUI
+# BusKill App
 
-This repo is a fork-ready base for your new cross-platform, python-based GUI application.
+This is the codebase for our cross-platform GUI app for [BusKill](https://www.buskill.in). It works in Linux, Windows, and MacOS.
 
-It includes the CI pipeline to automatically build self-contained executables for Linux (AppImage), Windows (exe), and MacOS (dmg).
+BusKill is a laptop kill cord that can trigger your computer to lock or shutdown when it's physically seperated from you.
 
-This project uses [kivy](https://kivy.org/), which also supports android and iOS--though building apps for these platforms hasn't been automated into GitHub Actions (yet). PRs Welcome! ;)
+For more information on how to buy or build your own BusKill cable, see the [BusKill Website](https://www.buskill.in):
 
-# How to use this repo
+![](.github-assets/busKill_demo.gif)
 
-1. Fork this repo
-2. Edit [src/main.py](/src/main.py) as needed
-3. Add any required python modules to [requirements.txt](/requirements.txt)
+ * [https://www.buskill.in](https://www.buskill.in)
 
-When you push git commits to github on master, github will automatically spin up containers in the cloud and build your application's executables for all target platforms.
+![](.github-assets/busKill_featuredImage.jpg)
+
+# Press
+
+As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), & [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves).
 
 # License
 
 The contents of this repo are dual-licensed. All code is GPLv3 and all other content is CC-BY-SA.
+
+# For more Information
+
+See https://tech.michaelaltfield.net/2020/01/02/buskill-laptop-kill-cord-dead-man-switch/
