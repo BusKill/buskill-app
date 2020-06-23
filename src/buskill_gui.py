@@ -27,14 +27,17 @@ class MainWindow(GridLayout):
 	buskill.init()
 
 	toggle_btn = ObjectProperty(None)
+	status = ObjectProperty(None)
 
 	def toggleBusKill(self):
 		if buskill.isArmed():
-			self.toggle_btn.text = 'BusKill is currently disarmed\n(click to arm)'
+			self.toggle_btn.text = 'Arm'
+			self.status.text = 'BusKill is currently disarmed.'
 			self.toggle_btn.background_color = [1,1,1,1]
 			buskill.buskill_is_armed = False
 		else:
-			self.toggle_btn.text = 'BusKill is currently armed\n(click to disarm)'
+			self.toggle_btn.text = 'Disarm'
+			self.status.text = 'BusKill is currently armed.'
 			self.toggle_btn.background_color = [1,0,0,1]
 			buskill.buskill_is_armed = True
 

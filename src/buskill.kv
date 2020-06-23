@@ -1,15 +1,24 @@
 <MainWindow>:
 
 	toggle_btn: toggle_btn
+	status: status
 
 	cols: 1
 	size: (20,500)
 	padding: [100,100]
 	orientation: 'vertical'
 
+	Label:
+		id: status 
+		text: "BusKill is currently disarmed."
+		#size: self.texture_size
+		size_hint: (1,2)
+		halign: 'center'
+		valign: 'middle'
+
 	Button:
 		id: toggle_btn
-		text: "BusKill is currently disarmed\n(click to arm)"
+		text: "Arm"
 		#size: self.texture_size
 		size_hint: (1,1)
 		halign: 'center'
