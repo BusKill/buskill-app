@@ -15,14 +15,25 @@ import kivy
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
+from kivy.properties import ObjectProperty
 
 from kivy.core.window import Window
 Window.size = ( 480, 800 )
 
 class MainWindow(GridLayout):
 
+	toggle_btn = ObjectProperty(None)
+	buskill_is_armed = False
+
 	def toggleBusKill(self):
-		print( 'hi' )
+		if self.buskill_is_armed == True:
+			self.toggle_btn.text = 'BusKill is currently armed\n(click to disarm)'
+			self.toggle_btn.background_color = [1,0,0,1]
+			self.buskill_is_armed = False
+		else:
+			self.toggle_btn.text = 'BusKill is currently disarmed\n(click to arm)'
+			self.toggle_btn.background_color = [1,1,1,1]
+			self.buskill_is_armed = True
 
 class BusKill(App):
 
