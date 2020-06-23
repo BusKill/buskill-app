@@ -1,3 +1,24 @@
+<CriticalError>:
+	cols: 1
+	msg: msg
+	cols: 1
+	padding: [100,100]
+
+	TextInput:
+		size_hint: (1,2)
+		id: msg
+		text: 'blah blah ' * 1000
+		text_size: self.width, None
+		#height: self.texture_size[1]
+		readonly: True
+
+	Button:
+		size_hint: (1,1)
+		text: 'Click to file a bug report'
+		halign: 'center'
+		valign: 'middle'
+		on_release: root.fileBugReport()
+
 <MainWindow>:
 
 	toggle_btn: toggle_btn
