@@ -30,17 +30,17 @@ class MainWindow(GridLayout):
 	status = ObjectProperty(None)
 
 	def toggleBusKill(self):
+		print( "buskill.buskill_is_armted:|" +str(buskill.buskill_is_armed)+ "|")
 		buskill.toggle()
+		print( "buskill.buskill_is_armted:|" +str(buskill.buskill_is_armed)+ "|")
 		if buskill.isArmed():
-			self.toggle_btn.text = 'Arm'
-			self.status.text = 'BusKill is currently disarmed.'
-			self.toggle_btn.background_color = [1,1,1,1]
-			buskill.buskill_is_armed = False
-		else:
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
 			self.toggle_btn.background_color = [1,0,0,1]
-			buskill.buskill_is_armed = True
+		else:
+			self.toggle_btn.text = 'Arm'
+			self.status.text = 'BusKill is currently disarmed.'
+			self.toggle_btn.background_color = [1,1,1,1]
 
 class CriticalError(GridLayout):
 
@@ -57,7 +57,6 @@ class CriticalError(GridLayout):
 class BusKill(App):
 
 	buskill.init()
-	print( buskill.ERR_PLATFORM_NOT_SUPPORTED )
 
 	def build(self):
 
@@ -71,6 +70,9 @@ class BusKill(App):
 
 		else:
 			# the current platform isn't supported; show critical error window
+
+			msg = buskill.ERR_PLATFORM_NOT_SUPPORTED
+			print( msg ); logging.error( msg )
 
 			crit = CriticalError()
 			crit.showError( buskill.ERR_PLATFORM_NOT_SUPPORTED )

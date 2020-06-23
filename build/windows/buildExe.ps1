@@ -102,7 +102,7 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=True )
-coll = COLLECT(exe,
+coll = COLLECT(exe, Tree('..\\src\\'),
                a.binaries,
                a.zipfiles,
                a.datas,

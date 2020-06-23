@@ -25,9 +25,12 @@ def isPlatformSupported():
 		return False
 
 def isArmed():
+	global buskill_is_armed
 	return buskill_is_armed
 
 def toggle():
+
+	global buskill_is_armed
 
 	if isArmed():
 
@@ -38,7 +41,7 @@ def toggle():
 		if platform.system() == 'Mac':
 			disarmMac()
 
-		busKill_is_armed = False
+		buskill_is_armed = False
 
 	else:
 
