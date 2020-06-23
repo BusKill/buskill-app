@@ -36,7 +36,6 @@ BUSKILL_VERSION = '0.1'
 #################
 
 # TODO: disable logging by default; enable it with an argument
-
 # TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
 if platform.system() == 'Windows':
 	log_file_path = os.path.join( 'buskill.log' )
