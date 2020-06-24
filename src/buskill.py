@@ -21,14 +21,18 @@ def init():
 	global ERR_PLATFORM_NOT_SUPPORTED
 	ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
+	global CURRENT_PLATFORM
+	CURRENT_PLATFORM = platform.system().upper()
+
 def isPlatformSupported():
-	if platform.system() in [ 'Linux', 'Windows', 'Darwin' ]:
+	if CURRENT_PLATFORM.startswith( 'LINUX' ) \
+	 or CURRENT_PLATFORM.startswith( 'WINDOWS' ) \
+	 or CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		return True
 	else:
 		return False
 
 def isArmed():
-	global buskill_is_armed
 	return buskill_is_armed
 
 def toggle():
@@ -37,22 +41,22 @@ def toggle():
 
 	if isArmed():
 
-		if platform.system() == 'Linux':
+		if CURRENT_PLATFORM.startswith( 'LINUX' ):
 			disarmLin()
-		if platform.system() == 'Windows':
+		if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 			disarmWin()
-		if platform.system() == 'Darwin':
+		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			disarmMac()
 
 		buskill_is_armed = False
 
 	else:
 
-		if platform.system() == 'Linux':
+		if CURRENT_PLATFORM.startswith( 'LINUX' ):
 			armLin()
-		if platform.system() == 'Windows':
+		if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 			armWin()
-		if platform.system() == 'Darwin':
+		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			armMac()
 
 		buskill_is_armed = True
