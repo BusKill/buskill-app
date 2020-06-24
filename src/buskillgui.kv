@@ -12,13 +12,14 @@
 
 	msg: msg
 
-	cols: 1
-	padding: [100,100]
+	orientation: 'vertical'
+	pos_hint: {'center_x': 0.5, 'top': 0.95}
+	size_hint: ( 0.9, 0.9 )
+	spacing: 10
 
 	TextInput:
-		size_hint: (1,2)
 		id: msg
-		text: 'blah blah ' * 1000
+		size_hint: (1,2)
 		readonly: True
 
 	Button:
@@ -33,15 +34,14 @@
 	toggle_btn: toggle_btn
 	status: status
 
-	cols: 1
-	size: (20,500)
-	padding: [100,100]
 	orientation: 'vertical'
+	pos_hint: {'center_x': 0.5, 'top': 0.95}
+	size_hint: ( 0.9, 0.9 )
+	spacing: 10
 
 	Label:
 		id: status 
 		text: "BusKill is currently disarmed."
-		#size: self.texture_size
 		size_hint: (1,2)
 		halign: 'center'
 		valign: 'middle'
@@ -49,7 +49,6 @@
 	Button:
 		id: toggle_btn
 		text: "Arm"
-		#size: self.texture_size
 		size_hint: (1,1)
 		halign: 'center'
 		valign: 'middle'

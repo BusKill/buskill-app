@@ -23,10 +23,14 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 
 from kivy.core.window import Window
 Window.size = ( 480, 800 )
+
+import logging
+logger = logging.getLogger( __name__ )
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -38,13 +42,15 @@ Window.size = ( 480, 800 )
 #                                   CLASSES                                    #
 ################################################################################
 
-class MainWindow(GridLayout):
+class MainWindow(BoxLayout):
 
 	toggle_btn = ObjectProperty(None)
 	status = ObjectProperty(None)
 
 	def toggleBusKill(self):
+
 		buskill.toggle()
+
 		if buskill.isArmed():
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
@@ -54,7 +60,7 @@ class MainWindow(GridLayout):
 			self.status.text = 'BusKill is currently disarmed.'
 			self.toggle_btn.background_color = [1,1,1,1]
 
-class CriticalError(GridLayout):
+class CriticalError(BoxLayout):
 
 	msg = ObjectProperty(None)
 
