@@ -116,11 +116,15 @@ chmod +x /tmp/kivy_appdir/AppRun
 ############
 # THINNING #
 ############
+
+# first print the pip packags installed before the thinning deletes pip
+/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
+
 echo "INFO: Beginning AppDir thinning"
 
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 
-unnecessary="pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples"
+unnecessary="pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
