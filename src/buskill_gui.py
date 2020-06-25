@@ -31,6 +31,7 @@ Window.size = ( 480, 800 )
 
 from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 import logging
 logger = logging.getLogger( __name__ )
