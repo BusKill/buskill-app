@@ -113,6 +113,27 @@ EOF
 # make it executable
 chmod +x /tmp/kivy_appdir/AppRun
 
+############
+# THINNING #
+############
+echo "INFO: Beginning AppDir thinning"
+
+# remove some unnecessary items from the AppDir to reduce the AppImage size
+
+unnecessary="pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples"
+for item in $(echo "${unnecessary}"); do
+
+	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
+
+	for path in $(echo "${paths}"); do
+		if [ -e ]; then
+			echo "INFO: deleting $path "
+			rm -rf "${path}"
+		fi
+	done
+
+done
+
 ##################
 # BUILD APPIMAGE #
 ##################
@@ -124,7 +145,7 @@ chmod +x /tmp/appimagetool.AppImage
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-/tmp/appimagetool.AppImage --no-appstream "/tmp/kivy_appdir dist/${APP_NAME}.AppImage"
+/tmp/appimagetool.AppImage --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #
