@@ -65,7 +65,7 @@ if __name__ == '__main__':
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
 		from buskill_gui import *
-		BusKillGUI().run()
+		BusKill().run()
 
 	else:
 		# the user passed-in arguments; give 'em the cli

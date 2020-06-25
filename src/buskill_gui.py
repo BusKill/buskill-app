@@ -29,6 +29,9 @@ from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 Window.size = ( 480, 800 )
 
+from kivy.config import Config
+Config.set('kivy', 'exit_on_escape', '0')
+
 import logging
 logger = logging.getLogger( __name__ )
 
@@ -72,9 +75,12 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://github.com/BusKill/buskill-app/issues' )
 
-class BusKillGUI(App):
+class BusKill(App):
 
 	buskill.init()
+
+	def close( self, *args ):
+		buskill.close()
 
 	def build(self):
 
@@ -84,6 +90,7 @@ class BusKillGUI(App):
 		if buskill.isPlatformSupported():
 
 			# yes, this platform is supported; show the main window
+			Window.bind( on_request_close = self.close )
 			return MainWindow()
 
 		else:

@@ -73,10 +73,6 @@ def BusKillCLI():
 	if args.arm:
 		buskill.toggle()
 
-		# TODO: make this statement true
-		msg = "BusKill is now armed. Closing this shell will disarm BusKill."
-		print( msg ); logging.error( msg )
-
 	else:
 		msg = "Nothing to do."
 		print( msg ); logging.warning( msg )

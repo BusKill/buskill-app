@@ -13,7 +13,7 @@
 #                                   IMPORTS                                    #
 ################################################################################
 
-import platform, usb1, multiprocessing
+import platform, usb1, multiprocessing, subprocess
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -58,6 +58,12 @@ def init():
 		arm_fun = armMac
 		disarm_fun = disarmMac
 		trigger_fun = triggerMac
+
+# this is called when the GUI is closed 
+def close():
+
+	# if we don't kill this child process on kill, the UI will freeze
+	usb_handler.terminate()
 
 def isPlatformSupported():
 
@@ -105,9 +111,18 @@ def toggle():
 
 		buskill_is_armed = True
 
-def trigger():
+def trigger( *argv ):
 
-	trigger_fun()
+	(context, device, event) = argv
+
+	msg = "DEBUG: called trigger()"
+	print( msg ); logger.debug( msg )
+
+	# is this from a usb device being inserted or removed? 
+	if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
+		# this is a usb removal event
+
+		trigger_fun( *argv )
 
 ####################
 # ARMING FUNCTIONS #
@@ -125,15 +140,12 @@ def armLin():
 			return msg
 
 		opaque = context.hotplugRegisterCallback( trigger )
-		msg = "DEBUG: callback registered"
-		print( msg ); logger.debug( msg )
+		msg = "INFO: BusKill is armed. Listening for removal event.\n"
+		msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
+		print( msg ); logger.info( msg )
 
 		try:
 			while True:
-				msg = "INFO: BusKill is armed. Listening for removal event.\n"
-				msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
-				print( msg ); logger.info( msg )
-
 				# this call is blocking (with a default timeout of 60 seconds)
 				# afaik there's no way to tell USBContext.handleEvents() to exit
 				# safely, so instead we just make the whole call to this arming
@@ -178,9 +190,15 @@ def disarmMac():
 
 # TODO: add other triggers besides lockscreens
 
-def triggerLin():
-	msg = "placeholder for triggering buskill on linux"
-	print( msg ); logger.info( msg )
+def triggerLin( context, device, event ):
+	msg = "DEBUG: BusKill lockscreen trigger executing now"
+	print( msg ); logger.debug( msg )
+
+	try:
+		subprocess.run( ['xdg-screensaver', 'lock'] )
+		subprocess.run( ['xscreensaver', '-lock'] )
+	except FileNotFoundError as e:
+		pass
 
 def triggerWin():
 	msg = "placeholder for triggering buskill on windows"
