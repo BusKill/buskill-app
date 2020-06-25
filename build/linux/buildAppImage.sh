@@ -19,6 +19,8 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
+APP_NAME='buskill'
+
 PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage'
 
 ################################################################################
@@ -55,7 +57,7 @@ print_debugging_info
 # download the latest python-appimage release, which is an AppImage containing
 # the core python3.7 runtime. We use this as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
-wget --continue -output-document="/tmp/python.AppImage" "${PYTHON_APPIMAGE_URL}"
+wget --continue --output-document="/tmp/python.AppImage" "${PYTHON_APPIMAGE_URL}"
 chmod +x /tmp/python.AppImage
 /tmp/python.AppImage --appimage-extract
 mv squashfs-root /tmp/kivy_appdir
@@ -122,7 +124,7 @@ chmod +x /tmp/appimagetool.AppImage
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-/tmp/appimagetool.AppImage --no-appstream /tmp/kivy_appdir dist/buskill.AppImage
+/tmp/appimagetool.AppImage --no-appstream "/tmp/kivy_appdir dist/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #
