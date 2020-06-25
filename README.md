@@ -1,4 +1,4 @@
-![](https://github.com/maltfield/cross-platform-python-gui/workflows/build/badge.svg)
+![](https://github.com/buskill/buskiil-app/workflows/build/badge.svg)
 
 # BusKill App
 
