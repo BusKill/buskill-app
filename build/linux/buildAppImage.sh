@@ -11,36 +11,42 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-05-31
-# Version: 0.2
+# Updated: 2020-06-25
+# Version: 0.3
 ################################################################################
 
-############
-# SETTINGS #
-############
+################################################################################
+#                                  SETTINGS                                    #
+################################################################################
 
-PYTHON_PATH='/usr/bin/python3.7'
+PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage'
 
-###################
-# INSTALL DEPENDS #
-###################
+################################################################################
+#                                  FUNCTIONS                                   #
+################################################################################
 
-# install os-level depends
-sudo apt-get update; sudo apt-get -y install python3.7 python3-pip python3-setuptools wget rsync fuse
+print_debugging_info () {
+	date
+	uname -a
+	cat /etc/issue
+	which python
+	python --version
+	python -m pip list
+	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
+	/tmp/kivy_appdir/opt/python*/bin/python* --version
+	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
+}
 
-uname -a
-cat /etc/issue
-which python
-which python3.7
+################################################################################
+#                                 MAIN BODY                                    #
+################################################################################
 
-# setup a virtualenv to isolate our app's python depends
-${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
-${PYTHON_PATH} -m pip install --upgrade --user virtualenv
-${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
+###############
+# OUTPUT INFO #
+###############
 
-# install kivy and all other python dependencies with pip into our virtual env
-# we'll later add these to our AppDir for building the AppImage
-source /tmp/kivy_venv/bin/activate; python -m pip install -r requirements.txt
+# output info to debug issues with this build
+print_debugging_info
 
 ##################
 # PREPARE APPDIR #
@@ -49,13 +55,12 @@ source /tmp/kivy_venv/bin/activate; python -m pip install -r requirements.txt
 # download the latest python-appimage release, which is an AppImage containing
 # the core python3.7 runtime. We use this as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
-wget -O /tmp/python3.7.AppImage https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage
-chmod +x /tmp/python3.7.AppImage
-/tmp/python3.7.AppImage --appimage-extract
+wget --continue -output-document="/tmp/python.AppImage" "${PYTHON_APPIMAGE_URL}"
+chmod +x /tmp/python.AppImage
+/tmp/python.AppImage --appimage-extract
 mv squashfs-root /tmp/kivy_appdir
 
-# copy depends that were installed with kivy into our kivy AppDir
-rsync -a /tmp/kivy_venv/ /tmp/kivy_appdir/opt/python3.7/
+/tmp/kivy_appdir/opt/python*/bin/python* -m pip install --upgrade -r requirements.txt
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
@@ -111,23 +116,20 @@ chmod +x /tmp/kivy_appdir/AppRun
 ##################
 
 # create the AppImage from kivy AppDir
-wget -O /tmp/appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
+wget --continue --output-document="/tmp/appimagetool.AppImage" https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
 chmod +x /tmp/appimagetool.AppImage
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-/tmp/appimagetool.AppImage /tmp/kivy_appdir dist/buskill.AppImage
+/tmp/appimagetool.AppImage --no-appstream /tmp/kivy_appdir dist/buskill.AppImage
 
-#######################
-# OUTPUT VERSION INFO #
-#######################
+###############
+# OUTPUT INFO #
+###############
 
-uname -a
-cat /etc/issue
-which python
-python --version
-python -m pip list
+# output info to debug issues with this build
+print_debugging_info
 
 ##################
 # CLEANUP & EXIT #
