@@ -18,6 +18,18 @@ import platform, multiprocessing, subprocess
 import logging
 logger = logging.getLogger( __name__ )
 
+# platform-specific modules
+CURRENT_PLATFORM = platform.system().upper()
+if CURRENT_PLATFORM.startswith( 'LINUX' ):
+	import usb1
+
+if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
+	import win32api, win32con, win32gui
+	from ctypes import *
+
+if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+	pass
+
 ################################################################################
 #                                  SETTINGS                                    #
 ################################################################################
@@ -31,7 +43,7 @@ DBT_DEVICEARRIVAL = 0x8000
 DBT_DEVICEQUERYREMOVE = 0x8001
 DBT_DEVICEQUERYREMOVEFAILED = 0x8002
 DBT_DEVICEMOVEPENDING = 0x8003
-BT_DEVICEREMOVECOMPLETE = 0x8004
+DBT_DEVICEREMOVECOMPLETE = 0x8004
 DBT_DEVICETYPESSPECIFIC = 0x8005
 DBT_CONFIGCHANGED = 0x0018
 
@@ -66,7 +78,6 @@ def init():
 	global CURRENT_PLATFORM
 	CURRENT_PLATFORM = platform.system().upper()
 
-
 	# platform-specific setup
 	global arm_fun
 	global disarm_fun
@@ -81,7 +92,7 @@ def init():
 	if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 		arm_fun = armWin
 		disarm_fun = disarmWin
-		trigger_fun = triggerWin
+		#trigger_fun = triggerWin
 
 		import win32api, win32con, win32gui
 		from ctypes import *
