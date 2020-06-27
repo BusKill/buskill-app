@@ -13,7 +13,6 @@ set -x
 # Version: 0.2
 ################################################################################
 
-
 ############
 # SETTINGS #
 ############
@@ -63,6 +62,12 @@ ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
 ${PYTHON_PATH} -m pip install --upgrade --user Cython==0.29.10
 ${PYTHON_PATH} -m pip install --upgrade --user -r requirements.txt
 ${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
+
+# libusb depend for MacOS, extracted from:
+# * libusb-1.0.23.tar.bz:libusb/.libs/libusb-1.0.dylib
+# * https://libusb.info/
+# * https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.tar.bz2
+cp build/mac/libusb-1.0.dylib src/
 
 #####################
 # PYINSTALLER BUILD #

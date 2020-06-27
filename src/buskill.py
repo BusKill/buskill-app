@@ -5,7 +5,7 @@
 #          For more info, see: https://buskill.in/
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-23
-# Updated: 2020-06-23
+# Updated: 2020-06-28
 # Version: 0.1
 ################################################################################
 
@@ -28,7 +28,7 @@ if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 	from ctypes import *
 
 if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-	pass
+	import usb1
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -316,6 +316,7 @@ def armWin():
 def armMac():
 	msg = "placeholder for arming buskill on a mac"
 	print( msg ); logger.info( msg )
+	armLin()
 
 #######################
 # DISARMING FUNCTIONS #

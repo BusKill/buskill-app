@@ -54,9 +54,15 @@ logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 
 if __name__ == '__main__':
 
-	# fix "error: unrecognized arguments: --multiprocessing-fork"
+	CURRENT_PLATFORM = platform.system().upper()
+
+	# fix windows "error: unrecognized arguments: --multiprocessing-fork"
 	# * kttps://stackoverflow.com/questions/46335842/python-multiprocessing-throws-error-with-argparse-and-pyinstaller
 	multiprocessing.freeze_support()
+
+	# fix macos error "The process has forked and you cannot use this CoreFoundation functionality safely. You MUST exec()."
+	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		multiprocessing.set_start_method('spawn')
 
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
