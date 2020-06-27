@@ -54,7 +54,7 @@ logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 
 if __name__ == '__main__':
 
-	# fix "error: unrecognized arguments: --multiprocessing-for"
+	# fix "error: unrecognized arguments: --multiprocessing-fork"
 	# * kttps://stackoverflow.com/questions/46335842/python-multiprocessing-throws-error-with-argparse-and-pyinstaller
 	multiprocessing.freeze_support()
 
