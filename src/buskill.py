@@ -160,11 +160,20 @@ def hotplugCallbackLin( *argv ):
 	msg = "DEBUG: called hotplugCallbackLin()"
 	print( msg ); logger.debug( msg )
 
+	msg = "context:|" +str(context)+ "|"
+	print( msg ); logger.debug( msg )
+
+	msg = "device:|" +str(device)+ "|"
+	print( msg ); logger.debug( msg )
+
+	msg = "event:|" +str(event)+ "|"
+	print( msg ); logger.debug( msg )
+
 	# is this from a usb device being inserted or removed? 
 	if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 		# this is a usb removal event
 
-		trigger_fun( *argv )
+		triggerLin()
 
 ############################
 # WINDOWS HELPER FUNCTIONS #
@@ -330,7 +339,7 @@ def disarmMac():
 
 # TODO: add other triggers besides lockscreens
 
-def triggerLin( context, device, event ):
+def triggerLin():
 	msg = "DEBUG: BusKill lockscreen trigger executing now"
 	print( msg ); logger.debug( msg )
 
@@ -340,7 +349,7 @@ def triggerLin( context, device, event ):
 	except FileNotFoundError as e:
 		pass
 
-def triggerWin( context, device, event ):
+def triggerWin():
 	msg = "DEBUG: BusKill lockscreen trigger executing now"
 	print( msg ); logger.debug( msg )
 
