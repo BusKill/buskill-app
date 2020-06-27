@@ -92,7 +92,7 @@ def init():
 	if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 		arm_fun = armWin
 		disarm_fun = disarmWin
-		#trigger_fun = triggerWin
+		trigger_fun = triggerWin
 
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		arm_fun = armMac
@@ -151,11 +151,13 @@ def toggle():
 
 		buskill_is_armed = True
 
-def trigger( *argv ):
+# this is a callback function that is registered to be called when a usb
+# hotplug event occurs in linux
+def hotplugCallbackLin( *argv ):
 
 	(context, device, event) = argv
 
-	msg = "DEBUG: called trigger()"
+	msg = "DEBUG: called hotplugCallbackLin()"
 	print( msg ); logger.debug( msg )
 
 	# is this from a usb device being inserted or removed? 
@@ -201,7 +203,7 @@ if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 	class Notification:
 		def __init__(self):
 			message_map = {
-			 win32con.WM_DEVICECHANGE: self.triggerWin
+			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
 			}
 	
 			wc = win32gui.WNDCLASS()
@@ -223,31 +225,43 @@ if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 			 hinst, None
 			)
 	
+		# this is a callback function that is registered to be called when a usb
+		# hotplug event occurs in windows
 		# WM_DEVICECHANGE:
 		#  wParam - type of change: arrival, removal etc.
 		#  lParam - what's changed?
 		#    if it's a volume then...
 		#  lParam - what's changed more exactly
-		def triggerWin(self, hwnd, msg, wparam, lparam):
+		def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
 	
 			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
 	
-				msg = "placeholder for lockscreen trigger exec windows"
-				print( msg ); logger.info( msg )
+				triggerWin()
 	
-				print("Something's removed")
-				print( "hwnd:|" +str(hwnd)+ "|" )
-				print( "msg:|" +str(msg)+ "|" )
-				print( "wparam:|" +str(wparam)+ "|" )
-				print( "lparam:|" +str(lparam)+ "|" )
+				msg = "hwnd:|" +str(hwnd)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "message:|" +str(message)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg= "wparam:|" +str(wparam)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "lparam:|" +str(lparam)+ "|"
+				print( msg ); logger.debug( msg )
 	
 				dev_broadcast_volume = DEV_BROADCAST_VOLUME.from_address(lparam)
-				print( "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|" )
+				msg = "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|"
+				print( msg ); logger.debug( msg )
+
 				drive_letter = drive_from_mask(dev_broadcast_volume.dbcv_unitmask)
-				print( "drive_letter:|" +str(drive_letter)+ "|" )
-				print( "ch( ord('A') + drive_letter):|", chr(ord('A') + drive_letter), '|' )
+				msg = "drive_letter:|" +str(drive_letter)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "ch( ord('A') + drive_letter):|" +str( chr(ord('A') + drive_letter) )+ '|'
+				print( msg ); logger.debug( msg )
 	
 			return 1
 
@@ -264,7 +278,7 @@ def armLin():
 			print( msg ); logger.error( msg )
 			return msg
 
-		opaque = context.hotplugRegisterCallback( trigger )
+		opaque = context.hotplugRegisterCallback( hotplugCallbackLin )
 		msg = "INFO: BusKill is armed. Listening for removal event.\n"
 		msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
 		print( msg ); logger.info( msg )
@@ -275,7 +289,7 @@ def armLin():
 				# afaik there's no way to tell USBContext.handleEvents() to exit
 				# safely, so instead we just make the whole call to this arming
 				# function in a new child process and kill it on disarm with
-				# terminate( )this approach isn't very nice and it dumps a
+				# terminate() this approach isn't very nice and it dumps a
 				# traceback to output, but it *does* immediately disarm without
 				# having wait for the timeout..
 				context.handleEvents()
@@ -325,6 +339,12 @@ def triggerLin( context, device, event ):
 		subprocess.run( ['xscreensaver', '-lock'] )
 	except FileNotFoundError as e:
 		pass
+
+def triggerWin( context, device, event ):
+	msg = "DEBUG: BusKill lockscreen trigger executing now"
+	print( msg ); logger.debug( msg )
+
+	windll.user32.LockWorkStation()
 
 def triggerMac():
 	msg = "placeholder for triggering buskill on a mac"
