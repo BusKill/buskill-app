@@ -87,15 +87,10 @@ def init():
 		disarm_fun = disarmLin
 		trigger_fun = triggerLin
 
-		import usb1
-
 	if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
 		arm_fun = armWin
 		disarm_fun = disarmWin
 		#trigger_fun = triggerWin
-
-		import win32api, win32con, win32gui
-		from ctypes import *
 
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		arm_fun = armMac
@@ -170,6 +165,10 @@ def trigger( *argv ):
 ############################
 # WINDOWS HELPER FUNCTIONS #
 ############################
+
+# The windows WM_DEVICECHANGE code below was adapted from the following sources:
+# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
+# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
 
 class DEV_BROADCAST_HDR(Structure):
 	_fields_ = [
