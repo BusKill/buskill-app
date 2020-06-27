@@ -19,7 +19,7 @@ if platform.system() == 'Windows':
 #                                   IMPORTS                                    #
 ################################################################################
 
-import argparse, logging, sys
+import argparse, logging, sys, multiprocessing
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -53,6 +53,10 @@ logging.debug("=================================================================
 logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 
 if __name__ == '__main__':
+
+	# fix "error: unrecognized arguments: --multiprocessing-for"
+	# * kttps://stackoverflow.com/questions/46335842/python-multiprocessing-throws-error-with-argparse-and-pyinstaller
+	multiprocessing.freeze_support()
 
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
