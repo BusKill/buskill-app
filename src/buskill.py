@@ -23,7 +23,7 @@ CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'LINUX' ):
 	import usb1
 
-if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
+if CURRENT_PLATFORM.startswith( 'WIN' ):
 	import win32api, win32con, win32gui
 	from ctypes import *
 
@@ -38,7 +38,7 @@ if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 # WINDOWS CONSTANTS #
 #####################
 
-if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
+if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 	# Device change events (WM_DEVICECHANGE wParam)
 	DBT_DEVICEARRIVAL = 0x8000
@@ -89,7 +89,7 @@ def init():
 		disarm_fun = disarmLin
 		trigger_fun = triggerLin
 
-	if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
+	if CURRENT_PLATFORM.startswith( 'WIN' ):
 		arm_fun = armWin
 		disarm_fun = disarmWin
 		trigger_fun = triggerWin
@@ -108,7 +108,7 @@ def close():
 def isPlatformSupported():
 
 	if CURRENT_PLATFORM.startswith( 'LINUX' ) \
-	 or CURRENT_PLATFORM.startswith( 'WINDOWS' ) \
+	 or CURRENT_PLATFORM.startswith( 'WIN' ) \
 	 or CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		return True
 	else:
@@ -183,7 +183,7 @@ def hotplugCallbackLin( *argv ):
 # * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
 # * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
 
-if CURRENT_PLATFORM.startswith( 'WINDOWS' ):
+if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 	class DEV_BROADCAST_HDR(Structure):
 		_fields_ = [

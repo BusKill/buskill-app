@@ -1,4 +1,4 @@
-![](https://github.com/buskill/buskiil-app/workflows/build/badge.svg)
+![build](https://github.com/BusKill/buskill-app/workflows/build/badge.svg?branch=master)
 
 # BusKill App
 

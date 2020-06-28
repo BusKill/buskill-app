@@ -12,7 +12,8 @@
 # this is needed for supporting Windows 10 with OpenGL < v2.0
 # Example: VirtualBox w/ OpenGL v1.1
 import platform, os
-if platform.system() == 'Windows':
+CURRENT_PLATFORM = platform.system().upper()
+if CURRENT_PLATFORM.startswith( 'WIN' ):
     os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
 
 ################################################################################
@@ -37,7 +38,7 @@ BUSKILL_VERSION = '0.1'
 
 # TODO: disable logging by default; enable it with an argument
 # TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
-if platform.system() == 'Windows':
+if CURRENT_PLATFORM.startswith( 'WIN' ):
 	log_file_path = os.path.join( 'buskill.log' )
 else:
 	log_file_path = os.path.join( os.sep, 'tmp', 'buskill.log' )
@@ -51,6 +52,15 @@ logging.basicConfig(
 )
 logging.debug("===============================================================================")
 logging.debug( 'os.environ|' +str(os.environ)+ '|' )
+logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
+logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
+logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )
+logging.debug( 'sys.path|' +str(sys.path)+ '|' )
+logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
+logging.debug( 'sys.prefix|' +str(sys.prefix)+ '|' )
+logging.debug( 'sys.version|' +str(sys.version)+ '|' )
+logging.debug( 'sys.api_version|' +str(sys.api_version)+ '|' )
+logging.debug( 'sys.version_info|' +str(sys.version_info)+ '|' )
 
 if __name__ == '__main__':
 
