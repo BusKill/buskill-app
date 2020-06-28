@@ -85,7 +85,7 @@ def init():
 	global disarm_fun
 	global trigger_fun
 	if CURRENT_PLATFORM.startswith( 'LINUX' ):
-		arm_fun = armLin
+		arm_fun = armNix
 		disarm_fun = disarmLin
 		trigger_fun = triggerLin
 
@@ -95,7 +95,7 @@ def init():
 		trigger_fun = triggerWin
 
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-		arm_fun = armMac
+		arm_fun = armNix
 		disarm_fun = disarmMac
 		trigger_fun = triggerMac
 
@@ -129,8 +129,8 @@ def toggle():
 		msg = "INFO: disarming BusKill (ignore the traceback below caused by killing the child process abruptly)"
 		print( msg ); logger.info( msg )
 
-		# TODO: maybe move this to diarmLin() if it doesn't work for Win/Mac
-		# terminate our process that's looping & listening for usb events
+		# disarm just means to terminate the child process in which the arm
+		# function was spawned. this works on all platforms.
 		usb_handler.terminate()
 		usb_handler.join()
 
@@ -152,12 +152,12 @@ def toggle():
 		buskill_is_armed = True
 
 # this is a callback function that is registered to be called when a usb
-# hotplug event occurs in linux
-def hotplugCallbackLin( *argv ):
+# hotplug event occurs using libusb (linux & macos)
+def hotplugCallbackNix( *argv ):
 
 	(context, device, event) = argv
 
-	msg = "DEBUG: called hotplugCallbackLin()"
+	msg = "DEBUG: called hotplugCallbackNix()"
 	print( msg ); logger.debug( msg )
 
 	msg = "context:|" +str(context)+ "|"
@@ -173,7 +173,7 @@ def hotplugCallbackLin( *argv ):
 	if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 		# this is a usb removal event
 
-		triggerLin()
+		trigger_fun()
 
 ############################
 # WINDOWS HELPER FUNCTIONS #
@@ -278,7 +278,8 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 # ARMING FUNCTIONS #
 ####################
 
-def armLin():
+# this works for both linux and mac
+def armNix():
 
 	with usb1.USBContext() as context:
 
@@ -287,7 +288,7 @@ def armLin():
 			print( msg ); logger.error( msg )
 			return msg
 
-		opaque = context.hotplugRegisterCallback( hotplugCallbackLin )
+		opaque = context.hotplugRegisterCallback( hotplugCallbackNix )
 		msg = "INFO: BusKill is armed. Listening for removal event.\n"
 		msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
 		print( msg ); logger.info( msg )
@@ -312,28 +313,6 @@ def armWin():
 
 	w = Notification()
 	win32gui.PumpMessages()
-
-def armMac():
-	msg = "placeholder for arming buskill on a mac"
-	print( msg ); logger.info( msg )
-	armLin()
-
-#######################
-# DISARMING FUNCTIONS #
-#######################
-
-def disarmLin():
-	msg = "placeholder for disarming buskill on linux"
-	print( msg ); logger.info( msg )
-
-def disarmWin():
-	msg = "placeholder for disarming buskill on windows"
-	print( msg ); logger.info( msg )
-
-def disarmMac():
-	msg = "placeholder for disarming buskill on a mac"
-	print( msg ); logger.info( msg )
-
 #####################
 # TRIGGER FUNCTIONS #
 #####################
@@ -360,3 +339,7 @@ def triggerMac():
 	msg = "placeholder for triggering buskill on a mac"
 	print( msg ); logger.info( msg )
 
+	try:
+		subprocess.run( ['pmset', 'displaysleepnow'] )
+	except FileNotFoundError as e:
+		subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] )
