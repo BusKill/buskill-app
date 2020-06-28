@@ -86,17 +86,14 @@ def init():
 	global trigger_fun
 	if CURRENT_PLATFORM.startswith( 'LINUX' ):
 		arm_fun = armNix
-		disarm_fun = disarmLin
 		trigger_fun = triggerLin
 
 	if CURRENT_PLATFORM.startswith( 'WIN' ):
 		arm_fun = armWin
-		disarm_fun = disarmWin
 		trigger_fun = triggerWin
 
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		arm_fun = armNix
-		disarm_fun = disarmMac
 		trigger_fun = triggerMac
 
 # this is called when the GUI is closed 
