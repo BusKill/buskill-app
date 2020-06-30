@@ -73,9 +73,9 @@ cp build/mac/libusb-1.0.dylib src/
 # output information about this build so the code can use it later in logs
 cat > src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
- 'GITHUB_REF': '${GITHUB_REF}'
- 'GITHUB_SHA': '${GITHUB_SHA}'
- 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}'
+ 'GITHUB_REF': '${GITHUB_REF}',
+ 'GITHUB_SHA': '${GITHUB_SHA}',
+ 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}',
 }
 EOF
 

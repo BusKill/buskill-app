@@ -65,9 +65,9 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt
 
 # output information about this build so the code can use it later in logs
 echo "BUSKILL_VERSION = {
- 'GITHUB_REF': '$env:GITHUB_REF'
- 'GITHUB_SHA': '$env:GITHUB_SHA'
- 'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID'
+ 'GITHUB_REF': '$env:GITHUB_REF',
+ 'GITHUB_SHA': '$env:GITHUB_SHA',
+ 'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID',
 }
 " | tee src/buskill_version.py
 

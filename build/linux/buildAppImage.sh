@@ -71,9 +71,9 @@ rsync -a src /tmp/kivy_appdir/opt/
 # output information about this build so the code can use it later in logs
 cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
- 'GITHUB_REF': '${GITHUB_REF}'
- 'GITHUB_SHA': '${GITHUB_SHA}'
- 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}'
+ 'GITHUB_REF': '${GITHUB_REF}',
+ 'GITHUB_SHA': '${GITHUB_SHA}',
+ 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}',
 }
 EOF
 
