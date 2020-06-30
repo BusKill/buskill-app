@@ -1,0 +1,5 @@
+BUSKILL_VERSION = {
+ 'GITHUB_REF': '',
+ 'GITHUB_SHA': '',
+ 'GITHUB_RUN_ID': '',
+}
