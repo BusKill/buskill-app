@@ -153,6 +153,8 @@ def toggle():
 # hotplug event occurs using libusb (linux & macos)
 def hotplugCallbackNix( *argv ):
 
+	global trigger_fun
+
 	(context, device, event) = argv
 
 	msg = "DEBUG: called hotplugCallbackNix()"
