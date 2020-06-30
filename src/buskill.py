@@ -153,7 +153,15 @@ def toggle():
 # hotplug event occurs using libusb (linux & macos)
 def hotplugCallbackNix( *argv ):
 
-	global trigger_fun
+	# the global scope variables appear to be undefined when this function is
+	# called by libusb for some reason, so we have to add this platform logic
+	# directly in this function too
+	CURRENT_PLATFORM = platform.system().upper()
+	if CURRENT_PLATFORM.startswith( 'LINUX' ):
+		trigger_fun = triggerLin()
+
+	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		trigger_fun = triggerMac()
 
 	(context, device, event) = argv
 
@@ -178,6 +186,7 @@ def hotplugCallbackNix( *argv ):
 
 		msg = "calling " +str(trigger_fun)
 		print( msg ); logger.debug( msg )
+
 		trigger_fun()
 
 ############################
