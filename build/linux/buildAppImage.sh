@@ -19,6 +19,8 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
+cat "${GITHUB_EVENT_PATH}"
+
 env
 echo "${CI}"
 echo "${HOME}"
@@ -56,6 +58,7 @@ print_debugging_info () {
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
+	env
 }
 
 ################################################################################

@@ -13,6 +13,7 @@ set -x
 # Version: 0.2
 ################################################################################
 
+cat "${GITHUB_EVENT_PATH}"
 env
 echo "${CI}"
 echo "${HOME}"
@@ -57,6 +58,7 @@ ${PYTHON_PATH} --version
 echo $PATH
 pwd
 ls -lah
+env
 
 ###################
 # INSTALL DEPENDS #

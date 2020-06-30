@@ -15,6 +15,7 @@ Set-PSDebug -Trace 1
 # Version: 0.1
 ################################################################################
 
+cat $env:GITHUB_EVENT_PATH
 Get-ChildItem env:
 
 $env:CI
@@ -174,6 +175,9 @@ Write-Output 'INFO: Python versions info'
 # before exiting, output the versions of software installed
 C:\tmp\kivy_venv\Scripts\python.exe --version | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip list | Out-String
+
+# print all environment variables
+Get-ChildItem env:
 
 ##################
 # CLEANUP & EXIT #
