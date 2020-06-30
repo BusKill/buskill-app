@@ -101,6 +101,7 @@ def close():
 
 	# if we don't kill this child process on kill, the UI will freeze
 	usb_handler.terminate()
+	usb_handler.join()
 
 def isPlatformSupported():
 
@@ -166,10 +167,15 @@ def hotplugCallbackNix( *argv ):
 	msg = "event:|" +str(event)+ "|"
 	print( msg ); logger.debug( msg )
 
+	msg = "usb1.HOTPLUG_EVENT_DEVICE_LEFT:|" +str(usb1.HOTPLUG_EVENT_DEVICE_LEFT)+ "|"
+	print( msg ); logger.debug( msg )
+
 	# is this from a usb device being inserted or removed? 
 	if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 		# this is a usb removal event
 
+		msg = "calling " +str(trigger_fun)
+		print( msg ); logger.debug( msg )
 		trigger_fun()
 
 ############################
@@ -333,7 +339,7 @@ def triggerWin():
 	windll.user32.LockWorkStation()
 
 def triggerMac():
-	msg = "placeholder for triggering buskill on a mac"
+	msg = "DEBUG: BusKill lockscreen trigger executing now"
 	print( msg ); logger.info( msg )
 
 	try:
