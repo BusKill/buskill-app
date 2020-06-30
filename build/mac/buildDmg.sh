@@ -13,6 +13,25 @@ set -x
 # Version: 0.2
 ################################################################################
 
+env
+echo "${CI}"
+echo "${HOME}"
+echo "${GITHUB_WORKFLOW}"
+echo "${GITHUB_RUN_ID}"
+echo "${GITHUB_RUN_NUMBER}"
+echo "${GITHUB_ACTION}"
+echo "${GITHUB_ACTIONS}"
+echo "${GITHUB_ACTOR}"
+echo "${GITHUB_REPOSITORY}"
+echo "${GITHUB_EVENT_NAME}"
+echo "${GITHUB_EVENT_PATH}"
+echo "${GITHUB_WORKSPACE}"
+echo "${GITHUB_SHA}"
+echo "${GITHUB_REF}"
+echo "${GITHUB_HEAD_REF}"
+echo "${GITHUB_BASE_REF}"
+exit 1
+
 ############
 # SETTINGS #
 ############

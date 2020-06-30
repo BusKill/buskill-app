@@ -15,6 +15,28 @@ Set-PSDebug -Trace 1
 # Version: 0.1
 ################################################################################
 
+Get-ChildItem env:
+
+$env:CI
+$env:HOME
+$env:GITHUB_WORKFLOW
+$env:GITHUB_RUN_ID
+$env:GITHUB_RUN_NUMBER
+$env:GITHUB_ACTION
+$env:GITHUB_ACTIONS
+$env:GITHUB_ACTOR
+$env:GITHUB_REPOSITORY
+$env:GITHUB_EVENT_NAME
+$env:GITHUB_EVENT_PATH
+$env:GITHUB_WORKSPACE
+$env:GITHUB_SHA
+$env:GITHUB_REF
+$env:GITHUB_HEAD_REF
+$env:GITHUB_BASE_REF
+
+exit
+Exit-PSSession
+
 ######################################
 #### A Note about ' | Out-String' ####
 ######################################
