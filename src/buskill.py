@@ -158,10 +158,10 @@ def hotplugCallbackNix( *argv ):
 	# directly in this function too
 	CURRENT_PLATFORM = platform.system().upper()
 	if CURRENT_PLATFORM.startswith( 'LINUX' ):
-		trigger_fun = triggerLin()
+		trigger_fun = triggerLin
 
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-		trigger_fun = triggerMac()
+		trigger_fun = triggerMac
 
 	(context, device, event) = argv
 
