@@ -31,7 +31,6 @@ echo "${GITHUB_SHA}"
 echo "${GITHUB_REF}"
 echo "${GITHUB_HEAD_REF}"
 echo "${GITHUB_BASE_REF}"
-exit 1
 
 ############
 # SETTINGS #

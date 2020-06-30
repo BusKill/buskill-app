@@ -35,9 +35,6 @@ $env:GITHUB_REF
 $env:GITHUB_HEAD_REF
 $env:GITHUB_BASE_REF
 
-exit
-Exit-PSSession
-
 ######################################
 #### A Note about ' | Out-String' ####
 ######################################
