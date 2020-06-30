@@ -19,26 +19,6 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
-cat "${GITHUB_EVENT_PATH}"
-
-env
-echo "${CI}"
-echo "${HOME}"
-echo "${GITHUB_WORKFLOW}"
-echo "${GITHUB_RUN_ID}"
-echo "${GITHUB_RUN_NUMBER}"
-echo "${GITHUB_ACTION}"
-echo "${GITHUB_ACTIONS}"
-echo "${GITHUB_ACTOR}"
-echo "${GITHUB_REPOSITORY}"
-echo "${GITHUB_EVENT_NAME}"
-echo "${GITHUB_EVENT_PATH}"
-echo "${GITHUB_WORKSPACE}"
-echo "${GITHUB_SHA}"
-echo "${GITHUB_REF}"
-echo "${GITHUB_HEAD_REF}"
-echo "${GITHUB_BASE_REF}"
-
 APP_NAME='buskill'
 
 PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage'
@@ -87,6 +67,15 @@ mv squashfs-root /tmp/kivy_appdir
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
+
+# output information about this build so the code can use it later in logs
+cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
+BUSKILL_VERSION = {
+ 'GITHUB_REF': '${GITHUB_REF}'
+ 'GITHUB_SHA': '${GITHUB_SHA}'
+ 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}'
+}
+EOF
 
 # change AppRun so it executes our app
 mv /tmp/kivy_appdir/AppRun /tmp/kivy_appdir/AppRun.orig

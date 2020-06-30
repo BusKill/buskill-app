@@ -15,26 +15,6 @@ Set-PSDebug -Trace 1
 # Version: 0.1
 ################################################################################
 
-cat $env:GITHUB_EVENT_PATH
-Get-ChildItem env:
-
-$env:CI
-$env:HOME
-$env:GITHUB_WORKFLOW
-$env:GITHUB_RUN_ID
-$env:GITHUB_RUN_NUMBER
-$env:GITHUB_ACTION
-$env:GITHUB_ACTIONS
-$env:GITHUB_ACTOR
-$env:GITHUB_REPOSITORY
-$env:GITHUB_EVENT_NAME
-$env:GITHUB_EVENT_PATH
-$env:GITHUB_WORKSPACE
-$env:GITHUB_SHA
-$env:GITHUB_REF
-$env:GITHUB_HEAD_REF
-$env:GITHUB_BASE_REF
-
 ######################################
 #### A Note about ' | Out-String' ####
 ######################################
@@ -82,6 +62,14 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade docutils pygments p
 
 # install kivy and all other python dependencies with pip into our virtual env
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt | Out-String
+
+# output information about this build so the code can use it later in logs
+echo "BUSKILL_VERSION = {
+ 'GITHUB_REF': '$env:GITHUB_REF'
+ 'GITHUB_SHA': '$env:GITHUB_SHA'
+ 'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID'
+}
+" | tee src/buskill_version.py
 
 ##################################
 # PREPARE BUILD WITH PYINSTALLER #

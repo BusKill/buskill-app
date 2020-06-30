@@ -13,25 +13,6 @@ set -x
 # Version: 0.2
 ################################################################################
 
-cat "${GITHUB_EVENT_PATH}"
-env
-echo "${CI}"
-echo "${HOME}"
-echo "${GITHUB_WORKFLOW}"
-echo "${GITHUB_RUN_ID}"
-echo "${GITHUB_RUN_NUMBER}"
-echo "${GITHUB_ACTION}"
-echo "${GITHUB_ACTIONS}"
-echo "${GITHUB_ACTOR}"
-echo "${GITHUB_REPOSITORY}"
-echo "${GITHUB_EVENT_NAME}"
-echo "${GITHUB_EVENT_PATH}"
-echo "${GITHUB_WORKSPACE}"
-echo "${GITHUB_SHA}"
-echo "${GITHUB_REF}"
-echo "${GITHUB_HEAD_REF}"
-echo "${GITHUB_BASE_REF}"
-
 ############
 # SETTINGS #
 ############
@@ -88,6 +69,15 @@ ${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
 # * https://libusb.info/
 # * https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.tar.bz2
 cp build/mac/libusb-1.0.dylib src/
+
+# output information about this build so the code can use it later in logs
+cat > src/buskill_version.py <<EOF
+BUSKILL_VERSION = {
+ 'GITHUB_REF': '${GITHUB_REF}'
+ 'GITHUB_SHA': '${GITHUB_SHA}'
+ 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}'
+}
+EOF
 
 #####################
 # PYINSTALLER BUILD #

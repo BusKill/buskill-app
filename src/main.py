@@ -26,7 +26,8 @@ import argparse, logging, sys, multiprocessing
 #                                  SETTINGS                                    #
 ################################################################################
 
-BUSKILL_VERSION = '0.1'
+#BUSKILL_VERSION = '0.1'
+from buskill_version import BUSKILL_VERSION
 
 ################################################################################
 #                                  MAIN BODY                                   #
@@ -51,6 +52,7 @@ logging.basicConfig(
  level = logging.DEBUG
 )
 logging.debug("===============================================================================")
+logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
 logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
