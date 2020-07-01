@@ -69,7 +69,7 @@ echo "BUSKILL_VERSION = {
  'GITHUB_SHA': '$env:GITHUB_SHA',
  'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID',
 }
-" | tee src/buskill_version.py
+" | tee src\buskill_version.py
 
 ##################################
 # PREPARE BUILD WITH PYINSTALLER #
