@@ -64,7 +64,8 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade docutils pygments p
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt | Out-String
 
 # output information about this build so the code can use it later in logs
-echo "BUSKILL_VERSION = {
+echo "# -*- mode: python ; coding: utf-8 -*-
+BUSKILL_VERSION = {
  'GITHUB_REF': '$env:GITHUB_REF',
  'GITHUB_SHA': '$env:GITHUB_SHA',
  'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID',
