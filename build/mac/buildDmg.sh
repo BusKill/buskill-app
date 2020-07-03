@@ -28,7 +28,7 @@ PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 # executed, hash randomization will be enabled (per defaults)
 # * https://pyinstaller.readthedocs.io/en/stable/advanced-topics.html#creating-a-reproducible-build
 # * https://docs.python.org/3/using/cmdline.html#cmdoption-r
-PYTHONHASHSEED=0
+export PYTHONHASHSEED=0
 
 ########
 # INFO #
