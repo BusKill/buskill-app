@@ -26,6 +26,39 @@ Set-PSDebug -Trace 1
 # delaying the subsequent line from running until the current line finishes
 ######################################
 
+############
+# SETTINGS #
+############
+
+$env:APP_NAME="buskill"
+
+# make PyInstaller produce reproducible builds. This will only affect the hash
+# randomization at build time. When the frozen app built by PyInstaller is
+# executed, hash randomization will be enabled (per defaults)
+# * https://pyinstaller.readthedocs.io/en/stable/advanced-topics.html#creating-a-reproducible-build
+# * https://docs.python.org/3/using/cmdline.html#cmdoption-r
+$env:PYTHONHASHSEED=0
+
+#################
+# FIX CONSTANTS #
+#################
+
+# fill-in some constants if this script is not being run on GitHub
+if ( ! $env:GITHUB_REF ){ 
+	# TODO convert this bash to powershelll
+	#GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
+	$env:GITHUB_REF="???"
+}
+if ( ! $env:GITHUB_SHA ){ 
+	# TODO convert this bash to powershelll
+	#GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+	$env:GITHUB_SHA="???"
+}
+
+########
+# INFO #
+########
+
 Write-Output "listing contents of C drive root"
 Get-ChildItem -Path C:\ -Force | Out-String
 
@@ -68,7 +101,6 @@ echo "# -*- mode: python ; coding: utf-8 -*-
 BUSKILL_VERSION = {
  'GITHUB_REF': '$env:GITHUB_REF',
  'GITHUB_SHA': '$env:GITHUB_SHA',
- 'GITHUB_RUN_ID': '$env:GITHUB_RUN_ID',
 }
 " | tee .\src\buskill_version.py
 (Get-Content .\src\buskill_version.py) -replace "`0", "" | Set-Content .\src\buskill_version.py

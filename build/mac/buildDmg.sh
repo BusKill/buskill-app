@@ -23,6 +23,13 @@ APP_NAME='buskill'
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 
+# make PyInstaller produce reproducible builds. This will only affect the hash
+# randomization at build time. When the frozen app built by PyInstaller is
+# executed, hash randomization will be enabled (per defaults)
+# * https://pyinstaller.readthedocs.io/en/stable/advanced-topics.html#creating-a-reproducible-build
+# * https://docs.python.org/3/using/cmdline.html#cmdoption-r
+PYTHONHASHSEED=0
+
 ########
 # INFO #
 ########
@@ -39,6 +46,19 @@ echo $PATH
 pwd
 ls -lah
 env
+
+#################
+# FIX CONSTANTS #
+#################
+
+# fill-in some constants if this script is not being run on GitHub
+if [ -z ${GITHUB_SHA} ]; then
+	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+fi
+
+if [ -z ${GITHUB_REF} ]; then
+	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
+fi
 
 ###################
 # INSTALL DEPENDS #
@@ -75,7 +95,6 @@ cat > src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
- 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}',
 }
 EOF
 
