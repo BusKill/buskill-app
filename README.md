@@ -48,8 +48,6 @@ build/linux/buildAppImage.sh
 
 TODO move to docs dir (Sphinx?) and include notes about hardware implant risks and integrity verification
 
-If you find any security-related bugs, please immediately send an email to security@buskill.in
-
 This app was created for convenience, providing the user with an easy-to-use method of arming, disarming, and configuring BusKill with an intuitive GUI that "just works" on Linux, Windows, and MacOS.
 
 Convenience is a trade-off that comes at a cost of reduced security. Using this app requires your computer to not only run hundreds of lines of our code, but also thousands of lines of code from dependant libraries.
@@ -61,6 +59,12 @@ The most secure way to run BusKill is using a simple udev config as described he
 # Press
 
 As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), & [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves).
+
+# Contact
+
+To contact us via email, please visit:
+
+ * https://www.buskill.in/contact/
 
 # License
 

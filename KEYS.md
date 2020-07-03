@@ -1,9 +1,11 @@
-This file contains the PGP keys of various developers.
+This file contains the PGP keys of various developers for the [buskill-app](https://github.com/buskill/buskill-app/) project. For more info, see:
+
+ * https://www.buskill.in
 
 # Users
 
 ```
-gpg --import KEYS
+gpg --import KEYS.md
 ```
 
 # Developers
@@ -18,6 +20,7 @@ And append the output to this file
 
 # Keys
 
+```
 pub   rsa4096/0xFE1B84494E640D41 2017-09-30 [SC] [expires: 2020-10-04]
       Key fingerprint = 0465 E42F 7120 6785 E972  644C FE1B 8449 4E64 0D41
 uid                   [ultimate] Michael Altfield <michael@michaelaltfield.net>
@@ -1069,4 +1072,4 @@ jO4CQZGKvepZdCwtzPUjve94jPWuDVAMTBaJtWb0616w95ITCtY8iAkGAqgmT2ao
 4A+CVYaE9c14K4IflcAFJWVMSASGCiY2WLUKSFXVNMmMcd1lQvVx8u1B8IKszWHy
 =YTye
 -----END PGP PUBLIC KEY BLOCK-----
-
+```

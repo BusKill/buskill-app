@@ -44,6 +44,19 @@ print_debugging_info () {
 #                                 MAIN BODY                                    #
 ################################################################################
 
+#################
+# FIX CONSTANTS #
+#################
+
+# fill-in some constants if this script is not being run on GitHub
+if [ -z ${GITHUB_SHA} ]; then
+	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+fi
+
+if [ -z ${GITHUB_REF} ]; then
+	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
+fi
+	
 ###############
 # OUTPUT INFO #
 ###############
@@ -73,7 +86,6 @@ cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
- 'GITHUB_RUN_ID': '${GITHUB_RUN_ID}',
 }
 EOF
 
@@ -134,7 +146,7 @@ echo "INFO: Beginning AppDir thinning"
 
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 
-unnecessary="pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
