@@ -30,6 +30,9 @@ PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
 # * https://docs.python.org/3/using/cmdline.html#cmdoption-r
 export PYTHONHASHSEED=0
 
+# https://reproducible-builds.org/docs/source-date-epoch/
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
 ########
 # INFO #
 ########
@@ -95,6 +98,7 @@ cat > src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
+ 'SOURCE_DATE_EPOCH': '${SOURCE_DATE_EPOCH}',
 }
 EOF
 
@@ -152,7 +156,13 @@ EOF
 ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
 pushd dist
+
+# change the timestamps of all the files in the appdir or reproducable builds
+find ${APP_NAME}.app -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
+
 hdiutil create ./${APP_NAME}.dmg -srcfolder ${APP_NAME}.app -ov
+touch -h -d "@${SOURCE_DATE_EPOCH}" "${APP_NAME}.dmg"
+
 popd
 
 #####################
