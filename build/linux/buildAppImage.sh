@@ -191,7 +191,7 @@ mv /tmp/squashfs-root /tmp/appimagetool_appdir
 mv /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs.orig
 
 cat > /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs <<EOF
-#!/usr/bin/sh
+#!/bin/sh
 
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
 
