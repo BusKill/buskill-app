@@ -79,7 +79,7 @@ chmod +x /tmp/python.AppImage
 /tmp/python.AppImage --appimage-extract
 mv squashfs-root /tmp/kivy_appdir
 
-/tmp/kivy_appdir/opt/python*/bin/python* -m pip install --upgrade -r requirements.txt
+/tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade -r requirements.txt
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
