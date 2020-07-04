@@ -139,6 +139,9 @@ EOF
 # make it executable
 chmod +x /tmp/kivy_appdir/AppRun
 
+# change the timestamps of all the files in the appdir or reproducable builds
+find /tmp/kivy_appdir -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
+
 ############
 # THINNING #
 ############
