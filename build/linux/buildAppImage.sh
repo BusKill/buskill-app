@@ -40,6 +40,7 @@ print_debugging_info () {
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
+	dpkg -l
 	env
 }
 
