@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-06-25
-# Version: 0.3
+# Updated: 2020-07-05
+# Version: 0.4
 ################################################################################
 
 ################################################################################
@@ -206,12 +206,6 @@ EOF
 
 chmod +x /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
 
-# TODO: remove me
-/tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs -version
-ls -lah /tmp/appimagetool_appdir/usr/lib/appimagekit/
-cat /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
-ls -lah /tmp/squashfs4.4/squashfs-tools/
-
 popd # leave /tmp
 
 ##################
@@ -223,7 +217,7 @@ popd # leave /tmp
 mkdir dist
 
 # create the AppImage from kivy AppDir
-env VERSION="0.1.0" ARCH="x86_64" SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}" /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
+/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #
