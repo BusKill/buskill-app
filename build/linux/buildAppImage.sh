@@ -23,6 +23,9 @@ APP_NAME='buskill'
 
 PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage'
 
+# https://reproducible-builds.org/docs/source-date-epoch/
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
 ################################################################################
 #                                  FUNCTIONS                                   #
 ################################################################################
@@ -86,6 +89,7 @@ cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
+ 'SOURCE_DATE_EPOCH': '${SOURCE_DATE_EPOCH}',
 }
 EOF
 
@@ -160,18 +164,57 @@ for item in $(echo "${unnecessary}"); do
 
 done
 
+########################
+# PREPARE APPIMAGETOOL #
+########################
+
+# download the latest stable release of appimagetool
+pushd /tmp
+wget --continue --output-document="/tmp/appimagetool.AppImage" https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
+chmod +x /tmp/appimagetool.AppImage
+
+# The latest stable appimagetool uses an old version of mksquashfs (v4.3),
+# which does not support reproducable builds. Here we download the latest
+# squashfs-tools (v4.4) and hack appimagetools to use it. For more info, see:
+#  * https://github.com/BusKill/buskill-app/issues/3
+wget --continue --output-document="squashfs4.4.tar.gz" "https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.4/squashfs4.4.tar.gz/download"
+
+tar -xzvf squashfs4.4.tar.gz
+pushd squashfs4.4/squashfs-tools
+sudo apt-get install zlib1g-dev make
+make
+popd
+
+
+/tmp/appimagetool.AppImage --appimage-extract
+mv /tmp/squashfs-root /tmp/appimagetool_appdir
+mv /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs.orig
+
+cat > /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs <<EOF
+#!/usr/bin/sh
+
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
+
+# the new version of mksquashfs no longer supports the '-mkfs-fixed-time'
+# argument, so we remove it
+args=\$(echo "\$@" | sed -e 's/-mkfs-fixed-time 0//')
+/tmp/squashfs4.4/squashfs-tools/mksquashfs \$args
+EOF
+
+chmod +x /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
+
+popd # leave /tmp
+
 ##################
 # BUILD APPIMAGE #
 ##################
 
-# create the AppImage from kivy AppDir
-wget --continue --output-document="/tmp/appimagetool.AppImage" https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
-chmod +x /tmp/appimagetool.AppImage
-
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir dist
-/tmp/appimagetool.AppImage --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
+
+# create the AppImage from kivy AppDir
+/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #

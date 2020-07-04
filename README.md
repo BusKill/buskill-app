@@ -32,6 +32,8 @@ TODO. Sphinx?
 
 # Building from source
 
+TODO Add note about deterministic/reproducable builds.
+
 The scripts used to build this app are platform-specific and must be executed on the target platform. In other words, you cannot build the app for MacOS on a Linux platform, you cannot build for Windows on MacOS, for Linux on Windows, etc.
 
 From the root of this repo, simply execute the relevant build script from the [build](build) directory.
