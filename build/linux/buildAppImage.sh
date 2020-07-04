@@ -220,7 +220,7 @@ popd # leave /tmp
 mkdir dist
 
 # create the AppImage from kivy AppDir
-/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
+env VERSION="0.1.0" ARCH="x86_64" SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}" /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #
