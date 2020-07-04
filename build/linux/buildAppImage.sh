@@ -203,6 +203,12 @@ EOF
 
 chmod +x /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
 
+# TODO: remove me
+/tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs -version
+ls -lah /tmp/appimagetool_appdir/usr/lib/appimagekit/
+cat /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
+ls -lah /tmp/squashfs4.4/squashfs-tools/
+
 popd # leave /tmp
 
 ##################
