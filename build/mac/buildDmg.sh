@@ -83,7 +83,6 @@ ${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
 
 # install kivy and all other python dependencies with pip into our virtual env
 #source /tmp/kivy_venv/bin/activate
-${PYTHON_PATH} -m pip install --upgrade --user Cython==0.29.10
 ${PYTHON_PATH} -m pip install --upgrade --user -r requirements.txt
 ${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
 

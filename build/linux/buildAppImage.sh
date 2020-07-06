@@ -11,7 +11,7 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-07-05
+# Updated: 2020-07-06
 # Version: 0.4
 ################################################################################
 
@@ -21,7 +21,7 @@ set -x
 
 APP_NAME='buskill'
 
-PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux2014_x86_64.AppImage'
+PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.8-cp37-cp37m-manylinux2014_x86_64.AppImage'
 
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
