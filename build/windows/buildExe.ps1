@@ -91,7 +91,7 @@ Write-Output 'INFO: Installing Python Depends'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv | Out-String
 C:\tmp\kivy_venv\Scripts\activate.ps1 | Out-String
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pygments pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
 
 # install kivy and all other python dependencies with pip into our virtual env
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt | Out-String
