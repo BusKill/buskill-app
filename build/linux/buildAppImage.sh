@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-07-06
-# Version: 0.4
+# Updated: 2020-07-09
+# Version: 0.5
 ################################################################################
 
 ################################################################################
@@ -21,10 +21,12 @@ set -x
 
 APP_NAME='buskill'
 
-PYTHON_APPIMAGE_URL='https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.8-cp37-cp37m-manylinux2014_x86_64.AppImage'
-
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
+# we use firejail to prevent insecure package managers (like pip) from
+# having internet access; instead we install everything locally
+FIREJAIL='/bin/firejail --noprofile --net=none'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -40,7 +42,7 @@ print_debugging_info () {
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
-	dpkg -l
+	dpkg --list --no-pager
 	env
 }
 
@@ -68,19 +70,32 @@ fi
 # output info to debug issues with this build
 print_debugging_info
 
+###################
+# INSTALL DEPENDS #
+###################
+
+sudo apt-get update
+sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail
+sudo firecfg --clean
+
 ##################
 # PREPARE APPDIR #
 ##################
 
-# download the latest python-appimage release, which is an AppImage containing
-# the core python3.7 runtime. We use this as a base for building our own python
+# We use this ppython-appimage release as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
-wget --continue --output-document="/tmp/python.AppImage" "${PYTHON_APPIMAGE_URL}"
+cp build/deps/python3.7.8-cp37-cp37m-manylinux2014_x86_64.AppImage /tmp/python.AppImage
 chmod +x /tmp/python.AppImage
+pushd /tmp
 /tmp/python.AppImage --appimage-extract
-mv squashfs-root /tmp/kivy_appdir
+popd
+mv /tmp/squashfs-root /tmp/kivy_appdir
 
-/tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade -r requirements.txt
+# install our pip depends from the files in the repo since pip doesn't provide
+# decent authentication and integrity checks on what it downloads from PyPI
+#  * https://security.stackexchange.com/a/234098/213165
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/Kivy-1.11.1.tar.gz
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/libusb-1.0.23.tar.bz2
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
@@ -172,23 +187,22 @@ done
 # PREPARE APPIMAGETOOL #
 ########################
 
-# download the latest stable release of appimagetool
-pushd /tmp
-wget --continue --output-document="/tmp/appimagetool.AppImage" https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage
+cp build/deps/appimagetool.AppImage /tmp/
 chmod +x /tmp/appimagetool.AppImage
 
+cp build/deps/squashfs4.4.tar.gz /tmp/
+
+pushd /tmp
+
 # The latest stable appimagetool uses an old version of mksquashfs (v4.3),
-# which does not support reproducable builds. Here we download the latest
+# which does not support reproducable builds. Here we build the latest
 # squashfs-tools (v4.4) and hack appimagetools to use it. For more info, see:
 #  * https://github.com/BusKill/buskill-app/issues/3
-wget --continue --output-document="squashfs4.4.tar.gz" "https://sourceforge.net/projects/squashfs/files/squashfs/squashfs4.4/squashfs4.4.tar.gz/download"
-
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
 sudo apt-get install zlib1g-dev make
 make
 popd
-
 
 /tmp/appimagetool.AppImage --appimage-extract
 mv /tmp/squashfs-root /tmp/appimagetool_appdir

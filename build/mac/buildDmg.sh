@@ -69,7 +69,9 @@ fi
 
 # first update brew
 #  * https://blog.fossasia.org/deploying-a-kivy-application-with-pyinstaller-for-mac-osx-to-github/
-brew update
+# strke that. let's *not* pull updates through an insecure pipe
+#  * https://github.com/BusKill/buskill-app/issues/2
+#brew update
 
 # install os-level depends
 brew install wget python3
