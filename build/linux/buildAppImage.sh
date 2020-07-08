@@ -79,7 +79,7 @@ print_debugging_info
 ###################
 
 apt-get update
-apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail
+apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync
 firecfg --clean
 
 ##################
@@ -100,7 +100,7 @@ mv /tmp/squashfs-root /tmp/kivy_appdir
 #  * https://security.stackexchange.com/a/234098/213165
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/libusb-1.0.23.tar.bz2
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
