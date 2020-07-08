@@ -29,7 +29,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
-FIREJAIL='/usr/bin/firejail --noprofile --net=none'
+FIREJAIL='/usr/bin/firejail --noprofile --net=none --force'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
