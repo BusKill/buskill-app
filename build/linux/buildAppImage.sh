@@ -24,6 +24,9 @@ APP_NAME='buskill'
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
+# prevent apt from asking for things we can't respond to
+export DEBIAN_FRONTEND=noninteractive
+
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
 FIREJAIL='/usr/bin/firejail --noprofile --net=none'
