@@ -26,7 +26,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
-FIREJAIL='/bin/firejail --noprofile --net=none'
+FIREJAIL='/usr/bin/firejail --noprofile --net=none'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
