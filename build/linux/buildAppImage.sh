@@ -74,9 +74,9 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail
-sudo firecfg --clean
+apt-get update
+apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail
+firecfg --clean
 
 ##################
 # PREPARE APPDIR #
@@ -200,7 +200,7 @@ pushd /tmp
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
-sudo apt-get install zlib1g-dev make
+apt-get install zlib1g-dev make
 make
 popd
 
