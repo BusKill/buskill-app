@@ -43,6 +43,7 @@ print_debugging_info () {
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
 	dpkg --list --no-pager
+	whoami
 	env
 }
 
