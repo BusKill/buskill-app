@@ -37,8 +37,12 @@ ${CURL} -s https://check.torproject.org | grep Congratulations | head -n1
 # and today's date
 date -u +"%Y-%m-%d"
 
+# first download and upgrade pip (required to get some wheels)
+${PYTHON} -m pip download --no-cache-dir pip==20.1.1
+${PYTHON} -m pip install --upgrade pip==20.1.1
+
 # pip (all platforms)
-${PYTHON} -m pip download kivy==1.11.1 libusb1==1.8 pyinstaller==3.6 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0
+${PYTHON} -m pip download --no-cache-dir kivy==1.11.1 libusb1==1.8 pyinstaller==3.6 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0
 
 # pip (platform-specific binaries/wheels)
 ${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-1.11.1-cp37-cp37m-win_amd64.whl#'`
