@@ -29,7 +29,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
-FIREJAIL='/usr/bin/firejail --noprofile --net=none --force'
+FIREJAIL='/usr/bin/firejail --noprofile --net=none'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -45,6 +45,7 @@ print_debugging_info () {
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
+	dpkg --help
 	dpkg --list --no-pager
 	whoami
 	env
@@ -78,9 +79,9 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-apt-get update
-apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync
-firecfg --clean
+sudo apt-get update
+sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync
+sudo firecfg --clean
 
 ##################
 # PREPARE APPDIR #
@@ -192,7 +193,7 @@ done
 # PREPARE APPIMAGETOOL #
 ########################
 
-cp build/deps/appimagetool.AppImage /tmp/
+cp build/deps/appimagetool-x86_64.AppImage /tmp/appimagetool.AppImage
 chmod +x /tmp/appimagetool.AppImage
 
 cp build/deps/squashfs4.4.tar.gz /tmp/
@@ -205,7 +206,7 @@ pushd /tmp
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
-apt-get install zlib1g-dev make
+sudo apt-get install zlib1g-dev make
 make
 popd
 
