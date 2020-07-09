@@ -45,8 +45,7 @@ print_debugging_info () {
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
-	dpkg --help
-	dpkg --list --no-pager
+	dpkg --list --no-pager || dpkg --list # fucking Ubuntu
 	whoami
 	env
 }
@@ -99,9 +98,9 @@ mv /tmp/squashfs-root /tmp/kivy_appdir
 # install our pip depends from the files in the repo since pip doesn't provide
 # decent authentication and integrity checks on what it downloads from PyPI
 #  * https://security.stackexchange.com/a/234098/213165
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file://build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file://build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file://build/deps/ build/deps/libusb1-1.8.tar.gz
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
