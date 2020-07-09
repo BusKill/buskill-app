@@ -80,13 +80,17 @@ fi
 #  * https://github.com/BusKill/buskill-app/issues/2
 #brew update
 
+# copy all our brew depends into the brew cache dir
+cacheDir=`brew --cache`
+cp build/deps/*bottle* ${cacheDir}/
+
 # install os-level depends
-brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
-brew reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/python-3.7.8.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
+brew reinstall --cache build/deps/ build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
 
 # get python essential dependencies
 ${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
