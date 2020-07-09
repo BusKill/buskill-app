@@ -82,11 +82,13 @@ fi
 
 # copy all our brew depends into the brew cache dir
 cacheDir=`brew --cache`
+ls -lah ${cacheDir}
 cp build/deps/*bottle* ${cacheDir}/
 
 # install os-level depends
 brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 brew reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
 brew reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
 brew reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
