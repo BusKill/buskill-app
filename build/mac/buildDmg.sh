@@ -83,7 +83,6 @@ fi
 # copy all our brew depends into the brew cache dir
 cacheDir=`brew --cache`
 ls -lah ${cacheDir}
-cp build/deps/*bottle* ${cacheDir}/
 
 # install os-level depends
 brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
