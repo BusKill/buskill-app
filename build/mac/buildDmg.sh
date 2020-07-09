@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-06-24
-# Version: 0.2
+# Updated: 2020-07-09
+# Version: 0.3
 ################################################################################
 
 ############
@@ -32,6 +32,12 @@ export PYTHONHASHSEED=1
 
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
+# prevent brew from accessing the Internet, since it doesn't do cryptographic
+# authentication and integrity checks and could be a vector for MITM attacks
+# poisoning our builds
+export HOMEBREW_NO_AUTO_UPDATE=1
+export all_proxy='http://example.com:9999'
 
 ########
 # INFO #
@@ -74,25 +80,34 @@ fi
 #brew update
 
 # install os-level depends
-brew install wget python3
-brew reinstall sdl2 sdl2_image sdl2_ttf sdl2_mixer
+brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+brew reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
+brew reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
+brew reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
+brew reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
 
 # setup a virtualenv to isolate our app's python depends
-sudo ${PYTHON_PATH} -m ensurepip
-${PYTHON_PATH} -m pip install --upgrade --user pip setuptools
-#${PYTHON_PATH} -m pip install --upgrade --user virtualenv
-#${PYTHON_PATH} -m virtualenv /tmp/kivy_venv
+${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
 
 # install kivy and all other python dependencies with pip into our virtual env
 #source /tmp/kivy_venv/bin/activate
-${PYTHON_PATH} -m pip install --upgrade --user -r requirements.txt
-${PYTHON_PATH} -m pip install --upgrade --user PyInstaller
+${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+${PYHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/build/deps/libusb1-1.8.tar.gz
+${PYHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --find-links file:///`pwd`/build/deps/build/deps/PyInstaller-3.6.tar.gz
 
-# libusb depend for MacOS, extracted from:
-# * libusb-1.0.23.tar.bz:libusb/.libs/libusb-1.0.dylib
+# libusb depend for MacOS, from:
 # * https://libusb.info/
 # * https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.tar.bz2
-cp build/mac/libusb-1.0.dylib src/
+cp build/deps/libusb-1.0.23.tar.bz2 /tmp/
+pushd /tmp
+tar -xjvf libusb-1.0.23.tar.bz2
+pushd libusb-1.0.23
+./configure
+make
+popd
+popd
+cp /tmp/libusb-1.0.23/.libs/libusb-1.0.dylib src/
 
 # output information about this build so the code can use it later in logs
 cat > src/buskill_version.py <<EOF
