@@ -108,7 +108,8 @@ pushd libusb-1.0.23
 make
 popd
 popd
-cp /tmp/libusb-1.0.23/.libs/libusb-1.0.dylib src/
+find /tmp | grep -i dylib
+cp /tmp/libusb-1.0.23/libusb/.libs/libusb-1.0.dylib src/
 
 # output information about this build so the code can use it later in logs
 cat > src/buskill_version.py <<EOF
