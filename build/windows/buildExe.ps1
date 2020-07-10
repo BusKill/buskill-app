@@ -39,6 +39,9 @@ $env:APP_NAME="buskill"
 # * https://docs.python.org/3/using/cmdline.html#cmdoption-r
 $env:PYTHONHASHSEED=0
 
+# https://reproducible-builds.org/docs/source-date-epoch/
+$env:SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
+
 #################
 # FIX CONSTANTS #
 #################
@@ -89,20 +92,21 @@ New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv | Out-String
 C:\tmp\kivy_venv\Scripts\activate.ps1 | Out-String
 
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pypiwin32-223-py3-none-any.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.sdl2-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.glew-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.angle-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\PyInstaller-3.6.tar.gz | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pypiwin32-223-py3-none-any.whl | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.sdl2-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.glew-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.angle-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\PyInstaller-3.6.tar.gz | Out-String
 
 # install kivy and all other python dependencies with pip into our virtual env
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
 
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-
 BUSKILL_VERSION = {
  'GITHUB_REF': '$env:GITHUB_REF',
  'GITHUB_SHA': '$env:GITHUB_SHA',
+ 'SOURCE_DATE_EPOCH': '$env:SOURCE_DATE_EPOCH',
 }
 " | tee .\src\buskill_version.py
 (Get-Content .\src\buskill_version.py) -replace "`0", "" | Set-Content .\src\buskill_version.py
