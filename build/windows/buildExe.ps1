@@ -1,4 +1,5 @@
 $ErrorActionPreference = 'continue'
+C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv | Out-String
 Set-PSDebug -Trace 1
 ################################################################################
 # File:    windows/buildExe.ps1
@@ -11,8 +12,8 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2020-05-31
-# Version: 0.1
+# Updated: 2020-07-11
+# Version: 0.2
 ################################################################################
 
 ######################################
@@ -71,30 +72,32 @@ Write-Output 'INFO: Beginning execution'
 # INSTALL DEPENDS #
 ###################
 
-# it looks like we can't use the smaller embeddable zip file as it lacks pip
-#curl -OutFile python3.7.zip https://www.python.org/ftp/python/3.7.7/python-3.7.7-embed-amd64.zip
-#Expand-Archive .\python3.7.zip
-
 # See https://docs.python.org/3.7/using/windows.html#installing-without-ui
-Write-Output 'INFO: Downloading python3.7'
-curl -OutFile python3.7.exe https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe | Out-String
-
 Write-Output 'INFO: Installing python'
 New-Item -Path C:\tmp -Type Directory | Out-String
 New-Item -Path C:\tmp\python -Type Directory | Out-String
-.\python3.7.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
+.\build/deps/python-3.7.8-amd64.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
 
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
-C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv | Out-String
+
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pip-20.1.1-py2.py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\wheel-0.34.2-py2.py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\setuptools-49.1.0-py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\virtualenv-20.0.26-py2.py3-none-any.whl | Out-String
 
 Write-Output 'INFO: Installing Python Depends'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
 C:\tmp\python\python.exe -m virtualenv C:\tmp\kivy_venv | Out-String
 C:\tmp\kivy_venv\Scripts\activate.ps1 | Out-String
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pypiwin32 kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle | Out-String
+
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pypiwin32-223-py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.sdl2-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.glew-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\kivy_deps.angle-0.2.0-cp37-cp37m-win_amd64.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\PyInstaller-3.6.tar.gz | Out-String
 
 # install kivy and all other python dependencies with pip into our virtual env
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
 
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-
