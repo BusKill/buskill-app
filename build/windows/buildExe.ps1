@@ -1,5 +1,4 @@
 $ErrorActionPreference = 'continue'
-C:\tmp\python\python.exe -m pip install --upgrade --user pip wheel setuptools virtualenv | Out-String
 Set-PSDebug -Trace 1
 ################################################################################
 # File:    windows/buildExe.ps1
