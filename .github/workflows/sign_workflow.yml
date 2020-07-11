@@ -3,8 +3,7 @@ name: sign_workflow
 # execute this workflow automatically when a release is first created by our
 # 'build' workflow
 on:
-  release:
-    types: [published]
+  release
 
 jobs:
 
