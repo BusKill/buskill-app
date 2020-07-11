@@ -32,12 +32,17 @@ set -x
 # our only input should consist of only numbers; per our assignment below, if
 # it has a double-quote in it, it could become a vector for arbitrary command
 # execution; both checks are necessary.
-if [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]]; then
-	echo "ERROR: release_id absolutely cannot have a double-quote!"
-	exit 1
-fi
-RELEASE_ID="${{ github.event.client_payload.release_id }}"
+#if [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]]; then
+#	echo "ERROR: release_id absolutely cannot have a double-quote!"
+#	exit 1
+#fi
+#RELEASE_ID="${{ github.event.client_payload.release_id }}"
+#RELEASE_ID="${RELEASE_ID//[^0-9]}"
+
+echo "RELEASE_ID:|${RELEASE_ID}|"
 RELEASE_ID="${RELEASE_ID//[^0-9]}"
+echo "RELEASE_ID:|${RELEASE_ID}|"
+exit 0
 
 ###################
 # INSTALL DEPENDS #
@@ -45,7 +50,6 @@ RELEASE_ID="${RELEASE_ID//[^0-9]}"
 
 apt-get update
 apt-get -y install curl
-
 
 ###########################
 # DOWNLOAD RELEASE ASSETS #
