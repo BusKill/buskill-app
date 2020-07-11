@@ -16,7 +16,7 @@ jobs:
 
     - name: Query for release ID
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
       run: |
         [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]] && exit 1
         RELEASE_ID="${{ github.event.client_payload.release_id }}"
