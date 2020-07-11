@@ -58,7 +58,9 @@ jobs:
     - name: Trigger cryptographic signature workflow
       env:
         BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
-      run: 'curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/buskill/buskill-app/dispatches'
+      run: |
+        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/buskill/buskill-app/dispatches
+      shell: bash
 
   windows:
     runs-on: windows-latest
