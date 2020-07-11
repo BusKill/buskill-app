@@ -22,6 +22,6 @@ jobs:
         apt-get update
         apt-get -y install curl
         (echo "${RELEASE_ID}" | grep -E '^[0-9]+$') || exit 1
-        curl -i --header 'authorization: Bearer ${GITHUB_TOKEN}' "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
+        curl -i --header "authorization: Bearer ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
       shell: bash
 
