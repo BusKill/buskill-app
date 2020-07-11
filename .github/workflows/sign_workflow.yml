@@ -4,7 +4,7 @@ name: sign_workflow
 # 'build' workflow
 on:
   repository_dispatch
-    #types: [
+    types: [sign_release]
 
 jobs:
 
@@ -14,7 +14,12 @@ jobs:
 
     steps:
 
-    - name: Test scope
-      run: 'echo "hello world!"'
+    - name: Query for release ID
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        RELEASE_ID=$(echo "${{ github.event.client_payload.release_id }}")
+        (echo "${RELEASE_ID}" | grep -E '^[0-9]+$') || exit 1
+        curl -i --header 'authorization: Bearer ${GITHUB_TOKEN}' "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
       shell: bash
 
