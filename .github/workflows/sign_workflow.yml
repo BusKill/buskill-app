@@ -19,6 +19,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         RELEASE_ID=$(echo "${{ github.event.client_payload.release_id }}")
+        apt-get update
         apt-get -y install curl
         (echo "${RELEASE_ID}" | grep -E '^[0-9]+$') || exit 1
         curl -i --header 'authorization: Bearer ${GITHUB_TOKEN}' "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
