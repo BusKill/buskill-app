@@ -18,7 +18,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        RELEASE_ID=$(echo "${${{ github.event.client_payload.release_id }}//[^0-9]}")
+        RELEASE_ID='${{ github.event.client_payload.release_id }}'
+        RELEASE_ID="${RELEASE_ID//[^0-9]}"
         apt-get update
         apt-get -y install curl
         echo "RELEASE_ID:|${RELEASE_ID}|"
