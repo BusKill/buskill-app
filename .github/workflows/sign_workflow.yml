@@ -14,17 +14,11 @@ jobs:
 
     steps:
 
-    - name: Query for release ID
+    - uses: actions/checkout@v2
+
+    - name: Execute script to sign release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]] && exit 1
-        RELEASE_ID="${{ github.event.client_payload.release_id }}"
-        RELEASE_ID="${RELEASE_ID//[^0-9]}"
-        apt-get update
-        apt-get -y install curl
-        echo "RELEASE_ID:|${RELEASE_ID}|"
-        curl -i --header "authorization: Bearer ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
-        env
+      run: "build/signRelease.sh"
       shell: bash
 
