@@ -52,9 +52,9 @@ jobs:
         asset_name: buskill-linux-x86_64.${{ github.run_id }}.tar.bz2
         asset_content_type: application/x-bzip2
 
-# workflows can't trigger other workflows (actually, the ephemeral
-# GITHUB_TOKEN is blocked from launching other workflows), so we get
-# around it by using the "BusKill Bot" token
+    # workflows can't trigger other workflows (actually, the ephemeral
+    # GITHUB_TOKEN is blocked from launching other workflows), so we get
+    # around it by using the "BusKill Bot" token
     - name: Trigger cryptographic signature workflow
       env:
         BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
