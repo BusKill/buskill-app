@@ -1,0 +1,20 @@
+name: sign_workflow
+
+# execute this workflow automatically when a release is first created by our
+# 'build' workflow
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  sign_job:
+    runs-on: ubuntu-latest
+    container: debian:buster-slim
+
+    steps:
+
+    - name: Test scope
+      run: 'echo "hello world!"'
+      shell: bash
+
