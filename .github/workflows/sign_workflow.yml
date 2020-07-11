@@ -18,8 +18,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        [[ "${{ contains( github.event.client_payload.release_id, ''') }}" == "true" ]] && exit 1
-        RELEASE_ID='${{ github.event.client_payload.release_id }}'
+        [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]] && exit 1
+        RELEASE_ID="${{ github.event.client_payload.release_id }}"
         RELEASE_ID="${RELEASE_ID//[^0-9]}"
         apt-get update
         apt-get -y install curl
