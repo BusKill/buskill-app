@@ -16,7 +16,7 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+# n/a
 
 ################################################################################
 #                                 MAIN BODY                                    #
@@ -28,6 +28,12 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 apt-get update
 apt-get -y install git python3-sphinx rsync
+
+#####################
+# DECLARE VARIABLES #
+#####################
+
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 ##############
 # BUILD DOCS #
@@ -42,16 +48,20 @@ make -C docs html
 # Update GitHub Pages #
 #######################
 
+git config user.name "${GITHUB_ACTOR}"
+git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
 docroot=`mktemp -d`
+rsync -av "docs/_build/html/" "${pagesSandbox}/"
+
 pushd "${docroot}"
 
 # don't bother maintaining history; just generate fresh
 git init
-git remote add origin "https://token@${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+git remote add origin "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git checkout -b gh-pages
 
 # copy the resulting html pages built from sphinx above to our new git repo
-rsync -av "docs/_build/html/" "${pagesSandbox}/"
 git add .
 
 # commit all the new files
@@ -60,6 +70,8 @@ git commit -am "${msg}"
 
 # overwrite the contents of the gh-pages branch on our github.com repo
 git push origin gh-pages --force
+
+popd # return to main repo sandbox root
 
 ##################
 # CLEANUP & EXIT #
