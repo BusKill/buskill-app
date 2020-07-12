@@ -61,18 +61,18 @@ pushd "${docroot}"
 
 # don't bother maintaining history; just generate fresh
 git init
-git remote add origin "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+git remote add deploy "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git checkout -b gh-pages
 
 # copy the resulting html pages built from sphinx above to our new git repo
 git add .
 
 # commit all the new files
-msg="Updating Docs for commit ${GITHUB_SHA} made on `date -d"@${SOUCE_DATE_EPOCH}" --iso-8601=seconds` from ${GITHUB_REF}"
+msg="Updating Docs for commit ${GITHUB_SHA} made on `date -d"@${SOURCE_DATE_EPOCH}" --iso-8601=seconds` from ${GITHUB_REF}"
 git commit -am "${msg}"
 
 # overwrite the contents of the gh-pages branch on our github.com repo
-git push origin gh-pages --force
+git push deploy gh-pages --force
 
 popd # return to main repo sandbox root
 
