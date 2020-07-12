@@ -50,7 +50,7 @@ curl -sL --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com
 
 sha256sum * > SHA256SUMS
 
-curl -iL --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq -r '.assets[].browser_download_url' | xargs curl --remote-name-all
+curl -iL --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets/?name=SHA256SUMS"
 
 ##################
 # CLEANUP & EXIT #
