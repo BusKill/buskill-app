@@ -44,7 +44,7 @@ apt-get -y install curl jq
 ###########################
 
 tmpDir="`mktemp -d`"
-pushd "${tmpDir}""
+pushd "${tmpDir}"
 
 curl -sL --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq -r '.assets[].browser_download_url' | xargs curl --remote-name-all
 
