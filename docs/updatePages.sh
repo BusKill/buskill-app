@@ -35,7 +35,6 @@ apt-get -y install git python3-sphinx rsync
 
 pwd
 ls -lah
-git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
 ls -lah
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
