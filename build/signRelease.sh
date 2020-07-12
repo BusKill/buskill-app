@@ -46,12 +46,12 @@ apt-get -y install curl jq
 tmpDir="`mktemp -d`"
 pushd "${tmpDir}"
 
-curl -sL --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq -r '.assets[].browser_download_url' | xargs curl -iL --remote-name-all
+curl --silent --location --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq --raw-output '.assets[].browser_download_url' | xargs curl --location --remote-name-all
 
 du -sh *
 sha256sum * > SHA256SUMS
 
-curl -iL --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=SHA256SUMS"
+curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=SHA256SUMS"
 
 ##################
 # CLEANUP & EXIT #
