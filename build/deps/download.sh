@@ -42,7 +42,7 @@ ${PYTHON} -m pip download --no-cache-dir pip==20.1.1
 ${PYTHON} -m pip install --upgrade pip==20.1.1
 
 # pip (all platforms)
-${PYTHON} -m pip download --no-cache-dir kivy==1.11.1 libusb1==1.8 pyinstaller==3.6 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0
+${PYTHON} -m pip download --no-cache-dir kivy==1.11.1 libusb1==1.8 pyinstaller==3.6 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0 setuptools==49.1.0 wheel==0.34.2 virtualenv==20.0.26
 
 # pip (platform-specific binaries/wheels)
 ${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-1.11.1-cp37-cp37m-win_amd64.whl#'`
@@ -69,6 +69,7 @@ ${WGET} https://homebrew.bintray.com/bottles/sdl2-2.0.12_1.catalina.bottle.tar.g
 ${WGET} https://homebrew.bintray.com/bottles/sdl2_image-2.0.5.catalina.bottle.tar.gz
 ${WGET} https://homebrew.bintray.com/bottles/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
 ${WGET} https://homebrew.bintray.com/bottles/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
+${WGET} https://homebrew.bintray.com/bottles/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 
 # get checksums
 sha256sum *
