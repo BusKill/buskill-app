@@ -33,6 +33,8 @@ apt-get -y install git python3-sphinx rsync
 # DECLARE VARIABLES #
 #####################
 
+pwd
+ls -lah
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 ##############
