@@ -19,6 +19,7 @@ jobs:
     - name: Execute script to sign release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BUSKILL_PRERELEASE_PGP_KEY: ${{ secrets.BUSKILL_PRERELEASE_PGP_KEY }}
         RELEASE_ID: ${{ github.event.client_payload.release_id }}
       run: "build/signRelease.sh"
       shell: bash

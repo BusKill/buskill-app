@@ -37,7 +37,7 @@ RELEASE_ID="${RELEASE_ID//[^0-9]}"
 ###################
 
 apt-get update
-apt-get -y install curl jq
+apt-get -y install curl jq gpg
 
 ###########################
 # DOWNLOAD RELEASE ASSETS #
@@ -48,10 +48,22 @@ pushd "${tmpDir}"
 
 curl --silent --location --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq --raw-output '.assets[].browser_download_url' | xargs curl --location --remote-name-all
 
+######################
+# PREPARE NEW ASSETS #
+######################
+
 du -sh *
 sha256sum * > SHA256SUMS
 
+echo "${BUSKILL_PRERELEASE_PGP_KEY}" | gpg --import
+gpg --armor --clearsign SHA256SUMS
+
+#####################
+# UPLOAD NEW ASSETS #
+#####################
+
 curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=SHA256SUMS"
+curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: text/plain" --data-binary @SHA256SUMS.asc "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=SHA256SUMS.asc"
 
 ##################
 # CLEANUP & EXIT #
