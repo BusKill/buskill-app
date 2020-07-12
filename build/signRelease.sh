@@ -29,35 +29,28 @@ set -x
 # INPUT SANITIZATION #
 ######################
 
-# our only input should consist of only numbers; per our assignment below, if
-# it has a double-quote in it, it could become a vector for arbitrary command
-# execution; both checks are necessary.
-#if [[ '${{ contains( github.event.client_payload.release_id, '"') }}' == 'true' ]]; then
-#	echo "ERROR: release_id absolutely cannot have a double-quote!"
-#	exit 1
-#fi
-#RELEASE_ID="${{ github.event.client_payload.release_id }}"
-#RELEASE_ID="${RELEASE_ID//[^0-9]}"
-
-echo "RELEASE_ID:|${RELEASE_ID}|"
+# our only input should consist of only numbers; strip everything else
 RELEASE_ID="${RELEASE_ID//[^0-9]}"
-echo "RELEASE_ID:|${RELEASE_ID}|"
-exit 0
 
 ###################
 # INSTALL DEPENDS #
 ###################
 
 apt-get update
-apt-get -y install curl
+apt-get -y install curl jq
 
 ###########################
 # DOWNLOAD RELEASE ASSETS #
 ###########################
 
-echo "RELEASE_ID:|${RELEASE_ID}|"
+tmpDir="`mktemp -d`"
+pushd "${tmpDir}""
 
-curl -i --header "authorization: Bearer ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}"
+curl -sL --header "authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq -r '.assets[].browser_download_url' | xargs curl --remote-name-all
+
+sha256sum * > SHA256SUMS
+
+curl -iL --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: $(file -b --mime-type SHA256SUMS)" --data-binary @SHA256SUMS "https://api.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}" | jq -r '.assets[].browser_download_url' | xargs curl --remote-name-all
 
 ##################
 # CLEANUP & EXIT #
