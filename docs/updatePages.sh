@@ -67,6 +67,10 @@ git checkout -b gh-pages
 # Add CNAME - this is required for GitHub to know what our custom domain is
 echo "docs.buskill.in" > CNAME
 
+# add .nojekyll to the root so that github won't 404 on content added to dirs
+# that start with an underscore (_), such as our "_content" dir..
+touch .nojekyll
+
 # add redirect (for now) since I want repo-specific docs dirs, but we only have one so far
 cat >> index.html <<EOF
 <!DOCTYPE html>
