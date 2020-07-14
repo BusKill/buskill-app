@@ -29,8 +29,9 @@ For information on using the BusKil App, see :ref:`software_usr`.
    software_usr/index
    hardware_dev/index
    software_dev/index
-   security
+   security/index
    support
+   license
    attribution
 
 

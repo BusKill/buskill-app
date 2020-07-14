@@ -100,9 +100,9 @@ html_theme_options = {
 #  * https://github.com/readthedocs/sphinx_rtd_theme/issues/529
 html_context = {
 	'display_github': True,
-  'github_user': 'buskill',
-  'github_repo': 'buskill-app',
-  'github_version': 'master/docs/',
+	'github_user': 'buskill',
+	'github_repo': 'buskill-app',
+	'github_version': 'master/docs/',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
