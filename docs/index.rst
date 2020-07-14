@@ -6,10 +6,27 @@
 Welcome to BusKill's documentation!
 ===================================
 
+Welcome! BusKill's documentation is split into 4 main parts:
+
+- :ref:`hardware_usr`
+- :ref:`software_usr`
+- :ref:`hardware_dev`
+- :ref:`software_dev`
+
+For information on using the BusKil App, see :ref:`software_usr`.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   introduction/index
+   hardware_usr/index
+   software_usr/index
+   hardware_dev/index
+   software_dev/index
+   security
+   support
+   attribution
 
 
 Indices and tables

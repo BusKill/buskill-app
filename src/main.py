@@ -1,13 +1,20 @@
 #!/usr/bin/env python3.7
-################################################################################
-# File:    main.py
-# Purpose: This is the main wrapper script for launching the buskill app
-#          For more info, see: https://buskill.in/
-# Authors: Michael Altfield <michael@buskill.in>
-# Created: 2020-06-23
-# Updated: 2020-06-23
-# Version: 0.1
-################################################################################
+"""
+::
+
+  File:    main.py
+  Authors: Michael Altfield <michael@buskill.in>
+  Created: 2020-06-23
+  Updated: 2020-06-23
+  Version: 0.1
+
+This is the main wrapper script for launching the BusKill app.
+
+It has no functions and simply sets-up some essential requirements based on the platform, sets-up logging, and then either launches the CLI (``buskill_cli.py``) or the GUI (``buskill_gui.py``).
+
+For more info, see: https://buskill.in/
+
+"""
 
 # this is needed for supporting Windows 10 with OpenGL < v2.0
 # Example: VirtualBox w/ OpenGL v1.1

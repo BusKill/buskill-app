@@ -1,13 +1,17 @@
 #!/usr/bin/env python3.7
-################################################################################
-# File:    buskill_cli.py
-# Purpose: This is the code to handle the BusKill app via CLI
-#          For more info, see: https://buskill.in/
-# Authors: Michael Altfield <michael@buskill.in>
-# Created: 2020-06-23
-# Updated: 2020-06-23
-# Version: 0.1
-################################################################################
+"""
+::
+
+  File:    buskill_cli.py
+  Authors: Michael Altfield <michael@buskill.in>
+  Created: 2020-06-23
+  Updated: 2020-06-23
+  Version: 0.1
+
+This is the code to handle the BusKill app via CLI
+
+For more info, see: https://buskill.in/
+"""
 
 ################################################################################
 #                                   IMPORTS                                    #

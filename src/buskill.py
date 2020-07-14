@@ -1,13 +1,17 @@
 #!/usr/bin/env python3.7
-################################################################################
-# File:    buskill.py
-# Purpose: This is the heart of the buskill app, shared by both the cli and gui
-#          For more info, see: https://buskill.in/
-# Authors: Michael Altfield <michael@buskill.in>
-# Created: 2020-06-23
-# Updated: 2020-06-28
-# Version: 0.1
-################################################################################
+"""
+::
+
+  File:    buskill.py
+  Authors: Michael Altfield <michael@buskill.in>
+  Created: 2020-06-23
+  Updated: 2020-06-28
+  Version: 0.1
+
+This is the heart of the buskill app, shared by both the cli and gui
+
+For more info, see: https://buskill.in/
+"""
 
 ################################################################################
 #                                   IMPORTS                                    #

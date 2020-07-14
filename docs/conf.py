@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 # -- Project information -----------------------------------------------------
 
 project = 'BusKill'
-copyright = '2020, BusKill Team'
+copyright = '2020, Michael Altfield and the BusKill team'
 author = 'BusKill Team'
 
 # The short X.Y version
@@ -40,7 +40,8 @@ release = 'version'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
+    'sphinx.ext.autosummary',
+#    'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
@@ -64,7 +65,9 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
+locale_dirs = ['locale/']
+gettext_compact = True
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -82,6 +85,8 @@ pygments_style = None
 #
 html_theme = 'sphinx_rtd_theme'
 html_logo = '_static/buskill_202007_200px.png'
+display_github = True
+github_url = 'https://github.com/buskill/buskill-app/'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -186,9 +191,18 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+#intersphinx_mapping = {'https://docs.python.org/': None}
 
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# prevent "failed to import module...No module named..." errors on modules that
+# we don't need just to build our documentation from the code
+autodoc_mock_imports = ["kivy"]
+autodoc_default_flags = ['members']
+autodoc_member_order = 'bysource'
+autodoc_default_options = {
+	'undoc-members': True,
+}
