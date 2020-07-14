@@ -87,8 +87,6 @@ pygments_style = None
 #
 html_theme = 'sphinx_rtd_theme'
 html_logo = '_static/buskill_202007_200px.png'
-display_github = True
-github_url = 'https://github.com/buskill/buskill-app/'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -96,6 +94,15 @@ github_url = 'https://github.com/buskill/buskill-app/'
 #
 html_theme_options = {
 	'logo_only': True,
+}
+
+# replace "view page source" with "edit on github" in Read The Docs theme
+#  * https://github.com/readthedocs/sphinx_rtd_theme/issues/529
+html_context = {
+	'display_github': True,
+  'github_user': 'buskill',
+  'github_repo': 'buskill-app',
+  'github_version': 'master/docs/',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
