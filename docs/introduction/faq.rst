@@ -67,5 +67,5 @@ You can `signup for our BusKill email newsletter <https://www.buskill.in/#newsle
 Q: My questions isn't listed. Where can I get support?
 ------------------------------------------------------
 
-Please `create an issue <https://github.com/BusKill/buskill-app/issues/new/choose>`_ on our github.
+Please see :ref:`support`
 

@@ -15,6 +15,11 @@ Welcome! BusKill's documentation is split into 4 main parts:
 
 For information on using the BusKil App, see :ref:`software_usr`.
 
+.. figure:: /images/buskill_featuredImageLight.jpg
+  :align: center
+
+  source: `Michael Altfield's tech blog <https://tech.michaelaltfield.net/2020/01/02/buskill-laptop-kill-cord-dead-man-switch/>`_
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
