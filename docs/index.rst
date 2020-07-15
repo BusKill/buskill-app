@@ -31,6 +31,8 @@ For information on using the BusKil App, see :ref:`software_usr`.
    software_dev/index
    security/index
    support
+   contributing
+   changelog
    license
    attribution
 

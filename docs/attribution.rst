@@ -27,3 +27,20 @@ This project would not have been possible without the following tools and servic
  * `QubesOS <https://www.qubes-os.org/>`_
  * `TAILS <https://tails.boum.org/install/index.en.html>`_
  * `Debian <https://www.debian.org/>`_ `GNU <http://www.gnu.org/>`_/`Linux <https://www.kernel.org/>`_
+
+Similar Projects
+----------------
+
+The reader may be interested to investigate the following similar projects:
+
+ * `USB Kill <https://github.com/hephaest0s/usbkill>`_
+ * `Silk Guardian <https://github.com/NateBrune/silk-guardian>`_
+ * `Day Tripper <https://github.com/maltfield/daytripper>`_
+ * `USBGuard <https://usbguard.github.io/>`_
+ * `suicideCrypt <https://github.com/MonolithInd/suicideCrypt>`_
+ * `panic_bcast <https://github.com/qnrq/panic_bcast>`_
+ * `Nuke My LUKS <https://github.com/juliocesarfort/nukemyluks>`_
+ * `luksAddNuke <http://lxer.com/module/newswire/view/103692/index.html>`_
+ * `cryptsetup-nuke-keys <https://gitlab.com/kalilinux/packages/cryptsetup-nuke-keys>`_
+ * `TAILS Memory Erasure <https://tails.boum.org/contribute/design/memory_erasure/>`_
+ * `TEDD (Transparent Emergency Data Destruction) <https://bitbucket.org/ausiv4/tedd/src/default/>`_

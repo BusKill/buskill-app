@@ -1,7 +1,12 @@
 .. _autodoc:
 
-Source Code
+buskill-app
 ===========
+
+This section documents the main BusKill app
+
+Source Code
+-----------
 
 This section documents the source code files and their classes/function using ``autodoc``.
 

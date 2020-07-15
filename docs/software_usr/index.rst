@@ -8,6 +8,7 @@ This section will describe how to use the BusKill App to arm, disarm, and config
 .. toctree::
    :maxdepth: 3
 
+   requirements
    download
    gui
    cli
