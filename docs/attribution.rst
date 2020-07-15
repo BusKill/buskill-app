@@ -3,7 +3,7 @@
 Attribution
 ===========
 
-Thank you to the following folks who have contributed to the BusKill project:
+Thank you to the following folks who have contributed to the BusKill project!
  * `Michael Altfield <https://michaelaltfield.net>`_
  * `cyberkryption <https://twitter.com/cyberkryption>`_
  * `Steven Johnson <https://www.linkedin.com/in/sj2019/>`_

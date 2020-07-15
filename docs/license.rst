@@ -12,3 +12,5 @@ And you can read the CC-BY-SA license here:
  * https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 Per the terms in these licenses, you're welcome to reuse our works, but you must display prominent attribution back to our `BusKill project official website <https://www.buskill.in/>`_ and your work must also be copyleft under equivalent licenses.
+
+.. literalinclude:: ../LICENSE
