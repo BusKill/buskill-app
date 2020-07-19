@@ -104,14 +104,6 @@ html_context = {
 	'github_user': 'buskill',
 	'github_repo': 'buskill-app',
 	'github_version': 'master/docs/',
-	'versions': [
-	 ('latest', '/en/latest'),
-	 ('2', '/en/2'),
-	],
-	'subprojects': [
-	 ('buskill-spanish', '/es/latest/'),
-	 ('buskill-german', '/de/latest/'),
-	],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -244,12 +236,12 @@ html_context['languages'] = list()
 
 languages = [lang.name for lang in os.scandir('locale') if lang.is_dir()]
 for lang in languages:
-	html_context['languages'].append( (lang, '/' +lang+ '/' +current_version+ '/buskill-app/') )
+	html_context['languages'].append( (lang, '/buskill-app/' +lang+ '/' +current_version+ '/') )
 
 # VERSIONS
 html_context['versions'] = list()
 
 versions = [branch.name for branch in repo.branches]
 for version in versions:
-	html_context['versions'].append( (version, '/' +current_language+ '/' +version+ '/buskill-app/') )
+	html_context['versions'].append( (version, '/buskill-app/' +current_language+ '/' +version+ '/') )
 
