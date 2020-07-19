@@ -42,10 +42,46 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # BUILD DOCS #
 ##############
 
+# first, cleanup any old builds' static assets
+make -C docs clean
+
+# get a list of branches
+branches="`git for-each-ref --format="%(refname:short)" refs/heads`"
+for current_branch in ${branches}; do
+
+	# make the current language available to conf.py
+	export current_branch
+
+	echo "INFO: Building sites for ${current_branch}"
+
+	# skip this branch if it doesn't have our docs dir & sphinx config
+	if [ ! -e 'docs/conf.py' ]; then
+		echo -e "\tINFO: Couldn't find 'docs/conf.py' (skipped)"
+		continue
+	fi
+
+	languages="`find docs/locale/ -mindepth 1 -maxdepth 1 -type d -exec basename '{}' \;`"
+	for current_language in ${languages}; do
+
+		# make the current language available to conf.py
+		export current_language
+
+		echo "INFO: Building for ${current_language_slug}"
+		sphinx-build -b html docs docs/_build/html/${current_language_slug}/latest -D language="${current_language_slug}"
+
+	done
+
+done
+
+exit 0
+
 # build our documentation with sphinx (see docs/conf.py)
 # * https://www.sphinx-doc.org/en/master/usage/quickstart.html#running-the-build
 make -C docs clean
 make -C docs html
+
+# TODO: remove me
+exit 0
 
 #######################
 # Update GitHub Pages #
@@ -55,6 +91,8 @@ git config --global user.name "${GITHUB_ACTOR}"
 git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
 docroot=`mktemp -d`
+exit 0
+exit 0
 rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
 
 pushd "${docroot}"

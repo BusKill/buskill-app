@@ -38,22 +38,30 @@ Imagine a vacationer logged-into their bank account doing a quick transfer betwe
 |:studio_microphone:| Journalists
 ---------------------------------
 
-In many countries, `reporting the truth can be a life-threatening occupation <https://rsf.org/en/ranking>`_ for journalists and their sources. BusKill can help journalists operating in an oppressive regimes keep their documents and their sources safe when the political police suddenly raid their workplace.
+In many countries, `reporting the truth can be a life-threatening occupation <https://rsf.org/en/ranking>`_.
+
+BusKill can help journalists operating in an oppressive regimes keep their documents and their sources safe when the political police suddenly raid their workplace.
 
 |:peace:| Activists
 -------------------
 
-Many oppressive governments and businesses have imprisoned and murdered peaceful protesters. BusKill can keep an activist's affinity group safe when the `secret police <https://en.wikipedia.org/wiki/Secret_police>`_ suddenly raid an organizer's home.
+Many oppressive governments and businesses have imprisoned and murdered peaceful protesters.
+
+BusKill can keep an activist's affinity group safe when the `secret police <https://en.wikipedia.org/wiki/Secret_police>`_ suddenly raid an organizer's home.
 
 |btc| Crypto Traders
 --------------------
 
-In the `cryptocurrency <https://en.wikipedia.org/wiki/Cryptocurrency>`_ space, *"you are your own bank"*. BusKill can protect the private keys stored on a crypto trader's machine while trading OTC or on an exchange.
+In the `cryptocurrency <https://en.wikipedia.org/wiki/Cryptocurrency>`_ space, *"you are your own bank"*.
+
+BusKill can protect the private keys stored on a crypto trader's machine while trading OTC or on an exchange.
 
 |:briefcase:| Businesses
 --------------------------
 
-Business has always been the backbone of infosec. Data stored on employee's laptops (whether private keys or IP) can easily cause millions or billions of dollars in losses to a company. BusKill can prevent an unlocked computer from ending-up in a competitor's hands.
+Business has always been the backbone of infosec. Data stored on employee's laptops (whether private keys or IP) can easily cause millions or billions of dollars in losses to a company.
+
+BusKill can prevent an unlocked computer from ending-up in a competitor's hands.
 
 |:spy:| Military/Intelligence
 -----------------------------

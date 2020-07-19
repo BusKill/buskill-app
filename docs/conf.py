@@ -94,6 +94,7 @@ html_logo = '_static/buskill_202007_200px.png'
 #
 html_theme_options = {
 	'logo_only': True,
+	'display_version': True,
 }
 
 # replace "view page source" with "edit on github" in Read The Docs theme
@@ -103,6 +104,14 @@ html_context = {
 	'github_user': 'buskill',
 	'github_repo': 'buskill-app',
 	'github_version': 'master/docs/',
+	'versions': [
+	 ('latest', '/en/latest'),
+	 ('2', '/en/2'),
+	],
+	'subprojects': [
+	 ('buskill-spanish', '/es/latest/'),
+	 ('buskill-german', '/de/latest/'),
+	],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -215,3 +224,40 @@ autodoc_member_order = 'bysource'
 autodoc_default_options = {
 	'undoc-members': True,
 }
+
+############################
+# SETUP THE RTD LOWER-LEFT #
+############################
+print( '----------------------------' )
+print( os.environ )
+print( dir() )
+print( globals() )
+print( locals() )
+#print( output_dir )
+print( tags.tags )
+print( '----------------------------' )
+html_context['display_lower_left'] = True
+
+# set this build's current version by looking at the branch
+from git import Repo
+repo = Repo( search_parent_directories=True )
+current_version = repo.active_branch.name
+html_context['current_version'] = current_version
+
+current_language = os.environ['current_language']
+html_context['current_language'] = current_language
+
+# LANGUAGES
+html_context['languages'] = list()
+
+languages = [lang.name for lang in os.scandir('locale') if lang.is_dir()]
+for lang in languages:
+	html_context['languages'].append( (lang, '/' +lang+ '/' + current_version) )
+
+# VERSIONS
+html_context['versions'] = list()
+
+versions = [branch.name for branch in repo.branches]
+for version in versions:
+	html_context['versions'].append( (version, '/' +current_language+ '/' + version) )
+

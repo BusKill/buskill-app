@@ -5,6 +5,8 @@ Hardware User Guide
 
 This section will describe how to setup the hardware BusKill cable prior to using the software to arm and disarm BusKill.
 
+For information on how to build and assemble the BusKill cable, see :ref:`hardware_dev`
+
 Step 1: Attach Carabiner To Belt
 --------------------------------
 
