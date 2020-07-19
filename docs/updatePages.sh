@@ -34,7 +34,7 @@ apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-ste
 #####################
 
 pwd
-ls -lah
+env
 ls -lah
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 

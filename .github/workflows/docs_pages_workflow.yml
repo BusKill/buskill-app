@@ -19,7 +19,7 @@ jobs:
       run: |
         apt-get update
         apt-get install -y git
-        git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+        git clone --depth 1 --no-single-branch "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
       shell: bash
 
     - name: Execute script to build our documentation and update pages
