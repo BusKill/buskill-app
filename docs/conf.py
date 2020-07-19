@@ -226,6 +226,8 @@ html_context['display_lower_left'] = True
 from git import Repo
 repo = Repo( search_parent_directories=True )
 current_version = repo.active_branch.name
+if current_version == 'master':
+	current_version = 'latest'
 html_context['current_version'] = current_version
 
 current_language = os.environ['current_language']
