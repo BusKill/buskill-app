@@ -65,16 +65,13 @@ for current_branch in ${branches}; do
 	fi
 
 	languages="`find docs/locale/ -mindepth 1 -maxdepth 1 -type d -exec basename '{}' \;`"
-	echo languages:
-	echo "${languages}"
-	echo ^ languages
-	for current_language in $(echo "${languages}"); do
+	for current_language in ${languages}; do
 
 		# make the current language available to conf.py
 		export current_language
 
-		echo "INFO: Building for ${current_language_slug}"
-		sphinx-build -b html docs docs/_build/html/${current_language_slug}/latest -D language="${current_language_slug}"
+		echo "INFO: Building for ${current_language}"
+		sphinx-build -b html docs docs/_build/html/${current_language}/latest -D language="${current_language}"
 
 		# copy the static assets produced by the above build into our docroot
 		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
