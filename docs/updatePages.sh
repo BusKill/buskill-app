@@ -65,6 +65,9 @@ for current_branch in ${branches}; do
 	fi
 
 	languages="`find docs/locale/ -mindepth 1 -maxdepth 1 -type d -exec basename '{}' \;`"
+	echo languages:
+	echo "${languages}"
+	echo ^ languages
 	for current_language in $(echo "${languages}"); do
 
 		# make the current language available to conf.py
