@@ -243,4 +243,9 @@ html_context['versions'] = list()
 
 versions = [branch.name for branch in repo.branches]
 for version in versions:
+
+	# special override to rename 'master' branch to 'latest'
+	if version == 'master':
+		version = 'latest'
+
 	html_context['versions'].append( (version, '/buskill-app/' +current_language+ '/' +version+ '/') )
