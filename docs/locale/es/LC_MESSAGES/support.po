@@ -1,0 +1,30 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2020, Michael Altfield and the BusKill team
+# This file is distributed under the same license as the BusKill package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BusKill \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-16 13:12+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: ../../support.rst:4
+msgid "Support"
+msgstr ""
+
+#: ../../support.rst:6
+msgid ""
+"If you have a question that is not answered by this documentation, please"
+" `create an issue <https://github.com/BusKill/buskill-"
+"app/issues/new/choose>`_ on our github."
+msgstr ""
+

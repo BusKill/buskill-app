@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2020, Michael Altfield and the BusKill team
+# This file is distributed under the same license as the BusKill package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BusKill \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-16 13:05+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: ../../attribution.rst:4
+msgid "Attribution"
+msgstr ""
+
+#: ../../attribution.rst:10
+msgid ""
+"Thank you to the following folks who have contributed to the BusKill "
+"project!"
+msgstr ""
+
+#: ../../attribution.rst:7
+msgid "`Michael Altfield <https://michaelaltfield.net>`_"
+msgstr ""
+
+#: ../../attribution.rst:8
+msgid "`cyberkryption <https://twitter.com/cyberkryption>`_"
+msgstr ""
+
+#: ../../attribution.rst:9
+msgid "`Steven Johnson <https://www.linkedin.com/in/sj2019/>`_"
+msgstr ""
+
+#: ../../attribution.rst:10
+msgid "`Jacob Neplokh <https://jacobneplokh.com/>`_"
+msgstr ""
+
+#: ../../attribution.rst:29
+msgid ""
+"This project would not have been possible without the following tools and"
+" services:"
+msgstr ""
+
+#: ../../attribution.rst:13
+msgid "`Python <https://www.python.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:14
+msgid "`Kivy <https://kivy.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:15
+msgid "`libusb <https://libusb.info/>`_"
+msgstr ""
+
+#: ../../attribution.rst:16
+msgid "`libusb1 <https://pypi.org/project/libusb1/>`_"
+msgstr ""
+
+#: ../../attribution.rst:17
+msgid "`AppImage <https://appimage.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:18
+msgid "`PyInstaller <https://www.pyinstaller.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:19
+msgid "`Vim <https://www.vim.org/vim>`_"
+msgstr ""
+
+#: ../../attribution.rst:20
+msgid "`Gimp <https://www.gimp.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:21
+msgid "`Kdenlive <https://kdenlive.org/en/>`_"
+msgstr ""
+
+#: ../../attribution.rst:22
+msgid "`Sphinx <https://www.sphinx-doc.org/en/master/>`_"
+msgstr ""
+
+#: ../../attribution.rst:23
+msgid "`Read The Docs <https://readthedocs.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:24
+msgid "`Wordpress <https://wordpress.com/>`_"
+msgstr ""
+
+#: ../../attribution.rst:25
+msgid "`SiteOrigin <https://siteorigin.com/>`_"
+msgstr ""
+
+#: ../../attribution.rst:26
+msgid "`phpList <https://www.phplist.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:27
+msgid "`QubesOS <https://www.qubes-os.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:28
+msgid "`TAILS <https://tails.boum.org/install/index.en.html>`_"
+msgstr ""
+
+#: ../../attribution.rst:29
+msgid ""
+"`Debian <https://www.debian.org/>`_ `GNU <http://www.gnu.org/>`_/`Linux "
+"<https://www.kernel.org/>`_"
+msgstr ""
+
+#: ../../attribution.rst:32
+msgid "Similar Projects"
+msgstr ""
+
+#: ../../attribution.rst:34
+msgid ""
+"The reader may be interested to investigate the following similar "
+"projects:"
+msgstr ""
+
+#: ../../attribution.rst:36
+msgid "`USB Kill <https://github.com/hephaest0s/usbkill>`_"
+msgstr ""
+
+#: ../../attribution.rst:37
+msgid "`Silk Guardian <https://github.com/NateBrune/silk-guardian>`_"
+msgstr ""
+
+#: ../../attribution.rst:38
+msgid "`Day Tripper <https://github.com/maltfield/daytripper>`_"
+msgstr ""
+
+#: ../../attribution.rst:39
+msgid "`USBGuard <https://usbguard.github.io/>`_"
+msgstr ""
+
+#: ../../attribution.rst:40
+msgid "`suicideCrypt <https://github.com/MonolithInd/suicideCrypt>`_"
+msgstr ""
+
+#: ../../attribution.rst:41
+msgid "`panic_bcast <https://github.com/qnrq/panic_bcast>`_"
+msgstr ""
+
+#: ../../attribution.rst:42
+msgid "`Nuke My LUKS <https://github.com/juliocesarfort/nukemyluks>`_"
+msgstr ""
+
+#: ../../attribution.rst:43
+msgid "`luksAddNuke <http://lxer.com/module/newswire/view/103692/index.html>`_"
+msgstr ""
+
+#: ../../attribution.rst:44
+msgid ""
+"`cryptsetup-nuke-keys <https://gitlab.com/kalilinux/packages/cryptsetup-"
+"nuke-keys>`_"
+msgstr ""
+
+#: ../../attribution.rst:45
+msgid ""
+"`TAILS Memory Erasure "
+"<https://tails.boum.org/contribute/design/memory_erasure/>`_"
+msgstr ""
+
+#: ../../attribution.rst:46
+msgid ""
+"`TEDD (Transparent Emergency Data Destruction) "
+"<https://bitbucket.org/ausiv4/tedd/src/default/>`_"
+msgstr ""
+

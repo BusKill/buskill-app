@@ -1,0 +1,242 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2020, Michael Altfield and the BusKill team
+# This file is distributed under the same license as the BusKill package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BusKill \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-16 13:12+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: ../../software_dev/autodoc.rst:4
+msgid "buskill-app"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:6
+msgid "This section documents the main BusKill app"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:9
+msgid "Source Code"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:11
+msgid ""
+"This section documents the source code files and their classes/function "
+"using ``autodoc``."
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:13
+msgid ""
+"You can find the sourcecode that this document refers to in the ``src/`` "
+"directory on our `github-app repo on github.com "
+"<https://github.com/BusKill/buskill-app/tree/master/src>`_"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:15
+msgid "Contents"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:18
+msgid "main.py"
+msgstr ""
+
+#: main:9 of
+msgid "This is the main wrapper script for launching the BusKill app."
+msgstr ""
+
+#: main:11 of
+msgid ""
+"It has no functions and simply sets-up some essential requirements based "
+"on the platform, sets-up logging, and then either launches the CLI "
+"(``buskill_cli.py``) or the GUI (``buskill_gui.py``)."
+msgstr ""
+
+#: buskill:11 buskill_cli:11 buskill_gui:11 main:13 of
+msgid "For more info, see: https://buskill.in/"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:25
+msgid "buskill.py"
+msgstr ""
+
+#: buskill:9 of
+msgid "This is the heart of the buskill app, shared by both the cli and gui"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:30
+msgid "buskill_cli.py"
+msgstr ""
+
+#: buskill_cli:9 of
+msgid "This is the code to handle the BusKill app via CLI"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:37
+msgid "buskill_gui.py"
+msgstr ""
+
+#: buskill_gui:9 of
+msgid "This is the code to launch the BusKill GUI app"
+msgstr ""
+
+#: buskill_gui.CriticalError.msg:1 buskill_gui.MainWindow.status:1
+#: buskill_gui.MainWindow.toggle_btn:1 of
+msgid "Used by autodoc_mock_imports."
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:44
+msgid "buskill.kv"
+msgstr ""
+
+#: ../../software_dev/autodoc.rst:46
+msgid ""
+"This is our main `kivy-specific design language "
+"<https://kivy.org/doc/stable/gettingstarted/rules.html>`_ file that "
+"describes how to render the GUI, separating code from design."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:4
+msgid "Documentation"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:6
+msgid "This section documents how to update and build the documentation"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:9
+msgid "Continuous Documentation"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:11
+msgid ""
+"The BusKill project treats documentation-as-code. It is versioned, "
+"managed with ``git``, and automatically built and released with our "
+"`CI/CD GitHub Actions workflows <https://github.com/BusKill/buskill-"
+"app/blob/master/.github/workflows/docs_pages_workflow.yml>`_."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:13
+msgid ""
+"Our documentation is written in `reStructuredText (reST) "
+"<https://en.wikipedia.org/wiki/ReStructuredText>`_ and built using "
+"`sphinx <https://www.sphinx-doc.org/en/master/>`_ with the `Read The Docs"
+" theme <https://github.com/readthedocs/sphinx_rtd_theme>`_. This has the "
+"following benefits:"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:15
+msgid "reST is human-readable plaintext. It plays nice with a VCS (like ``git``)."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:17
+msgid ""
+"Plaintext is easier to review for PRs, making malicious PRs easier to "
+"detect."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:18
+msgid ""
+"It's not necessary to build in order to read. The cryptographically-"
+"signed git commit sources can be read directly."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:19
+msgid ""
+"Our documentation gets versioned exactly matching our code's release "
+"branches."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:21
+msgid ""
+"It's trivial for Sphinx to export to `multiple formats <https://www"
+".sphinx-doc.org/en/master/usage/builders/index.html>`_, such as HTML, "
+"PDF, EPUB, etc."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:23
+msgid "reST is much more powerful than other human-readable markups."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:25
+msgid ""
+"We can define our own `extensions using python <https://www.sphinx-"
+"doc.org/en/master/development/tutorials/helloworld.html>`_ to do complex "
+"logic like `converting LibreOffice spreadsheets with calculations into "
+"tables <https://stackoverflow.com/questions/62682095/how-to-add-a"
+"-spreadsheet-in-read-the-docs>`_"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:27
+msgid ""
+"Sphinx has built-in support for documenting python sourcecode using "
+"`autodoc <https://www.sphinx-"
+"doc.org/en/master/usage/extensions/autodoc.html>`_"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:30
+msgid "Updating"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:32
+msgid ""
+"If you'd like to update this documentation, you can `fork "
+"<https://docs.github.com/en/github/getting-started-with-"
+"github/fork-a-repo>`_ our `repo <https://github.com/buskill/buskill-"
+"app>`_, edit the files as-needed in the `docs directory "
+"<https://github.com/BusKill/buskill-app/tree/master/docs>`_, and `submit "
+"a PR <https://docs.github.com/en/github/collaborating-with-issues-and-"
+"pull-requests/creating-a-pull-request-from-a-fork>`_."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:34
+msgid ""
+"To know which file to edit, click the ``Edit on GitHub`` link on the top-"
+"right of the page you wish to edit."
+msgstr ""
+
+#: ../../software_dev/documentation.rst:39
+msgid "Building"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:41
+msgid "You can build our documentation on Debian 10 using the following commands"
+msgstr ""
+
+#: ../../software_dev/documentation.rst:54
+msgid ""
+"After executing the above commands, you should have a new "
+"``docs/_build/html`` directory. You can open your locally-built "
+"documentation in firefox by executing"
+msgstr ""
+
+#: ../../software_dev/index.rst:4
+msgid "Software Developer Guide"
+msgstr ""
+
+#: ../../software_dev/index.rst:6
+msgid ""
+"This section is intended for the developer who wants to modify the source"
+" code of the BusKill software."
+msgstr ""
+
+#: ../../software_dev/repo.rst:4
+msgid "Repo Maintanance"
+msgstr ""
+
+#: ../../software_dev/repo.rst:6
+msgid ""
+"TODO: Steps to preform when releasing a new version "
+"(build/test/download/checksum diff/sign/upload, create new branch for "
+"dev, update build depends)"
+msgstr ""
+

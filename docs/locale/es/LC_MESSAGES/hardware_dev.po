@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2020, Michael Altfield and the BusKill team
+# This file is distributed under the same license as the BusKill package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BusKill \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-16 13:12+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: ../../hardware_dev/index.rst:4
+msgid "Hardware Developer Guide"
+msgstr ""
+
+#: ../../hardware_dev/index.rst:6
+msgid "This section will describe how to build the BusKill hardware cable."
+msgstr ""
+
+#: ../../hardware_dev/index.rst:8
+msgid ""
+"For information on how to setup and use the BusKill cable before using "
+"the BusKill app, see :ref:`hardware_usr`"
+msgstr ""
+
+#: ../../hardware_dev/index.rst:10
+msgid "TODO: BOM TODO: Assembly of components"
+msgstr ""
+
