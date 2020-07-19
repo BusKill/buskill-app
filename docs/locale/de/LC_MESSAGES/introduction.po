@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BusKill \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-16 13:05+0545\n"
+"POT-Creation-Date: 2020-07-19 22:07+0545\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,54 +252,114 @@ msgstr ""
 #: ../../introduction/what.rst:41
 msgid ""
 "In many countries, `reporting the truth can be a life-threatening "
-"occupation <https://rsf.org/en/ranking>`_ for journalists and their "
-"sources. BusKill can help journalists operating in an oppressive regimes "
-"keep their documents and their sources safe when the political police "
-"suddenly raid their workplace."
+"occupation <https://rsf.org/en/ranking>`_."
 msgstr ""
 
-#: ../../introduction/what.rst:44
-msgid "|:peace:| Activists"
+#: ../../introduction/what.rst:43
+msgid ""
+"BusKill can help journalists operating in an oppressive regimes keep "
+"their documents and their sources safe when the political police suddenly"
+" raid their workplace."
 msgstr ""
 
 #: ../../introduction/what.rst:46
-msgid ""
-"Many oppressive governments and businesses have imprisoned and murdered "
-"peaceful protesters. BusKill can keep an activist's affinity group safe "
-"when the `secret police <https://en.wikipedia.org/wiki/Secret_police>`_ "
-"suddenly raid an organizer's home."
+msgid "|:peace:| Activists"
 msgstr ""
 
-#: ../../introduction/what.rst:49
+#: ../../introduction/what.rst:48
+msgid ""
+"Many oppressive governments and businesses have imprisoned and murdered "
+"peaceful protesters."
+msgstr ""
+
+#: ../../introduction/what.rst:50
+msgid ""
+"BusKill can keep an activist's affinity group safe when the `secret "
+"police <https://en.wikipedia.org/wiki/Secret_police>`_ suddenly raid an "
+"organizer's home."
+msgstr ""
+
+#: ../../introduction/what.rst:53
 msgid "|btc| Crypto Traders"
 msgstr ""
 
-#: ../../introduction/what.rst:51
+#: ../../introduction/what.rst:55
 msgid ""
 "In the `cryptocurrency <https://en.wikipedia.org/wiki/Cryptocurrency>`_ "
-"space, *\"you are your own bank\"*. BusKill can protect the private keys "
-"stored on a crypto trader's machine while trading OTC or on an exchange."
+"space, *\"you are your own bank\"*."
 msgstr ""
 
-#: ../../introduction/what.rst:54
+#: ../../introduction/what.rst:57
+msgid ""
+"BusKill can protect the private keys stored on a crypto trader's machine "
+"while trading OTC or on an exchange."
+msgstr ""
+
+#: ../../introduction/what.rst:60
 msgid "|:briefcase:| Businesses"
 msgstr ""
 
-#: ../../introduction/what.rst:56
+#: ../../introduction/what.rst:62
 msgid ""
 "Business has always been the backbone of infosec. Data stored on "
 "employee's laptops (whether private keys or IP) can easily cause millions"
-" or billions of dollars in losses to a company. BusKill can prevent an "
-"unlocked computer from ending-up in a competitor's hands."
+" or billions of dollars in losses to a company."
 msgstr ""
 
-#: ../../introduction/what.rst:59
+#: ../../introduction/what.rst:64
+msgid ""
+"BusKill can prevent an unlocked computer from ending-up in a competitor's"
+" hands."
+msgstr ""
+
+#: ../../introduction/what.rst:67
 msgid "|:spy:| Military/Intelligence"
 msgstr ""
 
-#: ../../introduction/what.rst:61
+#: ../../introduction/what.rst:69
 msgid ""
 "BusKill can be a life-saver for intelligence operatives behind enemy "
 "lines."
 msgstr ""
+
+#~ msgid ""
+#~ "In many countries, `reporting the truth"
+#~ " can be a life-threatening occupation"
+#~ " <https://rsf.org/en/ranking>`_ for journalists "
+#~ "and their sources. BusKill can help "
+#~ "journalists operating in an oppressive "
+#~ "regimes keep their documents and their"
+#~ " sources safe when the political "
+#~ "police suddenly raid their workplace."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Many oppressive governments and businesses "
+#~ "have imprisoned and murdered peaceful "
+#~ "protesters. BusKill can keep an "
+#~ "activist's affinity group safe when the"
+#~ " `secret police "
+#~ "<https://en.wikipedia.org/wiki/Secret_police>`_ suddenly "
+#~ "raid an organizer's home."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In the `cryptocurrency "
+#~ "<https://en.wikipedia.org/wiki/Cryptocurrency>`_ space, "
+#~ "*\"you are your own bank\"*. BusKill "
+#~ "can protect the private keys stored "
+#~ "on a crypto trader's machine while "
+#~ "trading OTC or on an exchange."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Business has always been the backbone"
+#~ " of infosec. Data stored on "
+#~ "employee's laptops (whether private keys "
+#~ "or IP) can easily cause millions "
+#~ "or billions of dollars in losses "
+#~ "to a company. BusKill can prevent "
+#~ "an unlocked computer from ending-up "
+#~ "in a competitor's hands."
+#~ msgstr ""
 

@@ -71,7 +71,7 @@ for current_branch in ${branches}; do
 		export current_language
 
 		echo "INFO: Building for ${current_language}"
-		sphinx-build -b html docs docs/_build/html/${current_language}/latest -D language="${current_language}"
+		sphinx-build -b html docs docs/_build/html/${current_language}/${current_branch} -D language="${current_language}"
 
 		# copy the static assets produced by the above build into our docroot
 		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
