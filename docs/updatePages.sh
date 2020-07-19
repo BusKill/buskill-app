@@ -56,6 +56,11 @@ for current_branch in ${branches}; do
 	export current_branch
 	git checkout ${current_branch}
 
+	# rename "master" to "latest"
+	if [[ "${current_branch}" == "master" ]]; then
+		current_branch="latest"
+	fi
+
 	echo "INFO: Building sites for ${current_branch}"
 
 	# skip this branch if it doesn't have our docs dir & sphinx config
@@ -110,7 +115,7 @@ cat >> index.html <<EOF
 <html>
    <head>
       <title>BusKill Docs</title>
-      <meta http-equiv = "refresh" content="0; url='/buskill-app/'" />
+      <meta http-equiv = "refresh" content="0; url='/buskill-app/en/latest/'" />
    </head>
    <body>
       <p>Please wait while you're redirected to our <a href="/buskill-app/">buskill-app documentation page</a>.</p>
