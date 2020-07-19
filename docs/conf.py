@@ -220,7 +220,6 @@ autodoc_default_options = {
 ############################
 # SETUP THE RTD LOWER-LEFT #
 ############################
-"""
 html_context['display_lower_left'] = True
 
 # set this build's current version by looking at the branch
@@ -245,4 +244,3 @@ html_context['versions'] = list()
 versions = [branch.name for branch in repo.branches]
 for version in versions:
 	html_context['versions'].append( (version, '/buskill-app/' +current_language+ '/' +version+ '/') )
-"""
