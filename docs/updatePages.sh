@@ -48,9 +48,6 @@ docroot=`mktemp -d`
 # first, cleanup any old builds' static assets
 make -C docs clean
 
-# record the original branch so we can switch to it after our loop
-original_branch="`git rev-parse --abbrev-ref HEAD`"
-
 # get a list of branches
 branches="`git for-each-ref --format="%(refname:short)" refs/heads`"
 for current_branch in ${branches}; do
@@ -83,8 +80,8 @@ for current_branch in ${branches}; do
 
 done
 
-# return to our original branch
-git checkout "${original_branch}"
+# return to master branch
+git checkout master
 
 #######################
 # Update GitHub Pages #
