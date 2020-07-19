@@ -229,6 +229,7 @@ current_version = repo.active_branch.name
 if current_version == 'master':
 	current_version = 'latest'
 html_context['current_version'] = current_version
+html_context['version'] = current_version
 
 current_language = os.environ['current_language']
 html_context['current_language'] = current_language
