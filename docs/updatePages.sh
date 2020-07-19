@@ -48,8 +48,8 @@ docroot=`mktemp -d`
 # first, cleanup any old builds' static assets
 make -C docs clean
 
-# get a list of branches
-branches="`git for-each-ref --format="%(refname:short)" refs/heads`"
+# get a list of branches, excluding 'HEAD' and 'gh-pages'
+branches="`git for-each-ref '--format=%(refname:lstrip=-1)' refs/remotes/origin/ | grep -viE '^(HEAD|gh-pages)$`"
 for current_branch in ${branches}; do
 
 	# make the current language available to conf.py
