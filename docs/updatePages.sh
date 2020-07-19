@@ -38,6 +38,9 @@ ls -lah
 ls -lah
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
+# make a new temp dir which will be our GitHub Pages docroot
+docroot=`mktemp -d`
+
 ##############
 # BUILD DOCS #
 ##############
@@ -45,12 +48,16 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # first, cleanup any old builds' static assets
 make -C docs clean
 
+# record the original branch so we can switch to it after our loop
+original_branch="`git rev-parse --abbrev-ref HEAD`"
+
 # get a list of branches
 branches="`git for-each-ref --format="%(refname:short)" refs/heads`"
 for current_branch in ${branches}; do
 
 	# make the current language available to conf.py
 	export current_branch
+	git checkout ${current_branch}
 
 	echo "INFO: Building sites for ${current_branch}"
 
@@ -69,19 +76,15 @@ for current_branch in ${branches}; do
 		echo "INFO: Building for ${current_language_slug}"
 		sphinx-build -b html docs docs/_build/html/${current_language_slug}/latest -D language="${current_language_slug}"
 
+		# copy the static assets produced by the above build into our docroot
+		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
+
 	done
 
 done
 
-exit 0
-
-# build our documentation with sphinx (see docs/conf.py)
-# * https://www.sphinx-doc.org/en/master/usage/quickstart.html#running-the-build
-make -C docs clean
-make -C docs html
-
-# TODO: remove me
-exit 0
+# return to our original branch
+git checkout "${original_branch}"
 
 #######################
 # Update GitHub Pages #
@@ -89,11 +92,6 @@ exit 0
 
 git config --global user.name "${GITHUB_ACTOR}"
 git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-docroot=`mktemp -d`
-exit 0
-exit 0
-rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
 
 pushd "${docroot}"
 

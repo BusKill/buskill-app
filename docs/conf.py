@@ -228,14 +228,6 @@ autodoc_default_options = {
 ############################
 # SETUP THE RTD LOWER-LEFT #
 ############################
-print( '----------------------------' )
-print( os.environ )
-print( dir() )
-print( globals() )
-print( locals() )
-#print( output_dir )
-print( tags.tags )
-print( '----------------------------' )
 html_context['display_lower_left'] = True
 
 # set this build's current version by looking at the branch
@@ -252,12 +244,12 @@ html_context['languages'] = list()
 
 languages = [lang.name for lang in os.scandir('locale') if lang.is_dir()]
 for lang in languages:
-	html_context['languages'].append( (lang, '/' +lang+ '/' + current_version) )
+	html_context['languages'].append( (lang, '/' +lang+ '/' +current_version+ '/buskill-app/') )
 
 # VERSIONS
 html_context['versions'] = list()
 
 versions = [branch.name for branch in repo.branches]
 for version in versions:
-	html_context['versions'].append( (version, '/' +current_language+ '/' + version) )
+	html_context['versions'].append( (version, '/' +current_language+ '/' +version+ '/buskill-app/') )
 
