@@ -49,19 +49,19 @@ docroot=`mktemp -d`
 make -C docs clean
 
 # get a list of branches, excluding 'HEAD' and 'gh-pages'
-branches="`git for-each-ref '--format=%(refname:lstrip=-1)' refs/remotes/origin/ | grep -viE '^(HEAD|gh-pages)$'`"
-for current_branch in ${branches}; do
+versions="`git for-each-ref '--format=%(refname:lstrip=-1)' refs/remotes/origin/ | grep -viE '^(HEAD|gh-pages)$'`"
+for current_version in ${versions}; do
 
 	# make the current language available to conf.py
-	export current_branch
-	git checkout ${current_branch}
+	export current_version
+	git checkout ${current_version}
 
 	# rename "master" to "latest"
-	if [[ "${current_branch}" == "master" ]]; then
-		current_branch="latest"
+	if [[ "${current_version}" == "master" ]]; then
+		current_version="latest"
 	fi
 
-	echo "INFO: Building sites for ${current_branch}"
+	echo "INFO: Building sites for ${current_version}"
 
 	# skip this branch if it doesn't have our docs dir & sphinx config
 	if [ ! -e 'docs/conf.py' ]; then
@@ -76,7 +76,7 @@ for current_branch in ${branches}; do
 		export current_language
 
 		echo "INFO: Building for ${current_language}"
-		sphinx-build -b html docs docs/_build/html/${current_language}/${current_branch} -D language="${current_language}"
+		sphinx-build -b html docs docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
 
 		# copy the static assets produced by the above build into our docroot
 		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
