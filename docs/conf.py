@@ -223,14 +223,20 @@ autodoc_default_options = {
 html_context['display_lower_left'] = True
 
 # set this build's current version by looking at the branch
-from git import Repo
-repo = Repo( search_parent_directories=True )
-current_version = repo.active_branch.name
+current_version = os.environ['current_version']
+
+# TODO: fall-back only if the env var isn't set
+#from git import Repo
+#repo = Repo( search_parent_directories=True )
+#current_version = repo.active_branch.name
+
 if current_version == 'master':
 	current_version = 'latest'
+
 html_context['current_version'] = current_version
 html_context['version'] = current_version
 
+# TODO: fall-back to 'en' if this env var isn't set
 current_language = os.environ['current_language']
 html_context['current_language'] = current_language
 
