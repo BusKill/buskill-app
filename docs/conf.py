@@ -281,12 +281,12 @@ rinoh_documents = [(
  '© ' +copyright,
 )]
 rinoh_logo = '_static/buskill_202007_200px.png'
-today_fmt = "'%B %d, %Y'"
+today_fmt = "%B %d, %Y"
 
 # settings for EPUB
 epub_basename = 'target'
 
 html_context['downloads'] = list()
-html_context['downloads'].append( ('PDF', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.pdf') )
+html_context['downloads'].append( ('pdf', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.pdf') )
 
-html_context['downloads'].append( ('EPUB', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.epub') )
+html_context['downloads'].append( ('epub', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.epub') )
