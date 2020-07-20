@@ -8,8 +8,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-07-13
-# Updated: 2020-07-13
-# Version: 0.1
+# Updated: 2020-07-20
+# Version: 0.2
 ################################################################################
 
 ################################################################################
@@ -27,7 +27,9 @@ set -x
 ###################
 
 apt-get update
-apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-stemmer python3-git
+apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-stemmer python3-git python3-pygments
+
+python3 -m pip install --upgrade rinohtype
 
 #####################
 # DECLARE VARIABLES #
@@ -75,8 +77,18 @@ for current_version in ${versions}; do
 		# make the current language available to conf.py
 		export current_language
 
+		##########
+		# BUILDS #
+		##########
 		echo "INFO: Building for ${current_language}"
-		sphinx-build -b html docs docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
+
+		# HTML #
+		sphinx-build -b html docs/ docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
+
+		# PDF #
+		sphinx-build -b rinoh docs/ docs/_build/rinoh -D language="${current_language}"
+		mkdir -p "${docroot}/${current_language}/${current_version}"
+		cp "docs/_build/rinoh/target.pdf" "${docroot}/${current_language}/${current_version}/buskill-docs_${current_language}_${current_version}.pdf"
 
 		# copy the static assets produced by the above build into our docroot
 		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"

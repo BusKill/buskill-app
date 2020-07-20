@@ -16,7 +16,7 @@ This project would not have been possible without the following tools and servic
  * `libusb1 <https://pypi.org/project/libusb1/>`_
  * `AppImage <https://appimage.org/>`_
  * `PyInstaller <https://www.pyinstaller.org/>`_
- * `Vim <https://www.vim.org/vim>`_ 
+ * `Vim <https://www.vim.org/>`_ 
  * `Gimp <https://www.gimp.org/>`_
  * `Kdenlive <https://kdenlive.org/en/>`_
  * `Sphinx <https://www.sphinx-doc.org/en/master/>`_

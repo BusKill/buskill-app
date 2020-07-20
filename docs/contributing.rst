@@ -41,10 +41,13 @@ Here's some items on our wish list that you can help contribute to:
 
 #. Create a `spreadsheet extension in sphinx <https://stackoverflow.com/questions/62682095/how-to-add-a-spreadsheet-in-read-the-docs>`_ that converts LibreOffice Calc documents (with formulas in them) into csv format (using ``localc``) at build-time for creating `BOM <https://en.wikipedia.org/wiki/Bill_of_materials>`_ tables in reST documents.
 
+#. Create a sphinx `part library <https://wiki.opensourceecology.org/wiki/Hydraulic_Fitting_Library>`_ extension that does for .stl and `FreeCAD <https://www.freecadweb.org/>`_ files what `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_ does `for .py files <https://medium.com/@eikonomega/getting-started-with-sphinx-autodoc-part-1-2cebbbca5365#011c>`_.
+
 Hardware
 ^^^^^^^^
 
 #. Open-source USB magnetic disconnect (`.stl <https://en.wikipedia.org/wiki/3D_printing>`_ file, `BOM <https://en.wikipedia.org/wiki/Bill_of_materials>`_ w/ link to USB components/magnets/`pogo <https://en.wikipedia.org/wiki/Pogo_pin>`_ connector, build instructions, etc)
+
 #. A simple-as-possible open-source USB peripheral that can send `USB hotplug events <http://libusb.sourceforge.net/api-1.0/group__libusb__hotplug.html#ga00e0c69ddf1fb1b6774dc918192e8dc7>`_ but doesn't have the ability to send data to the machine, including a low-tech guide to `verify the integrity <https://www.bunniestudios.com/blog/?p=5706>`_ of the device.
 
 

@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 
 project = 'BusKill'
 copyright = '2020, Michael Altfield and the BusKill team'
-author = 'BusKill Team'
+author = 'Michael Altfield and the BusKill Team'
 
 # The short X.Y version
 version = ''
@@ -270,3 +270,17 @@ for version in versions:
 		version = 'latest'
 
 	html_context['versions'].append( (version, '/buskill-app/' +current_language+ '/' +version+ '/') )
+
+# DOWNLOADS
+
+# settings for creating PDF with rinoh
+rinoh_documents = [(
+ master_doc,
+ 'target',
+ project+ ' Documentation',
+ author,
+)]
+
+html_context['downloads'] = list()
+html_context['downloads'].append( ('PDF', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.pdf') )
+
