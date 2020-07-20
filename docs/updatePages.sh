@@ -27,9 +27,9 @@ set -x
 ###################
 
 apt-get update
-apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-stemmer python3-git python3-pygments python3-pip python3-virtualenv python3-setuptools
+apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python3-stemmer python3-git python3-pip python3-virtualenv python3-setuptools
 
-python3 -m pip install --upgrade rinohtype
+python3 -m pip install --upgrade rinohtype pygments
 
 #####################
 # DECLARE VARIABLES #
