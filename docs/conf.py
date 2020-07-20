@@ -225,20 +225,31 @@ html_context['display_lower_left'] = True
 from git import Repo
 repo = Repo( search_parent_directories=True )
 
-# set this build's current version by looking at the branch
-current_version = os.environ['current_version']
+if 'current_version' in os.environ:
+	# get the current_version env var set by updatePages.sh
+	current_version = os.environ['current_version']
+else:
+	# the user is probably doing `make html`
+	# set this build's current version by looking at the branch
+	current_version = repo.active_branch.name
 
-# TODO: fall-back only if the env var isn't set
-#current_version = repo.active_branch.name
-
+# rename the 'master' bracnh to be version = 'latest'
 if current_version == 'master':
 	current_version = 'latest'
 
+# tell the theme which version we're currently on ('current_version' affects
+# the lower-left rtd menu and 'version' affects the logo-area version)
 html_context['current_version'] = current_version
 html_context['version'] = current_version
 
-# TODO: fall-back to 'en' if this env var isn't set
-current_language = os.environ['current_language']
+if 'current_language' in os.environ:
+	# get the current_language env var set by updatePages.sh
+	current_language = os.environ['current_language']
+else:
+	# the user is probably doing `make html`
+	# set this build's current language to english
+	current_language = 'en'
+
 html_context['current_language'] = current_language
 
 # LANGUAGES
