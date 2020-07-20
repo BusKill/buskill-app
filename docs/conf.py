@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+'%B %d, %Y'# -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
 #
@@ -210,7 +210,7 @@ todo_include_todos = True
 
 # prevent "failed to import module...No module named..." errors on modules that
 # we don't need just to build our documentation from the code
-autodoc_mock_imports = ["kivy"]
+autodoc_mock_imports = [ "kivy", "usb1" ]
 autodoc_default_flags = ['members']
 autodoc_member_order = 'bysource'
 autodoc_default_options = {
@@ -278,9 +278,15 @@ rinoh_documents = [(
  master_doc,
  'target',
  project+ ' Documentation',
- author,
+ '© ' +copyright,
 )]
+rinoh_logo = '_static/buskill_202007_200px.png'
+today_fmt = "'%B %d, %Y'"
+
+# settings for EPUB
+epub_basename = 'target'
 
 html_context['downloads'] = list()
 html_context['downloads'].append( ('PDF', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.pdf') )
 
+html_context['downloads'].append( ('EPUB', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.epub') )
