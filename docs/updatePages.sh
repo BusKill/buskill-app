@@ -93,7 +93,7 @@ for current_version in ${versions}; do
 		# EPUB #
 		sphinx-build -b epub docs/ docs/_build/epub -D language="${current_language}"
 		mkdir -p "${docroot}/buskill-app/${current_language}/${current_version}"
-		cp "docs/_build/rinoh/target.epub" "${docroot}/buskill-app/${current_language}/${current_version}/buskill-docs_${current_language}_${current_version}.epub"
+		cp "docs/_build/epub/target.epub" "${docroot}/buskill-app/${current_language}/${current_version}/buskill-docs_${current_language}_${current_version}.epub"
 
 		# copy the static assets produced by the above build into our docroot
 		rsync -av "docs/_build/html/" "${docroot}/buskill-app/"
