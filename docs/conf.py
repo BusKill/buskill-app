@@ -252,14 +252,14 @@ else:
 
 html_context['current_language'] = current_language
 
-# LANGUAGES
-html_context['languages'] = list()
+# POPULATE LINKS TO OTHER LANGUAGES
+html_context['languages'] = [ ('en', '/buskill-app/en/' +current_version+ '/') ]
 
 languages = [lang.name for lang in os.scandir('locale') if lang.is_dir()]
 for lang in languages:
 	html_context['languages'].append( (lang, '/buskill-app/' +lang+ '/' +current_version+ '/') )
 
-# VERSIONS
+# POPULATE LINKS TO OTHER VERSIONS
 html_context['versions'] = list()
 
 versions = [branch.name for branch in repo.branches]

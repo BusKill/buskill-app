@@ -2,12 +2,12 @@
 {# Add rst-badge after rst-versions for small badge style. #}
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
-      <span class="fa fa-book"> Read the Docs</span>
+      <span class="fa fa-book"> Alternate Versions</span>
       v: {{ current_version }}
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
-      {% if languages|length >= 1 %}
+      {% if languages|length >= 2 %}
       <dl>
         <dt>{{ _('Languages') }}</dt>
         {% for slug, url in languages %}
@@ -47,7 +47,7 @@
       </dl>
       {% endif %}
       <hr/>
-      {% trans %}Free document hosting provided by <a href="http://www.readthedocs.org">Read the Docs</a>.{% endtrans %}
+      {% trans %}Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.{% endtrans %}
 
     </div>
   </div>
