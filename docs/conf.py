@@ -233,9 +233,9 @@ else:
 	# set this build's current version by looking at the branch
 	current_version = repo.active_branch.name
 
-# rename the 'master' bracnh to be version = 'latest'
+# rename the 'master' bracnh to be version = 'stable'
 if current_version == 'master':
-	current_version = 'latest'
+	current_version = 'stable'
 
 # tell the theme which version we're currently on ('current_version' affects
 # the lower-left rtd menu and 'version' affects the logo-area version)
@@ -265,9 +265,9 @@ html_context['versions'] = list()
 versions = [branch.name for branch in repo.branches]
 for version in versions:
 
-	# special override to rename 'master' branch to 'latest'
+	# special override to rename 'master' branch to 'stable'
 	if version == 'master':
-		version = 'latest'
+		version = 'stable'
 
 	html_context['versions'].append( (version, '/buskill-app/' +current_language+ '/' +version+ '/') )
 

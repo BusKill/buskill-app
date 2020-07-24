@@ -58,9 +58,9 @@ for current_version in ${versions}; do
 	export current_version
 	git checkout ${current_version}
 
-	# rename "master" to "latest"
+	# rename "master" to "stable"
 	if [[ "${current_version}" == "master" ]]; then
-		current_version="latest"
+		current_version="stable"
 	fi
 
 	echo "INFO: Building sites for ${current_version}"
@@ -132,7 +132,7 @@ cat >> index.html <<EOF
 <html>
    <head>
       <title>BusKill Docs</title>
-      <meta http-equiv = "refresh" content="0; url='/buskill-app/en/latest/'" />
+      <meta http-equiv = "refresh" content="0; url='/buskill-app/en/stable/'" />
    </head>
    <body>
       <p>Please wait while you're redirected to our <a href="/buskill-app/">buskill-app documentation page</a>.</p>
