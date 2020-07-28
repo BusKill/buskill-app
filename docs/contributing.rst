@@ -50,9 +50,10 @@ Hardware
 
 #. A simple-as-possible open-source USB peripheral that can send `USB hotplug events <http://libusb.sourceforge.net/api-1.0/group__libusb__hotplug.html#ga00e0c69ddf1fb1b6774dc918192e8dc7>`_ but doesn't have the ability to send data to the machine, including a low-tech guide to `verify the integrity <https://www.bunniestudios.com/blog/?p=5706>`_ of the device.
 
+.. _donate:
 
 Donate
---------
+------
 
 Running the BusKill project has many fees, including
 

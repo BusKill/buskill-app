@@ -24,6 +24,7 @@ This project would not have been possible without the following tools and servic
  * `Wordpress <https://wordpress.com/>`_
  * `SiteOrigin <https://siteorigin.com/>`_
  * `phpList <https://www.phplist.org/>`_
+ * `GNU Privacy Guard <https://gnupg.org/>`_
  * `QubesOS <https://www.qubes-os.org/>`_
  * `TAILS <https://tails.boum.org/install/index.en.html>`_
  * `Debian <https://www.debian.org/>`_ `GNU <http://www.gnu.org/>`_/`Linux <https://www.kernel.org/>`_

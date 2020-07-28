@@ -15,6 +15,12 @@ Welcome! BusKill's documentation is split into 4 main parts:
 
 For information on using the BusKil App, see :ref:`software_usr`.
 
+For information on how to build your own BusKill cable, see :ref:`hardware_dev`.
+
+.. note:: If you're looking to order a pre-assembled BusKill cable, you can `buy a BusKill cable here <https://buskill.in/buy>`_.
+
+	Revenue from `BusKill cable purchases <https://buskill.in/buy>`_ go to supporting this open-source project. Please consider purchasing a cable or making a :ref:`donation <donate>` if you build your own.
+
 .. figure:: /images/buskill_featuredImageLight.jpg
   :align: center
 
@@ -39,6 +45,7 @@ For information on using the BusKil App, see :ref:`software_usr`.
 
 Indices and tables
 ==================
+
 
 * :ref:`genindex`
 * :ref:`modindex`

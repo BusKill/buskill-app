@@ -48,6 +48,8 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx_rtd_theme',
     'sphinxemoji.sphinxemoji',
+    'sphinx.ext.ifconfig',
+    'affiliatelinks',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -290,3 +292,14 @@ html_context['downloads'] = list()
 html_context['downloads'].append( ('pdf', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.pdf') )
 
 html_context['downloads'].append( ('epub', '/buskill-app/' +current_language+ '/' +current_version+ '/buskill-docs_' +current_language+ '_' +current_version+ '.epub') )
+
+def setup(app):
+
+	# get the buidername from sys.argv since it's not accessible to conf.py
+	# and extensions https://stackoverflow.com/a/63132102/1174102
+	if '-b' in sys.argv:
+		buildername = ( sys.argv[sys.argv.index('-b')+1] )
+	else:
+		buildername = ''
+
+	app.add_config_value('buildername', buildername, 'env')
