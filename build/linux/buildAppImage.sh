@@ -205,7 +205,7 @@ pushd /tmp
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
-sudo apt-get install zlib1g-dev make
+sudo apt-get -y install zlib1g-dev make
 make
 popd
 
