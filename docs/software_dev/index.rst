@@ -10,4 +10,4 @@ This section is intended for the developer who wants to modify the source code o
 
    autodoc
    documentation
-   repo
+   release
