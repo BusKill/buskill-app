@@ -3,7 +3,7 @@ name: build
 # execute this workflow automatically, but only when pushing to master
 on:
   push:
-    branches: [ master ]
+#    branches: [ master ]
 #  pull_request:
 #    branches: [ master ]
 
