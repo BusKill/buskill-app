@@ -8,7 +8,9 @@ This section will describe how to create a new release.
 Determine Version Number
 ------------------------
 
-The first thing you must do before creating a new release is determine the new (`semantic <https://semver.org/>`_) version number. In this example, we'll be using v3.2.0. That's a MAJOR version 3 and MINOR version 2. The PATCH version is 0, and it should only be incremented for patches to previous releases, which is a distinct workflow from what's documented here.
+The first thing you must do before creating a new release is determine the new (`semantic <https://semver.org/>`_) version number.
+
+In this example, we'll be using ``v3.2.0``. That's a ``MAJOR`` version ``3`` and ``MINOR`` version ``2``. The ``PATCH`` version is ``0``, and it should only be incremented for hotfixes to previous releases, which is a distinct workflow from what's documented here.
 
 ::
 
@@ -17,18 +19,18 @@ The first thing you must do before creating a new release is determine the new (
 Create Release Branch
 ---------------------
 
-In our project, we only put production-ready stable code in the `master` branch. No commits should occur in `master`. Most commits should be made in the `dev` branch (or in a feature-specific branch, then merged into `dev`).
+In our project, we only put production-ready stable code in the ``master`` branch. No commits should occur in ``master``. Most commits should be made in the ``dev`` branch (or in a feature-specific branch, then merged into ``dev``).
 
-After a set of features to be included in your new release are finished, create a new release branch from the `dev` branch. Push this new branch to github.com
+After a set of features to be included in your new release are finished, create a new release branch from the ``dev`` branch. Push this new branch to github.com
 
 ::
 
-	user@host:~/buskill-app/docs$ git checkout dev
+	user@host:~/buskill-app$ git checkout dev
 	Switched to branch 'dev'
-	user@host:~/buskill-app/docs$ git checkout -b v3.2.0
+	user@host:~/buskill-app$ git checkout -b v3.2.0
 	Switched to a new branch 'v3.2.0'
-	user@host:~/buskill-app/docs$ 
-	user@buskill:~/sandbox/buskill-app/docs$ git push origin v3.2.0
+	user@host:~/buskill-app$ 
+	user@host:~/buskill-app$ git push origin v3.2.0
 	Total 0 (delta 0), reused 0 (delta 0)
 	remote: 
 	remote: Create a pull request for 'v3.2.0' on GitHub by visiting:
@@ -36,7 +38,7 @@ After a set of features to be included in your new release are finished, create 
 	remote: 
 	To github.com:BusKill/buskill-app.git
  	* [new branch]      v3.2.0 -> v3.2.0
-	user@host:~/buskill-app/docs$ 
+	user@host:~/buskill-app$ 
 
 Finalize Release
 ----------------
@@ -47,12 +49,18 @@ At this point, all of your features for the new release should already be finish
 #. Testing & minor patches
 #. Updating documentation
 
+::
+
+	user@host:~/buskill-app/$ vim CHANGELOG
+	user@host:~/buskill-app/$ git commit -am 'updated changelog for new release'
+	user@host:~/buskill-app/$ 
+
 Test
 ----
 
 Before release, thoroughly test the code in your new release branch and commit directly to this branch.
 
-When testing is finished, merge all the commits into both the `master` and `dev` branches.
+When testing is finished, merge all the commits into both the ``master`` and ``dev`` branches.
 
 ::
 
@@ -60,14 +68,13 @@ When testing is finished, merge all the commits into both the `master` and `dev`
 	  dev
 	  master
 	* v3.2.0
-
 	user@host:~/buskill-app$ git checkout dev
 	Switched to branch 'dev'
-
 	user@host:~/buskill-app$ git pull origin dev
 	From github.com:BusKill/buskill-app
 	 * branch            dev        -> FETCH_HEAD
 	Already up to date.
+
 	user@host:~/buskill-app$ git merge v3.2.0
 	Updating f9e692a..3c1a6d5
 	Fast-forward
@@ -77,10 +84,10 @@ When testing is finished, merge all the commits into both the `master` and `dev`
 	 3 files changed, 55 insertions(+), 7 deletions(-)
 	 create mode 100644 docs/software_dev/release.rst
 	 delete mode 100644 docs/software_dev/repo.rst
+
 	user@host:~/buskill-app$ git checkout master
 	Switched to branch 'master'
 	Your branch is up to date with 'origin/master'.
-
 	user@host:~/buskill-app$ git pull origin master
 	From github.com:BusKill/buskill-app
 	 * branch            master     -> FETCH_HEAD
@@ -124,13 +131,12 @@ When testing is finished, merge all the commits into both the `master` and `dev`
 	   f9e692a..3c1a6d5  dev -> dev
 	   ab223f3..3c1a6d5  master -> master
 	   f9e692a..3c1a6d5  v3.2.0 -> v3.2.0
-
 	user@host:~/buskill-app$ 
 
 Tag
 ---
 
-After you've merged your release branch into the `master` branch, create a tag for the new release in the `master` branch, and push that to github.com
+After you've merged your release branch into the ``master`` branch, create a tag for the new release in the ``master`` branch, and push that to github.com
 
 ::
 
@@ -144,7 +150,6 @@ After you've merged your release branch into the `master` branch, create a tag f
 	Total 0 (delta 0), reused 0 (delta 0)
 	To github.com:BusKill/buskill-app.git
 	 * [new tag]         v0.1.0 -> v0.1.0
-
 	user@host:~/buskill-app$ 
 
 Build & Sign
@@ -152,43 +157,116 @@ Build & Sign
 
 For Linux, use the `build script <https://github.com/BusKill/buskill-app/blob/master/build/linux/buildAppImage.sh>`_ to build the new release locally on your machine in a fresh linux VM as root. Get the sha256 checksum of the new AppImage and confirm that it matches the AppImage built by GitHub's CI process. If it doesn't, don't proceed with signing it. Our Linux releases should be fully reproducible_.
 
-When downloading the AppImage from the repo's GitHub releases page, make sure the commits and branches exactly match your local build, else the checksum will differ because the contents of `buskill_version.py` will have a distinct `GITHUB_REF`, `GITHUB_SHA`, and `SOURCE_DATE_EPOCH`.
+When downloading the AppImage from the repo's GitHub releases page, make sure the commits and branches exactly match your local build, else the checksum will differ because the contents of ``buskill_version.py`` will have a distinct ``GITHUB_REF``, ``GITHUB_SHA``, and ``SOURCE_DATE_EPOCH``.
 
 ::
 
-user@disp215:~$ 
-user@disp215:~$ sudo su -
-root@disp215:~#	
- 
-root@disp2781:~# git clone --single-branch --branch v3.2.0 https://github.com/BusKill/buskill-app.git
-Cloning into 'buskill-app'...
-remote: Enumerating objects: 21, done.
-...
-root@disp2781:~# cd buskill-app
-root@disp2781:~/buskill-app# git branch -l
-* v3.2.0
-root@disp2781:~/buskill-app# 
+	user@disp215:~$ 
+	user@disp215:~$ sudo su -
+	root@disp215:~#	
+ 	
+	root@disp2781:~# git clone --single-branch --branch v3.2.0 https://github.com/BusKill/buskill-app.git
+	Cloning into 'buskill-app'...
+	remote: Enumerating objects: 21, done.
+	...
+	root@disp2781:~# cd buskill-app
+	root@disp2781:~/buskill-app# git branch -l
+	* v3.2.0
+	root@disp2781:~/buskill-app# 
+	
+	root@disp215:~/buskill-app# build/linux/buildAppImage.sh 
+	...
+	root@disp215:~/buskill-app# 
+	
+	root@disp215:~/buskill-app# sha256sum dist/buskill.AppImage
+	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
+	root@disp215:~/buskill-app# 
+	
+	root@disp215:~/buskill-app# cd ..
+	root@disp215:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_linux/buskill-linux-x86_64.<epoch_seconds>.tar.bz2
+	...
+	root@disp215:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2 
+	root@disp215:~# sha256sum dist/buskill.AppImage 
+	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
+	root@disp215:~# 
 
-root@disp215:~/buskill-app# build/linux/buildAppImage.sh 
-...
-root@disp215:~/buskill-app# 
+.. note::
 
-root@disp215:~/buskill-app# sha256sum dist/buskill.AppImage
-663ee5275256760a6dc04736f7211bd7482708f4f82c451b78733df442adaa37  dist/buskill.AppImage
-root@disp215:~/buskill-app# 
+	For Windows & MacOS, there is an `upstream issue with reproducibility in PyInstaller <https://github.com/BusKill/buskill-app/issues/3>`_, so we have to choose to trust our local build or the GitHub CI build.
 
-root@disp215:~/buskill-app# cd ..
-root@disp215:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/buskill-linux-x86_64.<epoch_seconds>.tar.bz2
-...
-root@disp215:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2 
-root@disp215:~# sha256sum dist/buskill.AppImage 
-292984aa32315bced99e88e9585a411cb341eb74166350e0fec2f80ba0bb672a  dist/buskill.AppImage
-root@disp215:~# 
+After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.
+
+::
+
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/buskill-windows-x86_64.<epoch_seconds>.zip
+	...
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/SHA256SUMS
+	...
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/SHA256SUMS.asc
+	...
+	root@disp2781:~# gpg --verify SHA256SUMS.asc
+	gpg: Signature made Fri 31 Jul 2020 03:43:43 PM +0545
+	gpg:                using RSA key 0B90809464D7B7A50E1871DE7DE9F38ADB5B1E8A
+	gpg: Good signature from "BusKill Pre-Releases Signing Key 2020.07 <pre-releases@buskill.in>" [unknown]
+	gpg: WARNING: This key is not certified with a trusted signature!
+	gpg:          There is no indication that the signature belongs to the owner.
+	Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
+	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
+	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
+	root@disp2781:~# sha256sum -c SHA256SUMS
+	buskill-windows-x86_64.189828725.zip: OK
+	root@disp2781:~# 
+
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/buskill-mac-x86_64.<epoch_seconds>.tar.bz2
+	...
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/SHA256SUMS
+	...
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/SHA256SUMS.asc
+	...
+	root@disp2781:~# gpg --verify SHA256SUMS.asc 
+	gpg: Signature made Fri 31 Jul 2020 03:43:43 PM +0545
+	gpg:                using RSA key 0B90809464D7B7A50E1871DE7DE9F38ADB5B1E8A
+	gpg: Good signature from "BusKill Pre-Releases Signing Key 2020.07 <pre-releases@buskill.in>" [unknown]
+	gpg: WARNING: This key is not certified with a trusted signature!
+	gpg:          There is no indication that the signature belongs to the owner.
+	Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
+	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
+	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
+	root@disp2781:~# sha256sum -c SHA256SUMS
+	buskill-mac-x86_64.189828725.tar.bz2: OK
+	root@disp2781:~# 
 
 
+Once you've verified the integrity of all three compressed archives, move them to your dragon-protected basement-safe laptop, rename them, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
 
-For Windows & MacOS, there is an `upstream issue with reproducibility in PyInstaller <https://github.com/BusKill/buskill-app/issues/3>`_, so we have to choose to trust our local build or the GitHub CI build.
+::
 
-TODO: Steps to preform when releasing a new version (build/test/download/checksum diff/sign/upload, create new branch for dev, update build depends)
+	user@vault:~$ ls
+	buskill-linux-x86_64.189828725.tar.bz2  buskill-windows-x86_64.189828725.zip
+	buskill-mac-x86_64.189828725.tar.bz2
+	user@vault:~$ mv buskill-linux-x86_64.189828725.tar.bz2 buskill-linux-x86_64.v0.1.0.tar.bz2 
+	user@vault:~$ mv buskill-windows-x86_64.189828725.zip buskill-windows-x86_64.v0.1.0.zip 
+	user@vault:~$ mv buskill-mac-x86_64.189828725.tar.bz2 buskill-mac-x86_64.v0.1.0.tar.bz2 
+	user@vault:~$ ls
+	buskill-linux-x86_64.v0.1.0.tar.bz2  buskill-windows-x86_64.v0.1.0.zip
+	buskill-mac-x86_64.v0.1.0.tar.bz2
+	user@vault:~$ 
+	user@vault:~$ sha256sum * > SHA256SUMS
+	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor --clearsign SHA256SUMS
+	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
+	user@vault:~$ ls
+	buskill-linux-x86_64.v0.1.0.tar.bz2  SHA256SUMS
+	buskill-mac-x86_64.v0.1.0.tar.bz2    SHA256SUMS.asc
+	buskill-windows-x86_64.v0.1.0.zip
+	user@vault:~$ 
+
+Upload
+------
+
+Copy all of the above files off your airgapped machine.
+
+Finally, upload the files to the tag's release using the github.com WUI
+
+ * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>_
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3
