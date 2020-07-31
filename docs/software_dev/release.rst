@@ -152,19 +152,23 @@ Build & Sign
 
 For Linux, use the `build script <https://github.com/BusKill/buskill-app/blob/master/build/linux/buildAppImage.sh>`_ to build the new release locally on your machine in a fresh linux VM as root. Get the sha256 checksum of the new AppImage and confirm that it matches the AppImage built by GitHub's CI process. If it doesn't, don't proceed with signing it. Our Linux releases should be fully reproducible_.
 
+When downloading the AppImage from the repo's GitHub releases page, make sure the commits and branches exactly match your local build, else the checksum will differ because the contents of `buskill_version.py` will have a distinct `GITHUB_REF`, `GITHUB_SHA`, and `SOURCE_DATE_EPOCH`.
+
 ::
 
 user@disp215:~$ 
 user@disp215:~$ sudo su -
 root@disp215:~#	
-
-root@disp215:~# git clone https://github.com/BusKill/buskill-app.git
+ 
+root@disp2781:~# git clone --single-branch --branch v3.2.0 https://github.com/BusKill/buskill-app.git
 Cloning into 'buskill-app'...
+remote: Enumerating objects: 21, done.
 ...
-Checking out files: 100% (120/120), done.
-root@disp215:~# 
+root@disp2781:~# cd buskill-app
+root@disp2781:~/buskill-app# git branch -l
+* v3.2.0
+root@disp2781:~/buskill-app# 
 
-root@disp215:~# cd buskill-app/
 root@disp215:~/buskill-app# build/linux/buildAppImage.sh 
 ...
 root@disp215:~/buskill-app# 
@@ -180,9 +184,6 @@ root@disp215:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2
 root@disp215:~# sha256sum dist/buskill.AppImage 
 292984aa32315bced99e88e9585a411cb341eb74166350e0fec2f80ba0bb672a  dist/buskill.AppImage
 root@disp215:~# 
-
-
-
 
 
 

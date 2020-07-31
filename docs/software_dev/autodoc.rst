@@ -1,7 +1,7 @@
 .. _autodoc:
 
-buskill-app
-===========
+API Reference (buskill-app)
+===========================
 
 This section documents the main BusKill app
 

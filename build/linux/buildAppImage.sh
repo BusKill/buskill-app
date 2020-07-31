@@ -115,7 +115,7 @@ BUSKILL_VERSION = {
 EOF
 
 # change AppRun so it executes our app
-mv /tmp/kivy_appdir/AppRun /tmp/kivy_appdir/AppRun.orig
+rm /tmp/kivy_appdir/AppRun
 cat > /tmp/kivy_appdir/AppRun <<'EOF'
 #! /bin/bash
 
@@ -160,7 +160,7 @@ EOF
 # make it executable
 chmod +x /tmp/kivy_appdir/AppRun
 
-# change the timestamps of all the files in the appdir or reproducable builds
+# change the timestamps of all the files in the appdir or reproducible builds
 find /tmp/kivy_appdir -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
 
 ############
@@ -173,8 +173,9 @@ find /tmp/kivy_appdir -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
 echo "INFO: Beginning AppDir thinning"
 
 # remove some unnecessary items from the AppDir to reduce the AppImage size
+# and make the AppImage reproducible
 
-unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests direct_url.json"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
@@ -200,7 +201,7 @@ cp build/deps/squashfs4.4.tar.gz /tmp/
 pushd /tmp
 
 # The latest stable appimagetool uses an old version of mksquashfs (v4.3),
-# which does not support reproducable builds. Here we build the latest
+# which does not support reproducible builds. Here we build the latest
 # squashfs-tools (v4.4) and hack appimagetools to use it. For more info, see:
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz

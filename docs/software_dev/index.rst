@@ -9,5 +9,6 @@ This section is intended for the developer who wants to modify the source code o
    :maxdepth: 3
 
    autodoc
+   build
    documentation
    release
