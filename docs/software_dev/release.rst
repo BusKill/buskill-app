@@ -161,9 +161,9 @@ When downloading the AppImage from the repo's GitHub releases page, make sure th
 
 ::
 
-	user@disp215:~$ 
-	user@disp215:~$ sudo su -
-	root@disp215:~#	
+	user@disp2781:~$ 
+	user@disp2781:~$ sudo su -
+	root@disp2781:~#	
  	
 	root@disp2781:~# git clone --single-branch --branch v3.2.0 https://github.com/BusKill/buskill-app.git
 	Cloning into 'buskill-app'...
@@ -174,21 +174,21 @@ When downloading the AppImage from the repo's GitHub releases page, make sure th
 	* v3.2.0
 	root@disp2781:~/buskill-app# 
 	
-	root@disp215:~/buskill-app# build/linux/buildAppImage.sh 
+	root@disp2781:~/buskill-app# build/linux/buildAppImage.sh 
 	...
-	root@disp215:~/buskill-app# 
+	root@disp2781:~/buskill-app# 
 	
-	root@disp215:~/buskill-app# sha256sum dist/buskill.AppImage
+	root@disp2781:~/buskill-app# sha256sum dist/buskill.AppImage
 	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
-	root@disp215:~/buskill-app# 
+	root@disp2781:~/buskill-app# 
 	
-	root@disp215:~/buskill-app# cd ..
-	root@disp215:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_linux/buskill-linux-x86_64.<epoch_seconds>.tar.bz2
+	root@disp2781:~/buskill-app# cd ..
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_linux/buskill-linux-x86_64.<epoch_seconds>.tar.bz2
 	...
-	root@disp215:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2 
-	root@disp215:~# sha256sum dist/buskill.AppImage 
+	root@disp2781:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2 
+	root@disp2781:~# sha256sum dist/buskill.AppImage 
 	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
-	root@disp215:~# 
+	root@disp2781:~# 
 
 .. note::
 
@@ -267,6 +267,6 @@ Copy all of the above files off your airgapped machine.
 
 Finally, upload the files to the tag's release using the github.com WUI
 
- * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>_
+ * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>`_
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3
