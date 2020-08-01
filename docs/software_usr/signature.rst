@@ -11,11 +11,13 @@ Before executing anything downloaded from github.com, it's important to verify t
 
 Before we can verify the authenticity of the BusKill app, it's necessary to download ``gpg`` and the BusKill release key. For information on how to obtain these dependencies, see :ref:`pgpkeys`.
 
- * `https://github.com/BusKill/buskill-app <buskill-app_repo_>`_
-
 Once the ``BusKill Releases Signing Key`` is in your ``gpg`` keyring, execute the following to verify the BusKill app downloaded from github.com
 
 ::
+
+	user@host:~/Downloads$ ls
+	buskill-linux-x86_64.v0.1.0.tar.bz2  SHA256SUMS  SHA256SUMS.asc
+	user@host:~/Downloads$ 
 
 	user@host:~/Downloads$ gpg --verify SHA256SUMS.asc 
 	gpg: assuming signed data in 'SHA256SUMS'
@@ -31,4 +33,3 @@ Once the ``BusKill Releases Signing Key`` is in your ``gpg`` keyring, execute th
 	user@host:~/Downloads$ sha256sum --ignore-missing -c SHA256SUMS
 	buskill-linux-x86_64.v0.1.0.tar.bz2: OK
 	user@host:~/Downloads$ 
-
