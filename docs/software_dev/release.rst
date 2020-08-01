@@ -217,11 +217,11 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	buskill-windows-x86_64.189828725.zip: OK
 	root@disp2781:~# 
 
-	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/buskill-mac-x86_64.<epoch_seconds>.tar.bz2
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/buskill-mac-x86_64.<epoch_seconds>.tar.bz2
 	...
-	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/SHA256SUMS
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/SHA256SUMS
 	...
-	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>/SHA256SUMS.asc
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/SHA256SUMS.asc
 	...
 	root@disp2781:~# gpg --verify SHA256SUMS.asc 
 	gpg: Signature made Fri 31 Jul 2020 03:43:43 PM +0545
@@ -252,7 +252,7 @@ Once you've verified the integrity of all three compressed archives, move them t
 	buskill-mac-x86_64.v0.1.0.tar.bz2
 	user@vault:~$ 
 	user@vault:~$ sha256sum * > SHA256SUMS
-	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor --clearsign SHA256SUMS
+	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b SHA256SUMS
 	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
 	user@vault:~$ ls
 	buskill-linux-x86_64.v0.1.0.tar.bz2  SHA256SUMS

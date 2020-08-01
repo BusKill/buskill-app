@@ -33,7 +33,7 @@ There are several use-cases for BusKill. It can be useful for:
 
 The `classic use-case <https://tech.michaelaltfield.net/2020/01/02/buskill-laptop-kill-cord-dead-man-switch/>`_ for BusKill is to protect a traveler's devices and accounts when using the device in public, such as a café when taking holiday in Paris or a coworking hot desk when on a business trip in San Francisco.
 
-Imagine a vacationer logged-into their bank account doing a quick transfer between accounts having their laptop stolen by a snatch-and-run thief while they're still logged-into their bank.
+BusKill can protect a tourist's bank accounts from a snatch-and-run laptop thief when logged-into online banking.
 
 |:studio_microphone:| Journalists
 ---------------------------------
