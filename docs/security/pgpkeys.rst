@@ -25,8 +25,6 @@ Users
 
 To add the BusKill PGP keys and our developer's keys to your keyring, execute the following commands.
 
-As noted above, it's very important that you pause and do your due-diligence to verify that the key is in-fact our key before proceeding with the final ``--import`` command.
-
 ::
 
   wget https://raw.githubusercontent.com/BusKill/buskill-app/master/KEYS
@@ -34,6 +32,11 @@ As noted above, it's very important that you pause and do your due-diligence to 
   # validate the full fingerprint against other out-of-band sources first
   gpg --keyid-format long KEYS
 
+As noted above, it's very important that you pause and do your due-diligence to verify that the key is in-fact our key before proceeding with the final ``--import`` command.
+
+::
+
+  # don't execute this until you've verified the fingerprint out-of-band
   gpg --import KEYS
 
 Developers

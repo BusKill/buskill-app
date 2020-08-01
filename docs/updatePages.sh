@@ -8,8 +8,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-07-13
-# Updated: 2020-07-20
-# Version: 0.2
+# Updated: 2020-08-01
+# Version: 0.3
 ################################################################################
 
 ################################################################################
@@ -56,7 +56,7 @@ for current_version in ${versions}; do
 
 	# make the current language available to conf.py
 	export current_version
-	git checkout ${current_version}
+	git checkout -B ${current_version} refs/remotes/origin/${current_version}
 
 	# rename "master" to "stable"
 	if [[ "${current_version}" == "master" ]]; then

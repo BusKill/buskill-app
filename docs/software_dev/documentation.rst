@@ -51,7 +51,7 @@ You can build our documentation on Debian 10 using the following commands
   make clean
   make html
 
-After executing the above commands, you should have a new ``docs/_build/html`` directory. You can open your locally-built documentation in firefox by executing
+After executing the above commands, you should have a new ``docs/_build/html/`` directory. You can open your locally-built documentation in firefox by executing
 
 ::
 
