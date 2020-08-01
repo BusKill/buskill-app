@@ -264,7 +264,14 @@ for lang in languages:
 # POPULATE LINKS TO OTHER VERSIONS
 html_context['versions'] = list()
 
-versions = [branch.name for branch in repo.branches]
+# get list of remote branches, excluding HEAD and gh-pages
+remote_refs = repo.remote().refs
+versions = list()
+for ref in remote_refs:
+	ref = ref.name.split('/')[-1]
+	if ref != 'HEAD' and ref != 'gh-pages':
+		versions.append( ref )
+
 for version in versions:
 
 	# special override to rename 'master' branch to 'stable'
