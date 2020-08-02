@@ -5,10 +5,12 @@ BusKill App: Command-Line Interface
 
 This page will describe how to use the BusKill app in CLI mode.
 
+To control BusKill via the CLI, use the same executable with arguments (executing ``buskill`` without arguments opens it in GUI mode).
+
 Help
 ----
 
-You can a list of allowable arguments by passing the ``buskill`` app ``-h`` or ``--help``
+You can print a list of allowable arguments by passing the ``buskill`` app ``-h`` or ``--help``
 
 ::
 
