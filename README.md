@@ -18,45 +18,16 @@ For more information on how to buy or build your own BusKill cable, see the [Bus
 
 # Install
 
-You can download this app by visiting our this repo's [releases page](https://github.com/BusKill/buskill-app/releases) on github.
+For instructions on downloading and cryptographically verifying our latest release, see:
 
-BusKill is packaged as a self-contained executable. It includes the python interpreter and all required dependencies. This allows the program to be easily executed as a portable app that is distributed on the BusKill usb drive itself.
-
-TODO: signature verification
-
-No installation is needed after download. After downloading and extracting the compressed archive, simply double-click or execute buskill from the command-line.
+ * [Downloading the BusKill App](https://docs.buskill.in/buskill-app/en/stable/software_usr/download.html)
+ * [Verifying the Download](https://docs.buskill.in/buskill-app/en/stable/software_usr/signature.html)
 
 # Documentation
 
-TODO. Sphinx?
+To read our comprehensive docs, see:
 
-# Building from source
-
-TODO Add note about deterministic/reproducable builds.
-
-The scripts used to build this app are platform-specific and must be executed on the target platform. In other words, you cannot build the app for MacOS on a Linux platform, you cannot build for Windows on MacOS, for Linux on Windows, etc.
-
-From the root of this repo, simply execute the relevant build script from the [build](build) directory.
-
-For example, the following commands will build the BusKill app on Linux:
-
-```
-git clone https://github.com/BusKill/buskill-app.git
-cd buskill-app
-build/linux/buildAppImage.sh 
-```
-
-# Security
-
-TODO move to docs dir (Sphinx?) and include notes about hardware implant risks and integrity verification
-
-This app was created for convenience, providing the user with an easy-to-use method of arming, disarming, and configuring BusKill with an intuitive GUI that "just works" on Linux, Windows, and MacOS.
-
-Convenience is a trade-off that comes at a cost of reduced security. Using this app requires your computer to not only run hundreds of lines of our code, but also thousands of lines of code from dependant libraries.
-
-The most secure way to run BusKill is using a simple udev config as described here:
-
- * https://www.buskill.in/buskill-laptop-kill-cord-dead-man-switch/
+ * [docs.buskill.in](https://docs.buskill.in)
 
 # Press
 
