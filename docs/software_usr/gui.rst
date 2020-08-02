@@ -19,19 +19,16 @@ To arm BusKill, click the ``Arm`` button. BusKill can be armed whether or not th
 	* - .. figure:: /images/buskill_app_lin_disarmed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_lin_disarmed1.jpg
 
 		Linux
 	  - .. figure:: /images/buskill_app_win_disarmed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_win_disarmed1.jpg
 
 		Windows
 	  - .. figure:: /images/buskill_app_mac_disarmed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_mac_disarmed1.jpg
 
 		MacOS
 
@@ -47,18 +44,15 @@ BusKill can be disarmed by closing the window or clicking the ``Disarm`` button.
 	* - .. figure:: /images/buskill_app_lin_armed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_lin_armed1.jpg
 
 		Linux
 	  - .. figure:: /images/buskill_app_win_armed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_win_armed1.jpg
 
 		Windows
 	  - .. figure:: /images/buskill_app_mac_armed1.jpg
 		:alt: screenshot of the buskill-app repo home page
 		:align: center
-		:target: ../_images/buskill_app_mac_armed1.jpg
 
 		MacOS
