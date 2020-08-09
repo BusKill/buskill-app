@@ -5,3 +5,4 @@ buskill-app changelog
 - Functionality is limited to arming and disarming from the CLI or GUI
 - The only trigger supported is lockscreen
 - The trigger is executed when *any* USB device is removed
+- Thank you to Michael Altfield, cyberkryption, Steven Johnson, and Jacob Neplokh

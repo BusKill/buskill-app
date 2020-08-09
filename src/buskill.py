@@ -5,8 +5,8 @@
   File:    buskill.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2020-06-28
-  Version: 0.1
+  Updated: 2020-08-09
+  Version: 0.2
 
 This is the heart of the buskill app, shared by both the cli and gui
 
@@ -18,6 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
+import urllib.request, json, certifi
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -361,3 +362,20 @@ def triggerMac():
 		subprocess.run( ['pmset', 'displaysleepnow'] )
 	except FileNotFoundError as e:
 		subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] )
+
+def upgrade():
+
+	# only upgrade on linux, windows, and mac
+	if not CURRENT_PLATFORM.startswith( 'LINUX' ) \
+	 and not CURRENT_PLATFORM.startswith( 'WIN' ) \
+	 and not CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		print( "DEBUG: Upgrades not supported on this platform" )
+		return
+
+	# TODO: check the latest version
+	# https://github.com/niess/python-appimage/issues/24
+	with urllib.request.urlopen( "https://api.github.com/repos/buskill/buskill-app/releases/latest", cafile=certifi.where() ) as url:
+		data = json.loads(url.read().decode())
+		print(data)
+
+	# TODO: determine if the latest version is newer than our current version

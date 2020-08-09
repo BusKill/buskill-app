@@ -57,6 +57,12 @@ def BusKillCLI():
 	 action="store_true"
 	)
 
+	parser.add_argument(
+	 "-U", "--upgrade",
+	 help="Download & upgrade latest version of BusKill",
+	 action="store_true"
+	)
+
 	# process command-line arguments
 	args = parser.parse_args()
 
@@ -73,6 +79,10 @@ def BusKillCLI():
 		msg = buskill.ERR_PLATFORM_NOT_SUPPORTED
 		print( msg ); logging.error( msg )
 		sys.exit(1)
+
+	if args.upgrade:
+		buskill.upgrade()
+		sys.exit(0)
 
 	if args.arm:
 		buskill.toggle()
