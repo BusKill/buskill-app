@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, json, certifi, fs, gnupg
+import urllib.request, json, certifi, sys, os, shutil, gnupg
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -38,6 +38,14 @@ if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 ################################################################################
 #                                  SETTINGS                                    #
 ################################################################################
+
+# APP_DIR is the dir in which our buskill executable lives, which often
+# is some dir on the USB drive itself or could be somewhere on the computer
+APP_DIR = sys.path[0]
+
+DATA_DIR = os.path.join( APP_DIR, '.buskill' )
+CACHE_DIR = os.path.join( DATA_DIR, 'cache' )
+GNUPGHOME = os.path.join( CACHE_DIR, '.gnupg' )
 
 #####################
 # WINDOWS CONSTANTS #
@@ -101,12 +109,36 @@ def init():
 		arm_fun = armNix
 		trigger_fun = triggerMac
 
+	# create cache dir (and clean if necessary)
+	if os.path.exists( CACHE_DIR ):
+		shutil.rmtree( CACHE_DIR )
+	os.makedirs( CACHE_DIR, mode=0o700 )
+	os.chmod( DATA_DIR, mode=0o0700 )
+
+	contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
+	with open( os.path.join(CACHE_DIR, 'README.txt'), 'w' ) as fd:
+		fd.write( contents )
+
 # this is called when the GUI is closed 
+# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
 def close():
 
-	# if we don't kill this child process on kill, the UI will freeze
-	usb_handler.terminate()
-	usb_handler.join()
+	# do what we can as fast as we can; don't get stuck by errors
+	try:
+
+		# if we don't kill this child process on exit, the UI will freeze
+		usb_handler.terminate()
+		usb_handler.join()
+	except:
+		pass
+
+	try:
+		# delete cache dir
+		if os.path.exists( CACHE_DIR ):
+			shutil.rmtree( CACHE_DIR )
+	except:
+		pass
+
 
 def isPlatformSupported():
 
@@ -372,22 +404,68 @@ def upgrade():
 		print( "DEBUG: Upgrades not supported on this platform" )
 		return
 
+	# prepare our ephemeral gnupg home dir so we can verify the signature of our
+	# checksum file after download and before "install"
+	if os.path.exists( GNUPGHOME ):
+		shutil.rmtree( GNUPGHOME )
+	os.makedirs( GNUPGHOME, mode=0o700 )
+	os.chmod( GNUPGHOME, mode=0o0700 )
+
+	# get the contents of the KEYS file shipped with our software
+	KEYS = ''
+	try:
+		with open( os.path.join(APP_DIR, 'KEYS'), 'r' ) as fd:
+			KEYS = fd.read()
+	except:
+		# fall-back to one dir up if we're executing from 'src/'
+		with open( os.path.join(APP_DIR, '..', 'KEYS'), 'r' ) as fd:
+			KEYS = fd.read()
+
+	gpg = gnupg.GPG( gnupghome=GNUPGHOME )
+	gpg.import_keys( KEYS )
+
 	# TODO: check the latest version
 	# https://github.com/niess/python-appimage/issues/24
 	with urllib.request.urlopen( "https://api.github.com/repos/buskill/buskill-app/releases/latest", cafile=certifi.where() ) as url:
 		github_latest = json.loads(url.read().decode())
 
 	sha256sum_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS" ].pop()
+	sha256sum_filepath = os.path.join( CACHE_DIR, 'SHA256SUM' )
+
 	signature_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS.asc" ].pop()
-	print( sha256sum_url )
+	signature_filepath = os.path.join( CACHE_DIR, 'SHA256SUM.asc' )
 
-	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url:
-		sha256sum_data = url.read().decode()
-	with urllib.request.urlopen( signature_url, cafile=certifi.where() ) as url:
-		signature_data = url.read().decode()
+	if CURRENT_PLATFORM.startswith( 'LINUX' ):
+		match = 'lin'
+	if CURRENT_PLATFORM.startswith( 'WIN' ):
+		match = 'win'
+	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		match = 'mac'
 
-	print( sha256sum_data )
-	print( signature_data )
+	archive_url = [ item['browser_download_url'] for item in github_latest['assets'] if match in item['name'] ].pop()
+	archive_filename = [ item['name'] for item in github_latest['assets'] if match in item['name'] ].pop()
+	archive_filepath = os.path.join( CACHE_DIR, archive_filename )
+
+	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url, \
+	 open( signature_filepath, 'wb' ) as out_file:
+		#sha256sum_data = url.read().decode()
+		shutil.copyfileobj(url, out_file)
+
+	with urllib.request.urlopen( signature_url, cafile=certifi.where() ) as url, \
+	 open( sha256sum_filepath, 'wb' ) as out_file:
+		#signature_data = url.read().decode()
+		shutil.copyfileobj(url, out_file)
+
+	with open( sha256sum_filepath, 'rb' ) as fd:
+		verified = gpg.verify_file( fd, signature_filepath )
+		print(verified.sig_info)
+
+	with urllib.request.urlopen( archive_url, cafile=certifi.where() ) as url, \
+	 open( archive_filepath, 'wb' ) as out_file:
+		shutil.copyfileobj(url, out_file)
+
+	#print( sha256sum_data )
+	#print( signature_data )
 
 	#print(data)
 
