@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, json, certifi
+import urllib.request, json, certifi, fs, gnupg
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -375,7 +375,20 @@ def upgrade():
 	# TODO: check the latest version
 	# https://github.com/niess/python-appimage/issues/24
 	with urllib.request.urlopen( "https://api.github.com/repos/buskill/buskill-app/releases/latest", cafile=certifi.where() ) as url:
-		data = json.loads(url.read().decode())
-		print(data)
+		github_latest = json.loads(url.read().decode())
+
+	sha256sum_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS" ].pop()
+	signature_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS.asc" ].pop()
+	print( sha256sum_url )
+
+	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url:
+		sha256sum_data = url.read().decode()
+	with urllib.request.urlopen( signature_url, cafile=certifi.where() ) as url:
+		signature_data = url.read().decode()
+
+	print( sha256sum_data )
+	print( signature_data )
+
+	#print(data)
 
 	# TODO: determine if the latest version is newer than our current version

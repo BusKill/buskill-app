@@ -29,6 +29,13 @@ To read our comprehensive docs, see:
 
  * [docs.buskill.in](https://docs.buskill.in)
 
+# Misconceptions
+
+Q: Self-destruct?!? Will this brick my computer?
+A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). Our software does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
+
+For more information, see our [Frequently Asked Questions](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html).
+
 # Press
 
 As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), & [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves).
