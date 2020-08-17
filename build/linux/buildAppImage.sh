@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-07-31
-# Version: 0.6
+# Updated: 2020-08-18
+# Version: 0.7
 ################################################################################
 
 ################################################################################
@@ -181,7 +181,7 @@ echo "INFO: Beginning AppDir thinning"
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 # and make the AppImage reproducible
 
-unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources idna garden kivy-examples requests direct_url.json RECORD"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources garden kivy-examples requests direct_url.json RECORD"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`

@@ -1,5 +1,9 @@
 buskill-app changelog
 
+[0.2.0] - 2020-??-??
+- Added auto-update functionality
+- Special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
+
 [0.1.0] - 2020-07-31
 - Initial version with self-contained releases for Linux, Windows, and MacOS
 - Functionality is limited to arming and disarming from the CLI or GUI
