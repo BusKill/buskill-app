@@ -55,4 +55,4 @@ After executing the above commands, you should have a new ``docs/_build/html/`` 
 
 ::
 
-  firefox-esr docs/_build/html/index.html
+  firefox-esr _build/html/index.html
