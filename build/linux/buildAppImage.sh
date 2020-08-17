@@ -108,6 +108,9 @@ ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-ins
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/
 
+# also add our KEYS file
+cp KEYS /tmp/kivy_appdir/opt/src/
+
 # output information about this build so the code can use it later in logs
 cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
