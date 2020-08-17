@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, json, certifi, sys, os, shutil, gnupg
+import urllib.request, json, certifi, sys, os, shutil, tempfile, gnupg
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -41,11 +41,8 @@ if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 
 # APP_DIR is the dir in which our buskill executable lives, which often
 # is some dir on the USB drive itself or could be somewhere on the computer
+global APP_DIR
 APP_DIR = sys.path[0]
-
-DATA_DIR = os.path.join( APP_DIR, '.buskill' )
-CACHE_DIR = os.path.join( DATA_DIR, 'cache' )
-GNUPGHOME = os.path.join( CACHE_DIR, '.gnupg' )
 
 #####################
 # WINDOWS CONSTANTS #
@@ -109,15 +106,9 @@ def init():
 		arm_fun = armNix
 		trigger_fun = triggerMac
 
-	# create cache dir (and clean if necessary)
-	if os.path.exists( CACHE_DIR ):
-		shutil.rmtree( CACHE_DIR )
-	os.makedirs( CACHE_DIR, mode=0o700 )
-	os.chmod( DATA_DIR, mode=0o0700 )
-
-	contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
-	with open( os.path.join(CACHE_DIR, 'README.txt'), 'w' ) as fd:
-		fd.write( contents )
+	# create a data dir in some safe place where we have write access
+	global DATA_DIR, CACHE_DIR, GNUPGHOME
+	setupDataDir()
 
 # this is called when the GUI is closed 
 # TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
@@ -148,6 +139,58 @@ def isPlatformSupported():
 		return True
 	else:
 		return False
+
+def setupDataDir():
+
+	global DATA_DIR, CACHE_DIR, GNUPGHOME
+
+	# first we choose where our data dir based on where we have write access
+	data_dirs = list()
+
+	# first try to create our data dir in the same dir in which <this> python
+	# script is located
+	data_dirs.append( sys.path[0] )
+
+	# Fall-back to the dir in which the executable is located. This is mainly for
+	# AppImages since their src files are in a read-only squashfs. But only use
+	# this if the executable 'buskill.AppImage' or 'buskill.exe'. Don't use it if
+	# the executable is 'python' as we don't want our data dir in /usr/bin/
+	exe_dir = os.path.split(sys.executable)
+	if not 'python' in exe_dir[1]:
+		data_dirs.append( "exe_dir:|" +str(exe_dir)+ "|" )
+
+	# finally, try the users's $HOME dir
+	data_dirs.append( os.path.join( os.path.expanduser('~'), '.buskill' ) )
+
+	# iterate though our list of potential data dirs and pick the first one
+	# that we can actually write to
+	for data_dir in data_dirs:
+		try:
+			testfile = tempfile.TemporaryFile( dir=data_dir )
+			testfile.close()
+		except:
+			# we were unable to write to this data_dir; try the next one
+			continue
+
+		# if we made it this far, we've confirmed that we can write to this
+		# data_dir. store it and exit the loop; we'll use this one.
+		DATA_DIR = os.path.join( data_dir, '.buskill' )
+		break
+
+	print( "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|" )
+
+	# create cache dir (and clean if necessary) and data dir
+	CACHE_DIR = os.path.join( DATA_DIR, 'cache' )
+	if os.path.exists( CACHE_DIR ):
+		shutil.rmtree( CACHE_DIR )
+	os.makedirs( CACHE_DIR, mode=0o700 )
+	os.chmod( DATA_DIR, mode=0o0700 )
+
+	contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
+	with open( os.path.join(CACHE_DIR, 'README.txt'), 'w' ) as fd:
+		fd.write( contents )
+
+	GNUPGHOME = os.path.join( CACHE_DIR, '.gnupg' )
 
 def isArmed():
 	return buskill_is_armed
