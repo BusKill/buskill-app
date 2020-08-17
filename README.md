@@ -31,8 +31,8 @@ To read our comprehensive docs, see:
 
 # Misconceptions
 
-Q: Self-destruct?!? Will this brick my computer?
-A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). Our software does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
+> Q: Self-destruct?!? Will this brick my computer?
+> A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
 
 For more information, see our [Frequently Asked Questions](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html).
 
