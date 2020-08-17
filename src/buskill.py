@@ -157,7 +157,7 @@ def setupDataDir():
 	# the executable is 'python' as we don't want our data dir in /usr/bin/
 	exe_dir = os.path.split(sys.executable)
 	if not 'python' in exe_dir[1]:
-		data_dirs.append( "exe_dir:|" +str(exe_dir)+ "|" )
+		data_dirs.append( exe_dir[0] )
 
 	# finally, try the users's $HOME dir
 	data_dirs.append( os.path.join( os.path.expanduser('~'), '.buskill' ) )
@@ -170,6 +170,7 @@ def setupDataDir():
 			testfile.close()
 		except:
 			# we were unable to write to this data_dir; try the next one
+			print( "DEBUG: Unable to write to '" +data_dir+ "'; skipping." )
 			continue
 
 		# if we made it this far, we've confirmed that we can write to this
@@ -177,7 +178,12 @@ def setupDataDir():
 		DATA_DIR = os.path.join( data_dir, '.buskill' )
 		break
 
-	print( "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|" )
+	try:
+		print( "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|" )
+	except:
+		print( "DEBUG: Unable to write to any DATA_DIR; not using one" )
+		DATA_DIR = ''
+		return
 
 	# create cache dir (and clean if necessary) and data dir
 	CACHE_DIR = os.path.join( DATA_DIR, 'cache' )
