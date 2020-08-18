@@ -172,7 +172,7 @@ def setupDataDir():
 			# we were unable to write to this data_dir; try the next one
 			msg = "Unable to write to '" +data_dir+ "'; skipping."
 			msg += "----------------------------------------------"
-			msg += "\n\tstr(e)"
+			msg += "\n\t" +str(e)
 			msg += "----------------------------------------------"
 			print( msg ); logging.info( msg )
 			continue
