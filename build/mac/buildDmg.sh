@@ -103,6 +103,11 @@ ${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/dep
 ${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 ${PYTHON_PATH} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
 
+# TODO: pip download & verify sigs with gpg before install
+export all_proxy=''
+${PYTHON_PATH} -m pip install --ignore-installed --upgrade python-gnupg
+export all_proxy='http://example.com:9999'
+
 # libusb depend for MacOS, from:
 # * https://libusb.info/
 # * https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.tar.bz2
@@ -163,7 +168,7 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False )
-coll = COLLECT(exe, Tree('../src/'),
+coll = COLLECT(exe, Tree('../src/'), ../KEYS
                a.binaries,
                a.zipfiles,
                a.datas,

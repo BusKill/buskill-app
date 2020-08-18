@@ -102,7 +102,7 @@ ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-ins
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
-# TOOO: pip download & verify sigs with gpg before install
+# TODO: pip download & verify sigs with gpg before install
 /tmp/kivy_appdir/opt/python*/bin/python* -m pip install python-gnupg
 
 # add our code to the AppDir
