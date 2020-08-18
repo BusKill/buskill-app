@@ -474,7 +474,7 @@ def upgrade():
 			KEYS = fd.read()
 	except:
 		# fall-back to one dir up if we're executing from 'src/'
-		with open( os.path.join(APP_DIR, '..', 'KEYS'), 'r' ) as fd:
+		with open( os.path.join( os.path.split(APP_DIR)[0], 'KEYS'), 'r' ) as fd:
 			KEYS = fd.read()
 
 	gpg = gnupg.GPG( gnupghome=GNUPGHOME )
