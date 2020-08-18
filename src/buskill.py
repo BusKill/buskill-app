@@ -160,7 +160,7 @@ def setupDataDir():
 		data_dirs.append( exe_dir[0] )
 
 	# finally, try the users's $HOME dir
-	data_dirs.append( os.path.join( os.path.expanduser('~'), '.buskill' ) )
+	data_dirs.append( os.path.join( os.path.expanduser('~') ) )
 
 	# iterate though our list of potential data dirs and pick the first one
 	# that we can actually write to
@@ -172,9 +172,7 @@ def setupDataDir():
 		except Exception as e:
 			# we were unable to write to this data_dir; try the next one
 			msg = "Unable to write to '" +data_dir+ "'; skipping.\n"
-			msg += "----------------------------------------------"
 			msg += "\n\t" +str(e)
-			msg += "\n----------------------------------------------"
 			print( msg ); logging.info( msg )
 			continue
 
