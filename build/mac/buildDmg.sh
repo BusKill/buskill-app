@@ -168,7 +168,8 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False )
-coll = COLLECT(exe, Tree('../src/'), ../KEYS
+coll = COLLECT(exe, Tree('../src/'),
+               ( '../KEYS', 'KEYS; ),
                a.binaries,
                a.zipfiles,
                a.datas,
