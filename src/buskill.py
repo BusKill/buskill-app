@@ -87,6 +87,12 @@ def init():
 	global ERR_PLATFORM_NOT_SUPPORTED
 	ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
+	# update PATH to include the dir where main.py lives (the second one is MacOS
+	# .app compatibility weirdness) so that we can find `gpg` there
+	os.environ['PATH'] += \
+	 os.pathsep+ APP_DIR + \
+	 os.pathsep+ os.path.split(APP_DIR)[0]
+
 	global CURRENT_PLATFORM
 	CURRENT_PLATFORM = platform.system().upper()
 
@@ -170,8 +176,8 @@ def setupDataDir():
 			testfile.close()
 		except Exception as e:
 			# we were unable to write to this data_dir; try the next one
-			msg = "Unable to write to '" +data_dir+ "'; skipping.\n"
-			msg += "\n\t" +str(e)
+			msg = "Unable to write to '" +data_dir+ "'; skipping."
+			msg += "\n\t" +str(e)+ "\n"
 			print( msg ); logging.info( msg )
 			continue
 
