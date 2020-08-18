@@ -168,9 +168,13 @@ def setupDataDir():
 		try:
 			testfile = tempfile.TemporaryFile( dir=data_dir )
 			testfile.close()
-		except:
+		except Exception as e:
 			# we were unable to write to this data_dir; try the next one
-			print( "DEBUG: Unable to write to '" +data_dir+ "'; skipping." )
+			msg = "Unable to write to '" +data_dir+ "'; skipping."
+			msg += "----------------------------------------------"
+			msg += "\n\tstr(e)"
+			msg += "----------------------------------------------"
+			print( msg ); logging.info( msg )
 			continue
 
 		# if we made it this far, we've confirmed that we can write to this
@@ -179,9 +183,11 @@ def setupDataDir():
 		break
 
 	try:
-		print( "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|" )
+		msg = "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|"
+		print( msg ); logging.info( msg )
 	except:
-		print( "DEBUG: Unable to write to any DATA_DIR; not using one" )
+		msg = "DEBUG: Unable to write to any DATA_DIR; not using one"
+		print( msg ); logging.info( msg )
 		DATA_DIR = ''
 		return
 
