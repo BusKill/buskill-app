@@ -166,14 +166,15 @@ def setupDataDir():
 	# that we can actually write to
 	for data_dir in data_dirs:
 		try:
+			os.makedirs( data_dir, mode=0o700, exist_ok=True )
 			testfile = tempfile.TemporaryFile( dir=data_dir )
 			testfile.close()
 		except Exception as e:
 			# we were unable to write to this data_dir; try the next one
-			msg = "Unable to write to '" +data_dir+ "'; skipping."
+			msg = "Unable to write to '" +data_dir+ "'; skipping.\n"
 			msg += "----------------------------------------------"
 			msg += "\n\t" +str(e)
-			msg += "----------------------------------------------"
+			msg += "\n----------------------------------------------"
 			print( msg ); logging.info( msg )
 			continue
 
