@@ -169,7 +169,7 @@ exe = EXE(pyz,
           upx=True,
           console=False )
 coll = COLLECT(exe, Tree('../src/'),
-               ( '../KEYS', 'KEYS; ),
+               ( '../KEYS', 'KEYS' ),
                a.binaries,
                a.zipfiles,
                a.datas,
