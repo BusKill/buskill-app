@@ -166,7 +166,6 @@ def setupDataDir():
 	# that we can actually write to
 	for data_dir in data_dirs:
 		try:
-			os.makedirs( data_dir, mode=0o700, exist_ok=True )
 			testfile = tempfile.TemporaryFile( dir=data_dir )
 			testfile.close()
 		except Exception as e:
