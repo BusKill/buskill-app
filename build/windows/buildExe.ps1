@@ -18,11 +18,11 @@ Set-PSDebug -Trace 1
 ######################################
 #### A Note about ' | Out-String' ####
 ######################################
-# Straingely, when PowerShell calls any '.exe', it appears to have an implicit
+# Strangely, when PowerShell calls any '.exe', it appears to have an implicit
 # amp-off effect where that .exe is executed in the background and the next
 # command is initiated without waiting. This creates tons of nondeterministic
 # and undesired behaviour. The fix is a hack: just append ' | Out-String' to the
-# end of an .exe call, and it will prevent it from running in the backgound,
+# end of an .exe call, and it will prevent it from running in the background,
 # delaying the subsequent line from running until the current line finishes
 ######################################
 
@@ -68,6 +68,11 @@ Get-ChildItem -Path C:\ -Force | Out-String
 Write-Output "listing contents of cwd"
 Get-ChildItem -Force | Out-String
 
+# TODO: delete these
+# try to find the gpg binary
+Get-Command gpg
+Get-Command gpg.exe
+
 Write-Output 'INFO: Beginning execution'
 
 ###################
@@ -101,6 +106,9 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 # install kivy and all other python dependencies with pip into our virtual env
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
 
+# TODO: pip download & verify sigs with gpg before install
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade python-gnupg | Out-String
+
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-
 BUSKILL_VERSION = {
@@ -129,7 +137,8 @@ block_cipher = None
 a = Analysis(['..\\src\\main.py'],
              pathex=['.\\'],
              binaries=[],
-             datas=[],
+             #datas=[ ( '../KEYS', '.' ), ('/usr/local/bin/gpg', '.') ],
+             datas=[ ( '../KEYS', '.' ) ],
              hiddenimports=['pkg_resources.py2_warn', 'libusb1'],
              hookspath=[],
              runtime_hooks=[],
