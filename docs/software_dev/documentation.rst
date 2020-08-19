@@ -43,7 +43,7 @@ You can build our documentation on Debian 10 using the following commands
 ::
 
   sudo apt-get update
-  sudo apt-get -y install git firefox-esr python3-sphinx python3-sphinx-rtd-theme
+  sudo apt-get -y install git firefox-esr python3-git python3-sphinx python3-sphinx-rtd-theme
 
   git clone https://github.com/BusKill/buskill-app.git
   cd buskill-app/docs
