@@ -72,6 +72,10 @@ Get-ChildItem -Force | Out-String
 # try to find the gpg binary
 Get-Command gpg
 Get-Command gpg.exe
+Get-ChildItem -Filter "*msys-bz2-1.dll" -Recurse C:\ | Out-String
+Get-ChildItem -Filter "*msys-assuan-0.dll" -Recurse C:\ | Out-String
+Get-ChildItem -Filter "*msys-gcrypt-20.dll" -Recurse C:\ | Out-String
+Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
