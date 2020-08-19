@@ -70,12 +70,12 @@ Get-ChildItem -Force | Out-String
 
 # TODO: delete these
 # try to find the gpg binary
-Get-Command gpg
-Get-Command gpg.exe
-Get-ChildItem -Filter "*msys-bz2-1.dll" -Recurse C:\ | Out-String
-Get-ChildItem -Filter "*msys-assuan-0.dll" -Recurse C:\ | Out-String
-Get-ChildItem -Filter "*msys-gcrypt-20.dll" -Recurse C:\ | Out-String
-Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
+#Get-Command gpg
+#Get-Command gpg.exe
+#Get-ChildItem -Filter "*msys-bz2-1.dll" -Recurse C:\ | Out-String
+#Get-ChildItem -Filter "*msys-assuan-0.dll" -Recurse C:\ | Out-String
+#Get-ChildItem -Filter "*msys-gcrypt-20.dll" -Recurse C:\ | Out-String
+#Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
@@ -141,7 +141,15 @@ block_cipher = None
 a = Analysis(['..\\src\\main.py'],
              pathex=['.\\'],
              binaries=[],
-             datas=[ ( '..\\KEYS', '.' ), ('C:\\Program Files\\Git\\usr\\bin\\gpg.exe', '.') ],
+             datas=
+              [
+               ( '..\\KEYS', '.' ),
+               ('C:\\Program Files\\Git\\usr\\bin\\gpg.exe', '.'),
+               ('C:\\msys64\\usr\\bin\\msys-bz2-1.dll', '.'),
+               ('C:\\msys64\\usr\\bin\\msys-assuan-0.dll', '.'),
+               ('C:\\msys64\\usr\\bin\\msys-gcrypt-20.dll', '.'),
+               ('C:\\msys64\\usr\\bin\\msys-gpg-error-0.dll', '.'),
+              ],
              hiddenimports=['pkg_resources.py2_warn', 'libusb1'],
              hookspath=[],
              runtime_hooks=[],
