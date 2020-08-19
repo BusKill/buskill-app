@@ -196,7 +196,7 @@ coll = COLLECT(exe, Tree('..\\src\\'),
 $env:KIVY_GL_BACKEND="angle_sdl2"
 
 # build it from the spec file
-C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm .\buskill.spec | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buskill.spec | Out-String
 
 # attempt to execute it?
 #.\dist\buskill\buskill.exe | Out-String
