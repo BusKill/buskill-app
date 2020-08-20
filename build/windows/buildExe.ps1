@@ -76,6 +76,7 @@ Get-ChildItem -Force | Out-String
 #Get-ChildItem -Filter "*msys-assuan-0.dll" -Recurse C:\ | Out-String
 #Get-ChildItem -Filter "*msys-gcrypt-20.dll" -Recurse C:\ | Out-String
 #Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
+#Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
@@ -153,7 +154,7 @@ a = Analysis(['..\\src\\main.py'],
                ('C:\\msys64\\usr\\bin\\msys-readline8.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-z.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-sqlite3-0.dll', '.'),
-               ('C:\\msys64\\usr\\bin\\msys-iconv-2.dl', '.'),
+               ('C:\\msys64\\usr\\bin\\msys-iconv-2.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-intl-8.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-ncursesw6.dll', '.'),
               ],
@@ -221,6 +222,10 @@ cp -r .\pyinstaller\dist\buskill dist/buskill-x86_64 | Out-String
 #######################
 # OUTPUT VERSION INFO #
 #######################
+
+Write-Output 'INFO: Dir contents'
+Get-ChildItem -Path "pyinstaller" -Force | Out-String
+Get-ChildItem -Path "pyinstaller\dist" -Force | Out-String
 
 Write-Output 'INFO: Python versions info'
 
