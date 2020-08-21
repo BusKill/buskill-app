@@ -252,7 +252,7 @@ popd # leave /tmp
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
-mkdir "dist/${ARCHIVE_DIR}"
+mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}.AppImage"
