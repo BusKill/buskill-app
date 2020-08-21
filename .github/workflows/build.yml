@@ -46,15 +46,20 @@ jobs:
 
     - name: Upload Release Asset
       id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
+#      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: "dist/buskill-lin-x86_64.${{ github.run_id }}.tbz"
-        #asset_name: buskill-lin-x86_64.${{ github.run_id }}.tbz
-        asset_name: ${ARCHIVE_DIR}.tbz
-        asset_content_type: application/x-bzip2
+        RELEASE_ID: ${{ steps.create_release.outputs.id }}
+      run: |
+		  cd dist
+        RELEASE_FILE="`ls -1 | grep buskill-lin*.tbz | head -n1`"
+        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/x-bzip2" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+#        asset_path: "dist/buskill-lin-x86_64.${{ github.run_id }}.tbz"
+#        #asset_name: buskill-lin-x86_64.${{ github.run_id }}.tbz
+#        asset_name: ${ARCHIVE_DIR}.tbz
+#        asset_content_type: application/x-bzip2
 
     # workflows can't trigger other workflows (actually, the ephemeral
     # GITHUB_TOKEN is blocked from launching other workflows), so we get
