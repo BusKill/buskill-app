@@ -66,6 +66,13 @@ fi
 if [ -z ${GITHUB_REF} ]; then
 	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
 fi
+
+VERSION=`git show-ref | head -n1 | awk '{print $2}'`
+if [[ "${VERSION}" = "dev" ]]; then
+	VERSION="${SOURCE_DATE_EPOCH}"
+fi
+
+ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 	
 ###############
 # OUTPUT INFO #
@@ -122,6 +129,7 @@ BUSKILL_VERSION = {
  'SOURCE_DATE_EPOCH': '${SOURCE_DATE_EPOCH}',
 }
 EOF
+cat /tmp/kivy_appdir/opt/src/buskill_version.py
 
 # change AppRun so it executes our app
 rm /tmp/kivy_appdir/AppRun
@@ -244,10 +252,10 @@ popd # leave /tmp
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
-mkdir dist
+mkdir "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
-/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${APP_NAME}.AppImage"
+/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}.AppImage"
 
 ###############
 # OUTPUT INFO #

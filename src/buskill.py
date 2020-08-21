@@ -176,9 +176,9 @@ def setupDataDir():
 			testfile.close()
 		except Exception as e:
 			# we were unable to write to this data_dir; try the next one
-			msg = "Unable to write to '" +data_dir+ "'; skipping."
+			msg = "DEBUG: Unable to write to '" +data_dir+ "'; skipping."
 			msg += "\n\t" +str(e)+ "\n"
-			print( msg ); logging.info( msg )
+			print( msg ); logging.debug( msg )
 			continue
 
 		# if we made it this far, we've confirmed that we can write to this
@@ -187,11 +187,11 @@ def setupDataDir():
 		break
 
 	try:
-		msg = "DEBUG: using DATA_DIR:|" +str(DATA_DIR)+ "|"
+		msg = "INFO: using DATA_DIR:|" +str(DATA_DIR)+ "|"
 		print( msg ); logging.info( msg )
 	except:
-		msg = "DEBUG: Unable to write to any DATA_DIR; not using one"
-		print( msg ); logging.info( msg )
+		msg = "WARNING: Unable to write to any DATA_DIR; not using one"
+		print( msg ); logging.warn( msg )
 		DATA_DIR = ''
 		return
 
@@ -244,6 +244,8 @@ def toggle():
 		usb_handler.start()
 
 		buskill_is_armed = True
+		msg = "INFO: BusKill is armed."
+		print( msg ); logger.info( msg )
 
 # this is a callback function that is registered to be called when a usb
 # hotplug event occurs using libusb (linux & macos)
@@ -461,6 +463,12 @@ def upgrade():
 	 and not CURRENT_PLATFORM.startswith( 'WIN' ) \
 	 and not CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		print( "DEBUG: Upgrades not supported on this platform" )
+		return
+
+	# skip upgrade if we can't write to disk
+	# TODO: ask the OS if our user has write permission of the executable itself (may require platform-specific logic)
+	if DATA_DIR == '':
+		# TODO: change to "throw" some catchable exception to relay the erorr to the user via the UI (both GUI and CLI)
 		return
 
 	# prepare our ephemeral gnupg home dir so we can verify the signature of our
