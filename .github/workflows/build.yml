@@ -51,7 +51,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_ID: ${{ steps.create_release.outputs.id }}
       run: |
-		  cd dist
+        cd dist
         RELEASE_FILE="`ls -1 | grep buskill-lin*.tbz | head -n1`"
         curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/x-bzip2" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
 #      with:
