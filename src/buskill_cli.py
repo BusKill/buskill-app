@@ -81,7 +81,12 @@ def BusKillCLI():
 		sys.exit(1)
 
 	if args.upgrade:
-		buskill.upgrade()
+		try:
+			buskill.upgrade()
+		except RuntimeWarning as e:
+			msg = "ERROR: Unable to upgrade buskill\n\t" +str(e)
+			print( msg ); logging.error( msg )
+			sys.exit(1)
 		sys.exit(0)
 
 	if args.arm:

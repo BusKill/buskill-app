@@ -18,7 +18,8 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, json, certifi, sys, os, shutil, tempfile, gnupg
+import urllib.request, json, certifi, sys, os, shutil, tempfile, random, gnupg
+from buskill_version import BUSKILL_VERSION
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -43,6 +44,14 @@ if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 # is some dir on the USB drive itself or could be somewhere on the computer
 global APP_DIR
 APP_DIR = sys.path[0]
+
+UPGRADE_MIRRORS = [
+ 'https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json',
+ 'https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json',
+ 'https://repo.buskill.in/buskill-app/v1/meta.json',
+ 'https://repo.michaelaltfield.net/buskill-app/v1/meta.json',
+]
+random.shuffle(UPGRADE_MIRRORS)
 
 #####################
 # WINDOWS CONSTANTS #
@@ -113,6 +122,8 @@ def init():
 		trigger_fun = triggerMac
 
 	# create a data dir in some safe place where we have write access
+	# TODO: move this to main.py so the log file gets put in the CACHE_DIR
+	# (that--or maybe just move the buskill.init() into main.py)
 	global DATA_DIR, CACHE_DIR, GNUPGHOME
 	setupDataDir()
 
@@ -244,7 +255,8 @@ def toggle():
 		usb_handler.start()
 
 		buskill_is_armed = True
-		msg = "INFO: BusKill is armed."
+		msg = "INFO: BusKill is armed. Listening for removal event.\n"
+		msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
 		print( msg ); logger.info( msg )
 
 # this is a callback function that is registered to be called when a usb
@@ -401,9 +413,6 @@ def armNix():
 			return msg
 
 		opaque = context.hotplugRegisterCallback( hotplugCallbackNix )
-		msg = "INFO: BusKill is armed. Listening for removal event.\n"
-		msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
-		print( msg ); logger.info( msg )
 
 		try:
 			while True:
@@ -458,18 +467,65 @@ def triggerMac():
 
 def upgrade():
 
+	msg = "DEBUG: Called upgrade()"
+	print( msg ); logging.debug( msg )
+
+	# Note: While this upgrade solution does cryptographically verify the
+	# authenticity and integrity of new versions, it is still vulnerable to
+	# at least the following attacks:
+	# 
+	#  1. Freeze attacks
+	#  2. Slow retrieval attacks
+	#
+	# The fix to this is to upgrade to TUF, once it's safe to do so. In the
+	# meantime, these attacks are not worth mitigating because [a] this app
+	# never auto-updates; it's always requires user input, [b] our app  in
+	# general is low-risk; it doesn't even access the internet outside of the
+	# update process, and [c] these attacks aren't especially severe
+
+	# TODO: switch to using TUF once TUF no longer requires us to install
+	#       untrusted software onto our cold-storage machine holding our
+	#       release private keys. For more info, see:
+	# 
+	#  * https://github.com/BusKill/buskill-app/issues/6
+	#  * https://github.com/theupdateframework/tuf/issues/1109
+
+	#########################
+	# UPGRADE SANITY CHECKS #
+	#########################
+
 	# only upgrade on linux, windows, and mac
 	if not CURRENT_PLATFORM.startswith( 'LINUX' ) \
 	 and not CURRENT_PLATFORM.startswith( 'WIN' ) \
 	 and not CURRENT_PLATFORM.startswith( 'DARWIN' ):
-		print( "DEBUG: Upgrades not supported on this platform" )
-		return
+		raise RuntimeWarning( 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')' )
+
+	# get the absolute path to the file that the user executes to start buskill
+	EXE_PATH = sys.executable
+	EXE_DIR = os.path.split(EXE_PATH)[0]
+	EXE_FILE = os.path.split(EXE_PATH)[1]
+	# TODO: uncomment this block
+#	if EXE_FILE != 'buskill.AppImage' \
+#	 or EXE_FILE != 'buskill' \
+#	 or EXE_FILE != 'buskill.exe':
+#		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
 	# skip upgrade if we can't write to disk
-	# TODO: ask the OS if our user has write permission of the executable itself (may require platform-specific logic)
 	if DATA_DIR == '':
-		# TODO: change to "throw" some catchable exception to relay the erorr to the user via the UI (both GUI and CLI)
-		return
+		raise RuntimeWarning( 'Unable to upgrade. No DATA_DIR.' )
+
+	# make sure we can write to the dir where the executable lives
+	if not os.access(EXE_DIR, os.W_OK):
+		raise RuntimeWarning( 'Unable to upgrade. EXE_DIR not writeable (' +str(EXE_DIR)+ ')' )
+
+	# make sure we can overwrite the executable itself
+	# TODO: uncomment this block
+#	if not os.access(EXE_FILE, os.W_OK):
+#		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str(EXE_FILE)+ ')' )
+
+	#############
+	# SETUP GPG #
+	#############
 
 	# prepare our ephemeral gnupg home dir so we can verify the signature of our
 	# checksum file after download and before "install"
@@ -479,7 +535,6 @@ def upgrade():
 	os.chmod( GNUPGHOME, mode=0o0700 )
 
 	# get the contents of the KEYS file shipped with our software
-	KEYS = ''
 	try:
 		with open( os.path.join(APP_DIR, 'KEYS'), 'r' ) as fd:
 			KEYS = fd.read()
@@ -491,10 +546,88 @@ def upgrade():
 	gpg = gnupg.GPG( gnupghome=GNUPGHOME )
 	gpg.import_keys( KEYS )
 
-	# TODO: check the latest version
-	# https://github.com/niess/python-appimage/issues/24
-	with urllib.request.urlopen( "https://api.github.com/repos/buskill/buskill-app/releases/latest", cafile=certifi.where() ) as url:
-		github_latest = json.loads(url.read().decode())
+	############################
+	# DETERMINE LATEST VERSION #
+	############################
+	metadata_filepath = os.path.join( CACHE_DIR, 'meta.json' )
+	signature_filepath = os.path.join( CACHE_DIR, 'meta.json.asc' )
+
+	# loop through each of our mirrors until we get one that's online
+	metadata = ''
+	for mirror in UPGRADE_MIRRORS:
+
+		# break out of loop if we've already downloaded the metadata from
+		# some mirror in our list
+		if os.path.exists( metadata_filepath ) \
+		 and os.path.exists( signature_filepath ):
+			break
+
+		msg = "DEBUG: Checking for updates at '" +str(mirror)+ "'"
+		print( msg ); logging.debug( msg )
+
+		# try to download the metadata json file and its detached signature
+		files = [ mirror, mirror + '.asc' ]
+		for f in files:
+
+			filename = f.split('/')[-1]
+			filepath = os.path.join( CACHE_DIR, filename )
+
+			try:
+				with urllib.request.urlopen( f, cafile=certifi.where() ) as url, \
+				 open( filepath, 'wb' ) as out_file:
+	
+					# the metadata definitely shouldn't be more than 1 MB
+					size_bytes = int(url.info().get('content-length'))
+					if size_bytes > 1048576:
+						msg = "\tMetadata too big; skipping (" +str(size_bytes)+ " bytes)"
+						print( msg ); logging.debug( msg )
+						break
+	
+					shutil.copyfileobj(url, out_file)
+					continue
+
+			except Exception as e:
+				msg = "\tFailed to fetch data from mirror; skipping (" +str(e)+ ")"
+				print( msg ); logging.debug( msg )
+				break
+
+	# if we tried all the mirrors and weren't able to get any response, abort
+	try:
+		with open( metadata_filepath, 'r' ) as fd:
+			metadata = json.loads( fd.read() ) 
+	except Exception as e:
+		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file.' )
+		
+	if metadata == '':
+		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata contents.' )
+		
+	with open( signature_filepath, 'rb' ) as fd:
+		verified = gpg.verify_file( fd, metadata_filepath )
+		print( fd )
+		print( signature_filepath )
+		print(verified)
+		print(verified.sig_info)
+		print(verified.fingerprint)
+		print(verified.username)
+		print(verified.status)
+		print(verified.creation_date)
+		print(verified.timestamp)
+		print(verified.trust_level)
+		print(verified.trust_text)
+
+	print(metadata)
+	# check metadata to see if there's a newer version than what we're running
+	# note we use SOURCE_DATE_EPOCH to make version comparisons easy
+	latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
+	currentReleaseTime = int(BUSKILL_VERSION['SOURCE_DATE_EPOCH'])
+	if latestReleaseTime < currentReleaseTime:
+		msg = "INFO: Current version is latest version. No new updates available."
+		print( msg ); logging.info( msg )
+		return 1
+
+	print( "Yep, update is needed!" )
+	print( "TODO: fetch, validate, and install" )
+	sys.exit(1)
 
 	sha256sum_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS" ].pop()
 	sha256sum_filepath = os.path.join( CACHE_DIR, 'SHA256SUM' )
@@ -513,23 +646,53 @@ def upgrade():
 	archive_filename = [ item['name'] for item in github_latest['assets'] if match in item['name'] ].pop()
 	archive_filepath = os.path.join( CACHE_DIR, archive_filename )
 
+	# TODO: determine if latest version is newer than our current version. if not, print info and return
+
+	###########################
+	# DOWNLOAD LATEST VERSION #
+	###########################
+
 	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url, \
 	 open( signature_filepath, 'wb' ) as out_file:
 		#sha256sum_data = url.read().decode()
 		shutil.copyfileobj(url, out_file)
 
+	# TODO: check the size of the downloads and refuse if it's something huge
 	with urllib.request.urlopen( signature_url, cafile=certifi.where() ) as url, \
 	 open( sha256sum_filepath, 'wb' ) as out_file:
 		#signature_data = url.read().decode()
 		shutil.copyfileobj(url, out_file)
 
+	# TODO: check the size of the downloads and refuse if it's something huge
+	with urllib.request.urlopen( archive_url, cafile=certifi.where() ) as url, \
+	 open( archive_filepath, 'wb' ) as out_file:
+		shutil.copyfileobj(url, out_file)
+
+	####################
+	# VERIFY SIGNATURE #
+	####################
+
 	with open( sha256sum_filepath, 'rb' ) as fd:
 		verified = gpg.verify_file( fd, signature_filepath )
 		print(verified.sig_info)
 
-	with urllib.request.urlopen( archive_url, cafile=certifi.where() ) as url, \
-	 open( archive_filepath, 'wb' ) as out_file:
-		shutil.copyfileobj(url, out_file)
+	# TODO: check if signature of our digest file is valid. if not, delete all downloads and abort with critical error
+
+	# TODO: check if download's checksum matches our signed/verified digest file. If not, delete all downloads and abort with critical error
+
+	####################
+	# VERIFY INTEGRITY #
+	####################
+
+	# TODO verify that the downloaded archive's digest matches what's specified of the now-trustworthy SHA256SUMS file. If not, delete all downloads and abort with critical error
+
+	###########
+	# INSTALL #
+	###########
+
+	# TODO: move the new version out of cache into our EXE_DIR
+
+	# TODO: move our current version into some old dir
 
 	#print( sha256sum_data )
 	#print( signature_data )
