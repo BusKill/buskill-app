@@ -53,6 +53,9 @@ UPGRADE_MIRRORS = [
 ]
 random.shuffle(UPGRADE_MIRRORS)
 
+RELEASE_KEY_FINGERPRINT = 'E0AFFF57DC00FBE0563587614AE21E1936CE786A'
+RELEASE_KEY_SUB_FINGERPRINT = '798DC1101F3DEC428ADE124D68B8BCB0C5023905'
+
 #####################
 # WINDOWS CONSTANTS #
 #####################
@@ -596,26 +599,40 @@ def upgrade():
 		with open( metadata_filepath, 'r' ) as fd:
 			metadata = json.loads( fd.read() ) 
 	except Exception as e:
-		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file.' )
+		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.' )
 		
 	if metadata == '':
 		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata contents.' )
 		
+	# open the detached signature and check it with gpg
 	with open( signature_filepath, 'rb' ) as fd:
 		verified = gpg.verify_file( fd, metadata_filepath )
-		print( fd )
-		print( signature_filepath )
-		print(verified)
-		print(verified.sig_info)
-		print(verified.fingerprint)
-		print(verified.username)
-		print(verified.status)
-		print(verified.creation_date)
-		print(verified.timestamp)
-		print(verified.trust_level)
-		print(verified.trust_text)
 
-	print(metadata)
+	# check that this main signature fingerprint meets our expectations
+	# bail if it a key was used other than the one we require
+	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
+		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+RELEASE_KEY_SUB_FINGERPRINT+' but got '+verified.fingerprint+')! Please report this as a bug.' )
+
+	# extract from our list of signatures any signatures made with exactly the
+	# keys we'd expect (check the master key and the subkey fingerprints)
+	sig_info = [ verified.sig_info[key] for key in verified.sig_info if verified.sig_info[key]['fingerprint'] == RELEASE_KEY_SUB_FINGERPRINT and verified.sig_info[key]['pubkey_fingerprint'] == RELEASE_KEY_FINGERPRINT ]
+
+	# if we couldn't find a signature that matched our requirements, bail
+	if sig_info == list():
+		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+	else:
+		sig_info = sig_info.pop()
+
+	# check both the list of signatures and this other one. why not?
+	# bail if either is an invalid signature
+	if verified.status != 'signature valid':
+		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+	if sig_info['status'] != 'signature valid':
+		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug.' )
+
+	# TODO remove this
+	BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = '1598128933'
+
 	# check metadata to see if there's a newer version than what we're running
 	# note we use SOURCE_DATE_EPOCH to make version comparisons easy
 	latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
@@ -627,6 +644,7 @@ def upgrade():
 
 	print( "Yep, update is needed!" )
 	print( "TODO: fetch, validate, and install" )
+	print(metadata)
 	sys.exit(1)
 
 	sha256sum_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS" ].pop()
