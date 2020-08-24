@@ -498,9 +498,14 @@ def upgrade():
 	#########################
 
 	# only upgrade on linux, windows, and mac
-	if not CURRENT_PLATFORM.startswith( 'LINUX' ) \
-	 and not CURRENT_PLATFORM.startswith( 'WIN' ) \
-	 and not CURRENT_PLATFORM.startswith( 'DARWIN' ):
+	os_name_short = ''
+	if CURRENT_PLATFORM.startswith( 'LINUX' ):
+		os_name_short = 'lin'
+	if CURRENT_PLATFORM.startswith( 'WIN' ):
+		os_name_short = 'win'
+	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		os_name_short = 'mac'
+	if os_name_short == '':
 		raise RuntimeWarning( 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')' )
 
 	# get the absolute path to the file that the user executes to start buskill
@@ -552,6 +557,7 @@ def upgrade():
 	############################
 	# DETERMINE LATEST VERSION #
 	############################
+
 	metadata_filepath = os.path.join( CACHE_DIR, 'meta.json' )
 	signature_filepath = os.path.join( CACHE_DIR, 'meta.json.asc' )
 
@@ -594,15 +600,8 @@ def upgrade():
 				print( msg ); logging.debug( msg )
 				break
 
-	# if we tried all the mirrors and weren't able to get any response, abort
-	try:
-		with open( metadata_filepath, 'r' ) as fd:
-			metadata = json.loads( fd.read() ) 
-	except Exception as e:
-		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.' )
-		
-	if metadata == '':
-		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata contents.' )
+	msg = "\tDEBUG: Finished downloading update metadata. Checking signature."
+	print( msg ); logging.debug( msg )
 		
 	# open the detached signature and check it with gpg
 	with open( signature_filepath, 'rb' ) as fd:
@@ -630,6 +629,25 @@ def upgrade():
 	if sig_info['status'] != 'signature valid':
 		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug.' )
 
+	msg = "\tDEBUG: Signature is valid (" +str(sig_info)+ ")."
+	print( msg ); logging.debug( msg )
+
+	# try to load the metadata (this is done after signature so we don't load
+	# something malicious that may attack the json.loads() parser)
+	try:
+		with open( metadata_filepath, 'r' ) as fd:
+			metadata = json.loads( fd.read() ) 
+	except Exception as e:
+		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.' )
+		
+	# abort if it's empty
+	if metadata == '':
+		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata contents.' )
+
+	###########################
+	# DOWNLOAD LATEST VERSION #
+	###########################
+
 	# TODO remove this
 	BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = '1598128933'
 
@@ -637,38 +655,103 @@ def upgrade():
 	# note we use SOURCE_DATE_EPOCH to make version comparisons easy
 	latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
 	currentReleaseTime = int(BUSKILL_VERSION['SOURCE_DATE_EPOCH'])
+
+	msg = "DEBUG: Current version: " +str(currentReleaseTime)+ ".\n"
+	msg += "DEBUG: Latest version: " +str(latestReleaseTime)+ "."
+	print( msg ); logging.debug( msg )
+
 	if latestReleaseTime < currentReleaseTime:
 		msg = "INFO: Current version is latest version. No new updates available."
 		print( msg ); logging.info( msg )
 		return 1
 
-	print( "Yep, update is needed!" )
-	print( "TODO: fetch, validate, and install" )
+	# TODO: remove me
 	print(metadata)
-	sys.exit(1)
 
-	sha256sum_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS" ].pop()
+	# currently we only support x86_64 builds..
+	arch = 'x86_64'
+
+	sha256sums_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS']
 	sha256sum_filepath = os.path.join( CACHE_DIR, 'SHA256SUM' )
 
-	signature_url = [ item['browser_download_url'] for item in github_latest['assets'] if item['name'] == "SHA256SUMS.asc" ].pop()
+	signature_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS.asc']
 	signature_filepath = os.path.join( CACHE_DIR, 'SHA256SUM.asc' )
 
-	if CURRENT_PLATFORM.startswith( 'LINUX' ):
-		match = 'lin'
-	if CURRENT_PLATFORM.startswith( 'WIN' ):
-		match = 'win'
-	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-		match = 'mac'
-
-	archive_url = [ item['browser_download_url'] for item in github_latest['assets'] if match in item['name'] ].pop()
-	archive_filename = [ item['name'] for item in github_latest['assets'] if match in item['name'] ].pop()
+	archive_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)][os_name_short][arch]['archive']['url']
+	archive_filename = archive_urls[0].split('/')[-1]
 	archive_filepath = os.path.join( CACHE_DIR, archive_filename )
 
-	# TODO: determine if latest version is newer than our current version. if not, print info and return
+	# TODO: remove me
+	archive_urls.append( 'example.com/example.tar.gz' )
+	sha256sums_urls.append( 'example.com/SHA256SUMS' )
+	signature_urls.append( 'example.com/SHA256SUMS.asc' )
 
-	###########################
-	# DOWNLOAD LATEST VERSION #
-	###########################
+	# TODO: remove me
+	print( '--------------------------------------' )
+	print( 'arhcive_url:|' +str(archive_urls)+ '|' )
+	print( 'sha256sum_url:|' +str(sha256sums_urls)+ '|' )
+	print( 'signature_url:|' +str(signature_urls)+ '|' )
+
+	# shuffle all three URLs but shuffle them the same
+	start_state = random.getstate()
+	random.shuffle( archive_urls )
+	random.setstate( start_state)
+	random.shuffle( sha256sums_urls )
+	random.setstate( start_state)
+	random.shuffle( signature_urls )
+	random.setstate( start_state)
+
+	# TODO: remove me
+	print( '--------------------------------------' )
+	print( 'arhcive_url:|' +str(archive_urls)+ '|' )
+	print( 'sha256sum_url:|' +str(sha256sums_urls)+ '|' )
+	print( 'signature_url:|' +str(signature_urls)+ '|' )
+
+	# loop through each of our downloads
+	files = [ signature_urls, sha256sums_urls, archive_urls ]
+	for f in files:
+
+		# break out of loop if we've already all necessary files from
+		# some mirror in our list
+		if os.path.exists( archive_filepath ) \
+		 and os.path.exists( sha256sums_filepath ) \
+		 and os.path.exists( signature_filepath ): \
+			break
+
+		# try to download the metadata json file and its detached signature
+		for download in f:
+
+			msg = "DEBUG: Attempting to download '" +str(download)+ "'"
+			print( msg ); logging.debug( msg )
+
+			filename = download.split('/')[-1]
+			filepath = os.path.join( CACHE_DIR, filename )
+
+			try:
+				with urllib.request.urlopen( download, cafile=certifi.where() ) as url, \
+				 open( filepath, 'wb' ) as out_file:
+	
+					# don't download any files >100 MB
+					size_bytes = int(url.info().get('content-length'))
+					if size_bytes > 104857600:
+						msg = "\tFile too big; skipping (" +str(size_bytes)+ " bytes)"
+						print( msg ); logging.debug( msg )
+						continue
+	
+					shutil.copyfileobj(url, out_file)
+					msg = "\tDone"
+					print( msg ); logging.debug( msg )
+					break
+
+			except Exception as e:
+				msg = "\tFailed to download update; skipping (" +str(e)+ ")"
+				print( msg ); logging.debug( msg )
+				continue
+
+	print( "TODO: validate sig, validate integrity, and install" )
+	sys.exit(1)
+
+	# TODO: determine if latest version is newer than our current version. if not, print info and return
 
 	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url, \
 	 open( signature_filepath, 'wb' ) as out_file:
