@@ -600,6 +600,8 @@ def upgrade():
 				print( msg ); logging.debug( msg )
 				break
 
+	# CHECK SIGNATURE OF METADATA
+
 	msg = "\tDEBUG: Finished downloading update metadata. Checking signature."
 	print( msg ); logging.debug( msg )
 		
@@ -610,7 +612,7 @@ def upgrade():
 	# check that this main signature fingerprint meets our expectations
 	# bail if it a key was used other than the one we require
 	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
-		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+RELEASE_KEY_SUB_FINGERPRINT+' but got '+verified.fingerprint+')! Please report this as a bug.' )
+		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
 
 	# extract from our list of signatures any signatures made with exactly the
 	# keys we'd expect (check the master key and the subkey fingerprints)
@@ -625,9 +627,9 @@ def upgrade():
 	# check both the list of signatures and this other one. why not?
 	# bail if either is an invalid signature
 	if verified.status != 'signature valid':
-		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 	if sig_info['status'] != 'signature valid':
-		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug.' )
+		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 
 	msg = "\tDEBUG: Signature is valid (" +str(sig_info)+ ")."
 	print( msg ); logging.debug( msg )
@@ -672,10 +674,10 @@ def upgrade():
 	arch = 'x86_64'
 
 	sha256sums_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS']
-	sha256sum_filepath = os.path.join( CACHE_DIR, 'SHA256SUM' )
+	sha256sums_filepath = os.path.join( CACHE_DIR, 'SHA256SUMS' )
 
 	signature_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS.asc']
-	signature_filepath = os.path.join( CACHE_DIR, 'SHA256SUM.asc' )
+	signature_filepath = os.path.join( CACHE_DIR, 'SHA256SUMS.asc' )
 
 	archive_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)][os_name_short][arch]['archive']['url']
 	archive_filename = archive_urls[0].split('/')[-1]
@@ -731,9 +733,9 @@ def upgrade():
 				with urllib.request.urlopen( download, cafile=certifi.where() ) as url, \
 				 open( filepath, 'wb' ) as out_file:
 	
-					# don't download any files >100 MB
+					# don't download any files >200 MB
 					size_bytes = int(url.info().get('content-length'))
-					if size_bytes > 104857600:
+					if size_bytes > 209715200:
 						msg = "\tFile too big; skipping (" +str(size_bytes)+ " bytes)"
 						print( msg ); logging.debug( msg )
 						continue
@@ -748,10 +750,46 @@ def upgrade():
 				print( msg ); logging.debug( msg )
 				continue
 
-	print( "TODO: validate sig, validate integrity, and install" )
-	sys.exit(1)
+	# CHECK SIGNATURE OF RELEASE FILES
 
-	# TODO: determine if latest version is newer than our current version. if not, print info and return
+	msg = "DEBUG: Finished downloading update files. Checking signature."
+	print( msg ); logging.debug( msg )
+		
+	# TODO remove next 2 lines
+	print( 'payload sig filepath:|' +str(signature_filepath)+ '|' )
+	print( 'payload:|' +str(sha256sums_filepath)+ '|' )
+
+	# open the detached signature and check it with gpg
+	with open( signature_filepath, 'rb' ) as fd:
+		verified = gpg.verify_file( fd, sha256sums_filepath )
+
+	# check that this main signature fingerprint meets our expectations
+	# bail if it a key was used other than the one we require
+	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
+		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
+
+	# extract from our list of signatures any signatures made with exactly the
+	# keys we'd expect (check the master key and the subkey fingerprints)
+	sig_info = [ verified.sig_info[key] for key in verified.sig_info if verified.sig_info[key]['fingerprint'] == RELEASE_KEY_SUB_FINGERPRINT and verified.sig_info[key]['pubkey_fingerprint'] == RELEASE_KEY_FINGERPRINT ]
+
+	# if we couldn't find a signature that matched our requirements, bail
+	if sig_info == list():
+		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+	else:
+		sig_info = sig_info.pop()
+
+	# check both the list of signatures and this other one. why not?
+	# bail if either is an invalid signature
+	if verified.status != 'signature valid':
+		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+	if sig_info['status'] != 'signature valid':
+		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+
+	msg = "DEBUG: Signature is valid (" +str(sig_info)+ ")."
+	print( msg ); logging.debug( msg )
+
+	print( "TODO: validate integrity, and install" )
+	sys.exit(1)
 
 	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url, \
 	 open( signature_filepath, 'wb' ) as out_file:
@@ -775,7 +813,6 @@ def upgrade():
 
 	with open( sha256sum_filepath, 'rb' ) as fd:
 		verified = gpg.verify_file( fd, signature_filepath )
-		print(verified.sig_info)
 
 	# TODO: check if signature of our digest file is valid. if not, delete all downloads and abort with critical error
 
