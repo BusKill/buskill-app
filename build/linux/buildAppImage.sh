@@ -124,6 +124,7 @@ cp /usr/bin/gpg /tmp/kivy_appdir/opt/src/
 # output information about this build so the code can use it later in logs
 cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
+ 'VERSION': '${VERSION}',
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
  'SOURCE_DATE_EPOCH': '${SOURCE_DATE_EPOCH}',
@@ -255,7 +256,7 @@ popd # leave /tmp
 mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
-/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}.AppImage"
+/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
 ###############
 # OUTPUT INFO #
