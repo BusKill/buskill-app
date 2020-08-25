@@ -512,8 +512,6 @@ def integrity_is_ok( sha256sums_filepath, local_filepaths ):
   				data_chunk = fd.read(1024)
 
 		checksum = sha256sum.hexdigest()
-		print( checksum )
-		print( sha256sums[local_filename] )
 		if checksum != sha256sums[local_filename]:
 			return False
 
@@ -563,11 +561,10 @@ def upgrade():
 	EXE_PATH = sys.executable
 	EXE_DIR = os.path.split(EXE_PATH)[0]
 	EXE_FILE = os.path.split(EXE_PATH)[1]
-	# TODO: uncomment this block
-#	if EXE_FILE != 'buskill.AppImage' \
-#	 or EXE_FILE != 'buskill' \
-#	 or EXE_FILE != 'buskill.exe':
-#		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
+	if EXE_FILE != 'buskill.AppImage' \
+	 or EXE_FILE != 'buskill' \
+	 or EXE_FILE != 'buskill.exe':
+		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
 	# skip upgrade if we can't write to disk
 	if DATA_DIR == '':
@@ -578,9 +575,8 @@ def upgrade():
 		raise RuntimeWarning( 'Unable to upgrade. EXE_DIR not writeable (' +str(EXE_DIR)+ ')' )
 
 	# make sure we can overwrite the executable itself
-	# TODO: uncomment this block
-#	if not os.access(EXE_FILE, os.W_OK):
-#		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str(EXE_FILE)+ ')' )
+	if not os.access(EXE_FILE, os.W_OK):
+		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str(EXE_FILE)+ ')' )
 
 	#############
 	# SETUP GPG #
@@ -704,9 +700,6 @@ def upgrade():
 	###########################
 	# DOWNLOAD LATEST VERSION #
 	###########################
-
-	# TODO remove this
-	BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = '1598128933'
 
 	# check metadata to see if there's a newer version than what we're running
 	# note we use SOURCE_DATE_EPOCH to make version comparisons easy
@@ -839,24 +832,54 @@ def upgrade():
 	###########
 	# INSTALL #
 	###########
+	
+	msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(EXE_DIR)+ "'"
+	print( msg ); logging.debug( msg )
 
 	if os_name_short == 'lin':
-
-		import tarfile
-		archive_tarfile = tarfile.open( archive_filepath )
-
-		# get the path to the new executable
-		new_version_exe = EXE_DIR + '/' + archive_tarfile.getnames().pop()
 	
-		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(EXE_DIR)+ "'"
-		print( msg ); logging.debug( msg )
+		import tarfile
+		with tarfile.open( archive_filepath ) as archive_tarfile:
 
-		archive_tarfile.extractall( path=EXE_DIR )
-		return new_version_exe
+			# get the path to the new executable
+			new_version_exe0 = EXE_DIR + '/' + archive_tarfile.getnames().pop()
+			new_version_exe = new_version_exe0.split( '/' )
+			archive_dir = new_version_exe[-2]
+			new_version_exe = new_version_exe[0:-2] + [ new_version_exe[-1] ]
+			new_version_exe = '/'.join( new_version_exe )
+
+			archive_tarfile.extractall( path=EXE_DIR )
+
+		# move AppImage out of its single-file archive dir and delete the dir
+		os.rename( new_version_exe0, new_version_exe )
+		os.rmdir( EXE_DIR + '/' + archive_dir )
 
 	elif os_name_short == 'win':
-		pass
-	elif os_name_short == 'mac':
-		pass
 
-	# TODO: move our current version into some old dir
+		import zipfile
+		with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
+
+			# get the path to the new executable
+			new_version_exe = [ file for file in archive_zipfile.namelist() if 'buskill.exe' in file ][0]
+			new_version_exe = EXE_DIR + '/' + new_version_exe
+
+			archive_tarfile.extractall( path=EXE_DIR )
+
+	elif os_name_short == 'mac':
+
+		# create a new dir where we'll mount the dmg temporarily (since we can't
+		# extract DMGs and the python modules for extracting 7zip archives
+		# has many dependencies [so we don't use it])
+		dmg_mnt_path = os.path.join( CACHE_DIR, 'dmg_mnt' )
+		os.makedirs( dmg_mnt_path, mode=0o700 )
+		os.chmod( dmg_mnt_path, mode=0o0700 )
+
+		# mount the dmg, copy the .app out, and unmount
+		subprocess.run( ['hdiutil', 'attach', '-mountpoint', dmg_mnt_path, archive_filepath] )
+		app_path = os.listdir( dmg_mnt_path ).pop()
+		shutil.copy2( dmg_mnt_path +'/'+ app_path, EXE_DIR )
+		subprocess.run( ['hdiutil', 'detach', dmg_mnt_path] )
+
+		new_version_exe = EXE_DIR + '/' + app_path
+
+	return new_version_exe
