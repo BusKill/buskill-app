@@ -20,6 +20,7 @@ For more info, see: https://buskill.in/
 import platform, multiprocessing, subprocess
 import urllib.request, json, certifi, sys, os, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
+from hashlib import sha256
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -437,6 +438,7 @@ def armWin():
 
 	w = Notification()
 	win32gui.PumpMessages()
+
 #####################
 # TRIGGER FUNCTIONS #
 #####################
@@ -467,6 +469,55 @@ def triggerMac():
 		subprocess.run( ['pmset', 'displaysleepnow'] )
 	except FileNotFoundError as e:
 		subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] )
+
+#####################
+# UPGRADE FUNCTIONS #
+#####################
+
+def wipeCache():
+
+	if os.path.exists( CACHE_DIR ):
+		shutil.rmtree( CACHE_DIR )
+	os.makedirs( CACHE_DIR, mode=0o700 )
+	os.chmod( DATA_DIR, mode=0o0700 )
+
+# Takes the path (as a string) to a SHA256SUMS file and a list of paths to
+# local files. Returns true only if all files' checksums are present in the
+# SHA256SUMS file and their checksums match
+def integrity_is_ok( sha256sums_filepath, local_filepaths ):
+
+	# first we parse the SHA256SUMS file and convert it into a dictionary
+	sha256sums = dict()
+	with open( sha256sums_filepath ) as fd:
+		for line in fd:
+			# sha256 hashes are exactly 64 characters long
+			checksum = line[0:64]
+
+			# there is one space followed by one metadata character between the
+			# checksum and the filename in the `sha256sum` command output
+			filename = os.path.split( line[66:] )[1].strip()
+			sha256sums[filename] = checksum
+
+	# now loop through each file that we were asked to check and confirm its
+	# checksum matches what was listed in the SHA256SUMS file
+	for local_file in local_filepaths:
+
+		local_filename = os.path.split( local_file )[1]
+
+		sha256sum = sha256()
+		with open( local_file, 'rb' ) as fd:
+  			data_chunk = fd.read(1024)
+  			while data_chunk:
+  				sha256sum.update(data_chunk)
+  				data_chunk = fd.read(1024)
+
+		checksum = sha256sum.hexdigest()
+		print( checksum )
+		print( sha256sums[local_filename] )
+		if checksum != sha256sums[local_filename]:
+			return False
+
+	return True
 
 def upgrade():
 
@@ -612,6 +663,7 @@ def upgrade():
 	# check that this main signature fingerprint meets our expectations
 	# bail if it a key was used other than the one we require
 	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
+		wipeCache()
 		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
 
 	# extract from our list of signatures any signatures made with exactly the
@@ -620,6 +672,7 @@ def upgrade():
 
 	# if we couldn't find a signature that matched our requirements, bail
 	if sig_info == list():
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
 	else:
 		sig_info = sig_info.pop()
@@ -627,8 +680,10 @@ def upgrade():
 	# check both the list of signatures and this other one. why not?
 	# bail if either is an invalid signature
 	if verified.status != 'signature valid':
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 	if sig_info['status'] != 'signature valid':
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 
 	msg = "\tDEBUG: Signature is valid (" +str(sig_info)+ ")."
@@ -667,9 +722,6 @@ def upgrade():
 		print( msg ); logging.info( msg )
 		return 1
 
-	# TODO: remove me
-	print(metadata)
-
 	# currently we only support x86_64 builds..
 	arch = 'x86_64'
 
@@ -683,17 +735,6 @@ def upgrade():
 	archive_filename = archive_urls[0].split('/')[-1]
 	archive_filepath = os.path.join( CACHE_DIR, archive_filename )
 
-	# TODO: remove me
-	archive_urls.append( 'example.com/example.tar.gz' )
-	sha256sums_urls.append( 'example.com/SHA256SUMS' )
-	signature_urls.append( 'example.com/SHA256SUMS.asc' )
-
-	# TODO: remove me
-	print( '--------------------------------------' )
-	print( 'arhcive_url:|' +str(archive_urls)+ '|' )
-	print( 'sha256sum_url:|' +str(sha256sums_urls)+ '|' )
-	print( 'signature_url:|' +str(signature_urls)+ '|' )
-
 	# shuffle all three URLs but shuffle them the same
 	start_state = random.getstate()
 	random.shuffle( archive_urls )
@@ -702,12 +743,6 @@ def upgrade():
 	random.setstate( start_state)
 	random.shuffle( signature_urls )
 	random.setstate( start_state)
-
-	# TODO: remove me
-	print( '--------------------------------------' )
-	print( 'arhcive_url:|' +str(archive_urls)+ '|' )
-	print( 'sha256sum_url:|' +str(sha256sums_urls)+ '|' )
-	print( 'signature_url:|' +str(signature_urls)+ '|' )
 
 	# loop through each of our downloads
 	files = [ signature_urls, sha256sums_urls, archive_urls ]
@@ -750,14 +785,12 @@ def upgrade():
 				print( msg ); logging.debug( msg )
 				continue
 
-	# CHECK SIGNATURE OF RELEASE FILES
+	####################
+	# VERIFY SIGNATURE #
+	####################
 
 	msg = "DEBUG: Finished downloading update files. Checking signature."
 	print( msg ); logging.debug( msg )
-		
-	# TODO remove next 2 lines
-	print( 'payload sig filepath:|' +str(signature_filepath)+ '|' )
-	print( 'payload:|' +str(sha256sums_filepath)+ '|' )
 
 	# open the detached signature and check it with gpg
 	with open( signature_filepath, 'rb' ) as fd:
@@ -766,6 +799,7 @@ def upgrade():
 	# check that this main signature fingerprint meets our expectations
 	# bail if it a key was used other than the one we require
 	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
+		wipeCache()
 		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
 
 	# extract from our list of signatures any signatures made with exactly the
@@ -774,6 +808,7 @@ def upgrade():
 
 	# if we couldn't find a signature that matched our requirements, bail
 	if sig_info == list():
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
 	else:
 		sig_info = sig_info.pop()
@@ -781,46 +816,28 @@ def upgrade():
 	# check both the list of signatures and this other one. why not?
 	# bail if either is an invalid signature
 	if verified.status != 'signature valid':
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 	if sig_info['status'] != 'signature valid':
+		wipeCache()
 		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
 
 	msg = "DEBUG: Signature is valid (" +str(sig_info)+ ")."
 	print( msg ); logging.debug( msg )
 
-	print( "TODO: validate integrity, and install" )
-	sys.exit(1)
-
-	with urllib.request.urlopen( sha256sum_url, cafile=certifi.where() ) as url, \
-	 open( signature_filepath, 'wb' ) as out_file:
-		#sha256sum_data = url.read().decode()
-		shutil.copyfileobj(url, out_file)
-
-	# TODO: check the size of the downloads and refuse if it's something huge
-	with urllib.request.urlopen( signature_url, cafile=certifi.where() ) as url, \
-	 open( sha256sum_filepath, 'wb' ) as out_file:
-		#signature_data = url.read().decode()
-		shutil.copyfileobj(url, out_file)
-
-	# TODO: check the size of the downloads and refuse if it's something huge
-	with urllib.request.urlopen( archive_url, cafile=certifi.where() ) as url, \
-	 open( archive_filepath, 'wb' ) as out_file:
-		shutil.copyfileobj(url, out_file)
-
-	####################
-	# VERIFY SIGNATURE #
-	####################
-
-	with open( sha256sum_filepath, 'rb' ) as fd:
-		verified = gpg.verify_file( fd, signature_filepath )
-
-	# TODO: check if signature of our digest file is valid. if not, delete all downloads and abort with critical error
-
-	# TODO: check if download's checksum matches our signed/verified digest file. If not, delete all downloads and abort with critical error
-
 	####################
 	# VERIFY INTEGRITY #
 	####################
+
+	if not integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
+		wipeCache()
+		raise RuntimeError( 'ERROR: Integrity check failed. ')
+	else:
+		print( 'sig looks good!' )
+
+	# TODO: check if download's checksum matches our signed/verified digest file. If not, delete all downloads and abort with critical error
+	print( "TODO: install" )
+	sys.exit(1)
 
 	# TODO verify that the downloaded archive's digest matches what's specified of the now-trustworthy SHA256SUMS file. If not, delete all downloads and abort with critical error
 
