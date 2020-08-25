@@ -70,6 +70,13 @@ if [ -z ${GITHUB_REF} ]; then
 	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
 fi
 
+VERSION=`git show-ref | head -n1 | awk '{print $2}' | awk -F '/' '{print $NF}'`
+if [[ "${VERSION}" = "dev" ]]; then
+	VERSION="${SOURCE_DATE_EPOCH}"
+fi
+
+DMG_FILENAME="${APP_NAME}-mac-${VERSION}-x86_64.dmg"
+
 ###################
 # INSTALL DEPENDS #
 ###################
@@ -125,6 +132,7 @@ cp /tmp/libusb-1.0.23/libusb/.libs/libusb-1.0.dylib src/
 # output information about this build so the code can use it later in logs
 cat > src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
+ 'VERSION': '${VERSION}',
  'GITHUB_REF': '${GITHUB_REF}',
  'GITHUB_SHA': '${GITHUB_SHA}',
  'SOURCE_DATE_EPOCH': '${SOURCE_DATE_EPOCH}',
@@ -200,7 +208,7 @@ popd
 
 # create the dist dir for our result to be uploaded as an artifact
 mkdir -p ../dist
-cp "dist/${APP_NAME}.dmg" ../dist/
+cp "dist/${DMG_FILENAME}" ../dist/
 
 #######################
 # OUTPUT VERSION INFO #
