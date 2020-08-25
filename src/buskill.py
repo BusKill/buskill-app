@@ -832,26 +832,31 @@ def upgrade():
 	if not integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
 		wipeCache()
 		raise RuntimeError( 'ERROR: Integrity check failed. ')
-	else:
-		print( 'sig looks good!' )
 
-	# TODO: check if download's checksum matches our signed/verified digest file. If not, delete all downloads and abort with critical error
-	print( "TODO: install" )
-	sys.exit(1)
-
-	# TODO verify that the downloaded archive's digest matches what's specified of the now-trustworthy SHA256SUMS file. If not, delete all downloads and abort with critical error
+	msg = "DEBUG: New version's integrity is valid."
+	print( msg ); logging.debug( msg )
 
 	###########
 	# INSTALL #
 	###########
 
-	# TODO: move the new version out of cache into our EXE_DIR
+	if os_name_short == 'lin':
+
+		import tarfile
+		archive_tarfile = tarfile.open( archive_filepath )
+
+		# get the path to the new executable
+		new_version_exe = EXE_DIR + '/' + archive_tarfile.getnames().pop()
+	
+		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(EXE_DIR)+ "'"
+		print( msg ); logging.debug( msg )
+
+		archive_tarfile.extractall( path=EXE_DIR )
+		return new_version_exe
+
+	elif os_name_short == 'win':
+		pass
+	elif os_name_short == 'mac':
+		pass
 
 	# TODO: move our current version into some old dir
-
-	#print( sha256sum_data )
-	#print( signature_data )
-
-	#print(data)
-
-	# TODO: determine if the latest version is newer than our current version

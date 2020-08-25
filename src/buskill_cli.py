@@ -82,11 +82,14 @@ def BusKillCLI():
 
 	if args.upgrade:
 		try:
-			buskill.upgrade()
+			new_version_exe = buskill.upgrade()
 		except RuntimeWarning as e:
 			msg = "ERROR: Unable to upgrade buskill\n\t" +str(e)
 			print( msg ); logging.error( msg )
 			sys.exit(1)
+
+		print( "Upgrade complete. New executable is '" +str(new_version_exe)+ "'" )
+
 		sys.exit(0)
 
 	if args.arm:
