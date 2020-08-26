@@ -562,8 +562,8 @@ def upgrade():
 	EXE_DIR = os.path.split(EXE_PATH)[0]
 	EXE_FILE = os.path.split(EXE_PATH)[1]
 	if not EXE_FILE.endswith('.AppImage') \
-	 or EXE_FILE != 'buskill' \
-	 or EXE_FILE != 'buskill.exe':
+	 and EXE_FILE != 'buskill' \
+	 and EXE_FILE != 'buskill.exe':
 		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
 	# skip upgrade if we can't write to disk
