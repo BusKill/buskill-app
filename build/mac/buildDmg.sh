@@ -196,9 +196,10 @@ pushd dist
 
 # change the timestamps of all the files in the appdir or reproducable builds
 find ${APP_NAME}.app -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
+mv ${APP_NAME}.app ${APP_NAME}-${VERSION}.app
 
-hdiutil create ./${APP_NAME}.dmg -srcfolder ${APP_NAME}.app -ov
-touch -h -d "@${SOURCE_DATE_EPOCH}" "${APP_NAME}.dmg"
+hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_NAME}-${VERSION}.app -ov
+touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
 
 popd
 
