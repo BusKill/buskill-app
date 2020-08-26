@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, json, certifi, sys, os, shutil, tempfile, random, gnupg
+import urllib.request, re, json, certifi, sys, os, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
 from hashlib import sha256
 
@@ -559,11 +559,21 @@ def upgrade():
 
 	# get the absolute path to the file that the user executes to start buskill
 	EXE_PATH = sys.executable
+
+	# on MacOS, we treat the .app directory like an executable. Because Apple.
+	if os_name_short == 'mac':
+		EXE_PATH = EXE_PATH.split('/')[0:-3]
+		EXE_PATH = '/'.join( EXE_PATH )
+
+	# split the EXE_PATH into dir & file parts
 	EXE_DIR = os.path.split(EXE_PATH)[0]
 	EXE_FILE = os.path.split(EXE_PATH)[1]
-	if not EXE_FILE.endswith('.AppImage') \
-	 and EXE_FILE != 'buskill' \
-	 and EXE_FILE != 'buskill.exe':
+
+	# exit if the executable that we're supposed to update doesn't match what
+	# we expect (this can happen if the exe is actually the python interpreter)
+	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
+	 and not re.match( ".*buskill[^/]*\.app$", EXE_FILE ) \
+	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ) \
 		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
 	# skip upgrade if we can't write to disk
@@ -832,6 +842,11 @@ def upgrade():
 	###########
 	# INSTALL #
 	###########
+
+	# TODO delete next two lines
+	print( "EXE_PATH:|" +EXE_PATH+ "|" )
+	print( "EXE_DIR:|" +EXE_DIR+ "|" )
+	print( "EXE_FILE:|" +EXE_FILE+ "|" )
 	
 	msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(EXE_DIR)+ "'"
 	print( msg ); logging.debug( msg )
