@@ -573,7 +573,7 @@ def upgrade():
 	# we expect (this can happen if the exe is actually the python interpreter)
 	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
 	 and not re.match( ".*buskill[^/]*\.app$", EXE_FILE ) \
-	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ) \
+	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ): \
 		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
 	# skip upgrade if we can't write to disk
