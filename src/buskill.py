@@ -575,8 +575,8 @@ def upgrade():
 		raise RuntimeWarning( 'Unable to upgrade. EXE_DIR not writeable (' +str(EXE_DIR)+ ')' )
 
 	# make sure we can overwrite the executable itself
-	if not os.access(EXE_FILE, os.W_OK):
-		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str(EXE_FILE)+ ')' )
+	if not os.access( os.path.join(EXE_DIR, EXE_FILE), os.W_OK):
+		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str( os.path.join(EXE_DIR, EXE_FILE) )+ ')' )
 
 	#############
 	# SETUP GPG #
