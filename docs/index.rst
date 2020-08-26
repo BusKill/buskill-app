@@ -27,21 +27,30 @@ For information on how to build your own BusKill cable, see :ref:`hardware_dev`.
   source: `Michael Altfield's tech blog <https://tech.michaelaltfield.net/2020/01/02/buskill-laptop-kill-cord-dead-man-switch/>`_
 
 .. toctree::
+   :caption: What is BusKill?:
+
+   introduction/index
+   faq
+
+.. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   introduction/index
    hardware_usr/index
    software_usr/index
    hardware_dev/index
    software_dev/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: More:
+
    security/index
    support
    contributing
    changelog
    license
    attribution
-
 
 Indices and tables
 ==================

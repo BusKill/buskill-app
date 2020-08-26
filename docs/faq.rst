@@ -5,10 +5,24 @@ Frequently Asked Questions
 
 .. _faq_triggers:
 
+Q: What is BusKill?
+-------------------
+
+BusKill is the world's first laptop `kill cord <https://en.wikipedia.org/wiki/Kill_cord>`_. It's a hardware `Dead Man's Switch <https://en.wikipedia.org/wiki/Dead_man%27s_switch>`_ that can trigger your laptop to lock, shutdown, or self-destruct if your machine is physically separated from you.
+
+For a more detailed explanation on what BusKill is and who it's designed for, see :ref:`what`
+
+.. _faq_buy:
+
+Q: Where can I **buy** a BusKill cable?
+---------------------------------------
+
+You can `purchase a BusKill cable <https://buskill.in/buy>`_ from our website.
+
 Q: What actions can I trigger with BusKill?
 -------------------------------------------
 
-Anything scriptable! Currently BusKill supports locking your screen and shutting down your computer.
+Anything scriptable! Currently the BusKill App supports locking your screen and shutting down your computer.
 
 .. _faq_selfdestruct:
 
@@ -18,6 +32,22 @@ Q: Self-destruct?!? Will this brick my computer?
 No. Advanced users can add triggers that wipe RAM and encryption keys. This self-destruct sequence will make all of the data previously stored on a machine with Full Disk Encryption permanently useless. Note that this "self-destruct" sequence destroys the data only, not the hardware.
 
 **This self-destruct trigger is not included in BusKill by default.** So for most users, the worst that can happen is your machine powers off. No data loss. No fried hardware.
+
+.. _faq_false_positives:
+
+Q: What about false-positives?
+--------------------------------------------------------------------------------------------
+BusKill's breakaway connector uses strong magnets that decreases the risk of false-positives.
+
+That said, it *is* designed to breakaway, so if you accidentally trigger BusKill (by, say, standing up to get a cup of coffee without disarming BusKill), then the worst that can happen (if you're using the BusKill app without manually adding ``auxilary triggers``) is that your computer will shutdown.
+
+Here's some tips to avoid false-positives:
+
+ #. When using BusKill, work on a sturdy table with a comfortable chair.
+ #. Avoid moving your laptop after arming BusKill in the app.
+ #. The first few days, limit yourself to just the ``lock screen`` trigger to avoid loosing your work as you get used to disarming BusKill before taking toilet breaks.
+
+See also :ref:`faq_bluetooth`
 
 .. _faq_clone:
 
@@ -40,13 +70,6 @@ Q: But bluetooth...
 -------------------
 
 Using a radio-based Dead Man Switch introduces complexity, delays, and an increased vector of attack. BusKill is a simple hardware kill cord and is therefore more secure than any wireless solution.
-
-.. _faq_buy:
-
-Q: Where can I **buy** a BusKill cable?
----------------------------------------
-
-You can `purchase a BusKill cable <https://buskill.in/buy>`_ from our website.
 
 .. _faq_follow:
 
