@@ -877,7 +877,7 @@ def upgrade():
 		# mount the dmg, copy the .app out, and unmount
 		subprocess.run( ['hdiutil', 'attach', '-mountpoint', dmg_mnt_path, archive_filepath] )
 		app_path = os.listdir( dmg_mnt_path ).pop()
-		shutil.copy2( dmg_mnt_path +'/'+ app_path, EXE_DIR )
+		shutil.copytree( dmg_mnt_path +'/'+ app_path, EXE_DIR )
 		subprocess.run( ['hdiutil', 'detach', dmg_mnt_path] )
 
 		new_version_exe = EXE_DIR + '/' + app_path
