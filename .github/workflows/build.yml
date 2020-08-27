@@ -76,11 +76,6 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: Windows executable (x86_64)
-        path: dist/
-
-    - uses: actions/upload-artifact@v2
-      with:
         name: buskill-windows-x86_64
         path: dist/
 

@@ -229,7 +229,7 @@ New-Item -Path dist -Type Directory | Out-String
 cp -r .\pyinstaller\dist\buskill "dist/$env:ARCHIVE_DIR" | Out-String
 
 cd dist
-Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\*' | Out-String
+Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
 
 #######################
 # OUTPUT VERSION INFO #
