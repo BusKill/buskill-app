@@ -567,12 +567,17 @@ def upgrade():
 
 	# on Windows, PyInstaller produces a dir, not a self-contained exe
 	if os_name_short == 'win':
-		EXE_PATH = EXE_PATH.split('/')[0:-1]
-		EXE_PATH = '/'.join( EXE_PATH )
+		EXE_PATH = EXE_PATH.split('\\')[0:-1]
+		EXE_PATH = '\\'.join( EXE_PATH )
 
 	# split the EXE_PATH into dir & file parts
 	EXE_DIR = os.path.split(EXE_PATH)[0]
 	EXE_FILE = os.path.split(EXE_PATH)[1]
+
+	# TODO delete next three lines
+	print( "EXE_PATH:|" +EXE_PATH+ "|" )
+	print( "EXE_DIR:|" +EXE_DIR+ "|" )
+	print( "EXE_FILE:|" +EXE_FILE+ "|" )
 
 	# exit if the executable that we're supposed to update doesn't match what
 	# we expect (this can happen if the exe is actually the python interpreter)
@@ -848,7 +853,7 @@ def upgrade():
 	# INSTALL #
 	###########
 
-	# TODO delete next two lines
+	# TODO delete next three lines
 	print( "EXE_PATH:|" +EXE_PATH+ "|" )
 	print( "EXE_DIR:|" +EXE_DIR+ "|" )
 	print( "EXE_FILE:|" +EXE_FILE+ "|" )
