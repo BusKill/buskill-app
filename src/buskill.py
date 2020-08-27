@@ -577,7 +577,7 @@ def upgrade():
 	# exit if the executable that we're supposed to update doesn't match what
 	# we expect (this can happen if the exe is actually the python interpreter)
 	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
-	 and not re.match( ".*buskill[^/]*\.app$", EXE_FILE ) \
+	 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
 	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ): \
 		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
 
