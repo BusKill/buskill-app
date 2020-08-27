@@ -58,6 +58,14 @@ if ( ! $env:GITHUB_SHA ){
 	$env:GITHUB_SHA="???"
 }
 
+$env:VERSION="$( git show-ref | select -first 1 )"
+$env:VERSION="$( $env:VERSION.Split( "/") | select -last 1 )"
+if ( $env:VERSION -eq 'dev' ){
+	VERSION="$env:SOURCE_DATE_EPOCH"
+}
+
+$env:ARCHIVE_DIR="buskill-win-$env:VERSION-x86_64"
+
 ########
 # INFO #
 ########
@@ -117,6 +125,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-
 BUSKILL_VERSION = {
+ 'VERSION': '$env:VERSION',
  'GITHUB_REF': '$env:GITHUB_REF',
  'GITHUB_SHA': '$env:GITHUB_SHA',
  'SOURCE_DATE_EPOCH': '$env:SOURCE_DATE_EPOCH',
@@ -217,7 +226,10 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buski
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\buskill dist/buskill-x86_64 | Out-String
+cp -r .\pyinstaller\dist\buskill "dist/$env:ARCHIVE_DIR" | Out-String
+
+cd dist
+Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\*' | Out-String
 
 #######################
 # OUTPUT VERSION INFO #

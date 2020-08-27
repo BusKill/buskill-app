@@ -84,10 +84,6 @@ jobs:
         name: buskill-windows-x86_64
         path: dist/
 
-    - name: Create Release .zip
-      run: 'Compress-Archive -DestinationPath buskill-windows-x86_64.${{ github.run_id }}.zip -Path dist\*'
-      shell: powershell
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -101,14 +97,14 @@ jobs:
 
     - name: Upload Release Asset
       id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: buskill-windows-x86_64.${{ github.run_id }}.zip
-        asset_name: buskill-windows-x86_64.${{ github.run_id }}.zip
-        asset_content_type: application/zip
+        RELEASE_ID: ${{ steps.create_release.outputs.id }}
+      run: |
+        cd dist
+        RELEASE_FILE="`ls -1 | grep buskill-win*.zip | head -n1`"
+        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+      shell: bash
 
     - name: Trigger cryptographic signature workflow
       env:

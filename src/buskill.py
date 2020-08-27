@@ -875,7 +875,7 @@ def upgrade():
 		with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
 
 			# get the path to the new executable
-			new_version_exe = [ file for file in archive_zipfile.namelist() if 'buskill.exe' in file ][0]
+			new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
 			new_version_exe = EXE_DIR + '/' + new_version_exe
 
 			archive_tarfile.extractall( path=EXE_DIR )
