@@ -886,7 +886,7 @@ def upgrade():
 
 			# get the path to the new executable
 			new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
-			new_version_exe = EXE_DIR + '/' + new_version_exe
+			new_version_exe = EXE_DIR + '\\' + new_version_exe
 
 			archive_zipfile.extractall( path=EXE_DIR )
 
