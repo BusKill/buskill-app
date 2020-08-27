@@ -565,6 +565,11 @@ def upgrade():
 		EXE_PATH = EXE_PATH.split('/')[0:-3]
 		EXE_PATH = '/'.join( EXE_PATH )
 
+	# on Windows, PyInstaller produces a dir, not a self-contained exe
+	if os_name_short == 'win':
+		EXE_PATH = EXE_PATH.split('/')[0:-1]
+		EXE_PATH = '/'.join( EXE_PATH )
+
 	# split the EXE_PATH into dir & file parts
 	EXE_DIR = os.path.split(EXE_PATH)[0]
 	EXE_FILE = os.path.split(EXE_PATH)[1]
