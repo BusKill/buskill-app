@@ -61,7 +61,7 @@ if ( ! $env:GITHUB_SHA ){
 $env:VERSION="$( git show-ref | select -first 1 )"
 $env:VERSION="$( $env:VERSION.Split( "/") | select -last 1 )"
 if ( $env:VERSION -eq 'dev' ){
-	VERSION="$env:SOURCE_DATE_EPOCH"
+	$env:VERSION="$env:SOURCE_DATE_EPOCH"
 }
 
 $env:ARCHIVE_DIR="buskill-win-$env:VERSION-x86_64"

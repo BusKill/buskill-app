@@ -878,7 +878,7 @@ def upgrade():
 			new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
 			new_version_exe = EXE_DIR + '/' + new_version_exe
 
-			archive_tarfile.extractall( path=EXE_DIR )
+			archive_zipfile.extractall( path=EXE_DIR )
 
 	elif os_name_short == 'mac':
 
