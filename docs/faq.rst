@@ -49,6 +49,19 @@ Here's some tips to avoid false-positives:
 
 See also :ref:`faq_bluetooth`
 
+.. _faq_interdiction:
+
+Q: What about interdiction?
+--------------------------------------------------------------------------------------------
+
+Unfettered physical access can defeat most security, and installation of malicious software or hardware implants is a real risk for shipping.
+
+We don't consider hologram stickers or tamper-evident tape/crisps/glitter to be sufficient solutions to supply-chain security. Rather, the solution to these attacks is to build open-source, disassembleable, and easily inspectable hardware whose integrity can be validated without damaging the device and without sophisticated technology.
+
+Fortunately, the requirements for BusKill's hardware components are simple, making integrity verification relatively easy.
+
+If you'd like to help BusKill make our open-source cable more resistant to interdiction attacks, please `contact us <https://buskill.in/contact/>`_ about designing :ref:`verifiable hardware components <wishlist_hardware>`.
+
 .. _faq_clone:
 
 Q: Could an attacker clone my BusKill drive and quickly insert it before stealing my laptop?

@@ -102,6 +102,8 @@ pushd /tmp
 popd
 mv /tmp/squashfs-root /tmp/kivy_appdir
 
+# INSTALL LOCAL PIP PACKAGES
+
 # install our pip depends from the files in the repo since pip doesn't provide
 # decent authentication and integrity checks on what it downloads from PyPI
 #  * https://security.stackexchange.com/a/234098/213165
@@ -109,8 +111,33 @@ ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-ins
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
-# TODO: pip download & verify sigs with gpg before install
-/tmp/kivy_appdir/opt/python*/bin/python* -m pip install python-gnupg
+# INSTALL LATEST PIP PACKAGES
+# (this can only be done for packages that are cryptographically signed
+#  by the developer)
+
+# python-gnupg
+#  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
+#  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+/tmp/kivy_appdir/opt/python*/bin/python* -m pip download python-gnupg
+filename="`ls -1 | head -n1`"
+signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+wget "${signature_url}"
+
+mkdir gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+rm -rf "${tmpDir}"
 
 # add our code to the AppDir
 rsync -a src /tmp/kivy_appdir/opt/

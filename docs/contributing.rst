@@ -16,6 +16,8 @@ Below is a list of items on our TODO list. If you'd like to help us tackle these
 
 Please be aware that any contributions you make will be made open-source. See :ref:`license` for more info.
 
+.. _wishlist_software:
+
 Software
 ^^^^^^^^
 
@@ -42,6 +44,8 @@ Here's some items on our wish list that you can help contribute to:
 #. Create a `spreadsheet extension in sphinx <https://stackoverflow.com/questions/62682095/how-to-add-a-spreadsheet-in-read-the-docs>`_ that converts LibreOffice Calc documents (with formulas in them) into csv format (using ``localc``) at build-time for creating `BOM <https://en.wikipedia.org/wiki/Bill_of_materials>`_ tables in reST documents.
 
 #. Create a sphinx `part library <https://wiki.opensourceecology.org/wiki/Hydraulic_Fitting_Library>`_ extension that does for .stl and `FreeCAD <https://www.freecadweb.org/>`_ files what `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_ does `for .py files <https://medium.com/@eikonomega/getting-started-with-sphinx-autodoc-part-1-2cebbbca5365#011c>`_.
+
+.. _wishlist_hardware:
 
 Hardware
 ^^^^^^^^

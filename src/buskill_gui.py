@@ -31,7 +31,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 
 from kivy.core.window import Window
-Window.size = ( 480, 800 )
+Window.size = ( 300, 500 )
 
 from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
@@ -54,6 +54,12 @@ class MainWindow(BoxLayout):
 
 	toggle_btn = ObjectProperty(None)
 	status = ObjectProperty(None)
+	menu = ObjectProperty(None)
+
+	def toggleMenu(self):
+
+		# TODO make this slid-out a menu drawer on the left
+		print( 'foo' )
 
 	def toggleBusKill(self):
 

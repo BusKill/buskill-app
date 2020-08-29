@@ -10,7 +10,7 @@ BusKill is a laptop kill cord that can trigger your computer to lock or shutdown
   <img src=".github-assets/busKill_demo.gif?raw=true" alt="BusKill Demo Video"/>
 </p>
 
-For more information on how to buy or build your own BusKill cable, see the [BusKill Website](https://www.buskill.in):
+For more information on how to [buy](https://www.buskill.in/buy) or build your own BusKill cable, see the [BusKill Website](https://www.buskill.in):
 
  * [https://www.buskill.in](https://www.buskill.in)
 

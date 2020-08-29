@@ -30,27 +30,44 @@
 		on_release: root.fileBugReport()
 
 <MainWindow>:
+	orientation: 'vertical'
+	size_hint: ( 1, 0.95 )
+	pos_hint: {'top': 1}
 
 	toggle_btn: toggle_btn
 	status: status
 
-	orientation: 'vertical'
-	pos_hint: {'center_x': 0.5, 'top': 0.95}
-	size_hint: ( 0.9, 0.9 )
-	spacing: 10
+	ActionBar:
 
-	Label:
-		id: status 
-		text: "BusKill is currently disarmed."
-		size_hint: (1,2)
-		halign: 'center'
-		valign: 'middle'
+		ActionView:
+			id: menu
 
-	Button:
-		id: toggle_btn
-		text: "Arm"
-		size_hint: (1,1)
-		halign: 'center'
-		valign: 'middle'
-		on_release: root.toggleBusKill()
+			ActionPrevious:
+				with_previous: False
+				app_icon: 'images/menu.png'
+				app_icon_width: 30
+				title: '\u2630 BusKill'
+				on_release: root.toggleMenu()
+
+	BoxLayout:
+
+		orientation: 'vertical'
+		size_hint: ( 0.9, 1 )
+		pos_hint: {'center_x': 0.5, 'top': 1}
+		spacing: 10
+
+		Label:
+			id: status 
+			text: "BusKill is currently disarmed."
+			size_hint: (1,2)
+			halign: 'center'
+			valign: 'middle'
+
+		Button:
+			id: toggle_btn
+			text: "Arm"
+			size_hint: (1,1)
+			halign: 'center'
+			valign: 'middle'
+			on_release: root.toggleBusKill()
 
