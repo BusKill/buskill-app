@@ -15,6 +15,7 @@ This project would not have been possible without the following tools and servic
  * `Kivy <https://kivy.org/>`_
  * `libusb <https://libusb.info/>`_
  * `libusb1 <https://pypi.org/project/libusb1/>`_
+ * `python-gnupg <https://pypi.org/project/python-gnupg/>`_
  * `AppImage <https://appimage.org/>`_
  * `PyInstaller <https://www.pyinstaller.org/>`_
  * `Vim <https://www.vim.org/>`_ 

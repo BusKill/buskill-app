@@ -111,6 +111,9 @@ ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-ins
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
 ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
+# TODO: change to pinned local install
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install kivymd
+
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
 #  by the developer)
@@ -137,6 +140,7 @@ if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
 fi
+${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
 rm -rf "${tmpDir}"
 
 # add our code to the AppDir
