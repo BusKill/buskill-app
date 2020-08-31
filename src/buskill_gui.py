@@ -37,6 +37,9 @@ from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
+from kivymd.app import MDApp
+from kivymd.theming import ThemeManager
+
 import logging
 logger = logging.getLogger( __name__ )
 
@@ -68,11 +71,12 @@ class MainWindow(BoxLayout):
 		if buskill.isArmed():
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
-			self.toggle_btn.background_color = [1,0,0,1]
+			self.toggle_btn.md_bg_color = [1,0,0,1]
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
-			self.toggle_btn.background_color = [1,1,1,1]
+			#self.toggle_btn.background_color = [1,1,1,1]
+			self.toggle_btn.md_bg_color = self.primary_color
 
 class CriticalError(BoxLayout):
 
@@ -84,9 +88,15 @@ class CriticalError(BoxLayout):
 	def fileBugReport( self ):
 		# TODO: make this a redirect on buskill.in so old versions aren't tied
 		#       to github.com
-		webbrowser.open( 'https://github.com/BusKill/buskill-app/issues' )
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class BusKill(App):
+class BusKill(MDApp):
+
+	def __init__(self, **kwargs):
+		self.title = "BusKill"
+		self.theme_cls.theme_style = "Dark"
+		self.theme_cls.primary_palette = "Blue"
+		super().__init__(**kwargs)
 
 	buskill.init()
 

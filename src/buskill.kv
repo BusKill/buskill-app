@@ -8,6 +8,9 @@
 # Version: 0.1
 ################################################################################
 
+#:import MDToolbar kivymd.uix.toolbar
+#:import MDLabel kivymd.uix.label
+
 <CriticalError>:
 
 	msg: msg
@@ -37,26 +40,35 @@
 	toggle_btn: toggle_btn
 	status: status
 
+	primary_color: app.theme_cls.primary_color
+	red_color: 95.7,26.3,21.2,1
+
 	ActionBar:
 
 		ActionView:
-			id: menu
+			background_image: 'images/white.png'
+			background_color: app.theme_cls.primary_color
 
 			ActionPrevious:
 				with_previous: False
 				app_icon: 'images/menu.png'
-				app_icon_width: 30
-				title: 'BusKill'
+				markup: True
+				title: '[font=RobotoMedium][size=20]BusKill[/size][/font]'
 				on_release: root.toggleMenu()
 
 			ActionButton:
-				text: 'A'
+				text: '[font=Icons]\U000F0020[/font]'
+				markup: True
 			ActionButton:
 				text: 'B'
 			ActionButton:
 				text: 'C'
 			ActionButton:
 				text: 'D'
+
+	MDToolbar:
+		title: 'BusKill'
+		right_action_items: [ ['magnify', lambda x: print(x)], ['coffee', lambda x: print(x)], ['duck', lambda x: print(x)], ['earth', lambda x: print(app.theme_cls)] ]
 
 	BoxLayout:
 
@@ -65,16 +77,18 @@
 		pos_hint: {'center_x': 0.5, 'top': 1}
 		spacing: 10
 
-		Label:
+		MDLabel:
 			id: status 
 			text: "BusKill is currently disarmed."
+			theme_text_color: 'Primary'
 			size_hint: (1,2)
 			halign: 'center'
 			valign: 'middle'
 
-		Button:
+		MDRaisedButton:
 			id: toggle_btn
 			text: "Arm"
+			#md_bg_color: 1,0,0,1
 			size_hint: (1,1)
 			halign: 'center'
 			valign: 'middle'
