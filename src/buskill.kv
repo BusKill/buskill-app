@@ -37,18 +37,9 @@
 	toggle_btn: toggle_btn
 	status: status
 
-	primary_color: app.theme_cls.primary_color
-	red_color: 95.7,26.3,21.2,1
+	theme_cls: app.theme_cls
 
 	NavigationLayout:
-
-		MDNavigationDrawer:
-			id: nav_drawer
-			type: 'standard'
-			scrim_color: [0, 0, 0, 0.0]
-
-			MDLabel:
-				text: 'fuuuck'
 
 		ScreenManager:
 			id: 'screen_manager'
@@ -58,27 +49,53 @@
 
 				BoxLayout:
 					orientation: 'vertical'
+					size_hint: ( 1, 0.95 )
+					pos_hint: {'top': 1}
 
-					MDLabel:
-						id: status 
-						text: "BusKill is currently disarmed."
-						theme_text_color: 'Primary'
-						size_hint: (1,2)
-						halign: 'center'
-						valign: 'middle'
+					MDToolbar:
+						id: toolbar
+						title: 'BusKill'
+						left_action_items: [[ 'menu', lambda x: nav_drawer.set_state('toggle') ]]
+						elevation: 10
 
-					MDRaisedButton:
-						id: toggle_btn
-						text: "Arm"
-						#md_bg_color: 1,0,0,1
-						size_hint: (1,1)
-						halign: 'center'
-						valign: 'middle'
-						on_release: root.toggleBusKill()
+					BoxLayout:
+						orientation: 'vertical'
+						size_hint: ( 0.9, 1 )
+						pos_hint: {"center_x": 0.5, 'top': 1}
 
+						MDLabel:
+							id: status 
+							text: "BusKill is currently disarmed."
+							theme_text_color: 'Primary'
+							size_hint: (1,2)
+							halign: 'center'
+							valign: 'middle'
+
+						MDRaisedButton:
+							id: toggle_btn
+							text: "Arm"
+							#md_bg_color: 1,0,0,1
+							size_hint: (1,1)
+							halign: 'center'
+							valign: 'middle'
+							on_release: root.toggleBusKill()
+
+		MDNavigationDrawer:
+			id: nav_drawer
+
+			BoxLayout:
+				orientation: 'vertical'
 
 				MDToolbar:
-					id: toolbar
-					pos_hint: {"top": 1}
 					title: 'BusKill'
 					left_action_items: [[ 'menu', lambda x: nav_drawer.set_state('toggle') ]]
+
+				ScrollView:
+
+					MDList:
+
+						OneLineIconListItem:
+							text: 'Update'
+							IconLeftWidget:
+								icon: 'update'
+

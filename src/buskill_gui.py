@@ -55,7 +55,7 @@ logger = logging.getLogger( __name__ )
 #                                   CLASSES                                    #
 ################################################################################
 
-class MainWindow(BoxLayout):
+class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
 	status = ObjectProperty(None)
@@ -74,12 +74,11 @@ class MainWindow(BoxLayout):
 		if buskill.isArmed():
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
-			self.toggle_btn.md_bg_color = [1,0,0,1]
+			self.theme_cls.primary_palette = "Red"
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
-			#self.toggle_btn.background_color = [1,1,1,1]
-			self.toggle_btn.md_bg_color = self.primary_color
+			self.theme_cls.primary_palette = "Blue"
 
 class CriticalError(BoxLayout):
 
