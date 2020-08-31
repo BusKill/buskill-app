@@ -40,34 +40,15 @@
 	primary_color: app.theme_cls.primary_color
 	red_color: 95.7,26.3,21.2,1
 
-	ActionBar:
-
-		ActionView:
-			background_image: 'images/white.png'
-			background_color: app.theme_cls.primary_color
-
-			ActionPrevious:
-				with_previous: False
-				app_icon: 'images/menu.png'
-				markup: True
-				title: '[font=RobotoMedium][size=20]BusKill[/size][/font]'
-#				on_release: root.toggleMenu()
-				on_release: nav_drawer.toggle_nav_drawer()
-
-			ActionButton:
-				text: '[font=Icons]\U000F0020[/font]'
-				markup: True
-			ActionButton:
-				text: 'B'
-			ActionButton:
-				text: 'C'
-			ActionButton:
-				text: 'D'
-
 	NavigationLayout:
 
 		MDNavigationDrawer:
 			id: nav_drawer
+			type: 'standard'
+			scrim_color: [0, 0, 0, 0.0]
+
+			MDLabel:
+				text: 'fuuuck'
 
 		ScreenManager:
 			id: 'screen_manager'
@@ -76,11 +57,7 @@
 				name: 'home'
 
 				BoxLayout:
-
 					orientation: 'vertical'
-					size_hint: ( 0.9, 0.95 )
-					pos_hint: {'center_x': 0.5, 'top': 1}
-					spacing: 10
 
 					MDLabel:
 						id: status 
@@ -99,3 +76,9 @@
 						valign: 'middle'
 						on_release: root.toggleBusKill()
 
+
+				MDToolbar:
+					id: toolbar
+					pos_hint: {"top": 1}
+					title: 'BusKill'
+					left_action_items: [[ 'menu', lambda x: nav_drawer.set_state('toggle') ]]
