@@ -34,9 +34,6 @@
 
 <MainWindow>:
 	orientation: 'vertical'
-	size_hint: ( 1, 0.95 )
-	pos_hint: {'top': 1}
-
 	toggle_btn: toggle_btn
 	status: status
 
@@ -54,7 +51,8 @@
 				app_icon: 'images/menu.png'
 				markup: True
 				title: '[font=RobotoMedium][size=20]BusKill[/size][/font]'
-				on_release: root.toggleMenu()
+#				on_release: root.toggleMenu()
+				on_release: nav_drawer.toggle_nav_drawer()
 
 			ActionButton:
 				text: '[font=Icons]\U000F0020[/font]'
@@ -66,31 +64,38 @@
 			ActionButton:
 				text: 'D'
 
-	MDToolbar:
-		title: 'BusKill'
-		right_action_items: [ ['magnify', lambda x: print(x)], ['coffee', lambda x: print(x)], ['duck', lambda x: print(x)], ['earth', lambda x: print(app.theme_cls)] ]
+	NavigationLayout:
 
-	BoxLayout:
+		MDNavigationDrawer:
+			id: nav_drawer
 
-		orientation: 'vertical'
-		size_hint: ( 0.9, 1 )
-		pos_hint: {'center_x': 0.5, 'top': 1}
-		spacing: 10
+		ScreenManager:
+			id: 'screen_manager'
 
-		MDLabel:
-			id: status 
-			text: "BusKill is currently disarmed."
-			theme_text_color: 'Primary'
-			size_hint: (1,2)
-			halign: 'center'
-			valign: 'middle'
+			Screen:
+				name: 'home'
 
-		MDRaisedButton:
-			id: toggle_btn
-			text: "Arm"
-			#md_bg_color: 1,0,0,1
-			size_hint: (1,1)
-			halign: 'center'
-			valign: 'middle'
-			on_release: root.toggleBusKill()
+				BoxLayout:
+
+					orientation: 'vertical'
+					size_hint: ( 0.9, 0.95 )
+					pos_hint: {'center_x': 0.5, 'top': 1}
+					spacing: 10
+
+					MDLabel:
+						id: status 
+						text: "BusKill is currently disarmed."
+						theme_text_color: 'Primary'
+						size_hint: (1,2)
+						halign: 'center'
+						valign: 'middle'
+
+					MDRaisedButton:
+						id: toggle_btn
+						text: "Arm"
+						#md_bg_color: 1,0,0,1
+						size_hint: (1,1)
+						halign: 'center'
+						valign: 'middle'
+						on_release: root.toggleBusKill()
 

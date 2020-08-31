@@ -24,6 +24,7 @@ import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
 
 from kivy.app import App
+from kivymd.uix.navigationdrawer import NavigationLayout
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -63,6 +64,7 @@ class MainWindow(BoxLayout):
 
 		# TODO make this slid-out a menu drawer on the left
 		print( 'foo' )
+		#self.navigation_layout.toggle_nav_drawer()
 
 	def toggleBusKill(self):
 
