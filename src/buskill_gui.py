@@ -28,13 +28,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
-
-from kivymd.uix.navigationdrawer import NavigationLayout
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDFlatButton, MDRaisedButton
 
 from kivy.core.window import Window
 Window.size = ( 300, 500 )
@@ -43,8 +37,7 @@ from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
-from kivymd.app import MDApp
-from kivymd.theming import ThemeManager
+from kivy.core.text import LabelBase
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -59,59 +52,33 @@ logger = logging.getLogger( __name__ )
 #                                   CLASSES                                    #
 ################################################################################
 
-class MainWindow(Screen):
+class MainWindow(BoxLayout):
 
-	def toggle_buskill( self ):
+	toggle_btn = ObjectProperty(None)
+	status = ObjectProperty(None)
+	menu = ObjectProperty(None)
+	actionview = ObjectProperty(None)
+
+	def toggleMenu(self):
+
+		# TODO make this slid-out a menu drawer on the left
+		print( 'foo' )
+
+	def toggleBusKill(self):
 
 		buskill.toggle()
 
 		if buskill.isArmed():
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
-			self.theme_cls.primary_palette = "Red"
+			self.toggle_btn.md_bg_color = [1,0,0,1]
+			self.toggle_btn.background_color = self.red_color
+			self.actionview.background_color = self.red_color
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
-			self.theme_cls.primary_palette = "Blue"
-
-	def check_for_update1( self ):
-
-		self.nav_drawer.set_state('toggle')
-
-		font_color_hex = kivy.utils.get_hex_from_color( self.theme_cls.text_color )
-		msg = "Checking for updates requires internet access.\n\n"
-		msg+= "Would you like to check for updates now?"
-
-		self.dialog = MDDialog(
-		 type = "custom",
-		 title = '[color=' +font_color_hex+ ']Check for Updates?[/color]',
-		# TODO: figure out why this text only appears with type=alert (and why
-		# the buttons don't call on_release with type=alert)
-		 text = '[color=' +font_color_hex+ ']' +msg+ '[/color]',
-		 buttons = [
-		  MDFlatButton(
-		   text = "Cancel",
-			on_release = self.close_dialog
-		  ),
-		  MDRaisedButton(
-		   text = "Check Updates",
-		   on_release = self.check_for_update2
-		  )
-		 ]
-		)
-
-		self.dialog.size_hint_x = 0.8
-
-		self.dialog.open()
-
-	def close_dialog( self, context ):
-
-		self.dialog.dismiss()
-
-	def check_for_update2( self, context ):
-
-		print( 'ok' )
-		print( context )
+			self.toggle_btn.background_color = self.primary_color
+			self.actionview.background_color = self.primary_color
 
 class CriticalError(BoxLayout):
 
@@ -125,13 +92,11 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class BusKill(MDApp):
+class BusKill(App):
 
-	def __init__(self, **kwargs):
-		self.title = "BusKill"
-		self.theme_cls.theme_style = "Dark"
-		self.theme_cls.primary_palette = "Blue"
-		super().__init__(**kwargs)
+	LabelBase.register( "Roboto", "fonts/Roboto-Regular.ttf",  )
+	LabelBase.register( "RobotoMedium", "fonts/Roboto-Medium.ttf",  )
+	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
 
 	buskill.init()
 

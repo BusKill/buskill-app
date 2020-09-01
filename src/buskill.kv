@@ -8,9 +8,6 @@
 # Version: 0.1
 ################################################################################
 
-#:import MDToolbar kivymd.uix.toolbar
-#:import MDLabel kivymd.uix.label
-
 <CriticalError>:
 
 	msg: msg
@@ -34,72 +31,52 @@
 
 <MainWindow>:
 	orientation: 'vertical'
+	size_hint: ( 1, 0.95 )
+	pos_hint: {'top': 1}
+
+	actionview: actionview
 	toggle_btn: toggle_btn
 	status: status
-	nav_drawer: nav_drawer
 
-	theme_cls: app.theme_cls
+	primary_color: 0.129, 0.588, 0.953, 1
+	red_color: 0.957, 0.263, 0.212, 1
 
-	NavigationLayout:
+	ActionBar:
 
-		ScreenManager:
-			id: 'screen_manager'
+		ActionView:
+			id: actionview
+			background_image: 'images/white.png'
+			background_color: 0.129, 0.588, 0.953, 1
 
-			Screen:
-				name: 'home'
+			ActionPrevious:
+				with_previous: False
+				app_icon: 'images/menu.png'
+				markup: True
+				title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
+				on_release: root.toggleMenu()
 
-				BoxLayout:
-					orientation: 'vertical'
-					size_hint: ( 1, 0.95 )
-					pos_hint: {'top': 1}
+	BoxLayout:
 
-					MDToolbar:
-						id: toolbar
-						title: 'BusKill'
-						left_action_items: [[ 'menu', lambda x: nav_drawer.set_state('toggle') ]]
-						elevation: 10
+		orientation: 'vertical'
+		size_hint: ( 0.9, 1 )
+		pos_hint: {'center_x': 0.5, 'top': 1}
+		spacing: 10
 
-					BoxLayout:
-						orientation: 'vertical'
-						size_hint: ( 0.9, 1 )
-						pos_hint: {"center_x": 0.5, 'top': 1}
+		Label:
+			id: status 
+			text: "BusKill is currently disarmed."
+			size_hint: (1,2)
+			halign: 'center'
+			valign: 'middle'
+			font_name: "Roboto"
+			font_size: 16
 
-						MDLabel:
-							id: status 
-							text: "BusKill is currently disarmed."
-							theme_text_color: 'Primary'
-							size_hint: (1,2)
-							halign: 'center'
-							valign: 'middle'
-
-						MDRaisedButton:
-							id: toggle_btn
-							text: "Arm"
-							#md_bg_color: 1,0,0,1
-							size_hint: (1,1)
-							halign: 'center'
-							valign: 'middle'
-							on_release: root.toggle_buskill()
-
-		MDNavigationDrawer:
-			id: nav_drawer
-
-			BoxLayout:
-				orientation: 'vertical'
-
-				MDToolbar:
-					title: 'BusKill'
-					left_action_items: [[ 'menu', lambda x: nav_drawer.set_state('toggle') ]]
-
-				ScrollView:
-
-					MDList:
-
-						OneLineIconListItem:
-							text: 'Update'
-							#divider: None
-							on_release: root.check_for_update1()
-							IconLeftWidget:
-								icon: 'update'
-
-
+		Button:
+			id: toggle_btn
+			text: "Arm"
+			background_normal: ''
+			background_color: 0.129, 0.588, 0.953, 1
+			size_hint: (1,1)
+			halign: 'center'
+			valign: 'middle'
+			on_release: root.toggleBusKill()
