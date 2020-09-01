@@ -24,13 +24,17 @@ import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
 
 from kivy.app import App
-from kivymd.uix.navigationdrawer import NavigationLayout
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
+
+from kivymd.uix.navigationdrawer import NavigationLayout
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDFlatButton, MDRaisedButton
 
 from kivy.core.window import Window
 Window.size = ( 300, 500 )
@@ -57,17 +61,7 @@ logger = logging.getLogger( __name__ )
 
 class MainWindow(Screen):
 
-	toggle_btn = ObjectProperty(None)
-	status = ObjectProperty(None)
-	menu = ObjectProperty(None)
-
-	def toggleMenu(self):
-
-		# TODO make this slid-out a menu drawer on the left
-		print( 'foo' )
-		#self.navigation_layout.toggle_nav_drawer()
-
-	def toggleBusKill(self):
+	def toggle_buskill( self ):
 
 		buskill.toggle()
 
@@ -79,6 +73,45 @@ class MainWindow(Screen):
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
 			self.theme_cls.primary_palette = "Blue"
+
+	def check_for_update1( self ):
+
+		self.nav_drawer.set_state('toggle')
+
+		font_color_hex = kivy.utils.get_hex_from_color( self.theme_cls.text_color )
+		msg = "Checking for updates requires internet access.\n\n"
+		msg+= "Would you like to check for updates now?"
+
+		self.dialog = MDDialog(
+		 type = "custom",
+		 title = '[color=' +font_color_hex+ ']Check for Updates?[/color]',
+		# TODO: figure out why this text only appears with type=alert (and why
+		# the buttons don't call on_release with type=alert)
+		 text = '[color=' +font_color_hex+ ']' +msg+ '[/color]',
+		 buttons = [
+		  MDFlatButton(
+		   text = "Cancel",
+			on_release = self.close_dialog
+		  ),
+		  MDRaisedButton(
+		   text = "Check Updates",
+		   on_release = self.check_for_update2
+		  )
+		 ]
+		)
+
+		self.dialog.size_hint_x = 0.8
+
+		self.dialog.open()
+
+	def close_dialog( self, context ):
+
+		self.dialog.dismiss()
+
+	def check_for_update2( self, context ):
+
+		print( 'ok' )
+		print( context )
 
 class CriticalError(BoxLayout):
 
