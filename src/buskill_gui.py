@@ -82,13 +82,13 @@ class MainWindow(BoxLayout):
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
 			self.toggle_btn.md_bg_color = [1,0,0,1]
-			self.toggle_btn.background_color = self.red_color
-			self.actionview.background_color = self.red_color
+			self.toggle_btn.background_color = self.color_red
+			self.actionview.background_color = self.color_red
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
-			self.toggle_btn.background_color = self.primary_color
-			self.actionview.background_color = self.primary_color
+			self.toggle_btn.background_color = self.color_primary
+			self.actionview.background_color = self.color_primary
 
 class CriticalError(BoxLayout):
 
