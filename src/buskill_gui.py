@@ -29,8 +29,9 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.modalview import ModalView
 
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 
 #from kivy.garden.navigationdrawer import NavigationDrawer
 from garden.navigationdrawer import NavigationDrawer
@@ -68,13 +69,11 @@ class MainWindow(BoxLayout):
 	menu = ObjectProperty(None)
 	actionview = ObjectProperty(None)
 
-	def toggleMenu(self):
+	def toggle_menu(self):
 
-		# TODO make this slid-out a menu drawer on the left
-		print( 'foo' )
 		self.nav_drawer.toggle_state()
 
-	def toggleBusKill(self):
+	def toggle_buskill(self):
 
 		buskill.toggle()
 
@@ -89,6 +88,39 @@ class MainWindow(BoxLayout):
 			self.status.text = 'BusKill is currently disarmed.'
 			self.toggle_btn.background_color = self.color_primary
 			self.actionview.background_color = self.color_primary
+
+	def update1(self):
+
+		# first close the navigation drawer
+		self.nav_drawer.toggle_state()
+
+		#print( "update!" )
+		#dialog = ModalView( auto_dismiss=True, size_hint=(0.8, None) )
+		#dialog.add_widget( Label(text='fuck') )
+		#dialog.add_widget( Label(text='fuck you') )
+		#dialog.open()
+
+		msg = "Checking for updates requires internet access.\n\n"
+		msg+= "Would you like to check for updates now?"
+
+		dialog = DialogConfirmation(
+		 title='Check for Updates?',
+		 body = msg,
+		 button='Check Updates',
+		 continue_function=self.update2,
+		)
+		dialog.open()
+
+	def update2(self):
+
+		print( 'magic' )
+
+class DialogConfirmation(ModalView):
+
+	title = StringProperty(None)
+	body = StringProperty(None)
+	button = StringProperty(None)
+	continue_function = ObjectProperty(None)
 
 class CriticalError(BoxLayout):
 

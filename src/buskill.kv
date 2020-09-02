@@ -55,12 +55,18 @@
 				app_icon: 'images/menu.png'
 				markup: True
 				title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
-				on_release: root.toggleMenu()
+				on_release: root.toggle_menu()
 
 	NavigationDrawer:
 		id: nav_drawer
 		anim_type: 'slide_above_simple'
-		side_panel_width: 0.8*self.width
+		side_panel_width: min( dp(300), 0.8*self.width )
+
+		# this is the distance from the left side of the app from which the user
+		# can drag the navigation drawer open by touch gesture. It must be low else
+		# it will block other taps on other buttons in that left-side band
+		#touch_accept_width: min( dp(300), 0.8*self.width )
+		touch_accept_width: dp(15)
 
 		ScrollView:
 
@@ -77,6 +83,7 @@
 					height: 60
 					background_normal: ''
 					background_color: root.color_menu_bg
+					on_release: root.update1()
 
 				Widget:
 					id: separator
@@ -106,6 +113,7 @@
 					id: status 
 					text: "BusKill is currently disarmed."
 					size_hint: (1,2)
+					text_size: self.size
 					halign: 'center'
 					valign: 'middle'
 					font_name: "Roboto"
@@ -121,4 +129,89 @@
 					size_hint: (1,1)
 					halign: 'center'
 					valign: 'middle'
-					on_release: root.toggleBusKill()
+					on_release: root.toggle_buskill()
+
+<DialogConfirmation>:
+	id: update_dialog1
+	auto_dismiss: True
+	size_hint: (0.9, None)
+	#padding: '24dp', '24dp', '24dp', '24dp'
+	padding: '16dp', '40dp', '16dp', 0
+	#size_hint: (0.8, None)
+	height: dialog_contents.minimum_height*2
+	y: dialog_contents.y
+	#size_hint_y: None
+	#height: self.minimum_height
+
+	color_primary: 0.129, 0.588, 0.953, 1
+
+	BoxLayout:
+		id: dialog_contents
+		orientation: 'vertical'
+		#padding: '8dp'
+		#spacing: 10
+		#padding: '24dp', '24dp', '8dp', '8dp'
+		#padding: 0, 0, 0, '200dp'
+		#padding: 0
+
+		Label:
+			text: root.title
+			#text: str(dialog_contents.minimum_height)
+			#text: 'fucking top'
+			size_hint: 1, None
+			text_size: self.size
+			size_y: self.texture_size
+			height: 0
+			halign: 'center'
+			valign: 'top'
+			font_name: "RobotoMedium"
+			font_size: 20
+			#padding: '16dp', '1dp'
+			padding: 0, 0
+
+		Label:
+			text: ' '
+			size_hint: 1, None
+			size: 0, '35dp'
+
+		Label:
+			text: root.body
+			size_hint: 1, None
+			text_size: self.size
+			#size_y: self.texture_size
+			halign: 'left'
+			valign: 'top'
+			font_name: "Roboto"
+			font_size: 16
+			#padding: '16dp', '16dp'
+			padding: 0, 0
+
+		StackLayout:
+			orientation: 'rl-tb'
+			#size_hint: ( 1, None )
+			#size: self.width, 1
+			#padding: 0, 0, '14dp', '8dp'
+			spacing: '14dp'
+			padding: 0
+			#spacing: 0
+	
+			Button:
+				text: root.button
+				padding: '8dp', '8dp'
+				size_hint: None, None
+				size: self.texture_size
+				background_normal: ''
+				background_color: root.color_primary
+
+			Button:
+				text: 'Cancel'
+				size_hint: None, None
+				size: self.texture_size
+				padding: '8dp', '8dp'
+				background_normal: ''
+				background_color: 0, 0, 0, 0
+				on_release: update_dialog1.dismiss()
+				#text_size: None, None
+				#halign: 'center'
+				#valign: 'middle'
+				#size: self.texture_size * len('Cancel')
