@@ -27,6 +27,7 @@ from kivy.app import App
 
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
@@ -138,7 +139,52 @@ class MainWindow(BoxLayout):
 
 		# TODO: split this upgrade function into update() and upgrade() and
 		# make the status somehow accessible from here so we can put it in a modal
-		#buskill.upgrade()
+		try:
+			buskill.upgrade()
+		except Exception as e:
+
+			label_title = Label(
+			 text = "Update Failed!",
+			 size_hint = ( 0.9, None ),
+			 halign = 'center',
+			 font_name = "RobotoMedium",
+			 font_size = 20,
+			)
+			#label_title.text_size = label_title.size
+
+			label_icon = Label(
+			 text = "\ue002",
+			 size_hint = ( 0.9, None ),
+			 font_name = "mdicons",
+			 font_size = 50,
+			)
+
+			label_error = Label(
+			 text = str(e),
+			 text_size = (self.size[0] - 60, self.size[1] - 60),
+			 halign = 'center',
+			 valign = 'middle',
+			 font_name = "Roboto",
+			 font_size = 16,
+			)
+
+			b_ok = Button(
+			 text = 'OK',
+			 size_hint = ( None, None ),
+			 padding = ( '8dp', '8dp' ),
+			 background_normal = '',
+			 background_color = (0, 0, 0, 0),
+			 on_release = self.dialog.dismiss,
+			)
+			b_ok.size = b_ok.texture_size
+
+			self.dialog.dialog_contents.clear_widgets()
+			#self.dialog.dialog_contents.add_widget( BoxLayout(orientation='vertical') )
+			self.dialog.dialog_contents.add_widget( label_title )
+			self.dialog.dialog_contents.add_widget( label_icon )
+			self.dialog.dialog_contents.add_widget( label_error )
+			self.dialog.dialog_contents.add_widget( b_ok )
+			print( e )
 
 class DialogConfirmation(ModalView):
 
