@@ -96,12 +96,6 @@ class MainWindow(BoxLayout):
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
 
-		#print( "update!" )
-		#dialog = ModalView( auto_dismiss=True, size_hint=(0.8, None) )
-		#dialog.add_widget( Label(text='fuck') )
-		#dialog.add_widget( Label(text='fuck you') )
-		#dialog.open()
-
 		msg = "Checking for updates requires internet access.\n\n"
 		msg+= "Would you like to check for updates now?"
 
@@ -143,48 +137,10 @@ class MainWindow(BoxLayout):
 			buskill.upgrade()
 		except Exception as e:
 
-			label_title = Label(
-			 text = "Update Failed!",
-			 size_hint = ( 0.9, None ),
-			 halign = 'center',
-			 font_name = "RobotoMedium",
-			 font_size = 20,
-			)
-			#label_title.text_size = label_title.size
-
-			label_icon = Label(
-			 text = "\ue002",
-			 size_hint = ( 0.9, None ),
-			 font_name = "mdicons",
-			 font_size = 50,
-			)
-
-			label_error = Label(
-			 text = str(e),
-			 text_size = (self.size[0] - 60, self.size[1] - 60),
-			 halign = 'center',
-			 valign = 'middle',
-			 font_name = "Roboto",
-			 font_size = 16,
-			)
-
-			b_ok = Button(
-			 text = 'OK',
-			 size_hint = ( None, None ),
-			 padding = ( '8dp', '8dp' ),
-			 background_normal = '',
-			 background_color = (0, 0, 0, 0),
-			 on_release = self.dialog.dismiss,
-			)
-			b_ok.size = b_ok.texture_size
-
-			self.dialog.dialog_contents.clear_widgets()
-			#self.dialog.dialog_contents.add_widget( BoxLayout(orientation='vertical') )
-			self.dialog.dialog_contents.add_widget( label_title )
-			self.dialog.dialog_contents.add_widget( label_icon )
-			self.dialog.dialog_contents.add_widget( label_error )
-			self.dialog.dialog_contents.add_widget( b_ok )
-			print( e )
+			self.dialog.l_title.text = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!'
+			progress_spinner.parent.remove_widget( progress_spinner )
+			self.dialog.l_body.text = str(e)
+			self.dialog.b_cancel.text = "OK"
 
 class DialogConfirmation(ModalView):
 
@@ -200,14 +156,9 @@ class DialogConfirmation(ModalView):
 		self._parent = None
 		super(ModalView, self).__init__(**kwargs)
 
-		print( kwargs )
-
 		if self.button == "":
-			print( 'removing button' )
-			#self.b_continue.disabled = True
 			self.b_continue.parent.remove_widget( self.b_continue )
 		else:
-			print( 'not removing button' )
 			self.b_continue.text = self.button
 
 class CriticalError(BoxLayout):
