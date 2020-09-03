@@ -134,13 +134,45 @@ class MainWindow(BoxLayout):
 		# TODO: split this upgrade function into update() and upgrade() and
 		# make the status somehow accessible from here so we can put it in a modal
 		try:
-			buskill.upgrade()
+			upgrade_result = buskill.upgrade()
 		except Exception as e:
+			# if the update failed for some reason, alert the user
 
 			self.dialog.l_title.text = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!'
 			progress_spinner.parent.remove_widget( progress_spinner )
 			self.dialog.l_body.text = str(e)
 			self.dialog.b_cancel.text = "OK"
+
+		# 1 = poll was successful; we're on the latest version
+		if upgrade_result == 1:
+
+			msg = "You're currently using the latest version"
+
+			self.dialog.l_title.text = '[font=mdicons][size=30]\ue92f[/size][/font]  Update BusKill'
+			progress_spinner.parent.remove_widget( progress_spinner )
+			self.dialog.l_body.text = msg
+			self.dialog.b_cancel.text = "OK"
+			return
+
+		# if we made it this far, it means that the we successfully finished
+		# downloading and installing the latest possible version, and the result
+		# is the path to that new executable
+		self.new_version_exe = upgrade_result
+
+		self.dialog.dismiss()
+
+		msg = "BusKill was updated successfully. Please restart this app to continue."
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
+		 body = msg,
+		 button='Restart Now',
+		 continue_function = self.update3_restart,
+		)
+		self.dialog.open()
+
+	def update3_restart( self ):
+
+		print( 'TODO: actually restart the app:|' +self.new_version_exe+ '|' )
 
 class DialogConfirmation(ModalView):
 

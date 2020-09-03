@@ -519,6 +519,9 @@ def integrity_is_ok( sha256sums_filepath, local_filepaths ):
 
 def upgrade():
 
+	# TODO: remove me
+	return 'this/is/some/path'
+
 	msg = "DEBUG: Called upgrade()"
 	print( msg ); logging.debug( msg )
 
