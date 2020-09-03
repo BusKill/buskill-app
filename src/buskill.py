@@ -519,9 +519,6 @@ def integrity_is_ok( sha256sums_filepath, local_filepaths ):
 
 def upgrade():
 
-	# TODO: remove me
-	return 'this/is/some/path'
-
 	msg = "DEBUG: Called upgrade()"
 	print( msg ); logging.debug( msg )
 
@@ -558,7 +555,9 @@ def upgrade():
 	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 		os_name_short = 'mac'
 	if os_name_short == '':
-		raise RuntimeWarning( 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')' )
+		msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 	# get the absolute path to the file that the user executes to start buskill
 	EXE_PATH = sys.executable
@@ -582,24 +581,33 @@ def upgrade():
 	print( "EXE_DIR:|" +EXE_DIR+ "|" )
 	print( "EXE_FILE:|" +EXE_FILE+ "|" )
 
+	# TODO: uncomment this block
 	# exit if the executable that we're supposed to update doesn't match what
 	# we expect (this can happen if the exe is actually the python interpreter)
-	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
-	 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
-	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ): \
-		raise RuntimeWarning( 'Unsupported executable (' +EXE_PATH+ ')' )
+#	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
+#	 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
+#	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ):
+#		msg = 'Unsupported executable (' +EXE_PATH+ ')'
+#		print( "DEBUG: " + msg ); logging.debug( msg )
+#		raise RuntimeWarning( msg )
 
 	# skip upgrade if we can't write to disk
 	if DATA_DIR == '':
-		raise RuntimeWarning( 'Unable to upgrade. No DATA_DIR.' )
+		msg = 'Unable to upgrade. No DATA_DIR.'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 	# make sure we can write to the dir where the executable lives
 	if not os.access(EXE_DIR, os.W_OK):
-		raise RuntimeWarning( 'Unable to upgrade. EXE_DIR not writeable (' +str(EXE_DIR)+ ')' )
+		msg = 'Unable to upgrade. EXE_DIR not writeable (' +str(EXE_DIR)+ ')'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 	# make sure we can overwrite the executable itself
 	if not os.access( os.path.join(EXE_DIR, EXE_FILE), os.W_OK):
-		raise RuntimeWarning( 'Unable to upgrade. EXE_FILE not writeable (' +str( os.path.join(EXE_DIR, EXE_FILE) )+ ')' )
+		msg = 'Unable to upgrade. EXE_FILE not writeable (' +str( os.path.join(EXE_DIR, EXE_FILE) )+ ')'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 	#############
 	# SETUP GPG #
@@ -683,7 +691,9 @@ def upgrade():
 	# bail if it a key was used other than the one we require
 	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
 		wipeCache()
-		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
+		msg = 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
 
 	# extract from our list of signatures any signatures made with exactly the
 	# keys we'd expect (check the master key and the subkey fingerprints)
@@ -692,7 +702,10 @@ def upgrade():
 	# if we couldn't find a signature that matched our requirements, bail
 	if sig_info == list():
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+		msg = 'ERROR: No valid signature found! Please report this as a bug.'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
+
 	else:
 		sig_info = sig_info.pop()
 
@@ -700,10 +713,15 @@ def upgrade():
 	# bail if either is an invalid signature
 	if verified.status != 'signature valid':
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+		msg = 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
+
 	if sig_info['status'] != 'signature valid':
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+		msg = 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
 
 	msg = "\tDEBUG: Signature is valid (" +str(sig_info)+ ")."
 	print( msg ); logging.debug( msg )
@@ -714,15 +732,22 @@ def upgrade():
 		with open( metadata_filepath, 'r' ) as fd:
 			metadata = json.loads( fd.read() ) 
 	except Exception as e:
-		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.' )
+		msg = 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 		
 	# abort if it's empty
 	if metadata == '':
-		raise RuntimeWarning( 'Unable to upgrade. Could not fetch metadata contents.' )
+		msg = 'Unable to upgrade. Could not fetch metadata contents.'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 	###########################
 	# DOWNLOAD LATEST VERSION #
 	###########################
+
+	# TODO: remove this
+	BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = 1
 
 	# check metadata to see if there's a newer version than what we're running
 	# note we use SOURCE_DATE_EPOCH to make version comparisons easy
@@ -816,7 +841,9 @@ def upgrade():
 	# bail if it a key was used other than the one we require
 	if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
 		wipeCache()
-		raise RuntimeError( 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.' )
+		msg = 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
 
 	# extract from our list of signatures any signatures made with exactly the
 	# keys we'd expect (check the master key and the subkey fingerprints)
@@ -825,7 +852,10 @@ def upgrade():
 	# if we couldn't find a signature that matched our requirements, bail
 	if sig_info == list():
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug.' )
+		msg = 'ERROR: No valid signature found! Please report this as a bug.'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
+
 	else:
 		sig_info = sig_info.pop()
 
@@ -833,10 +863,15 @@ def upgrade():
 	# bail if either is an invalid signature
 	if verified.status != 'signature valid':
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+		msg = 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
+
 	if sig_info['status'] != 'signature valid':
 		wipeCache()
-		raise RuntimeError( 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').' )
+		msg = 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').'
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
 
 	msg = "DEBUG: Signature is valid (" +str(sig_info)+ ")."
 	print( msg ); logging.debug( msg )
@@ -847,7 +882,9 @@ def upgrade():
 
 	if not integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
 		wipeCache()
-		raise RuntimeError( 'ERROR: Integrity check failed. ')
+		msg = 'ERROR: Integrity check failed. '
+		print( msg ); logging.debug( msg )
+		raise RuntimeError( msg )
 
 	msg = "DEBUG: New version's integrity is valid."
 	print( msg ); logging.debug( msg )

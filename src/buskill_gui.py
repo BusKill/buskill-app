@@ -135,6 +135,7 @@ class MainWindow(BoxLayout):
 		# make the status somehow accessible from here so we can put it in a modal
 		try:
 			upgrade_result = buskill.upgrade()
+			print( 'upgrade_result:|' + upgrade_result + '|' )
 		except Exception as e:
 			# if the update failed for some reason, alert the user
 
@@ -142,6 +143,7 @@ class MainWindow(BoxLayout):
 			progress_spinner.parent.remove_widget( progress_spinner )
 			self.dialog.l_body.text = str(e)
 			self.dialog.b_cancel.text = "OK"
+			return
 
 		# 1 = poll was successful; we're on the latest version
 		if upgrade_result == 1:
