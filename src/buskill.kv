@@ -138,7 +138,9 @@
 	#padding: '24dp', '24dp', '24dp', '24dp'
 	padding: '16dp', '40dp', '16dp', 0
 	#size_hint: (0.8, None)
-	height: dialog_contents.minimum_height*2
+	#height: dialog_contents.minimum_height
+	#height: dialog_contents.minimum_height*2
+	height: l_title.texture_size[1] + l_spacer.texture_size[1] + l_body.texture_size[1] + b_cancel.texture_size[1] + dp(50)
 	y: dialog_contents.y
 	#size_hint_y: None
 	#height: self.minimum_height
@@ -155,6 +157,7 @@
 		#padding: 0
 
 		Label:
+			id: l_title
 			text: root.title
 			#text: str(dialog_contents.minimum_height)
 			#text: 'fucking top'
@@ -170,11 +173,13 @@
 			padding: 0, 0
 
 		Label:
+			id: l_spacer
 			text: ' '
 			size_hint: 1, None
 			size: 0, '35dp'
 
 		Label:
+			id: l_body
 			text: root.body
 			size_hint: 1, None
 			text_size: self.size
@@ -204,6 +209,7 @@
 				background_color: root.color_primary
 
 			Button:
+				id: b_cancel
 				text: 'Cancel'
 				size_hint: None, None
 				size: self.texture_size
