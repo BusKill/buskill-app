@@ -146,6 +146,7 @@
 	#height: self.minimum_height
 
 	color_primary: 0.129, 0.588, 0.953, 1
+	b_continue: b_continue
 
 	BoxLayout:
 		id: dialog_contents
@@ -201,12 +202,14 @@
 			#spacing: 0
 	
 			Button:
+				id: b_continue
 				text: root.button
 				padding: '8dp', '8dp'
 				size_hint: None, None
 				size: self.texture_size
 				background_normal: ''
 				background_color: root.color_primary
+				on_release: root.continue_function()
 
 			Button:
 				id: b_cancel

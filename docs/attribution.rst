@@ -23,6 +23,8 @@ This project would not have been possible without the following tools and servic
  * `Kdenlive <https://kdenlive.org/en/>`_
  * `Sphinx <https://www.sphinx-doc.org/en/master/>`_
  * `Read The Docs <https://readthedocs.org/>`_
+ * `Roboto Font <https://fonts.google.com/specimen/Roboto#about>`_
+ * `Material Design Icons <https://github.com/google/material-design-icons>`_
  * `Wordpress <https://wordpress.com/>`_
  * `SiteOrigin <https://siteorigin.com/>`_
  * `phpList <https://www.phplist.org/>`_

@@ -69,6 +69,8 @@ class MainWindow(BoxLayout):
 	menu = ObjectProperty(None)
 	actionview = ObjectProperty(None)
 
+	dialog = None
+
 	def toggle_menu(self):
 
 		self.nav_drawer.toggle_state()
@@ -103,17 +105,32 @@ class MainWindow(BoxLayout):
 		msg = "Checking for updates requires internet access.\n\n"
 		msg+= "Would you like to check for updates now?"
 
-		dialog = DialogConfirmation(
+		self.dialog = DialogConfirmation(
 		 title='Check for Updates?',
 		 body = msg,
 		 button='Check Updates',
 		 continue_function=self.update2,
 		)
-		dialog.open()
+		self.dialog.open()
 
 	def update2(self):
 
-		print( 'magic' )
+		if self.dialog != None:
+			self.dialog.dismiss()
+
+		self.dialog = DialogConfirmation(
+		 title='Updating BusKill',
+		 body = "TODO",
+		 button = "",
+		 continue_function=None,
+		)
+		self.dialog.open()
+		#self.dialog.b_continue.parent.remove_widget( self.dialog.b_continue )
+		#self.dialog.b_continue.disabled = True
+
+		# TODO: split this upgrade function into update() and upgrade() and
+		# make the status somehow accessible from here so we can put it in a modal
+		#buskill.upgrade()
 
 class DialogConfirmation(ModalView):
 
@@ -121,6 +138,23 @@ class DialogConfirmation(ModalView):
 	body = StringProperty(None)
 	button = StringProperty(None)
 	continue_function = ObjectProperty(None)
+
+	b_continue = ObjectProperty(None)
+
+	def __init__(self, **kwargs):
+
+		self._parent = None
+		super(ModalView, self).__init__(**kwargs)
+
+		print( kwargs )
+
+		if self.button == "":
+			print( 'removing button' )
+			#self.b_continue.disabled = True
+			self.b_continue.parent.remove_widget( self.b_continue )
+		else:
+			print( 'not removing button' )
+			self.b_continue.text = self.button
 
 class CriticalError(BoxLayout):
 
