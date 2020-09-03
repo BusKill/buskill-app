@@ -33,9 +33,8 @@ from kivy.uix.modalview import ModalView
 
 from kivy.properties import ObjectProperty, StringProperty
 
-#from kivy.garden.navigationdrawer import NavigationDrawer
 from garden.navigationdrawer import NavigationDrawer
-#import garden.navigationdrawer
+from garden.progressspinner import ProgressSpinner
 
 from kivy.core.window import Window
 Window.size = ( 300, 500 )
@@ -118,12 +117,21 @@ class MainWindow(BoxLayout):
 		if self.dialog != None:
 			self.dialog.dismiss()
 
+		msg = "Please wait while we check for updates and download the latest version of BusKill."
+
 		self.dialog = DialogConfirmation(
 		 title='Updating BusKill',
-		 body = "TODO",
+		 body = msg,
 		 button = "",
 		 continue_function=None,
 		)
+
+		progress_spinner = ProgressSpinner( color = self.color_primary )
+		self.dialog.dialog_contents.add_widget( progress_spinner, 2 )
+		self.dialog.dialog_contents.add_widget( Label( text='' ), 2 )
+		#self.dialog.size_y = self.dialog.height + 900
+		self.dialog.size_hint = (0.9,0.9)
+
 		self.dialog.open()
 		#self.dialog.b_continue.parent.remove_widget( self.dialog.b_continue )
 		#self.dialog.b_continue.disabled = True
