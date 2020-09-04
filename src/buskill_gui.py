@@ -20,10 +20,17 @@ For more info, see: https://buskill.in/
 import buskill
 import webbrowser
 
+import multiprocessing
+
 import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
 
 from kivy.app import App
+from kivy.properties import ObjectProperty, StringProperty
+from kivy.clock import Clock
+
+from kivy.core.window import Window
+Window.size = ( 300, 500 )
 
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
@@ -32,13 +39,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 
-from kivy.properties import ObjectProperty, StringProperty
-
 from garden.navigationdrawer import NavigationDrawer
 from garden.progressspinner import ProgressSpinner
-
-from kivy.core.window import Window
-Window.size = ( 300, 500 )
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -124,18 +126,20 @@ class MainWindow(BoxLayout):
 		progress_spinner = ProgressSpinner( color = self.color_primary )
 		self.dialog.dialog_contents.add_widget( progress_spinner, 2 )
 		self.dialog.dialog_contents.add_widget( Label( text='' ), 2 )
-		#self.dialog.size_y = self.dialog.height + 900
 		self.dialog.size_hint = (0.9,0.9)
 
 		self.dialog.open()
-		#self.dialog.b_continue.parent.remove_widget( self.dialog.b_continue )
-		#self.dialog.b_continue.disabled = True
 
 		# TODO: split this upgrade function into update() and upgrade() and
 		# make the status somehow accessible from here so we can put it in a modal
 		try:
-			upgrade_result = buskill.upgrade()
-			print( 'upgrade_result:|' + upgrade_result + '|' )
+			# Call the upgrade() function in an asynchronous process so it doesn't
+			# block the UI. We put it in a Pool() so we can get the return value
+			self.upgrade_pool = multiprocessing.Pool( processes=1 )
+			self.upgrade_process = self.upgrade_pool.apply_async(
+			 buskill.upgrade
+			)
+			Clock.schedule_interval(self.upgrade3_tick, 1)
 		except Exception as e:
 			# if the update failed for some reason, alert the user
 
@@ -143,34 +147,48 @@ class MainWindow(BoxLayout):
 			progress_spinner.parent.remove_widget( progress_spinner )
 			self.dialog.l_body.text = str(e)
 			self.dialog.b_cancel.text = "OK"
-			return
 
-		# 1 = poll was successful; we're on the latest version
-		if upgrade_result == 1:
+	def upgrade3_tick( self, dt ):
 
-			msg = "You're currently using the latest version"
+		# TODO: make this function update the body text of the dialog with the
+		# status of upgrade. Note that this would first require making
+		# buskill.py establish a proper Object with an instance field named
+		# upgrade_status_msg
+		#self.dialog.l_body.text = buskill.getUpgradeStatus()
 
-			self.dialog.l_title.text = '[font=mdicons][size=30]\ue92f[/size][/font]  Update BusKill'
-			progress_spinner.parent.remove_widget( progress_spinner )
-			self.dialog.l_body.text = msg
-			self.dialog.b_cancel.text = "OK"
-			return
+		# did the upgrade process finish?
+		if self.upgrade_process.ready():
+			# the call to upgrade() finished.
+			Clock.unschedule( self.upgrade3_tick )
 
-		# if we made it this far, it means that the we successfully finished
-		# downloading and installing the latest possible version, and the result
-		# is the path to that new executable
-		self.new_version_exe = upgrade_result
+			upgrade_result = self.upgrade_process.get()
 
-		self.dialog.dismiss()
+			# 1 = poll was successful; we're on the latest version
+			if upgrade_result == 1:
 
-		msg = "BusKill was updated successfully. Please restart this app to continue."
-		self.dialog = DialogConfirmation(
-		 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
-		 body = msg,
-		 button='Restart Now',
-		 continue_function = self.update3_restart,
-		)
-		self.dialog.open()
+				msg = "You're currently using the latest version"
+
+				self.dialog.l_title.text = '[font=mdicons][size=30]\ue92f[/size][/font]  Update BusKill'
+				# TODO: add this back
+				#progress_spinner.parent.remove_widget( progress_spinner )
+				self.dialog.l_body.text = msg
+				self.dialog.b_cancel.text = "OK"
+				return
+
+			# if we made it this far, it means that the we successfully finished
+			# downloading and installing the latest possible version, and the
+			# result is the path to that new executable
+			self.new_version_exe = upgrade_result
+			self.dialog.dismiss()
+
+			msg = "BusKill was updated successfully. Please restart this app to continue."
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
+			 body = msg,
+			 button='Restart Now',
+			 continue_function = self.update3_restart,
+			)
+			self.dialog.open()
 
 	def update3_restart( self ):
 

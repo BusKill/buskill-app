@@ -517,6 +517,9 @@ def integrity_is_ok( sha256sums_filepath, local_filepaths ):
 
 	return True
 
+# TODO: make this function update an instant field name upgrade_status_msg as it
+# progresses, which is accessible to the buskill_gui.py client. Note that this
+# would first require this buskill.py to be converted into a proper Object
 def upgrade():
 
 	msg = "DEBUG: Called upgrade()"
