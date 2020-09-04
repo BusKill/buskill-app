@@ -122,6 +122,7 @@ class MainWindow(BoxLayout):
 		 button = "",
 		 continue_function=None,
 		)
+		self.dialog.b_cancel.on_release = self.upgrade_cancel
 
 		progress_spinner = ProgressSpinner( color = self.color_primary )
 		self.dialog.dialog_contents.add_widget( progress_spinner, 2 )
@@ -132,21 +133,26 @@ class MainWindow(BoxLayout):
 
 		# TODO: split this upgrade function into update() and upgrade() and
 		# make the status somehow accessible from here so we can put it in a modal
-		try:
-			# Call the upgrade() function in an asynchronous process so it doesn't
-			# block the UI. We put it in a Pool() so we can get the return value
-			self.upgrade_pool = multiprocessing.Pool( processes=1 )
-			self.upgrade_process = self.upgrade_pool.apply_async(
-			 buskill.upgrade
-			)
-			Clock.schedule_interval(self.upgrade3_tick, 1)
-		except Exception as e:
-			# if the update failed for some reason, alert the user
 
-			self.dialog.l_title.text = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!'
-			progress_spinner.parent.remove_widget( progress_spinner )
-			self.dialog.l_body.text = str(e)
-			self.dialog.b_cancel.text = "OK"
+		# Call the upgrade() function in an asynchronous process so it doesn't
+		# block the UI. We put it in a Pool() so we can get the return value
+		self.upgrade_pool = multiprocessing.Pool( processes=1 )
+		self.upgrade_process = self.upgrade_pool.apply_async(
+		 buskill.upgrade
+		)
+		Clock.schedule_interval(self.upgrade3_tick, 1)
+
+	def upgrade_cancel( self ):
+
+		print( '---------------------------------------------------')
+		print( 'attempting to term pool' )
+		print( '===================================================')
+		print( self.upgrade_pool.terminate() )
+		print( '===================================================')
+		print( self.upgrade_pool.close() )
+		print( '===================================================')
+		print( self.upgrade_pool.join() )
+		print( '---------------------------------------------------')
 
 	def upgrade3_tick( self, dt ):
 
@@ -161,7 +167,33 @@ class MainWindow(BoxLayout):
 			# the call to upgrade() finished.
 			Clock.unschedule( self.upgrade3_tick )
 
-			upgrade_result = self.upgrade_process.get()
+			try:
+				upgrade_result = self.upgrade_process.get()
+
+			except Exception as e:
+				# if the update failed for some reason, alert the user
+
+				if self.dialog != None:
+					self.dialog.dismiss()
+
+				self.dialog = DialogConfirmation(
+				 title = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!',
+				 body = "",
+				 button = "",
+				 continue_function=None
+				)
+				self.dialog.l_title.text = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!'
+				self.dialog.l_body.text = str(e)
+				self.dialog.b_cancel.text = "OK"
+				self.dialog.open()
+
+				self.upgrade_pool.close()
+				self.upgrade_pool.join()
+				return
+
+			# cleanup the pool used to launch upgrade() asynchronously asap
+			self.upgrade_pool.close()
+			self.upgrade_pool.join()
 
 			# 1 = poll was successful; we're on the latest version
 			if upgrade_result == 1:
