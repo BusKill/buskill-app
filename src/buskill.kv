@@ -135,15 +135,8 @@
 	id: update_dialog1
 	auto_dismiss: True
 	size_hint: (0.9, None)
-	#padding: '24dp', '24dp', '24dp', '24dp'
 	padding: '16dp', '40dp', '16dp', 0
-	#size_hint: (0.8, None)
-	#height: dialog_contents.minimum_height
-	#height: dialog_contents.minimum_height*2
-	height: l_title.texture_size[1] + l_spacer.texture_size[1] + l_body.texture_size[1] + b_cancel.texture_size[1] + dp(50)
-	#y: dialog_contents.y
-	#size_hint_y: None
-	#height: self.minimum_height
+	height: dialog_contents.minimum_height + dp(16)
 
 	color_primary: 0.129, 0.588, 0.953, 1
 	l_title: l_title
@@ -155,56 +148,36 @@
 	BoxLayout:
 		id: dialog_contents
 		orientation: 'vertical'
-		#padding: '8dp'
-		#spacing: 10
-		#padding: '24dp', '24dp', '8dp', '8dp'
-		#padding: 0, 0, 0, '200dp'
-		#padding: 0
+		height: self.minimum_height
+		spacing: 10
 
 		Label:
 			id: l_title
 			text: root.title
-			#text: str(dialog_contents.minimum_height)
-			#text: 'fucking top'
-			size_hint: 1, None
-			text_size: self.size
-			size_y: self.texture_size
-			height: 0
-			halign: 'center'
-			valign: 'top'
 			font_name: "RobotoMedium"
 			font_size: 20
-			#padding: '16dp', '1dp'
-			padding: 0, 0
 			markup: True
-
-		Label:
-			id: l_spacer
-			text: ' '
-			size_hint: 1, None
-			size: 0, '35dp'
+			pos_hint: {'center_x': 0.5}
+			size_hint: None, None
+			size: self.texture_size
 
 		Label:
 			id: l_body
 			text: root.body
-			size_hint: 1, None
 			text_size: self.size
-			#size_y: self.texture_size
-			halign: 'left'
-			valign: 'top'
 			font_name: "Roboto"
 			font_size: 16
-			#padding: '16dp', '16dp'
-			padding: 0, 0
+			markup: True
+			pos_hint: {'center_x': 0.5}
+			size_hint: 1, None
+			size_y: self.texture_size
 
 		StackLayout:
 			orientation: 'rl-tb'
-			#size_hint: ( 1, None )
-			#size: self.width, 1
-			#padding: 0, 0, '14dp', '8dp'
 			spacing: '14dp'
-			padding: 0
-			#spacing: 0
+			padding: 0, '18dp', 0, 0
+			size_hint: 1, None
+			height: self.minimum_height
 	
 			Button:
 				id: b_continue
@@ -225,7 +198,3 @@
 				background_normal: ''
 				background_color: 0, 0, 0, 0
 				on_release: update_dialog1.dismiss()
-				#text_size: None, None
-				#halign: 'center'
-				#valign: 'middle'
-				#size: self.texture_size * len('Cancel')
