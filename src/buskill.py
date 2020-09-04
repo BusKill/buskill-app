@@ -517,6 +517,63 @@ def integrity_is_ok( sha256sums_filepath, local_filepaths ):
 
 	return True
 
+# TODO: delete this test function
+def upgrade_test():
+	import time
+	i=1
+	while True:
+		i+=1
+		print(i)
+		time.sleep(1)
+
+# helper function that executes upgrade() in the background because kivy
+# apps cannot https://github.com/kivy/kivy/issues/1116
+def upgrade_bg():
+	global upgrade_pool, upgrade_process, upgrade_result
+	upgrade_result = ""
+
+	#upgrade_pool = multiprocessing.Pool( processes=1 )
+	#upgrade_process = upgrade_pool.apply_async( upgrade )
+
+	upgrade_process = multiprocessing.Process( target = upgrade )
+	upgrade_process.start()
+	print( 'upgrade_process.pid:|' +str(upgrade_process.pid)+ '|' )
+
+def upgrade_bg_terminate():
+	global upgrade_pool, upgrade_process
+
+	print( '==========================================' )
+	#upgrade_pool.terminate()
+	import signal
+	os.kill( upgrade_process.pid, signal.SIGKILL )
+	print( '------------------------------------------' )
+	upgrade_process.terminate()
+	print( '------------------------------------------' )
+	#upgrade_pool.close()
+	print( '------------------------------------------' )
+	#upgrade_pool.join()
+	upgrade_process.join()
+	print( '==========================================' )
+
+def upgrade_is_finished():
+	global upgrade_pool, upgrade_process
+
+	if upgrade_process.is_alive():
+		return False
+
+def upgrade_result():
+	global upgrade_pool, upgrade_process
+
+	if upgrade_pool.is_alive():
+		msg = 'upgrade() is still running'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
+
+	return 'TODO'
+	#upgrade_result = upgrade_pool.get()
+	#upgrade_pool.close()
+	#upgrade_pool.join()
+
 # TODO: make this function update an instant field name upgrade_status_msg as it
 # progresses, which is accessible to the buskill_gui.py client. Note that this
 # would first require this buskill.py to be converted into a proper Object

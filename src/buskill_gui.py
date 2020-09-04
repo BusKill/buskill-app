@@ -21,6 +21,12 @@ import buskill
 import webbrowser
 
 import multiprocessing
+from multiprocessing import util
+
+import logging
+util.get_logger().setLevel(util.DEBUG)
+multiprocessing.log_to_stderr().setLevel( logging.DEBUG )
+#from multiprocessing import get_context
 
 import kivy
 #kivy.require('1.0.6') # replace with your current kivy version !
@@ -136,22 +142,39 @@ class MainWindow(BoxLayout):
 
 		# Call the upgrade() function in an asynchronous process so it doesn't
 		# block the UI. We put it in a Pool() so we can get the return value
-		self.upgrade_pool = multiprocessing.Pool( processes=1 )
-		self.upgrade_process = self.upgrade_pool.apply_async(
-		 buskill.upgrade
-		)
+#		self.upgrade_pool = multiprocessing.Pool( processes=1 )
+		#self.upgrade_pool = get_context("forkserver").Pool( processes=1 )
+#		self.upgrade_process = self.upgrade_pool.apply_async(
+#		 buskill.upgrade_test
+#		)
+#		import time; time.sleep(1)
+
+#		import os
+#		parent = os.getpid()
+#		print( "parent:|" +str(parent)+ "|" )
+#		#import psutil
+#		#print( psutil.Process(parent) )
+#		print('one')
+#		self.upgrade_pool.terminate()
+#		print('two')
+
+		buskill.upgrade_bg()
+
 		Clock.schedule_interval(self.upgrade3_tick, 1)
 
 	def upgrade_cancel( self ):
 
 		print( '---------------------------------------------------')
+		#print( str(self.upgrade_process.ready() ) )
+		#print( self.upgrade_pool.daemon )
+		#print( self.upgrade_pool.pid )
 		print( 'attempting to term pool' )
 		print( '===================================================')
-		print( self.upgrade_pool.terminate() )
-		print( '===================================================')
-		print( self.upgrade_pool.close() )
-		print( '===================================================')
-		print( self.upgrade_pool.join() )
+		print( buskill.upgrade_bg_terminate() )
+#		print( '===================================================')
+#		print( self.upgrade_pool.close() )
+#		print( '===================================================')
+#		print( self.upgrade_pool.join() )
 		print( '---------------------------------------------------')
 
 	def upgrade3_tick( self, dt ):
@@ -163,12 +186,14 @@ class MainWindow(BoxLayout):
 		#self.dialog.l_body.text = buskill.getUpgradeStatus()
 
 		# did the upgrade process finish?
-		if self.upgrade_process.ready():
+		#if self.upgrade_process.ready():
+		if buskill.upgrade_is_finished():
 			# the call to upgrade() finished.
 			Clock.unschedule( self.upgrade3_tick )
 
 			try:
-				upgrade_result = self.upgrade_process.get()
+#				upgrade_result = self.upgrade_process.get()
+				upgrade_result = buskill.upgrade_result()
 
 			except Exception as e:
 				# if the update failed for some reason, alert the user
@@ -187,13 +212,13 @@ class MainWindow(BoxLayout):
 				self.dialog.b_cancel.text = "OK"
 				self.dialog.open()
 
-				self.upgrade_pool.close()
-				self.upgrade_pool.join()
+#				self.upgrade_pool.close()
+#				self.upgrade_pool.join()
 				return
 
 			# cleanup the pool used to launch upgrade() asynchronously asap
-			self.upgrade_pool.close()
-			self.upgrade_pool.join()
+#			self.upgrade_pool.close()
+#			self.upgrade_pool.join()
 
 			# 1 = poll was successful; we're on the latest version
 			if upgrade_result == 1:
