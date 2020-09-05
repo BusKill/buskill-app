@@ -64,7 +64,8 @@ logger = logging.getLogger( __name__ )
 #                                  SETTINGS                                    #
 ################################################################################
 
-# n/a
+global bk
+bk = buskill.BusKill()
 
 ################################################################################
 #                                   CLASSES                                    #
@@ -79,15 +80,20 @@ class MainWindow(BoxLayout):
 
 	dialog = None
 
+	def __init__(self, **kwargs):
+		global bk
+		self.bk = bk
+		super(BoxLayout, self).__init__(**kwargs)
+
 	def toggle_menu(self):
 
 		self.nav_drawer.toggle_state()
 
 	def toggle_buskill(self):
 
-		buskill.toggle()
+		self.bk.toggle()
 
-		if buskill.isArmed():
+		if self.bk.is_armed:
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
 			self.toggle_btn.md_bg_color = [1,0,0,1]
@@ -129,6 +135,7 @@ class MainWindow(BoxLayout):
 		 continue_function=None,
 		)
 		self.dialog.b_cancel.on_release = self.upgrade_cancel
+		self.dialog.auto_dismiss = False
 
 		progress_spinner = ProgressSpinner( color = self.color_primary )
 		self.dialog.dialog_contents.add_widget( progress_spinner, 2 )
@@ -158,19 +165,20 @@ class MainWindow(BoxLayout):
 #		self.upgrade_pool.terminate()
 #		print('two')
 
-		buskill.upgrade_bg()
+		self.bk.upgrade_bg()
 
 		Clock.schedule_interval(self.upgrade3_tick, 1)
 
 	def upgrade_cancel( self ):
 
+		Clock.unschedule( self.upgrade3_tick )
 		print( '---------------------------------------------------')
 		#print( str(self.upgrade_process.ready() ) )
 		#print( self.upgrade_pool.daemon )
 		#print( self.upgrade_pool.pid )
 		print( 'attempting to term pool' )
 		print( '===================================================')
-		print( buskill.upgrade_bg_terminate() )
+		print( self.bk.upgrade_bg_terminate() )
 #		print( '===================================================')
 #		print( self.upgrade_pool.close() )
 #		print( '===================================================')
@@ -178,22 +186,25 @@ class MainWindow(BoxLayout):
 		print( '---------------------------------------------------')
 
 	def upgrade3_tick( self, dt ):
+		print( "called upgrade3_tick()" )
 
 		# TODO: make this function update the body text of the dialog with the
 		# status of upgrade. Note that this would first require making
 		# buskill.py establish a proper Object with an instance field named
 		# upgrade_status_msg
-		#self.dialog.l_body.text = buskill.getUpgradeStatus()
+		#self.dialog.l_body.text = buskill.get_upgrade_status()
+		#self.dialog.l_body.text = buskill.upgrade_status_msg
+		self.dialog.l_body.text = str(self.bk.upgrade_status_msg)
 
 		# did the upgrade process finish?
 		#if self.upgrade_process.ready():
-		if buskill.upgrade_is_finished():
+		if self.bk.upgrade_is_finished():
 			# the call to upgrade() finished.
 			Clock.unschedule( self.upgrade3_tick )
 
 			try:
 #				upgrade_result = self.upgrade_process.get()
-				upgrade_result = buskill.upgrade_result()
+				upgrade_result = self.bk.get_upgrade_result()
 
 			except Exception as e:
 				# if the update failed for some reason, alert the user
@@ -249,7 +260,9 @@ class MainWindow(BoxLayout):
 
 	def update3_restart( self ):
 
+		print( str(self.bk.upgrade_status_msg) )
 		print( 'TODO: actually restart the app:|' +self.new_version_exe+ '|' )
+		print( str(self.bk.upgrade_status_msg) )
 
 class DialogConfirmation(ModalView):
 
@@ -282,7 +295,7 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class BusKill(App):
+class BusKillApp(App):
 
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
@@ -291,19 +304,21 @@ class BusKill(App):
 	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
 
 	# does some UI-agnostic buskill initialization stuff
-	buskill.init()
+	#buskill.init()
+	global bk
+	bk = buskill.BusKill()
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
-		buskill.close()
+		bk.close()
 
 	def build(self):
 
-		# TODO: try to remove this (why is it declared twice?)
-		buskill.init()
+		global bk
+		self.bk = bk
 
 		# is the OS that we're running on supported?
-		if buskill.isPlatformSupported():
+		if self.bk.IS_PLATFORM_SUPPORTED:
 
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )

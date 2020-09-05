@@ -70,19 +70,19 @@ def BusKillCLI():
 	# MAIN BODY #
 	#############
 
-	buskill.init()
+	bk = buskill.BusKill()
 
 	# is the OS that we're running on supported?
-	if not buskill.isPlatformSupported():
+	if not bk.is_platform_supported():
 		# the current platform isn't supported; show critical error window
 
-		msg = buskill.ERR_PLATFORM_NOT_SUPPORTED
+		msg = bk.ERR_PLATFORM_NOT_SUPPORTED
 		print( msg ); logging.error( msg )
 		sys.exit(1)
 
 	if args.upgrade:
 		try:
-			new_version_exe = buskill.upgrade()
+			new_version_exe = bk.upgrade()
 		except RuntimeWarning as e:
 			msg = "ERROR: Unable to upgrade buskill\n\t" +str(e)
 			print( msg ); logging.error( msg )
@@ -93,7 +93,7 @@ def BusKillCLI():
 		sys.exit(0)
 
 	if args.arm:
-		buskill.toggle()
+		bk.toggle()
 
 	else:
 		msg = "Nothing to do."

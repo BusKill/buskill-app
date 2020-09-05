@@ -93,8 +93,8 @@ if __name__ == '__main__':
 		print( "No command-line arguments detected. Launching GUI" )
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
-		from buskill_gui import *
-		BusKill().run()
+		from buskill_gui import BusKillApp
+		BusKillApp().run()
 
 	else:
 		# the user passed-in arguments; give 'em the cli
