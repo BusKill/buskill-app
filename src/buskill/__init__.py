@@ -732,12 +732,12 @@ class BusKill:
 		# TODO: uncomment this block
 		# exit if the executable that we're supposed to update doesn't match what
 		# we expect (this can happen if the exe is actually the python interpreter)
-	#	if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
-	#	 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
-	#	 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ):
-	#		msg = 'Unsupported executable (' +EXE_PATH+ ')'
-	#		print( "DEBUG: " + msg ); logging.debug( msg )
-	#		raise RuntimeWarning( msg )
+		if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
+		 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
+		 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ):
+			msg = 'Unsupported executable (' +EXE_PATH+ ')'
+			print( "DEBUG: " + msg ); logging.debug( msg )
+			raise RuntimeWarning( msg )
 
 		# skip upgrade if we can't write to disk
 		if self.DATA_DIR == '':
@@ -897,7 +897,7 @@ class BusKill:
 		###########################
 
 		# TODO: remove this
-		BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = 1
+		#BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = 1
 
 		# check metadata to see if there's a newer version than what we're running
 		# note we use SOURCE_DATE_EPOCH to make version comparisons easy

@@ -94,6 +94,9 @@ sudo firecfg --clean
 # PREPARE APPDIR #
 ##################
 
+# first cleanup old appdir, if needed
+rm -rf /tmp/kivy_appdir
+
 # We use this python-appimage release as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
 cp build/deps/python3.7.8-cp37-cp37m-manylinux2014_x86_64.AppImage /tmp/python.AppImage
@@ -127,6 +130,7 @@ signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https:/
 wget "${signature_url}"
 
 mkdir gnupg
+chmod 0700 gnupg
 popd
 gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
 gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
@@ -222,7 +226,7 @@ echo "INFO: Beginning AppDir thinning"
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 # and make the AppImage reproducible
 
-unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources kivy-examples requests direct_url.json RECORD"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources kivy-examples garden requests direct_url.json RECORD"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
@@ -234,6 +238,16 @@ for item in $(echo "${unnecessary}"); do
 		fi
 	done
 
+done
+
+###############
+# ADD MODULES #
+###############
+
+# add symlinks from the appdir's site-packages dir to our modules in src/
+gardenFlowers="navigationdrawer progressspinner"
+for flower in ${gardenFlowers}; do
+	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
 done
 
 ########################
