@@ -227,7 +227,7 @@ echo "INFO: Beginning AppDir thinning"
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 # and make the AppImage reproducible
 
-unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources kivy-examples garden requests direct_url.json RECORD"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources kivy-examples requests direct_url.json RECORD"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
@@ -246,7 +246,7 @@ done
 ###############
 
 # add symlinks from the appdir's site-packages dir to our modules in src/
-mkdir "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
+mkdir -p "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
 gardenFlowers="navigationdrawer progressspinner"
 for flower in ${gardenFlowers}; do
 	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
