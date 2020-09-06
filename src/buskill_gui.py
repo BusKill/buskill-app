@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import buskill
-import webbrowser
+import os, webbrowser
 
 import multiprocessing
 from multiprocessing import util
@@ -247,7 +247,11 @@ class MainWindow(BoxLayout):
 
 	def update3_restart( self ):
 
-		print( 'TODO: actually restart the app:|' +self.upgrade_result+ '|' )
+		msg = "DEBUG: Exiting and launching " +str(self.upgrade_result)
+		print( msg ); logging.debug( msg )
+
+		# replace this process with the newer version
+		os.execv( self.upgrade_result, [self.upgrade_result] )
 
 class DialogConfirmation(ModalView):
 
