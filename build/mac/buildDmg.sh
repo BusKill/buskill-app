@@ -146,7 +146,7 @@ EOF
 mkdir pyinstaller
 pushd pyinstaller
 
-cat >> ${APP_NAME}.spec <<EOF
+cat > ${APP_NAME}.spec <<EOF
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
@@ -170,7 +170,8 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='${APP_NAME}',
+#          name='${APP_NAME}',
+          name='buskill_1',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -183,7 +184,8 @@ coll = COLLECT(exe, Tree('../src/'),
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='${APP_NAME}')
+#               name='${APP_NAME}')
+               name='buskill_2')
 app = BUNDLE(coll,
              name='${APP_NAME}.app',
              icon=None,
