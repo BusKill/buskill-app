@@ -44,6 +44,7 @@ print_debugging_info () {
 	python --version
 	python -m pip list
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
+	ls -lah "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/"
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
 	dpkg --list --no-pager || dpkg --list # fucking Ubuntu
@@ -245,6 +246,7 @@ done
 ###############
 
 # add symlinks from the appdir's site-packages dir to our modules in src/
+mkdir "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
 gardenFlowers="navigationdrawer progressspinner"
 for flower in ${gardenFlowers}; do
 	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
