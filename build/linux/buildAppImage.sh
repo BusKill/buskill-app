@@ -222,7 +222,7 @@ echo "INFO: Beginning AppDir thinning"
 # remove some unnecessary items from the AppDir to reduce the AppImage size
 # and make the AppImage reproducible
 
-unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources garden kivy-examples requests direct_url.json RECORD"
+unnecessary="__pycache__ pip pygments docutils setuptools chardet urllib3 elftools pkg_resources kivy-examples requests direct_url.json RECORD"
 for item in $(echo "${unnecessary}"); do
 
 	paths=`find /tmp/kivy_appdir -iname "*${item}*"`
