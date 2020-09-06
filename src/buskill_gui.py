@@ -194,7 +194,8 @@ class MainWindow(BoxLayout):
 		# upgrade_status_msg
 		#self.dialog.l_body.text = buskill.get_upgrade_status()
 		#self.dialog.l_body.text = buskill.upgrade_status_msg
-		self.dialog.l_body.text = str(self.bk.upgrade_status_msg)
+		#self.dialog.l_body.text = str(self.bk.upgrade_status_msg)
+		self.dialog.l_body.text = bk.get_upgrade_status()
 
 		# did the upgrade process finish?
 		#if self.upgrade_process.ready():
@@ -204,7 +205,9 @@ class MainWindow(BoxLayout):
 
 			try:
 #				upgrade_result = self.upgrade_process.get()
-				upgrade_result = self.bk.get_upgrade_result()
+				self.upgrade_result = self.bk.get_upgrade_result()
+				print( 'self.upgrade_result:|' +str(self.upgrade_result)+ '|' )
+				print( 'type(self.upgrade_result):|' +str(type(self.upgrade_result))+ '|' )
 
 			except Exception as e:
 				# if the update failed for some reason, alert the user
@@ -232,21 +235,24 @@ class MainWindow(BoxLayout):
 #			self.upgrade_pool.join()
 
 			# 1 = poll was successful; we're on the latest version
-			if upgrade_result == 1:
+			if self.upgrade_result == '1':
 
-				msg = "You're currently using the latest version"
+				if self.dialog != None:
+					self.dialog.dismiss()
 
-				self.dialog.l_title.text = '[font=mdicons][size=30]\ue92f[/size][/font]  Update BusKill'
-				# TODO: add this back
-				#progress_spinner.parent.remove_widget( progress_spinner )
-				self.dialog.l_body.text = msg
+				self.dialog = DialogConfirmation(
+				 title = '[font=mdicons][size=30]\ue92f[/size][/font] Update BusKill',
+				 body = "You're currently using the latest version",
+				 button = "",
+				 continue_function=None
+				)
 				self.dialog.b_cancel.text = "OK"
+				self.dialog.open()
 				return
 
 			# if we made it this far, it means that the we successfully finished
 			# downloading and installing the latest possible version, and the
 			# result is the path to that new executable
-			self.new_version_exe = upgrade_result
 			self.dialog.dismiss()
 
 			msg = "BusKill was updated successfully. Please restart this app to continue."
@@ -260,9 +266,7 @@ class MainWindow(BoxLayout):
 
 	def update3_restart( self ):
 
-		print( str(self.bk.upgrade_status_msg) )
-		print( 'TODO: actually restart the app:|' +self.new_version_exe+ '|' )
-		print( str(self.bk.upgrade_status_msg) )
+		print( 'TODO: actually restart the app:|' +self.upgrade_result+ '|' )
 
 class DialogConfirmation(ModalView):
 

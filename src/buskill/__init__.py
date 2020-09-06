@@ -18,7 +18,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, subprocess
-import urllib.request, re, json, certifi, sys, os, shutil, tempfile, random, gnupg
+import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
 from hashlib import sha256
 
@@ -109,6 +109,7 @@ class BusKill:
 		self.is_armed = None
 		self.usb_handler = None
 		self.upgrade_status_msg = None
+		self.upgrade_new_exe_filepath = None
 
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
@@ -212,7 +213,7 @@ class BusKill:
 
 			# if we made it this far, we've confirmed that we can write to this
 			# data_dir. store it and exit the loop; we'll use this one.
-			DATA_DIR = os.path.join( data_dir, '.buskill' )
+			self.DATA_DIR = os.path.join( data_dir, '.buskill' )
 			break
 
 		try:
@@ -225,11 +226,11 @@ class BusKill:
 			return
 
 		# create cache dir (and clean if necessary) and data dir
-		self.CACHE_DIR = os.path.join( DATA_DIR, 'cache' )
+		self.CACHE_DIR = os.path.join( self.DATA_DIR, 'cache' )
 		if os.path.exists( self.CACHE_DIR ):
 			shutil.rmtree( self.CACHE_DIR )
 		os.makedirs( self.CACHE_DIR, mode=0o700 )
-		os.chmod( DATA_DIR, mode=0o0700 )
+		os.chmod( self.DATA_DIR, mode=0o0700 )
 
 		contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
 		with open( os.path.join(self.CACHE_DIR, 'README.txt'), 'w' ) as fd:
@@ -541,23 +542,55 @@ class BusKill:
 			time.sleep(1)
 
 	def get_upgrade_status(self):
-		global upgrade_status_msg
 
-		return upgrade_status_msg
+		# is the message (upgrade_status_msg) a string that we can read from
+		# directly (running synchronously) or a multiprocessing.Array() because
+		# upgrade() is in an asymmetric child process?
+		if type(self.upgrade_status_msg) == str:
+			# it's just a string; read from it directly
+			return self.upgrade_status_msg
+		else:
+			# it's shared memory; write to it correctly
+			return self.upgrade_status_msg.value.decode('utf-8')
 
-	def set_upgrade_status(self, msg):
+	def set_upgrade_status(self, new_msg):
 
-		self.upgrade_status_msg = msg
+		# is the destination (upgrade_status_msg) a string that we can write to
+		# directly (running synchronously) or a multiprocessing.Array() because
+		# upgrade() is in an asymmetric child process?
+		if self.upgrade_status_msg == None or \
+		 type(self.upgrade_status_msg) == str:
+			# it's just a string; write to it directly
+			self.upgrade_status_msg = new_msg
+		else:
+			# it's shared memory; read from it correctly
+			self.upgrade_status_msg.value = bytes(new_msg, 'utf-8')
 
 	# helper function that executes upgrade() in the background because kivy
 	# apps cannot https://github.com/kivy/kivy/issues/1116
+	# Note: if you use this function, then you should make sure to call
+	#       get_upgrade_result() after it's done to free() the child's resources
 	def upgrade_bg(self):
-		self.upgrade_result = ""
+
+		# if we're running upgrade() synchronously, then upgrade() can access our
+		# object's instance fields OK. But if we run upgrade() in the background,
+		# then the child process won't be able to write to our instance fields as
+		# strings (well, only a copy of them that's not shared), and we have to 
+		# change the strings to shared memory using ctypes arrays
+		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
+		self.upgrade_new_exe_filepath = multiprocessing.Array( 'c', 256 )
 
 		#upgrade_pool = multiprocessing.Pool( processes=1 )
 		#upgrade_process = upgrade_pool.apply_async( upgrade )
 
-		self.upgrade_process = multiprocessing.Process( target = self.upgrade )
+		# Note: We're using multiprocessing.Process() instead of threads or
+		# multiprocessing.Pool() becaus we can get the pid and os.kill() a 
+		# child process. The downsides of this is that we have to use shared
+		# memory and we can't specify a callback when it finishes.
+
+		self.upgrade_process = multiprocessing.Process(
+		 target = self.upgrade
+		)
 		self.upgrade_process.start()
 		print( 'upgrade_process.pid:|' +str(self.upgrade_process.pid)+ '|' )
 
@@ -583,15 +616,51 @@ class BusKill:
 
 		return True
 
+	# this function should be called at the end of upgrade() with its return
+	# this is a hack that effectively allows us to get a value returned from
+	# a function that's executed in a child process using the multiprocessing
+	# module. On success, new_exe_filepath will be the absolute filepath to the
+	# newly-installed executable after upgrade(). On failure it will be:
+	#  1  = No new updates available
+	def set_upgrade_result(self, new_exe_filepath):
+		print( str(type(self.upgrade_new_exe_filepath)) )
+		print( type(self.upgrade_new_exe_filepath) )
+
+		# are we being called from inside a child process that needs to use
+		# shared memory? Or is it just a string?
+		if self.upgrade_new_exe_filepath == None or \
+		 type(self.upgrade_new_exe_filepath) in [str,int]:
+			# it's just a string; write to it directly
+			self.upgrade_new_exe_filepath = new_exe_filepath
+		else:
+			# it's shared memory; read from it correctly
+			self.upgrade_new_exe_filepath.value = bytes(str(new_exe_filepath), 'utf-8')
+
+		return new_exe_filepath
+
 	def get_upgrade_result(self):
+		print( 'called get_upgrade_result()' )
 
 #		if self.upgrade_pool.is_alive():
-#			msg = 'upgrade() is still running'
-#			print( "DEBUG: " + msg ); logging.debug( msg )
-#			raise RuntimeWarning( msg )
+		if not self.upgrade_is_finished():
+			msg = 'upgrade() is still running'
+			print( "DEBUG: " + msg ); logging.debug( msg )
+			raise RuntimeWarning( msg )
 
-		self.upgrade_process.join()
-		return 'TODO'
+		try:
+			# TODO; confirm that merely dereferencing this pointer to the ctypes array
+			# built using multiprocessing.Array() is sufficient to let it be free()ed
+			# later by the garbage collector (?)
+			#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
+			self.upgrade_new_exe_filepath = self.upgrade_new_exe_filepath.value.decode('utf-8')
+			self.upgrade_process.join()
+			self.upgrade_status_msg = None
+		except Exception as e:
+			print( 'caugh ya' )
+	
+		return self.upgrade_new_exe_filepath
+
+		#self.upgrade_process.join()
 		#upgrade_result = upgrade_pool.get()
 		#upgrade_pool.close()
 		#upgrade_pool.join()
@@ -600,11 +669,13 @@ class BusKill:
 	# progresses, which is accessible to the buskill_gui.py client. Note that this
 	# would first require this buskill.py to be converted into a proper Object
 	def upgrade(self):
-		global upgrade_status_msg
+
+		msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
+		print( "DEBUG: " + msg ); logging.debug( msg )
+		raise RuntimeWarning( msg )
 
 		# TODO remove this block
 		# neither of these work
-		self.upgrade_status = "Starting Upgrade.."
 		self.set_upgrade_status( "Starting Upgrade.." )
 
 		msg = "DEBUG: Called upgrade()"
@@ -730,7 +801,7 @@ class BusKill:
 			 and os.path.exists( signature_filepath ):
 				break
 
-			self.set_upgrade_status = "Polling for latest update"
+			self.set_upgrade_status( "Polling for latest update" )
 			msg = "DEBUG: Checking for updates at '" +str(mirror)+ "'"
 			print( msg ); logging.debug( msg )
 
@@ -762,7 +833,7 @@ class BusKill:
 
 		# CHECK SIGNATURE OF METADATA
 
-		self.upgrade_status = "Verifying metadata signature"
+		self.set_upgrade_status( "Verifying metadata signature" )
 		msg = "\tDEBUG: Finished downloading update metadata. Checking signature."
 		print( msg ); logging.debug( msg )
 			
@@ -844,7 +915,7 @@ class BusKill:
 		if latestReleaseTime < currentReleaseTime:
 			msg = "INFO: Current version is latest version. No new updates available."
 			print( msg ); logging.info( msg )
-			return 1
+			return self.set_upgrade_result( 1 )
 
 		# currently we only support x86_64 builds..
 		arch = 'x86_64'
@@ -894,6 +965,7 @@ class BusKill:
 		
 						# don't download any files >200 MB
 						size_bytes = int(url.info().get('content-length'))
+						self.set_upgrade_status( "Downloading " +str(filename)+ " (" +str(math.ceil(size_bytes/1024/1024))+ "MB)" )
 						if size_bytes > 209715200:
 							msg = "\tFile too big; skipping (" +str(size_bytes)+ " bytes)"
 							print( msg ); logging.debug( msg )
@@ -913,6 +985,7 @@ class BusKill:
 		# VERIFY SIGNATURE #
 		####################
 
+		self.set_upgrade_status( "Verifying signature" )
 		msg = "DEBUG: Finished downloading update files. Checking signature."
 		print( msg ); logging.debug( msg )
 
@@ -969,6 +1042,7 @@ class BusKill:
 			print( msg ); logging.debug( msg )
 			raise RuntimeError( msg )
 
+		self.set_upgrade_status( "Verifying integrity" )
 		msg = "DEBUG: New version's integrity is valid."
 		print( msg ); logging.debug( msg )
 
@@ -981,6 +1055,7 @@ class BusKill:
 		print( "EXE_DIR:|" +self.EXE_DIR+ "|" )
 		print( "EXE_FILE:|" +self.EXE_FILE+ "|" )
 		
+		self.set_upgrade_status( "Extracting archive" )
 		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(self.EXE_DIR)+ "'"
 		print( msg ); logging.debug( msg )
 
@@ -1030,4 +1105,4 @@ class BusKill:
 
 			new_version_exe = self.EXE_DIR + '/' + app_path
 
-		return new_version_exe
+		return self.set_upgrade_result( new_version_exe )
