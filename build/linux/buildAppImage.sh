@@ -30,6 +30,7 @@ export DEBIAN_FRONTEND=noninteractive
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
 FIREJAIL='/usr/bin/firejail --noprofile --net=none'
+PYTHON='/tmp/kivy_appdir/AppRun'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -107,9 +108,9 @@ mv /tmp/squashfs-root /tmp/kivy_appdir
 # install our pip depends from the files in the repo since pip doesn't provide
 # decent authentication and integrity checks on what it downloads from PyPI
 #  * https://security.stackexchange.com/a/234098/213165
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
+${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
+${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
@@ -120,7 +121,7 @@ ${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-ins
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
-/tmp/kivy_appdir/opt/python*/bin/python* -m pip download python-gnupg
+${PYTHON} -m pip download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 wget "${signature_url}"
@@ -137,7 +138,7 @@ if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
 fi
-${FIREJAIL} /tmp/kivy_appdir/opt/python*/bin/python* -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
 rm -rf "${tmpDir}"
 
 # add our code to the AppDir
@@ -285,6 +286,23 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+
+########################
+# ADD ADDITIONAL FILES #
+########################
+
+# now let's add some additional files to our release for the user, which will
+# be *outside* the AppImage
+
+# docs/
+docsDir="dist/${ARCHIVE_DIR}/docs"
+mkdir -p "${docsDir}"
+
+cp "docs/README.md" "${docsDir}/"
+cp "docs/attribution.rst" "${docsDir}/"
+cp "LICENSE" "${docsDir}/"
+cp "CHANGELOG" "${docsDir}/"
+cp "KEYS" "${docsDir}/"
 
 ###############
 # OUTPUT INFO #
