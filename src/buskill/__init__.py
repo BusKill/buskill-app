@@ -732,10 +732,10 @@ class BusKill:
 		# TODO: uncomment this block
 		# exit if the executable that we're supposed to update doesn't match what
 		# we expect (this can happen if the exe is actually the python interpreter)
-		if not re.match( ".*buskill[^/]*\.AppImage$", EXE_FILE ) \
-		 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", EXE_FILE ) \
-		 and not re.match( ".*buskill[^/]*\.exe$", EXE_FILE ):
-			msg = 'Unsupported executable (' +EXE_PATH+ ')'
+		if not re.match( ".*buskill[^/]*\.AppImage$", self.EXE_FILE ) \
+		 and not re.match( ".*buskill-win-[^\\\]*-x86_64$", self.EXE_FILE ) \
+		 and not re.match( ".*buskill[^/]*\.exe$", self.EXE_FILE ):
+			msg = 'Unsupported executable (' +self.EXE_PATH+ ')'
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
