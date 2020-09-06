@@ -17,7 +17,7 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import platform, multiprocessing, subprocess
+import platform, multiprocessing, traceback, subprocess
 import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
 from hashlib import sha256
@@ -109,7 +109,7 @@ class BusKill:
 		self.is_armed = None
 		self.usb_handler = None
 		self.upgrade_status_msg = None
-		self.upgrade_new_exe_filepath = None
+		self.upgrade_result = None
 
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
@@ -489,6 +489,28 @@ class BusKill:
 	# UPGRADE FUNCTIONS #
 	#####################
 
+	class Process(multiprocessing.Process):
+
+		def __init__(self, *args, **kwargs):
+			multiprocessing.Process.__init__(self, *args, **kwargs)
+			self._pconn, self._cconn = multiprocessing.Pipe()
+			self._exception = None
+
+		def run(self):
+			try:
+				multiprocessing.Process.run(self)
+				self._cconn.send(None)
+			except Exception as e:
+				tb = traceback.format_exc()
+				self._cconn.send((e, tb))
+				#raise e  # You can still rise this exception if you need to
+
+		@property
+		def exception(self):
+			if self._pconn.poll():
+				self._exception = self._pconn.recv()
+			return self._exception
+
 	def wipeCache(self):
 
 		if os.path.exists( self.CACHE_DIR ):
@@ -578,7 +600,7 @@ class BusKill:
 		# strings (well, only a copy of them that's not shared), and we have to 
 		# change the strings to shared memory using ctypes arrays
 		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
-		self.upgrade_new_exe_filepath = multiprocessing.Array( 'c', 256 )
+		self.upgrade_result = multiprocessing.Array( 'c', 256 )
 
 		#upgrade_pool = multiprocessing.Pool( processes=1 )
 		#upgrade_process = upgrade_pool.apply_async( upgrade )
@@ -588,7 +610,7 @@ class BusKill:
 		# child process. The downsides of this is that we have to use shared
 		# memory and we can't specify a callback when it finishes.
 
-		self.upgrade_process = multiprocessing.Process(
+		self.upgrade_process = self.Process(
 		 target = self.upgrade
 		)
 		self.upgrade_process.start()
@@ -597,17 +619,15 @@ class BusKill:
 	def upgrade_bg_terminate(self):
 
 		print( '==========================================' )
-		#upgrade_pool.terminate()
-		import signal
-		os.kill( self.upgrade_process.pid, signal.SIGKILL )
+		self.upgrade_process.kill()
 		print( '------------------------------------------' )
-		self.upgrade_process.terminate()
-		print( '------------------------------------------' )
-		#upgrade_pool.close()
-		print( '------------------------------------------' )
-		#upgrade_pool.join()
 		self.upgrade_process.join()
 		print( '==========================================' )
+
+		# cleanup
+		self.upgrade_process = None
+		self.upgrade_status_msg = None
+		self.upgrade_result = None
 
 	def upgrade_is_finished(self):
 
@@ -619,24 +639,24 @@ class BusKill:
 	# this function should be called at the end of upgrade() with its return
 	# this is a hack that effectively allows us to get a value returned from
 	# a function that's executed in a child process using the multiprocessing
-	# module. On success, new_exe_filepath will be the absolute filepath to the
+	# module. On success, upgrade_result will be the absolute filepath to the
 	# newly-installed executable after upgrade(). On failure it will be:
 	#  1  = No new updates available
-	def set_upgrade_result(self, new_exe_filepath):
-		print( str(type(self.upgrade_new_exe_filepath)) )
-		print( type(self.upgrade_new_exe_filepath) )
+	def set_upgrade_result(self, upgrade_result):
+		print( str(type(self.upgrade_result)) )
+		print( type(self.upgrade_result) )
 
 		# are we being called from inside a child process that needs to use
 		# shared memory? Or is it just a string?
-		if self.upgrade_new_exe_filepath == None or \
-		 type(self.upgrade_new_exe_filepath) in [str,int]:
+		if self.upgrade_result == None or \
+		 type(self.upgrade_result) in [str,int]:
 			# it's just a string; write to it directly
-			self.upgrade_new_exe_filepath = new_exe_filepath
+			self.upgrade_result = upgrade_result
 		else:
 			# it's shared memory; read from it correctly
-			self.upgrade_new_exe_filepath.value = bytes(str(new_exe_filepath), 'utf-8')
+			self.upgrade_result.value = bytes(str(upgrade_result), 'utf-8')
 
-		return new_exe_filepath
+		return upgrade_result
 
 	def get_upgrade_result(self):
 		print( 'called get_upgrade_result()' )
@@ -647,18 +667,29 @@ class BusKill:
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
-		try:
-			# TODO; confirm that merely dereferencing this pointer to the ctypes array
-			# built using multiprocessing.Array() is sufficient to let it be free()ed
-			# later by the garbage collector (?)
-			#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
-			self.upgrade_new_exe_filepath = self.upgrade_new_exe_filepath.value.decode('utf-8')
-			self.upgrade_process.join()
-			self.upgrade_status_msg = None
-		except Exception as e:
-			print( 'caugh ya' )
+		# TODO; confirm that merely dereferencing this pointer to the ctypes array
+		# built using multiprocessing.Array() is sufficient to let it be free()ed
+		# later by the garbage collector (?)
+		#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
+		print( 'self.upgrade_process.exception:|' +str(self.upgrade_process.exception)+ '|' )
+		print( 'type(self.upgrade_process.exception):|' +str(type(self.upgrade_process.exception))+ '|' )
+		if self.upgrade_process.exception:
+			exception, traceback = self.upgrade_process.exception
+			print( 'exception:|' +str(exception)+ '|' )
+			print( 'type(exception):|' +str(type(exception))+ '|' )
+			print( 'traceback:|' +str(traceback)+ '|' )
+			print( 'type(traceback):|' +str(type(traceback))+ '|' )
+			#raise exception from traceback
+			raise exception
 	
-		return self.upgrade_new_exe_filepath
+		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
+
+		# cleanup
+		self.upgrade_process.join()
+		self.upgrade_process = None
+		self.upgrade_status_msg = None
+	
+		return self.upgrade_result
 
 		#self.upgrade_process.join()
 		#upgrade_result = upgrade_pool.get()
@@ -670,14 +701,12 @@ class BusKill:
 	# would first require this buskill.py to be converted into a proper Object
 	def upgrade(self):
 
-		msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
-		print( "DEBUG: " + msg ); logging.debug( msg )
-		raise RuntimeWarning( msg )
+		#return self.set_upgrade_result( 1 )
+		#msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
+		#print( "DEBUG: " + msg ); logging.debug( msg )
+		#raise RuntimeWarning( msg )
 
-		# TODO remove this block
-		# neither of these work
 		self.set_upgrade_status( "Starting Upgrade.." )
-
 		msg = "DEBUG: Called upgrade()"
 		print( msg ); logging.debug( msg )
 
@@ -707,7 +736,7 @@ class BusKill:
 
 		# only upgrade on linux, windows, and mac
 		if self.OS_NAME_SHORT == '':
-			msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
+			msg = 'Upgrades not supported on this platform (' +CURRENT_PLATFORM+ ')'
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
