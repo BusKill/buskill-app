@@ -123,9 +123,12 @@ class MainWindow(BoxLayout):
 
 	def update2(self):
 
+		# close the dialog if it's already opened
 		if self.dialog != None:
 			self.dialog.dismiss()
 
+		# open a new dialog with a spinning progress circle that tells the user
+		# to wait for upgrade() to finish
 		msg = "Please wait while we check for updates and download the latest version of BusKill."
 
 		self.dialog = DialogConfirmation(
@@ -147,74 +150,46 @@ class MainWindow(BoxLayout):
 		# TODO: split this upgrade function into update() and upgrade() and
 		# make the status somehow accessible from here so we can put it in a modal
 
-		# Call the upgrade() function in an asynchronous process so it doesn't
-		# block the UI. We put it in a Pool() so we can get the return value
-#		self.upgrade_pool = multiprocessing.Pool( processes=1 )
-		#self.upgrade_pool = get_context("forkserver").Pool( processes=1 )
-#		self.upgrade_process = self.upgrade_pool.apply_async(
-#		 buskill.upgrade_test
-#		)
-#		import time; time.sleep(1)
-
-#		import os
-#		parent = os.getpid()
-#		print( "parent:|" +str(parent)+ "|" )
-#		#import psutil
-#		#print( psutil.Process(parent) )
-#		print('one')
-#		self.upgrade_pool.terminate()
-#		print('two')
-
+		# Call the upgrade_bg() function which executes the upgrade() function in
+		# an asynchronous process so it doesn't block the UI
 		self.bk.upgrade_bg()
 
+		# Register the upgrade3_tick() function as a callback to be executed
+		# every second, and we'll use that to update the UI with a status
+		# message from the upgrade() process and check to see if it the upgrade
+		# finished running
 		Clock.schedule_interval(self.upgrade3_tick, 1)
 
+	# cancel the upgrade()
 	def upgrade_cancel( self ):
 
 		Clock.unschedule( self.upgrade3_tick )
-		print( '---------------------------------------------------')
-		#print( str(self.upgrade_process.ready() ) )
-		#print( self.upgrade_pool.daemon )
-		#print( self.upgrade_pool.pid )
-		print( 'attempting to term pool' )
-		print( '===================================================')
 		print( self.bk.upgrade_bg_terminate() )
-#		print( '===================================================')
-#		print( self.upgrade_pool.close() )
-#		print( '===================================================')
-#		print( self.upgrade_pool.join() )
-		print( '---------------------------------------------------')
 
+	# this is the callback function that will be executed every one second
+	# while buskill's upgrade() method is running
 	def upgrade3_tick( self, dt ):
 		print( "called upgrade3_tick()" )
 
-		# TODO: make this function update the body text of the dialog with the
-		# status of upgrade. Note that this would first require making
-		# buskill.py establish a proper Object with an instance field named
-		# upgrade_status_msg
-		#self.dialog.l_body.text = buskill.get_upgrade_status()
-		#self.dialog.l_body.text = buskill.upgrade_status_msg
-		#self.dialog.l_body.text = str(self.bk.upgrade_status_msg)
+		# update the dailog 
 		self.dialog.l_body.text = bk.get_upgrade_status()
 
 		# did the upgrade process finish?
-		#if self.upgrade_process.ready():
 		if self.bk.upgrade_is_finished():
 			# the call to upgrade() finished.
 			Clock.unschedule( self.upgrade3_tick )
 
 			try:
-#				upgrade_result = self.upgrade_process.get()
 				self.upgrade_result = self.bk.get_upgrade_result()
-				print( 'self.upgrade_result:|' +str(self.upgrade_result)+ '|' )
-				print( 'type(self.upgrade_result):|' +str(type(self.upgrade_result))+ '|' )
 
 			except Exception as e:
 				# if the update failed for some reason, alert the user
 
+				# close the dialog if it's already opened
 				if self.dialog != None:
 					self.dialog.dismiss()
 
+				# open a new dialog that tells the user the error that occurred
 				self.dialog = DialogConfirmation(
 				 title = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!',
 				 body = "",
@@ -226,8 +201,6 @@ class MainWindow(BoxLayout):
 				self.dialog.b_cancel.text = "OK"
 				self.dialog.open()
 
-#				self.upgrade_pool.close()
-#				self.upgrade_pool.join()
 				return
 
 			# cleanup the pool used to launch upgrade() asynchronously asap
@@ -237,9 +210,12 @@ class MainWindow(BoxLayout):
 			# 1 = poll was successful; we're on the latest version
 			if self.upgrade_result == '1':
 
+				# close the dialog if it's already opened
 				if self.dialog != None:
 					self.dialog.dismiss()
 
+				# open a new dialog that tells the user that they're already
+				# running the latest version
 				self.dialog = DialogConfirmation(
 				 title = '[font=mdicons][size=30]\ue92f[/size][/font] Update BusKill',
 				 body = "You're currently using the latest version",
@@ -253,8 +229,13 @@ class MainWindow(BoxLayout):
 			# if we made it this far, it means that the we successfully finished
 			# downloading and installing the latest possible version, and the
 			# result is the path to that new executable
-			self.dialog.dismiss()
 
+			# close the dialog if it's already opened
+			if self.dialog != None:
+				self.dialog.dismiss()
+
+			# open a new dialog that tells the user that the upgrade() was a
+			# success and gets confirmation from the user to restart the app
 			msg = "BusKill was updated successfully. Please restart this app to continue."
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
@@ -307,8 +288,6 @@ class BusKillApp(App):
 	LabelBase.register( "RobotoMedium", "fonts/Roboto-Medium.ttf",  )
 	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
 
-	# does some UI-agnostic buskill initialization stuff
-	#buskill.init()
 	global bk
 	bk = buskill.BusKill()
 

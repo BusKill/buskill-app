@@ -238,10 +238,6 @@ class BusKill:
 
 		self.GNUPGHOME = os.path.join( self.CACHE_DIR, '.gnupg' )
 
-	# TODO: deprecate this if buskill.is_armed can be used
-	def isArmed(self):
-		return self.is_armed
-
 	def toggle(self):
 
 		if self.is_armed:
@@ -554,15 +550,6 @@ class BusKill:
 
 		return True
 
-	# TODO: delete this test function
-	def upgrade_test():
-		import time
-		i=1
-		while True:
-			i+=1
-			print(i)
-			time.sleep(1)
-
 	def get_upgrade_status(self):
 
 		# is the message (upgrade_status_msg) a string that we can read from
@@ -590,8 +577,13 @@ class BusKill:
 
 	# helper function that executes upgrade() in the background because kivy
 	# apps cannot https://github.com/kivy/kivy/issues/1116
+	#
 	# Note: if you use this function, then you should make sure to call
 	#       get_upgrade_result() after it's done to free() the child's resources
+	#
+	# TODO: maybe one day this function can be eliminated and instead the client
+	# can merely execute upgrade() directly in a thread. But that would require
+	# rewriting upgrade() to catch sentinels so it can terminate itself
 	def upgrade_bg(self):
 
 		# if we're running upgrade() synchronously, then upgrade() can access our
@@ -614,15 +606,11 @@ class BusKill:
 		 target = self.upgrade
 		)
 		self.upgrade_process.start()
-		print( 'upgrade_process.pid:|' +str(self.upgrade_process.pid)+ '|' )
 
 	def upgrade_bg_terminate(self):
 
-		print( '==========================================' )
 		self.upgrade_process.kill()
-		print( '------------------------------------------' )
 		self.upgrade_process.join()
-		print( '==========================================' )
 
 		# cleanup
 		self.upgrade_process = None
@@ -643,8 +631,6 @@ class BusKill:
 	# newly-installed executable after upgrade(). On failure it will be:
 	#  1  = No new updates available
 	def set_upgrade_result(self, upgrade_result):
-		print( str(type(self.upgrade_result)) )
-		print( type(self.upgrade_result) )
 
 		# are we being called from inside a child process that needs to use
 		# shared memory? Or is it just a string?
@@ -659,7 +645,6 @@ class BusKill:
 		return upgrade_result
 
 	def get_upgrade_result(self):
-		print( 'called get_upgrade_result()' )
 
 #		if self.upgrade_pool.is_alive():
 		if not self.upgrade_is_finished():
@@ -671,15 +656,10 @@ class BusKill:
 		# built using multiprocessing.Array() is sufficient to let it be free()ed
 		# later by the garbage collector (?)
 		#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
-		print( 'self.upgrade_process.exception:|' +str(self.upgrade_process.exception)+ '|' )
-		print( 'type(self.upgrade_process.exception):|' +str(type(self.upgrade_process.exception))+ '|' )
+
+		# take any exceptions raised within upgrade() and raise them now
 		if self.upgrade_process.exception:
 			exception, traceback = self.upgrade_process.exception
-			print( 'exception:|' +str(exception)+ '|' )
-			print( 'type(exception):|' +str(type(exception))+ '|' )
-			print( 'traceback:|' +str(traceback)+ '|' )
-			print( 'type(traceback):|' +str(type(traceback))+ '|' )
-			#raise exception from traceback
 			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
@@ -691,20 +671,7 @@ class BusKill:
 	
 		return self.upgrade_result
 
-		#self.upgrade_process.join()
-		#upgrade_result = upgrade_pool.get()
-		#upgrade_pool.close()
-		#upgrade_pool.join()
-
-	# TODO: make this function update an instant field name upgrade_status_msg as it
-	# progresses, which is accessible to the buskill_gui.py client. Note that this
-	# would first require this buskill.py to be converted into a proper Object
 	def upgrade(self):
-
-		#return self.set_upgrade_result( 1 )
-		#msg = 'Upgrades not supported on this platform(' +CURRENT_PLATFORM+ ')'
-		#print( "DEBUG: " + msg ); logging.debug( msg )
-		#raise RuntimeWarning( msg )
 
 		self.set_upgrade_status( "Starting Upgrade.." )
 		msg = "DEBUG: Called upgrade()"
