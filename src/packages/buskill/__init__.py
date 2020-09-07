@@ -225,7 +225,7 @@ class BusKill:
 
 		# create cache dir (and clean if necessary) and data dir
 		self.CACHE_DIR = os.path.join( self.DATA_DIR, 'cache' )
-		wipeCache()
+		self.wipeCache()
 
 		contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
 		with open( os.path.join(self.CACHE_DIR, 'README.txt'), 'w' ) as fd:
