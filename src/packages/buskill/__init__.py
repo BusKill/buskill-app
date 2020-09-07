@@ -491,31 +491,31 @@ class BusKill:
 
 		def run(self):
 			try:
-				print( '1')
+				print( '1'); logging.debug( '1' )
 				multiprocessing.Process.run(self)
-				print( '2')
+				print( '2'); logging.debug( '2' )
 				self._cconn.send(None)
-				print( '3')
+				print( '3'); logging.debug( '3' )
 			except Exception as e:
-				print( '4')
+				print( '4'); logging.debug( '4' )
 				msg = "DEBUG: Exception thrown in child process: " +str(e)
-				print( '5')
+				print( '5'); logging.debug( '5' )
 				print( msg ); logging.debug( msg )
-				print( '6')
+				print( '6'); logging.debug( '6' )
 
-				print( '7')
+				print( '7'); logging.debug( '7' )
 				tb = traceback.format_exc()
-				print( '8')
+				print( '8'); logging.debug( '8' )
 				msg = "DEBUG: Traceback: " +str(tb)
-				print( '9')
+				print( '9'); logging.debug( '9' )
 				print( msg ); logging.debug( msg )
-				print( '10')
+				print( '10'); logging.debug( '10' )
 
 				#self._cconn.send((e, tb))
-				self._cconn.send(tb)
-				print( '11')
+				self._cconn.send((str(e), str(tb)))
+				print( '11'); logging.debug( '11' )
 				raise e  # You can still rise this exception if you need to
-				print( '12')
+				print( '12'); logging.debug( '12' )
 
 		@property
 		def exception(self):
