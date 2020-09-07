@@ -225,10 +225,7 @@ class BusKill:
 
 		# create cache dir (and clean if necessary) and data dir
 		self.CACHE_DIR = os.path.join( self.DATA_DIR, 'cache' )
-		if os.path.exists( self.CACHE_DIR ):
-			shutil.rmtree( self.CACHE_DIR )
-		os.makedirs( self.CACHE_DIR, mode=0o700 )
-		os.chmod( self.DATA_DIR, mode=0o0700 )
+		wipeCache()
 
 		contents = "This is a runtime cache dir for BusKill that is deleted every time the BusKill app is launched or exits.\n\nFor more information, see https://buskill.in\n"
 		with open( os.path.join(self.CACHE_DIR, 'README.txt'), 'w' ) as fd:
@@ -247,8 +244,11 @@ class BusKill:
 
 			# disarm just means to terminate the child process in which the arm
 			# function was spawned. this works on all platforms.
-			self.usb_handler.terminate()
-			self.usb_handler.join()
+			try:
+				self.usb_handler.terminate()
+				self.usb_handler.join()
+			except:
+				pass
 
 			self.is_armed = False
 			msg = "INFO: BusKill is disarmed."
@@ -521,7 +521,7 @@ class BusKill:
 				#self._cconn.send((e, tb))
 				self._cconn.send((e, str(tb)))
 				print( '11'); logging.debug( '11' )
-				raise e  # You can still rise this exception if you need to
+				#raise e  # You can still rise this exception if you need to
 				print( '12'); logging.debug( '12' )
 
 		@property
