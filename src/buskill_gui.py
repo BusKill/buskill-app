@@ -17,7 +17,10 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import buskill
+import packages.buskill
+from packages.garden.navigationdrawer import NavigationDrawer
+from packages.garden.progressspinner import ProgressSpinner
+
 import os, webbrowser
 
 import multiprocessing
@@ -45,9 +48,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 
-from garden.navigationdrawer import NavigationDrawer
-from garden.progressspinner import ProgressSpinner
-
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
 
@@ -64,8 +64,7 @@ logger = logging.getLogger( __name__ )
 #                                  SETTINGS                                    #
 ################################################################################
 
-global bk
-bk = buskill.BusKill()
+# n/a
 
 ################################################################################
 #                                   CLASSES                                    #
@@ -293,7 +292,7 @@ class BusKillApp(App):
 	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
 
 	global bk
-	bk = buskill.BusKill()
+	bk = packages.buskill.BusKill()
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):

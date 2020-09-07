@@ -17,7 +17,7 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import buskill
+import packages.buskill
 import argparse, sys, platform
 
 import logging
@@ -70,7 +70,7 @@ def BusKillCLI():
 	# MAIN BODY #
 	#############
 
-	bk = buskill.BusKill()
+	bk = packages.buskill.BusKill()
 
 	# is the OS that we're running on supported?
 	if not bk.is_platform_supported():
