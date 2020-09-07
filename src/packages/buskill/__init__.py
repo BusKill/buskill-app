@@ -163,13 +163,10 @@ class BusKill:
 		except:
 			pass
 
-		try:
-			# delete cache dir
-			if os.path.exists( self.CACHE_DIR ):
-				shutil.rmtree( self.CACHE_DIR )
-		except:
-			pass
-
+		# delete cache dir
+		self.wipeCache()
+		if os.path.exists( self.CACHE_DIR ):
+			shutil.rmtree( self.CACHE_DIR )
 
 	def is_platform_supported(self):
 
@@ -515,10 +512,22 @@ class BusKill:
 
 	def wipeCache(self):
 
+		# first umount anything in the cache dir
+		try:
+			dmg_mnt_path = os.path.join( self.CACHE_DIR, 'dmg_mnt' )
+			if os.path.exists( dmg_mnt_path ) and self.OS_NAME_SHORT == 'mac':
+				subprocess.run( ['umount', dmg_mnt_path] )
+		except:
+			pass
+
 		if os.path.exists( self.CACHE_DIR ):
 			shutil.rmtree( self.CACHE_DIR )
-		os.makedirs( self.CACHE_DIR, mode=0o700 )
-		os.chmod( self.DATA_DIR, mode=0o0700 )
+
+		try:
+			os.makedirs( self.CACHE_DIR, mode=0o700 )
+			os.chmod( self.DATA_DIR, mode=0o0700 )
+		except:
+			pass
 
 	# Takes the path (as a string) to a SHA256SUMS file and a list of paths to
 	# local files. Returns true only if all files' checksums are present in the
