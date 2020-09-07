@@ -255,7 +255,7 @@ class BusKill:
 			print( msg ); logger.info( msg )
 
 		else:
-			msg = "DEBUG: attempting to arm BusKill"
+			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "()"
 			print( msg ); logger.debug( msg )
 
 			# launch an asynchronous child process that'll loop and listen for
@@ -418,17 +418,22 @@ class BusKill:
 	# this works for both linux and mac
 	def armNix(self):
 
+		print( 'a' ); logging.debug( 'a' )
 		with usb1.USBContext() as context:
+			print( 'b' ); logging.debug( 'b' )
 
 			if not context.hasCapability(usb1.CAP_HAS_HOTPLUG):
+				print( 'c' ); logging.debug( 'c' )
 				msg = 'ERROR: Hotplug support is missing'
 				print( msg ); logger.error( msg )
 				return msg
 
 			opaque = context.hotplugRegisterCallback( self.hotplugCallbackNix )
+			print( 'd' ); logging.debug( 'd' )
 
 			try:
 				while True:
+					print( 'e' ); logging.debug( 'e' )
 					# this call is blocking (with a default timeout of 60 seconds)
 					# afaik there's no way to tell USBContext.handleEvents() to exit
 					# safely, so instead we just make the whole call to this arming
@@ -437,6 +442,7 @@ class BusKill:
 					# traceback to output, but it *does* immediately disarm without
 					# having wait for the timeout..
 					context.handleEvents()
+					print( 'f' ); logging.debug( 'f' )
 
 			except (KeyboardInterrupt, SystemExit):
 				print('Exiting')
