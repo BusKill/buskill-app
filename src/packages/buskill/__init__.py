@@ -163,10 +163,11 @@ class BusKill:
 		except:
 			pass
 
+		try:
 		# delete cache dir
-		self.wipeCache()
-		if os.path.exists( self.CACHE_DIR ):
-			shutil.rmtree( self.CACHE_DIR )
+			self.wipeCache()
+		except:
+			pass
 
 	def is_platform_supported(self):
 
@@ -512,7 +513,7 @@ class BusKill:
 				print( '10'); logging.debug( '10' )
 
 				#self._cconn.send((e, tb))
-				self._cconn.send((str(e), str(tb)))
+				self._cconn.send((e, str(tb)))
 				print( '11'); logging.debug( '11' )
 				raise e  # You can still rise this exception if you need to
 				print( '12'); logging.debug( '12' )
