@@ -489,6 +489,14 @@ class BusKill:
 	# UPGRADE FUNCTIONS #
 	#####################
 
+	import pickle
+	class MyPickler (pickle.Pickler):
+		def save(self, obj):
+			try:
+				pickle.Pickler.save(self, obj)
+			except Exception, e:
+				import pdb;pdb.set_trace()
+
 	class Process(multiprocessing.Process):
 
 		def __init__(self, *args, **kwargs):
