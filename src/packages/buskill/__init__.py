@@ -497,7 +497,13 @@ class BusKill:
 				multiprocessing.Process.run(self)
 				self._cconn.send(None)
 			except Exception as e:
+				msg = "DEBUG: Exception thrown in child process: " +str(e)
+				print( msg ); logging.debug( msg )
+
 				tb = traceback.format_exc()
+				msg = "DEBUG: Traceback: " +str(tb)
+				print( msg ); logging.debug( msg )
+
 				self._cconn.send((e, tb))
 				#raise e  # You can still rise this exception if you need to
 
