@@ -505,7 +505,7 @@ class BusKill:
 				print( msg ); logging.debug( msg )
 
 				self._cconn.send((e, tb))
-				#raise e  # You can still rise this exception if you need to
+				raise e  # You can still rise this exception if you need to
 
 		@property
 		def exception(self):
