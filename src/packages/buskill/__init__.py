@@ -260,7 +260,7 @@ class BusKill:
 
 			# launch an asynchronous child process that'll loop and listen for
 			# usb events
-			self.usb_handler = multiprocessing.Process(
+			self.usb_handler = self.Process(
 			 target = self.ARM_FUNCTION
 			)
 			self.usb_handler.start()
@@ -521,7 +521,7 @@ class BusKill:
 				#self._cconn.send((e, tb))
 				self._cconn.send((e, str(tb)))
 				print( '11'); logging.debug( '11' )
-				#raise e  # You can still rise this exception if you need to
+				raise e  # You can still rise this exception if you need to
 				print( '12'); logging.debug( '12' )
 
 		@property
