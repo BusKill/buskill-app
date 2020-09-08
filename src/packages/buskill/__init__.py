@@ -494,7 +494,7 @@ class BusKill:
 		def save(self, obj):
 			try:
 				pickle.Pickler.save(self, obj)
-			except Exception, e:
+			except Exception as e:
 				import pdb;pdb.set_trace()
 
 	class Process(multiprocessing.Process):
