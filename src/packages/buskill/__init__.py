@@ -631,7 +631,7 @@ class BusKill:
 	# rewriting upgrade() to catch sentinels so it can terminate itself
 	def upgrade_bg(self):
 		# TODO remove this
-		import pdb;pdb.set_trace()
+#		import pdb;pdb.set_trace()
 
 		# if we're running upgrade() synchronously, then upgrade() can access our
 		# object's instance fields OK. But if we run upgrade() in the background,
