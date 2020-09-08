@@ -489,13 +489,13 @@ class BusKill:
 	# UPGRADE FUNCTIONS #
 	#####################
 
-	import pickle
-	class MyPickler (pickle.Pickler):
-		def save(self, obj):
-			try:
-				pickle.Pickler.save(self, obj)
-			except Exception as e:
-				import pdb;pdb.set_trace()
+#	import pickle
+#	class MyPickler (pickle.Pickler):
+#		def save(self, obj):
+#			try:
+#				pickle.Pickler.save(self, obj)
+#			except Exception as e:
+#				import pdb;pdb.set_trace()
 
 	# allow us to catch exceptions inside child processes
 	# * https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
@@ -506,39 +506,39 @@ class BusKill:
 			self._pconn, self._cconn = multiprocessing.Pipe()
 			self._exception = None
 
-		def run(self):
-			try:
-				print( '1'); logging.debug( '1' )
-				multiprocessing.Process.run(self)
-				print( '2'); logging.debug( '2' )
-				self._cconn.send(None)
-				print( '3'); logging.debug( '3' )
-			except Exception as e:
-				print( '4'); logging.debug( '4' )
-				msg = "DEBUG: Exception thrown in child process: " +str(e)
-				print( msg ); logging.debug( msg )
-
-				print( '5'); logging.debug( '5' )
-				tb = traceback.format_exc()
-				msg = "DEBUG: Traceback: " +str(tb)
-				print( msg ); logging.debug( msg )
-
-				print( '6'); logging.debug( '6' )
-				# attempt to fix "TypeError: can't pickle weakref objects" bugs
-				# https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
-				pickleFreeE = RuntimeWarning( str(e) )
-
-				#self._cconn.send((e, tb))
-				print( '7'); logging.debug( '7' )
-				self._cconn.send((pickleFreeE, str(tb)))
-				print( '8'); logging.debug( '8' )
-				raise pickleFreeE
-
-		@property
-		def exception(self):
-			if self._pconn.poll():
-				self._exception = self._pconn.recv()
-			return self._exception
+#		def run(self):
+#			try:
+#				print( '1'); logging.debug( '1' )
+#				multiprocessing.Process.run(self)
+#				print( '2'); logging.debug( '2' )
+#				self._cconn.send(None)
+#				print( '3'); logging.debug( '3' )
+#			except Exception as e:
+#				print( '4'); logging.debug( '4' )
+#				msg = "DEBUG: Exception thrown in child process: " +str(e)
+#				print( msg ); logging.debug( msg )
+#
+#				print( '5'); logging.debug( '5' )
+#				tb = traceback.format_exc()
+#				msg = "DEBUG: Traceback: " +str(tb)
+#				print( msg ); logging.debug( msg )
+#
+#				print( '6'); logging.debug( '6' )
+#				# attempt to fix "TypeError: can't pickle weakref objects" bugs
+#				# https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
+#				pickleFreeE = RuntimeWarning( str(e) )
+#
+#				#self._cconn.send((e, tb))
+#				print( '7'); logging.debug( '7' )
+#				self._cconn.send((pickleFreeE, str(tb)))
+#				print( '8'); logging.debug( '8' )
+#				raise pickleFreeE
+#
+#		@property
+#		def exception(self):
+#			if self._pconn.poll():
+#				self._exception = self._pconn.recv()
+#			return self._exception
 
 	def wipeCache(self):
 
