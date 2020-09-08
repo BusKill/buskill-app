@@ -514,7 +514,8 @@ class BusKill:
 				print( '2'); logging.debug( '2' )
 				self._cconn.send(None)
 				print( '3'); logging.debug( '3' )
-			except:
+			except Exception as e:
+				tb = traceback.format_exc()
 				print( '======================================' )
 				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
 				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
