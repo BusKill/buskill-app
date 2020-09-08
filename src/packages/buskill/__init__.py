@@ -807,7 +807,7 @@ class BusKill:
 		#############
 
 		# first, start with a clean cache
-		wipeCache()
+		self.wipeCache()
 
 		# prepare our ephemeral gnupg home dir so we can verify the signature of our
 		# checksum file after download and before "install"
