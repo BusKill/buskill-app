@@ -628,6 +628,8 @@ class BusKill:
 	# can merely execute upgrade() directly in a thread. But that would require
 	# rewriting upgrade() to catch sentinels so it can terminate itself
 	def upgrade_bg(self):
+		# TODO remove this
+		import pdb;pdb.set_trace()
 
 		# if we're running upgrade() synchronously, then upgrade() can access our
 		# object's instance fields OK. But if we run upgrade() in the background,
@@ -803,6 +805,9 @@ class BusKill:
 		#############
 		# SETUP GPG #
 		#############
+
+		# first, start with a clean cache
+		wipeCache()
 
 		# prepare our ephemeral gnupg home dir so we can verify the signature of our
 		# checksum file after download and before "install"
