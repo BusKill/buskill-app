@@ -507,11 +507,19 @@ class BusKill:
 			self._exception = None
 
 		def run(self):
-			print( '1'); logging.debug( '1' )
-			multiprocessing.Process.run(self)
-			print( '2'); logging.debug( '2' )
-			self._cconn.send(None)
-			print( '3'); logging.debug( '3' )
+
+			try: 
+				print( '1'); logging.debug( '1' )
+				multiprocessing.Process.run(self)
+				print( '2'); logging.debug( '2' )
+				self._cconn.send(None)
+				print( '3'); logging.debug( '3' )
+			except:
+				print( '======================================' )
+				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
+				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+				print( '======================================' )
 
 #		def run(self):
 #			try:
