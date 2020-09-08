@@ -497,6 +497,8 @@ class BusKill:
 			except Exception as e:
 				import pdb;pdb.set_trace()
 
+	# allow us to catch exceptions inside child processes
+	# * https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
 	class Process(multiprocessing.Process):
 
 		def __init__(self, *args, **kwargs):
@@ -514,23 +516,23 @@ class BusKill:
 			except Exception as e:
 				print( '4'); logging.debug( '4' )
 				msg = "DEBUG: Exception thrown in child process: " +str(e)
-				print( '5'); logging.debug( '5' )
 				print( msg ); logging.debug( msg )
-				print( '6'); logging.debug( '6' )
 
-				print( '7'); logging.debug( '7' )
+				print( '5'); logging.debug( '5' )
 				tb = traceback.format_exc()
-				print( '8'); logging.debug( '8' )
 				msg = "DEBUG: Traceback: " +str(tb)
-				print( '9'); logging.debug( '9' )
 				print( msg ); logging.debug( msg )
-				print( '10'); logging.debug( '10' )
+
+				print( '6'); logging.debug( '6' )
+				# attempt to fix "TypeError: can't pickle weakref objects" bugs
+				# https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
+				pickleFreeE = RuntimeWarning( str(e) )
 
 				#self._cconn.send((e, tb))
-				self._cconn.send((e, str(tb)))
-				print( '11'); logging.debug( '11' )
-				raise e  # You can still rise this exception if you need to
-				print( '12'); logging.debug( '12' )
+				print( '7'); logging.debug( '7' )
+				self._cconn.send((pickleFreeE, str(tb)))
+				print( '8'); logging.debug( '8' )
+				raise pickleFreeE
 
 		@property
 		def exception(self):
