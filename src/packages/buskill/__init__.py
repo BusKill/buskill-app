@@ -522,6 +522,12 @@ class BusKill:
 				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
 				print( '======================================' )
 
+		@property
+		def exception(self):
+			if self._pconn.poll():
+				self._exception = self._pconn.recv()
+			return self._exception
+
 #		def run(self):
 #			try:
 #				print( '1'); logging.debug( '1' )
