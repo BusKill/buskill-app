@@ -506,6 +506,13 @@ class BusKill:
 			self._pconn, self._cconn = multiprocessing.Pipe()
 			self._exception = None
 
+		def run(self):
+			print( '1'); logging.debug( '1' )
+			multiprocessing.Process.run(self)
+			print( '2'); logging.debug( '2' )
+			self._cconn.send(None)
+			print( '3'); logging.debug( '3' )
+
 #		def run(self):
 #			try:
 #				print( '1'); logging.debug( '1' )
@@ -705,9 +712,9 @@ class BusKill:
 		#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
 
 		# take any exceptions raised within upgrade() and raise them now
-		if self.upgrade_process.exception:
-			exception, traceback = self.upgrade_process.exception
-			raise exception
+#		if self.upgrade_process.exception:
+#			exception, traceback = self.upgrade_process.exception
+#			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
 
