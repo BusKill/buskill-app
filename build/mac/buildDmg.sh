@@ -17,7 +17,8 @@ set -x
 # SETTINGS #
 ############
 
-PYTHON_PATH='/usr/local/bin/python3'
+#PYTHON_PATH='/usr/local/bin/python3'
+PYTHON_PATH='/usr/local/Cellar/python@3.7/3.7.8_1/bin/python3'
 PIP_PATH='/usr/local/Cellar/python@3.7/3.7.8_1/bin/pip3'
 APP_NAME='buskill'
 
