@@ -662,8 +662,8 @@ class BusKill:
 		# then the child process won't be able to write to our instance fields as
 		# strings (well, only a copy of them that's not shared), and we have to 
 		# change the strings to shared memory using ctypes arrays
-		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
-		self.upgrade_result = multiprocessing.Array( 'c', 256 )
+#		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
+#		self.upgrade_result = multiprocessing.Array( 'c', 256 )
 
 		#upgrade_pool = multiprocessing.Pool( processes=1 )
 		#upgrade_process = upgrade_pool.apply_async( upgrade )
