@@ -735,7 +735,8 @@ class BusKill:
 #			exception, traceback = self.upgrade_process.exception
 #			raise exception
 	
-		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
+#		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
+		self.upgrade_result = 'I am a lie'
 
 		# cleanup
 		self.upgrade_process.join()
