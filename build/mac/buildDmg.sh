@@ -55,6 +55,9 @@ ${PYTHON_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
+ls -lah /usr/local/opt/python/libexec/
+ls -lah /usr/local/opt/python/libexec/bin
+ls -lah /usr/local/bin | grep -Ei 'pip|python'
 echo $PATH
 pwd
 ls -lah
@@ -231,6 +234,9 @@ ${PYTHON_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
+ls -lah /usr/local/opt/python/libexec/
+ls -lah /usr/local/opt/python/libexec/bin
+ls -lah /usr/local/bin | grep -Ei 'pip|python'
 echo $PATH
 pwd
 ls -lah
