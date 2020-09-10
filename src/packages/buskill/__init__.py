@@ -728,9 +728,9 @@ class BusKill:
 		#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
 
 		# take any exceptions raised within upgrade() and raise them now
-#		if self.upgrade_process.exception:
-#			exception, traceback = self.upgrade_process.exception
-#			raise exception
+		if self.upgrade_process.exception:
+			exception, traceback = self.upgrade_process.exception
+			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
 
