@@ -499,30 +499,30 @@ class BusKill:
 
 	# allow us to catch exceptions inside child processes
 	# * https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
-	class Process(multiprocessing.Process):
-
-		def __init__(self, *args, **kwargs):
-			multiprocessing.Process.__init__(self, *args, **kwargs)
-			self._pconn, self._cconn = multiprocessing.Pipe()
-			self._exception = None
-
-		def run(self):
-
-			try: 
-				print( '1'); logging.debug( '1' )
-				multiprocessing.Process.run(self)
-				print( '2'); logging.debug( '2' )
-				self._cconn.send(None)
-				print( '3'); logging.debug( '3' )
-			except Exception as e:
-#				tb = traceback.format_exc()
-#				self._cconn.send((e, tb))
-				print( '======================================' )
-				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
-				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-				print( '======================================' )
-
+#	class Process(multiprocessing.Process):
+#
+#		def __init__(self, *args, **kwargs):
+#			multiprocessing.Process.__init__(self, *args, **kwargs)
+#			self._pconn, self._cconn = multiprocessing.Pipe()
+#			self._exception = None
+#
+#		def run(self):
+#
+#			try: 
+#				print( '1'); logging.debug( '1' )
+#				multiprocessing.Process.run(self)
+#				print( '2'); logging.debug( '2' )
+#				self._cconn.send(None)
+#				print( '3'); logging.debug( '3' )
+#			except Exception as e:
+##				tb = traceback.format_exc()
+##				self._cconn.send((e, tb))
+#				print( '======================================' )
+#				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+#				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
+#				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+#				print( '======================================' )
+#
 #		@property
 #		def exception(self):
 #			if self._pconn.poll():
@@ -729,9 +729,9 @@ class BusKill:
 
 
 		# take any exceptions raised within upgrade() and raise them now
-		if self.upgrade_process.exception:
-			exception, traceback = self.upgrade_process.exception
-			raise exception
+#		if self.upgrade_process.exception:
+#			exception, traceback = self.upgrade_process.exception
+#			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
 
