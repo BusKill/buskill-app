@@ -113,19 +113,22 @@ brew reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
 brew reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
 brew reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
 
+# check contents of pip binary
+cat ${PIP_PATH}
+
 # get python essential dependencies
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/setuptools-49.1.0-py3-none-any.whl
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/wheel-0.34.2-py2.py3-none-any.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/setuptools-49.1.0-py3-none-any.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/wheel-0.34.2-py2.py3-none-any.whl
 
 # install kivy and all other python dependencies with pip
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
-${PIP_PATH} install--ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
 
 # TODO: pip download & verify sigs with gpg before install
 export all_proxy=''
-${PIP_PATH} install--ignore-installed --upgrade python-gnupg
+${PIP_PATH} install --ignore-installed --upgrade python-gnupg
 export all_proxy='http://example.com:9999'
 
 # libusb depend for MacOS, from:
