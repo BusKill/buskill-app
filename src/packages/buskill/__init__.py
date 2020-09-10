@@ -515,19 +515,19 @@ class BusKill:
 				self._cconn.send(None)
 				print( '3'); logging.debug( '3' )
 			except Exception as e:
-				tb = traceback.format_exc()
-				self._cconn.send((e, tb))
+#				tb = traceback.format_exc()
+#				self._cconn.send((e, tb))
 				print( '======================================' )
 				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
 				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
 				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
 				print( '======================================' )
 
-		@property
-		def exception(self):
-			if self._pconn.poll():
-				self._exception = self._pconn.recv()
-			return self._exception
+#		@property
+#		def exception(self):
+#			if self._pconn.poll():
+#				self._exception = self._pconn.recv()
+#			return self._exception
 
 #		def run(self):
 #			try:
