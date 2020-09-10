@@ -522,7 +522,6 @@ class BusKill:
 				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
 				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
 				print( '======================================' )
-				raise e
 
 		@property
 		def exception(self):
