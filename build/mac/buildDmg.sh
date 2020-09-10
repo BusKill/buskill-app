@@ -102,8 +102,8 @@ ls -lah ${cacheDir}
 # install os-level depends
 brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 
-brew uninstall --ignore-dependencies python
-brew reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+brew -v uninstall --ignore-dependencies python
+brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
 
 brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
