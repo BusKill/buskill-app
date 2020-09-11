@@ -780,11 +780,10 @@ class BusKill:
 
 			raise exception
 	
-		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
 		if self.upgrade_result == None or \
 		 type(self.upgrade_result) in [str,int]:
 			# it's just a string; write to it directly
-			upgrade_result = str(upgrade_result)
+			upgrade_result = str(self.upgrade_result)
 		else:
 			upgrade_result = str(self.upgrade_result.value.decode('utf-8'))
 
