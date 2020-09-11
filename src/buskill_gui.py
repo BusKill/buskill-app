@@ -265,7 +265,6 @@ class MainWindow(BoxLayout):
 			 button = "",
 			 continue_function=None
 			)
-			self.dialog.size_hint = (0.9,0.9)
 			self.dialog.b_cancel.text = "OK"
 			self.dialog.open()
 

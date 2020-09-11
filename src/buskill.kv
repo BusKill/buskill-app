@@ -164,13 +164,12 @@
 		Label:
 			id: l_body
 			text: root.body
-			text_size: self.size
+			text_size: self.size[0], None
 			font_name: "Roboto"
 			font_size: 16
 			markup: True
-			pos_hint: {'center_x': 0.5}
 			size_hint: 1, None
-			size_y: self.texture_size
+			size: self.texture_size
 
 		StackLayout:
 			orientation: 'rl-tb'
