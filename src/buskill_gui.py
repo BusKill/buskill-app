@@ -258,14 +258,14 @@ class MainWindow(BoxLayout):
 				self.dialog.dismiss()
 
 			# open a new dialog that tells the user the error that occurred
-			msg = "Sorry, we were unable to restart the BusKill App.\n\n"
-			msg+= "Please manually launch " + str(self.upgrade_result)
+			msg = "Sorry, we were unable to restart the BusKill App. Please execute it manually at the following location.\n\n" + str(self.upgrade_result)
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue002[/size][/font] Restart Error',
 			 body = msg,
 			 button = "",
 			 continue_function=None
 			)
+			self.dialog.size_hint = (0.9,0.9)
 			self.dialog.b_cancel.text = "OK"
 			self.dialog.open()
 
