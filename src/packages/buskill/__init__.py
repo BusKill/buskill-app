@@ -146,6 +146,11 @@ class BusKill:
 
 	# this is called when the GUI is closed 
 	# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
+
+	def __reduce__():
+
+		return 'no pickles please'
+
 	def close(self):
 
 		# do what we can as fast as we can; don't get stuck by errors
