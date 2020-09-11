@@ -774,6 +774,11 @@ class BusKill:
 		# take any exceptions raised within upgrade() and raise them now
 		if self.upgrade_process.exception:
 			exception, traceback = self.upgrade_process.exception
+
+			self.upgrade_process.join()
+			self.upgrade_process = None
+			self.upgrade_status_msg = None
+
 			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
