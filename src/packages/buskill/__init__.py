@@ -159,7 +159,7 @@ class BusKill:
 	def __getstate__(self):
 
 		state = self.__dict__.copy()
-		del state['rpgrade_process']
+		del state['upgrade_process']
 		return state
 
 	def close(self):
