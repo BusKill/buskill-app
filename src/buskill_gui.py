@@ -191,12 +191,10 @@ class MainWindow(BoxLayout):
 				# open a new dialog that tells the user the error that occurred
 				self.dialog = DialogConfirmation(
 				 title = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!',
-				 body = "",
+				 body = str(e),
 				 button = "",
 				 continue_function=None
 				)
-				self.dialog.l_title.text = '[font=mdicons][size=30]\ue002[/size][/font] Update Failed!'
-				self.dialog.l_body.text = str(e)
 				self.dialog.b_cancel.text = "OK"
 				self.dialog.open()
 
@@ -249,8 +247,28 @@ class MainWindow(BoxLayout):
 		msg = "DEBUG: Exiting and launching " +str(self.upgrade_result)
 		print( msg ); logging.debug( msg )
 
-		# replace this process with the newer version
-		os.execv( self.upgrade_result, [self.upgrade_result] )
+		try:
+			# replace this process with the newer version
+			os.execv( self.upgrade_result, [self.upgrade_result] )
+
+		except:
+
+			# close the dialog if it's already opened
+			if self.dialog != None:
+				self.dialog.dismiss()
+
+			# open a new dialog that tells the user the error that occurred
+			msg = "Sorry, we were unable to restart the BusKill App.\n\n"
+			msg+= "Please manually launch " + str(elf.upgrade_result)
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue002[/size][/font] Restart Error',
+			 body = msg,
+			 button = "",
+			 continue_function=None
+			)
+			self.dialog.l_body.text = str(e)
+			self.dialog.b_cancel.text = "OK"
+			self.dialog.open()
 
 class DialogConfirmation(ModalView):
 
