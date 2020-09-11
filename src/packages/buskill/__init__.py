@@ -159,7 +159,17 @@ class BusKill:
 	def __getstate__(self):
 
 		state = self.__dict__.copy()
-		del state['upgrade_process']
+
+		msg = "DEBUG:__getstate__() pre:" +str( state.keys() )+ "|"
+		print( msg ); logging.debug( msg )
+
+		#del state['upgrade_process']
+		del state['upgrade_status_msg']
+		del state['upgrade_result']
+
+		msg = "DEBUG:__getstate__() post:|" +str( state.keys() )+ "|"
+		print( msg ); logging.debug( msg )
+
 		return state
 
 	def close(self):
