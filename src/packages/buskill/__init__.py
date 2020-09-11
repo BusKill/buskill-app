@@ -149,7 +149,7 @@ class BusKill:
 
 	def __reduce__(self):
 
-		return packages.buskill, ('hold the pickles',)
+		return self.__class__, ()
 
 	def close(self):
 
@@ -629,9 +629,10 @@ class BusKill:
 		# is the message (upgrade_status_msg) a string that we can read from
 		# directly (running synchronously) or a multiprocessing.Array() because
 		# upgrade() is in an asymmetric child process?
-		if type(self.upgrade_status_msg) == str:
+		if self.upgrade_status_msg == None or \
+		 type(self.upgrade_status_msg) == str:
 			# it's just a string; read from it directly
-			return self.upgrade_status_msg
+			return str(self.upgrade_status_msg)
 		else:
 			# it's shared memory; write to it correctly
 			return self.upgrade_status_msg.value.decode('utf-8')
@@ -659,6 +660,8 @@ class BusKill:
 	# can merely execute upgrade() directly in a thread. But that would require
 	# rewriting upgrade() to catch sentinels so it can terminate itself
 	def upgrade_bg(self):
+		import pickle
+		pickle.dumps(self)
 		# TODO remove this
 #		import pdb;pdb.set_trace()
 
