@@ -165,7 +165,8 @@ class BusKill:
 
 		#del state['upgrade_process']
 		unpickleable = [
-		 'upgrade_status_msg', 'upgrade_result', 'upgrade_process', 'usb_handler'
+#		 'upgrade_status_msg', 'upgrade_result', 'upgrade_process', 'usb_handler'
+		 'upgrade_result', 'upgrade_process', 'usb_handler'
 		]
 		for instance_field in unpickleable:
 			if instance_field in state:
@@ -264,6 +265,10 @@ class BusKill:
 		self.GNUPGHOME = os.path.join( self.CACHE_DIR, '.gnupg' )
 
 	def toggle(self):
+
+		# TODO remove these two lines from debugging
+		import pickle
+		pickle.dumps(self)
 
 		if self.is_armed:
 			msg = "DEBUG: attempting to disarm BusKill"
