@@ -149,8 +149,7 @@ class BusKill:
 
 	def __reduce__(self):
 
-		import dill
-		return dill.dumps(self)
+		return ('hold the pickles',)
 
 	def close(self):
 
