@@ -144,18 +144,13 @@ class BusKill:
 		# (that--or maybe just move the buskill.init() into main.py)
 		self.setupDataDir()
 
-	# this is called when the GUI is closed 
-	# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
-
 	# this function is necessary to be able to execute non-static methods on
 	# the `self` instance of this object in a child process. Without this, we'll
 	# get "TypeError: can't pickle weakref objects" errors in python >= 3.7.0
 	# because some of the instance fields of this object are not pickleable
 	#  * https://bugs.python.org/issue34034
 	#  * https://docs.python.org/3/library/pickle.html#object.__reduce__
-#	def __reduce__(self):
-#		return self.__class__, ()
-
+	#  * https://docs.python.org/3/library/pickle.html#object.__getstate__
 	def __getstate__(self):
 
 		state = self.__dict__.copy()
@@ -163,8 +158,9 @@ class BusKill:
 		msg = "DEBUG:__getstate__() pre:" +str( state.keys() )+ "|"
 		print( msg ); logging.debug( msg )
 
+		# remove instances of multiprocessing.Process() because they're not
+		# pickleable
 		unpickleable = [
-#		 'upgrade_status_msg', 'upgrade_result', 'upgrade_process', 'usb_handler'
 		 'upgrade_process', 'usb_handler'
 		]
 		for instance_field in unpickleable:
@@ -176,6 +172,8 @@ class BusKill:
 
 		return state
 
+	# this is called when the GUI is closed 
+	# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
 	def close(self):
 
 		# do what we can as fast as we can; don't get stuck by errors
@@ -215,10 +213,11 @@ class BusKill:
 		# script is located
 		data_dirs.append( sys.path[0] )
 
-		# Fall-back to the dir in which the executable is located. This is mainly for
-		# AppImages since their src files are in a read-only squashfs. But only use
-		# this if the executable 'buskill.AppImage' or 'buskill.exe'. Don't use it if
-		# the executable is 'python' as we don't want our data dir in /usr/bin/
+		# Fall-back to the dir in which the executable is located. This is mainly
+		# for AppImages since their src files are in a read-only squashfs. But
+		# only use this if the executable 'buskill.AppImage' or 'buskill.exe'.
+		# Don't use it if the executable is 'python' as we don't want our data
+		# dir in /usr/bin/
 		exe_dir = os.path.split(sys.executable)
 		if not 'python' in exe_dir[1]:
 			data_dirs.append( exe_dir[0] )
@@ -777,18 +776,25 @@ class BusKill:
 			self.upgrade_process.join()
 			self.upgrade_process = None
 			self.upgrade_status_msg = None
+			self.upgrade_result = None
 
 			raise exception
 	
 		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
-#		self.upgrade_result = 'I am a lie'
+		if self.upgrade_result == None or \
+		 type(self.upgrade_result) in [str,int]:
+			# it's just a string; write to it directly
+			upgrade_result = str(upgrade_result)
+		else:
+			upgrade_result = str(self.upgrade_result.value.decode('utf-8'))
 
 		# cleanup
 		self.upgrade_process.join()
 		self.upgrade_process = None
 		self.upgrade_status_msg = None
+		self.upgrade_result = None
 	
-		return self.upgrade_result
+		return upgrade_result
 
 	def upgrade(self):
 
