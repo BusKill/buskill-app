@@ -149,7 +149,7 @@ class BusKill:
 
 	def __reduce__(self):
 
-		return ('hold the pickles',)
+		return packages.buskill, ('hold the pickles',)
 
 	def close(self):
 
