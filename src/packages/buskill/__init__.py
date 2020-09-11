@@ -163,10 +163,9 @@ class BusKill:
 		msg = "DEBUG:__getstate__() pre:" +str( state.keys() )+ "|"
 		print( msg ); logging.debug( msg )
 
-		#del state['upgrade_process']
 		unpickleable = [
 #		 'upgrade_status_msg', 'upgrade_result', 'upgrade_process', 'usb_handler'
-		 'upgrade_result', 'upgrade_process', 'usb_handler'
+		 'upgrade_process', 'usb_handler'
 		]
 		for instance_field in unpickleable:
 			if instance_field in state:
