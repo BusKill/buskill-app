@@ -777,6 +777,7 @@ class BusKill:
 			self.upgrade_process = None
 			self.upgrade_status_msg = None
 			self.upgrade_result = None
+			self.wipeCache()
 
 			raise exception
 	
@@ -792,6 +793,7 @@ class BusKill:
 		self.upgrade_process = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
+		self.wipeCache()
 	
 		return upgrade_result
 
