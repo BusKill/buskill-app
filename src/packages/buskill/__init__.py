@@ -147,7 +147,7 @@ class BusKill:
 	# this is called when the GUI is closed 
 	# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
 
-	def __reduce__():
+	def __reduce__(self):
 
 		return 'no pickles please'
 
