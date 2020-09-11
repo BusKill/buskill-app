@@ -139,7 +139,9 @@ class MainWindow(BoxLayout):
 		self.dialog.b_cancel.on_release = self.upgrade_cancel
 		self.dialog.auto_dismiss = False
 
-		progress_spinner = ProgressSpinner( color = self.color_primary )
+		progress_spinner = ProgressSpinner(
+		 color = self.color_primary,
+		)
 		self.dialog.dialog_contents.add_widget( progress_spinner, 2 )
 		self.dialog.dialog_contents.add_widget( Label( text='' ), 2 )
 		self.dialog.size_hint = (0.9,0.9)
