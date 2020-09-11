@@ -147,9 +147,20 @@ class BusKill:
 	# this is called when the GUI is closed 
 	# TODO: use 'fuckit' python module https://stackoverflow.com/questions/63436916/how-to-ignore-exceptions-and-proceed-with-whole-blocks-multiple-lines-in-pytho/
 
-	def __reduce__(self):
+	# this function is necessary to be able to execute non-static methods on
+	# the `self` instance of this object in a child process. Without this, we'll
+	# get "TypeError: can't pickle weakref objects" errors in python >= 3.7.0
+	# because some of the instance fields of this object are not pickleable
+	#  * https://bugs.python.org/issue34034
+	#  * https://docs.python.org/3/library/pickle.html#object.__reduce__
+#	def __reduce__(self):
+#		return self.__class__, ()
 
-		return self.__class__, ()
+	def __getstate__(self):
+
+		state = self.__dict__.copy()
+		del state['rpgrade_process']
+		return state
 
 	def close(self):
 
