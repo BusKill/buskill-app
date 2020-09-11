@@ -505,35 +505,35 @@ class BusKill:
 
 	# allow us to catch exceptions inside child processes
 	# * https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
-#	class Process(multiprocessing.Process):
-#
-#		def __init__(self, *args, **kwargs):
-#			multiprocessing.Process.__init__(self, *args, **kwargs)
-#			self._pconn, self._cconn = multiprocessing.Pipe()
-#			self._exception = None
-#
-#		def run(self):
-#
-#			try: 
-#				print( '1'); logging.debug( '1' )
-#				multiprocessing.Process.run(self)
-#				print( '2'); logging.debug( '2' )
-#				self._cconn.send(None)
-#				print( '3'); logging.debug( '3' )
-#			except Exception as e:
-##				tb = traceback.format_exc()
-##				self._cconn.send((e, tb))
-#				print( '======================================' )
-#				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-#				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
-#				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-#				print( '======================================' )
-#
-#		@property
-#		def exception(self):
-#			if self._pconn.poll():
-#				self._exception = self._pconn.recv()
-#			return self._exception
+	class Process(multiprocessing.Process):
+
+		def __init__(self, *args, **kwargs):
+			multiprocessing.Process.__init__(self, *args, **kwargs)
+			self._pconn, self._cconn = multiprocessing.Pipe()
+			self._exception = None
+
+		def run(self):
+
+			try: 
+				print( '1'); logging.debug( '1' )
+				multiprocessing.Process.run(self)
+				print( '2'); logging.debug( '2' )
+				self._cconn.send(None)
+				print( '3'); logging.debug( '3' )
+			except Exception as e:
+				tb = traceback.format_exc()
+				self._cconn.send((e, tb))
+				print( '======================================' )
+				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
+				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
+				print( '======================================' )
+
+		@property
+		def exception(self):
+			if self._pconn.poll():
+				self._exception = self._pconn.recv()
+			return self._exception
 
 #		def run(self):
 #			try:
@@ -660,8 +660,11 @@ class BusKill:
 	# can merely execute upgrade() directly in a thread. But that would require
 	# rewriting upgrade() to catch sentinels so it can terminate itself
 	def upgrade_bg(self):
+
+		# TODO remove these two lines from debugging
 		import pickle
 		pickle.dumps(self)
+
 		# TODO remove this
 #		import pdb;pdb.set_trace()
 
@@ -670,8 +673,8 @@ class BusKill:
 		# then the child process won't be able to write to our instance fields as
 		# strings (well, only a copy of them that's not shared), and we have to 
 		# change the strings to shared memory using ctypes arrays
-#		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
-#		self.upgrade_result = multiprocessing.Array( 'c', 256 )
+		self.upgrade_status_msg = multiprocessing.Array( 'c', 256 )
+		self.upgrade_result = multiprocessing.Array( 'c', 256 )
 
 		#upgrade_pool = multiprocessing.Pool( processes=1 )
 		#upgrade_process = upgrade_pool.apply_async( upgrade )
@@ -681,8 +684,8 @@ class BusKill:
 		# child process. The downsides of this is that we have to use shared
 		# memory and we can't specify a callback when it finishes.
 
-#		self.upgrade_process = self.Process(
-		self.upgrade_process = multiprocessing.Process(
+		self.upgrade_process = self.Process(
+#		self.upgrade_process = multiprocessing.Process(
 		 target = self.upgrade
 		)
 		self.upgrade_process.start()
@@ -739,12 +742,12 @@ class BusKill:
 
 
 		# take any exceptions raised within upgrade() and raise them now
-#		if self.upgrade_process.exception:
-#			exception, traceback = self.upgrade_process.exception
-#			raise exception
+		if self.upgrade_process.exception:
+			exception, traceback = self.upgrade_process.exception
+			raise exception
 	
-#		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
-		self.upgrade_result = 'I am a lie'
+		self.upgrade_result = self.upgrade_result.value.decode('utf-8')
+#		self.upgrade_result = 'I am a lie'
 
 		# cleanup
 		self.upgrade_process.join()
