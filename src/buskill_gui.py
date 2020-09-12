@@ -82,7 +82,7 @@ class MainWindow(BoxLayout):
 	def __init__(self, **kwargs):
 		global bk
 		self.bk = bk
-		super(BoxLayout, self).__init__(**kwargs)
+		super(MainWindow, self).__init__(**kwargs)
 
 	def toggle_menu(self):
 
