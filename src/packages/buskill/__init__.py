@@ -181,7 +181,7 @@ class BusKill:
 
 			# if we don't kill this child process on exit, the UI will freeze
 			try:
-				self.usb_handler.terminate()
+				self.usb_handler.kill()
 			except ProcessLookupError as e:
 				msg = "DEBUG: Ignoring ProcessLookupError " +str(e)
 				msg += "\n\t" +str(e)+ "\n"
@@ -278,7 +278,7 @@ class BusKill:
 			# disarm just means to terminate the child process in which the arm
 			# function was spawned. this works on all platforms.
 			try:
-				self.usb_handler.terminate()
+				self.usb_handler.kill()
 				self.usb_handler.join()
 			except:
 				pass
@@ -472,7 +472,7 @@ class BusKill:
 					# afaik there's no way to tell USBContext.handleEvents() to exit
 					# safely, so instead we just make the whole call to this arming
 					# function in a new child process and kill it on disarm with
-					# terminate() this approach isn't very nice and it dumps a
+					# kill() this approach isn't very nice and it dumps a
 					# traceback to output, but it *does* immediately disarm without
 					# having wait for the timeout..
 					context.handleEvents()
@@ -686,7 +686,7 @@ class BusKill:
 	#
 	# TODO: maybe one day this function can be eliminated and instead the client
 	# can merely execute upgrade() directly in a thread. But that would require
-	# rewriting upgrade() to catch sentinels so it can terminate itself
+	# rewriting upgrade() to catch sentinels so it can kill itself
 	def upgrade_bg(self):
 
 		# TODO remove these two lines from debugging

@@ -251,6 +251,7 @@ class MainWindow(BoxLayout):
 
 		try:
 			# replace this process with the newer version
+			bk.close()
 			os.execv( self.upgrade_result, [self.upgrade_result] )
 
 		except:
