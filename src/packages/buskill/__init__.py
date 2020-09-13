@@ -102,9 +102,16 @@ class BusKill:
 		self.ARM_FUNCTION = None
 		self.DISARM_FUNCTION = None
 		self.TRIGGER_FUNCTION = None
+		self.EXE_PATH = None
+		self.EXE_DIR = None
+		self.EXE_FILE = None
+		self.APP_DIR = None
+		self.APPS_DIR = None
 		self.DATA_DIR = None
 		self.CACHE_DIR = None
 		self.GNUPGHOME = None
+		self.UPGRADED_FROM = None
+		self.UPGRADED_TO = None
 
 		self.is_armed = None
 		self.usb_handler = None
@@ -114,11 +121,36 @@ class BusKill:
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
-		# update PATH to include the dir where main.py lives (the second one is
-		# MacOS .app compatibility weirdness) so that we can find `gpg` there
-		os.environ['PATH'] += \
-		 os.pathsep+ APP_DIR + \
-		 os.pathsep+ os.path.split(APP_DIR)[0]
+		# NOTE about instance fields used for storing path info relative to the
+		#      buskill executable:
+		#
+		# 1. EXE_PATH = the absolute path to the executable for running BusKill,
+		#               which is:
+		#                 [a] the 'buskill-<version>.AppImage' file in Linux
+		#                 [b] the 'buskill-<version>.exe' file in Windows
+		#                 [c] the 'buskill' binary file in MacOS
+		# 2. EXE_FILE = just the filename (basename) of the EXE_PATH
+		# 3. EXE_DIR = the directory (dirname) where EXE_FILE lives
+		# 4. APP_DIR = the root directory for a given version of the buskill app,
+		#              which is 'buskill-<lin|win|mac>-<version>-x86_64' and:
+		#                 [a] the dir containing the EXE_FILE file in Linux
+		#                 [b] the dir containing the EXE_FILE file in Windows
+		#                 [c] 2 dirs above the dir containing the EXE_FILE in
+		#                     MacOS
+		# 4. APPS_DIR = the directory where the app dirs live (one dir above
+		#               APP_DIR)
+
+		# get the absolute path to the file that the user executes to start buskill
+		self.EXE_PATH = sys.executable
+
+		# if the executable is actually just the python interpreter, then what
+		# we want is the first argument
+		if re.match( ".*python[1-9\.]*$", self.EXE_PATH ):
+			self.EXE_PATH = os.path.abspath( sys.argv[0] )
+
+		# split the EXE_PATH into dir & file parts
+		self.EXE_DIR = os.path.split(self.EXE_PATH)[0]
+		self.EXE_FILE = os.path.split(self.EXE_PATH)[1]
 
 		# platform-specific setup
 		if CURRENT_PLATFORM.startswith( 'LINUX' ):
@@ -127,11 +159,17 @@ class BusKill:
 			self.ARM_FUNCTION = self.armNix
 			self.TRIGGER_FUNCTION = self.triggerLin
 
+			# on Linux, the buskill AppImage is directly inside the APP_DIR
+			self.APP_DIR = self.EXE_DIR
+
 		if CURRENT_PLATFORM.startswith( 'WIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
 			self.OS_NAME_SHORT = 'win'
 			self.ARM_FUNCTION = self.armWin
 			self.TRIGGER_FUNCTION = self.triggerWin
+
+			# on Windows, the buskill binary is directly inside the APP_DIR
+			self.APP_DIR = self.EXE_DIR
 
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
@@ -139,10 +177,42 @@ class BusKill:
 			self.ARM_FUNCTION = self.armNix
 			self.TRIGGER_FUNCTION = self.triggerMac
 
+			# on MacOS, the binary is 2 dirs below the .app dir
+			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
+			self.APP_DIR = '/'.join( self.EXE_PATH )
+
+		# but if we're executing the code directly, then the APP_DIR is actually
+		# one dir higher
+		if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
+			self.APP_DIR = os.path.abspath(
+			 os.path.join( self.APP_DIR, os.pardir)
+			)
+
+		# the APPS_DIR is one dir above the APP_DIR
+		self.APPS_DIR = os.path.abspath( os.path.join(self.APP_DIR, os.pardir) )
+
+		# update PATH to include the dir where main.py lives (the second one is
+		# MacOS .app compatibility weirdness) so that we can find `gpg` there
+		os.environ['PATH'] += \
+		 os.pathsep+ self.APP_DIR + \
+		 os.pathsep+ self.APPS_DIR
+
+		msg = "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
+		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
+		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
+		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
+		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
+		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+		print( msg ); logging.debug( msg )
+
 		# create a data dir in some safe place where we have write access
 		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
 		# (that--or maybe just move the buskill.init() into main.py)
 		self.setupDataDir()
+
+		# handle conditions where this version was already upgraded by a newer
+		# version or if this is a version that upgraded an older version
+		self.handle_upgrades()
 
 	# this function is necessary to be able to execute non-static methods on
 	# the `self` instance of this object in a child process. Without this, we'll
@@ -192,7 +262,7 @@ class BusKill:
 			pass
 
 		try:
-		# delete cache dir
+			# delete cache dir
 			self.wipeCache()
 		except:
 			pass
@@ -204,23 +274,61 @@ class BusKill:
 		else:
 			return False
 
+	def handle_upgrades(self):
+
+		# check to see if we're currently running a new version that is being
+		# executed for the first time after replacing an old version
+		if os.path.isfile( 'upgraded_from.py' ):
+			from upgraded_from import UPGRADED_FROM
+			if os.path.isdir( UPGRADED_FROM['APP_DIR'] ):
+
+				msg = "DEBUG: Detected first-run of new version. Deleting old version."
+				msg += "\n\t" +str(UPGRADED_FROM)+ "\n"
+				print( msg ); logging.debug( msg )
+
+				# only proceed with this delete if the dir matches what we'd expect
+				if os.path.exists( os.path.join( UPGRADED_FROM['APP_DIR'], '.git' ) ):
+					msg = "DEBUG: Cowardly refusing to recursively delete an app that actually looks like a git sandbox."
+					print( msg ); logging.debug( msg )
+
+				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
+
+					# TODO: uncomment thsese lines to actually do the delete
+					print( 'skipping delete for now' )
+					# delete the old version's APP_DIR entirely
+					#self.UPGRADED_FROM = UPGRADED_FROM
+					#shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
+
+					# and delete the 'upgraded_from.py' file so we don't try to
+					# delete the old version again
+					#os.unlink( 'upgraded_from.py' )
+
+				else:
+					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
+					print( msg ); logging.debug( msg )
+
+		# check to see if we're currently running an old version whose
+		# replacement version has already been installed
+		if os.path.isfile( 'upgraded_to.py' ):
+			from upgraded_to import UPGRADED_TO
+			if os.path.exists( UPGRADED_TO['EXE_PATH'] ):
+				self.UPGRADED_TO = UPGRADED_TO
+				msg = "DEBUG: Detected that this version has already been upgraded. New version is:"
+				msg += "\n\t" +str(self.UPGRADED_TO)+ "\n"
+				print( msg ); logging.debug( msg )
+
 	def setupDataDir(self):
 
 		# first we choose where our data dir based on where we have write access
 		data_dirs = list()
 
-		# first try to create our data dir in the same dir in which <this> python
-		# script is located
-		data_dirs.append( sys.path[0] )
+		# first try to create our data dir in the same dir that holds the dir
+		# where the buskill app was installed (and where future updates will be
+		# installed). This may be the BusKill USB drive itself.
+		data_dirs.append( self.APPS_DIR )
 
-		# Fall-back to the dir in which the executable is located. This is mainly
-		# for AppImages since their src files are in a read-only squashfs. But
-		# only use this if the executable 'buskill.AppImage' or 'buskill.exe'.
-		# Don't use it if the executable is 'python' as we don't want our data
-		# dir in /usr/bin/
-		exe_dir = os.path.split(sys.executable)
-		if not 'python' in exe_dir[1]:
-			data_dirs.append( exe_dir[0] )
+		# Fall-back to the dir in which the executable is located
+		data_dirs.append( self.APP_DIR )
 
 		# finally, try the users's $HOME dir
 		data_dirs.append( os.path.join( os.path.expanduser('~') ) )
@@ -795,6 +903,7 @@ class BusKill:
 		self.upgrade_result = None
 		self.wipeCache()
 	
+		self.UPGRADED_TO = { 'EXE_PATH': upgrade_result }
 		return upgrade_result
 
 	def upgrade(self):
@@ -833,51 +942,20 @@ class BusKill:
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
-		# get the absolute path to the file that the user executes to start buskill
-		self.EXE_PATH = sys.executable
-
-		# on MacOS, we treat the .app directory like an executable. Because Apple.
-		if self.OS_NAME_SHORT == 'mac':
-			self.EXE_PATH = self.EXE_PATH.split('/')[0:-3]
-			self.EXE_PATH = '/'.join( self.EXE_PATH )
-
-		# on Windows, PyInstaller produces a dir, not a self-contained exe
-		if self.OS_NAME_SHORT == 'win':
-			self.EXE_PATH = self.EXE_PATH.split('\\')[0:-1]
-			self.EXE_PATH = '\\'.join( self.EXE_PATH )
-
-		# split the EXE_PATH into dir & file parts
-		self.EXE_DIR = os.path.split(self.EXE_PATH)[0]
-		self.EXE_FILE = os.path.split(self.EXE_PATH)[1]
-
-		# TODO delete next three lines
-		print( "EXE_PATH:|" +self.EXE_PATH+ "|" )
-		print( "EXE_DIR:|" +self.EXE_DIR+ "|" )
-		print( "EXE_FILE:|" +self.EXE_FILE+ "|" )
-
-		# TODO: uncomment this block
-		# exit if the executable that we're supposed to update doesn't match what
-		# we expect (this can happen if the exe is actually the python interpreter)
-		if not re.match( ".*buskill[^/]*\.AppImage$", self.EXE_FILE ) \
-		 and not re.match( ".*buskill-win-[^\\\]*$", self.EXE_FILE ) \
-		 and not re.match( ".*buskill[^/]*\.app$", self.EXE_FILE ):
-			msg = 'Unsupported executable (' +self.EXE_PATH+ ')'
-			print( "DEBUG: " + msg ); logging.debug( msg )
-			raise RuntimeWarning( msg )
-
 		# skip upgrade if we can't write to disk
 		if self.DATA_DIR == '':
 			msg = 'Unable to upgrade. No DATA_DIR.'
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
-		# make sure we can write to the dir where the executable lives
-		if not os.access(self.EXE_DIR, os.W_OK):
-			msg = 'Unable to upgrade. EXE_DIR not writeable (' +str(self.EXE_DIR)+ ')'
+		# make sure we can write to the dir where the new versions will be
+		# extracted
+		if not os.access(self.APPS_DIR, os.W_OK):
+			msg = 'Unable to upgrade. APPS_DIR not writeable (' +str(self.APPS_DIR)+ ')'
 			print( "DEBUG: " + msg ); logging.debug( msg )
 			raise RuntimeWarning( msg )
 
-		# make sure we can overwrite the executable itself
+		# make sure we can delete the executable itself
 		if not os.access( os.path.join(self.EXE_DIR, self.EXE_FILE), os.W_OK):
 			msg = 'Unable to upgrade. EXE_FILE not writeable (' +str( os.path.join(self.EXE_DIR, self.EXE_FILE) )+ ')'
 			print( "DEBUG: " + msg ); logging.debug( msg )
@@ -1174,14 +1252,9 @@ class BusKill:
 		###########
 		# INSTALL #
 		###########
-
-		# TODO delete next three lines
-		print( "EXE_PATH:|" +self.EXE_PATH+ "|" )
-		print( "EXE_DIR:|" +self.EXE_DIR+ "|" )
-		print( "EXE_FILE:|" +self.EXE_FILE+ "|" )
 		
 		self.set_upgrade_status( "Extracting archive" )
-		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(self.EXE_DIR)+ "'"
+		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(self.APPS_DIR)+ "'"
 		print( msg ); logging.debug( msg )
 
 		if self.OS_NAME_SHORT == 'lin':
@@ -1190,17 +1263,8 @@ class BusKill:
 			with tarfile.open( archive_filepath ) as archive_tarfile:
 
 				# get the path to the new executable
-				new_version_exe0 = self.EXE_DIR + '/' + archive_tarfile.getnames().pop()
-				new_version_exe = new_version_exe0.split( '/' )
-				archive_dir = new_version_exe[-2]
-				new_version_exe = new_version_exe[0:-2] + [ new_version_exe[-1] ]
-				new_version_exe = '/'.join( new_version_exe )
-
-				archive_tarfile.extractall( path=self.EXE_DIR )
-
-			# move AppImage out of its single-file archive dir and delete the dir
-			os.rename( new_version_exe0, new_version_exe )
-			os.rmdir( self.EXE_DIR + '/' + archive_dir )
+				new_version_exe = self.APPS_DIR + '/' + archive_tarfile.getnames().pop()
+				archive_tarfile.extractall( path=self.APPS_DIR )
 
 		elif self.OS_NAME_SHORT == 'win':
 
@@ -1209,9 +1273,9 @@ class BusKill:
 
 				# get the path to the new executable
 				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
-				new_version_exe = self.EXE_DIR + '\\' + new_version_exe
+				new_version_exe = self.APPS_DIR + '\\' + new_version_exe
 
-				archive_zipfile.extractall( path=self.EXE_DIR )
+				archive_zipfile.extractall( path=self.APPS_DIR )
 
 		elif self.OS_NAME_SHORT == 'mac':
 
@@ -1225,9 +1289,25 @@ class BusKill:
 			# mount the dmg, copy the .app out, and unmount
 			subprocess.run( ['hdiutil', 'attach', '-mountpoint', dmg_mnt_path, archive_filepath] )
 			app_path = os.listdir( dmg_mnt_path ).pop()
-			shutil.copytree( dmg_mnt_path +'/'+ app_path, self.EXE_DIR + '/' + app_path )
+			shutil.copytree( dmg_mnt_path +'/'+ app_path, self.APPS_DIR + '/' + app_path )
 			subprocess.run( ['hdiutil', 'detach', dmg_mnt_path] )
 
-			new_version_exe = self.EXE_DIR + '/' + app_path
+			new_version_exe = self.APPS_DIR + '/' + app_path
+
+		# create a file in new version's EXE_DIR so that it will know where the
+		# old version lives and be able to delete it on its first execution
+		contents = { 'APP_DIR': self.APP_DIR }
+		new_version_exe_dir = os.path.abspath(
+		 os.path.join( new_version_exe, os.pardir)
+		)
+		with open( os.path.join( new_version_exe_dir, 'upgraded_from.py' ), 'w' ) as fd:
+			fd.write( 'UPGRADED_FROM = ' +str(contents) )
+		
+		# create a file in this current (now outdated) version's EXE_DIR so that
+		# it will be able to prompt the user to execute the newer version if they
+		# open this older version by mistake in the future
+		self.UPGRADED_TO = { 'EXE_PATH': new_version_exe }
+		with open( os.path.join( self.EXE_DIR, 'upgraded_to.py' ), 'w' ) as fd:
+			fd.write( 'UPGRADED_TO = ' +str(self.UPGRADED_TO) )
 
 		return self.set_upgrade_result( new_version_exe )

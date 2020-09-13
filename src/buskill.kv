@@ -83,7 +83,7 @@
 					height: 60
 					background_normal: ''
 					background_color: root.color_menu_bg
-					on_release: root.update1()
+					on_release: root.upgrade1()
 
 				Widget:
 					id: separator
@@ -132,7 +132,7 @@
 					on_release: root.toggle_buskill()
 
 <DialogConfirmation>:
-	id: update_dialog1
+	id: upgrade_dialog1
 	auto_dismiss: True
 	size_hint: (0.9, None)
 	padding: '16dp', '40dp', '16dp', 0
@@ -196,4 +196,4 @@
 				padding: '8dp', '8dp'
 				background_normal: ''
 				background_color: 0, 0, 0, 0
-				on_release: update_dialog1.dismiss()
+				on_release: upgrade_dialog1.dismiss()

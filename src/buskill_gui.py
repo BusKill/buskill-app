@@ -80,8 +80,15 @@ class MainWindow(BoxLayout):
 	dialog = None
 
 	def __init__(self, **kwargs):
+
+		# instantiate our global BusKill object instance
 		global bk
 		self.bk = bk
+
+		# check to see if this is an old version that was already upgraded
+		# as soon as we've loaded
+		Clock.schedule_once(self.handle_upgrades, 1)
+
 		super(MainWindow, self).__init__(**kwargs)
 
 	def toggle_menu(self):
@@ -104,10 +111,26 @@ class MainWindow(BoxLayout):
 			self.toggle_btn.background_color = self.color_primary
 			self.actionview.background_color = self.color_primary
 
-	def update1(self):
+	def handle_upgrades( self, dt ):
+
+		if bk.UPGRADED_TO:
+			# the buskill app has already been updated; let's prompt the user to
+			# restart to *that* version instead of this outdated version
+			self.upgrade4_restart_prompt()
+
+	def upgrade1(self):
 
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
+
+		# check to see if an upgrade was already done
+		if bk.UPGRADED_TO:
+			# a newer version has already been installed; skip upgrade() step and
+			# just prompt the user to restart to the newer version
+			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
+			print( msg ); logging.debug( msg )
+			self.upgrade4_restart_prompt()
+			return
 
 		msg = "Checking for updates requires internet access.\n\n"
 		msg+= "Would you like to check for updates now?"
@@ -116,11 +139,11 @@ class MainWindow(BoxLayout):
 		 title='Check for Updates?',
 		 body = msg,
 		 button='Check Updates',
-		 continue_function=self.update2,
+		 continue_function=self.upgrade2,
 		)
 		self.dialog.open()
 
-	def update2(self):
+	def upgrade2(self):
 
 		# close the dialog if it's already opened
 		if self.dialog != None:
@@ -172,7 +195,7 @@ class MainWindow(BoxLayout):
 	def upgrade3_tick( self, dt ):
 		print( "called upgrade3_tick()" )
 
-		# update the dailog 
+		# update the dialog
 		self.dialog.l_body.text = bk.get_upgrade_status()
 
 		# did the upgrade process finish?
@@ -184,7 +207,7 @@ class MainWindow(BoxLayout):
 				self.upgrade_result = self.bk.get_upgrade_result()
 
 			except Exception as e:
-				# if the update failed for some reason, alert the user
+				# if the upgrade failed for some reason, alert the user
 
 				# close the dialog if it's already opened
 				if self.dialog != None:
@@ -228,31 +251,39 @@ class MainWindow(BoxLayout):
 			# if we made it this far, it means that the we successfully finished
 			# downloading and installing the latest possible version, and the
 			# result is the path to that new executable
+			self.upgrade4_restart_prompt()
 
-			# close the dialog if it's already opened
-			if self.dialog != None:
-				self.dialog.dismiss()
+	def upgrade4_restart_prompt( self ):
 
-			# open a new dialog that tells the user that the upgrade() was a
-			# success and gets confirmation from the user to restart the app
-			msg = "BusKill was updated successfully. Please restart this app to continue."
-			self.dialog = DialogConfirmation(
-			 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
-			 body = msg,
-			 button='Restart Now',
-			 continue_function = self.update3_restart,
-			)
-			self.dialog.open()
+		# close the dialog if it's already opened
+		if self.dialog != None:
+			self.dialog.dismiss()
 
-	def update3_restart( self ):
+		# open a new dialog that tells the user that the upgrade() was a
+		# success and gets confirmation from the user to restart the app
+		msg = "BusKill was updated successfully. Please restart this app to continue."
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Update Successful',
+		 body = msg,
+		 button='Restart Now',
+		 continue_function = self.upgrade5_restart,
+		)
+		self.dialog.open()
 
-		msg = "DEBUG: Exiting and launching " +str(self.upgrade_result)
+	def upgrade5_restart( self ):
+
+		if bk.UPGRADED_TO:
+			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+		else:
+			new_version_exe = self.upgrade_result
+
+		msg = "DEBUG: Exiting and launching " +str(new_version_exe)
 		print( msg ); logging.debug( msg )
 
 		try:
 			# replace this process with the newer version
 			bk.close()
-			os.execv( self.upgrade_result, [self.upgrade_result] )
+			os.execv( new_version_exe, [new_version_exe] )
 
 		except:
 
