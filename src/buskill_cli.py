@@ -81,6 +81,14 @@ def BusKillCLI():
 		sys.exit(1)
 
 	if args.upgrade:
+
+		# check to see if this version has already been upgraded
+		if bk.UPGRADED_TO:
+			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+			msg = "INFO: A newer upgrade has already been installed. Thew new executable is '" +str(new_version_exe)+ "'"
+			print( msg ); logging.error( msg )
+			sys.exit(1)
+
 		try:
 			new_version_exe = bk.upgrade()
 		except RuntimeWarning as e:
