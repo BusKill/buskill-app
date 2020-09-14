@@ -127,7 +127,7 @@ class BusKill:
 		# 1. EXE_PATH = the absolute path to the executable for running BusKill,
 		#               which is:
 		#                 [a] the 'buskill-<version>.AppImage' file in Linux
-		#                 [b] the 'buskill-<version>.exe' file in Windows
+		#                 [b] the 'buskill.exe' file in Windows
 		#                 [c] the 'buskill' binary file in MacOS
 		# 2. EXE_FILE = just the filename (basename) of the EXE_PATH
 		# 3. EXE_DIR = the directory (dirname) where EXE_FILE lives
@@ -293,7 +293,7 @@ class BusKill:
 
 				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
 
-					# TODO: uncomment thsese lines to actually do the delete
+					# TODO: uncomment these lines to actually do the delete
 					print( 'skipping delete for now' )
 					# delete the old version's APP_DIR entirely
 					#self.UPGRADED_FROM = UPGRADED_FROM
@@ -371,10 +371,6 @@ class BusKill:
 		self.GNUPGHOME = os.path.join( self.CACHE_DIR, '.gnupg' )
 
 	def toggle(self):
-
-		# TODO remove these two lines from debugging
-		import pickle
-		pickle.dumps(self)
 
 		if self.is_armed:
 			msg = "DEBUG: attempting to disarm BusKill"
@@ -560,22 +556,17 @@ class BusKill:
 	# this works for both linux and mac
 	def armNix(self):
 
-		print( 'a' ); logging.debug( 'a' )
 		with usb1.USBContext() as context:
-			print( 'b' ); logging.debug( 'b' )
 
 			if not context.hasCapability(usb1.CAP_HAS_HOTPLUG):
-				print( 'c' ); logging.debug( 'c' )
 				msg = 'ERROR: Hotplug support is missing'
 				print( msg ); logger.error( msg )
 				return msg
 
 			opaque = context.hotplugRegisterCallback( self.hotplugCallbackNix )
-			print( 'd' ); logging.debug( 'd' )
 
 			try:
 				while True:
-					print( 'e' ); logging.debug( 'e' )
 					# this call is blocking (with a default timeout of 60 seconds)
 					# afaik there's no way to tell USBContext.handleEvents() to exit
 					# safely, so instead we just make the whole call to this arming
@@ -584,10 +575,10 @@ class BusKill:
 					# traceback to output, but it *does* immediately disarm without
 					# having wait for the timeout..
 					context.handleEvents()
-					print( 'f' ); logging.debug( 'f' )
 
-			except (KeyboardInterrupt, SystemExit):
-				print('Exiting')
+			except (KeyboardInterrupt, SystemExit) as e:
+				msg = "DEBUG: Exiting armNix() loop: " +str(e)
+				print( msg ); logger.info( msg )
 
 		return 0
 
@@ -651,59 +642,21 @@ class BusKill:
 		def run(self):
 
 			try: 
-				print( '1'); logging.debug( '1' )
 				multiprocessing.Process.run(self)
-				print( '2'); logging.debug( '2' )
 				self._cconn.send(None)
-				print( '3'); logging.debug( '3' )
+
 			except Exception as e:
+				msg = "DEBUG: Exception thrown in child process: " +str(e)
+				print( msg ); logging.debug( msg )
+
 				tb = traceback.format_exc()
 				self._cconn.send((e, tb))
-				print( '======================================' )
-				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-				print( 'EXCEPTION FOUND! EXCEPTION FOUND!')
-				print( 'WEEEEEEEOOOOOOOOHWEEEEEEEEOOOOOOH')
-				print( '======================================' )
 
 		@property
 		def exception(self):
 			if self._pconn.poll():
 				self._exception = self._pconn.recv()
 			return self._exception
-
-#		def run(self):
-#			try:
-#				print( '1'); logging.debug( '1' )
-#				multiprocessing.Process.run(self)
-#				print( '2'); logging.debug( '2' )
-#				self._cconn.send(None)
-#				print( '3'); logging.debug( '3' )
-#			except Exception as e:
-#				print( '4'); logging.debug( '4' )
-#				msg = "DEBUG: Exception thrown in child process: " +str(e)
-#				print( msg ); logging.debug( msg )
-#
-#				print( '5'); logging.debug( '5' )
-#				tb = traceback.format_exc()
-#				msg = "DEBUG: Traceback: " +str(tb)
-#				print( msg ); logging.debug( msg )
-#
-#				print( '6'); logging.debug( '6' )
-#				# attempt to fix "TypeError: can't pickle weakref objects" bugs
-#				# https://stackoverflow.com/questions/63758186/how-to-catch-exceptions-thrown-by-functions-executed-using-multiprocessing-proce
-#				pickleFreeE = RuntimeWarning( str(e) )
-#
-#				#self._cconn.send((e, tb))
-#				print( '7'); logging.debug( '7' )
-#				self._cconn.send((pickleFreeE, str(tb)))
-#				print( '8'); logging.debug( '8' )
-#				raise pickleFreeE
-#
-#		@property
-#		def exception(self):
-#			if self._pconn.poll():
-#				self._exception = self._pconn.recv()
-#			return self._exception
 
 	def wipeCache(self):
 
@@ -797,13 +750,6 @@ class BusKill:
 	# rewriting upgrade() to catch sentinels so it can kill itself
 	def upgrade_bg(self):
 
-		# TODO remove these two lines from debugging
-		import pickle
-		pickle.dumps(self)
-
-		# TODO remove this
-#		import pdb;pdb.set_trace()
-
 		# if we're running upgrade() synchronously, then upgrade() can access our
 		# object's instance fields OK. But if we run upgrade() in the background,
 		# then the child process won't be able to write to our instance fields as
@@ -875,7 +821,6 @@ class BusKill:
 		# built using multiprocessing.Array() is sufficient to let it be free()ed
 		# later by the garbage collector (?)
 		#  * https://stackoverflow.com/questions/63757092/how-to-cleanup-free-memory-when-using-multiprocessing-array-in-python
-
 
 		# take any exceptions raised within upgrade() and raise them now
 		if self.upgrade_process.exception:
@@ -1102,9 +1047,6 @@ class BusKill:
 		###########################
 		# DOWNLOAD LATEST VERSION #
 		###########################
-
-		# TODO: remove this
-		#BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = 1
 
 		# check metadata to see if there's a newer version than what we're running
 		# note we use SOURCE_DATE_EPOCH to make version comparisons easy

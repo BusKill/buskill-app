@@ -127,10 +127,35 @@ ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-in
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
 
-# TODO: pip download & verify sigs with gpg before install
-export all_proxy=''
-${PIP_PATH} install --ignore-installed --upgrade python-gnupg
-export all_proxy='http://example.com:9999'
+# INSTALL LATEST PIP PACKAGES
+# (this can only be done for packages that are cryptographically signed
+#  by the developer)
+
+# python-gnupg
+#  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
+#  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+${PYTHON} -m pip download python-gnupg
+filename="`ls -1 | head -n1`"
+signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+wget "${signature_url}"
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+rm -rf "${tmpDir}"
 
 # libusb depend for MacOS, from:
 # * https://libusb.info/
@@ -211,9 +236,32 @@ ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
 pushd dist
 
-# change the timestamps of all the files in the appdir or reproducable builds
+########################
+# ADD ADDITIONAL FILES #
+########################
+
+# now let's add some additional files to our release for the user, which will
+# be *outside* the AppImage
+
+# docs/
+docsDir="${APP_NAME}.app/docs"
+mkdir -p "${docsDir}"
+
+cp "docs/README.md" "${docsDir}/"
+cp "docs/attribution.rst" "${docsDir}/"
+cp "LICENSE" "${docsDir}/"
+cp "CHANGELOG" "${docsDir}/"
+cp "KEYS" "${docsDir}/"
+
+# change the timestamps of all the files in the appdir for reproducible builds
 find ${APP_NAME}.app -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
 mv ${APP_NAME}.app ${APP_NAME}-${VERSION}.app
+
+############
+# MAKE DMG #
+############
+
+We make a (7-zip compresssed) dmg image instead of a tarball for MacOS
 
 hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_NAME}-${VERSION}.app -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
