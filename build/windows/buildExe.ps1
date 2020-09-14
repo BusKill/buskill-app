@@ -77,14 +77,10 @@ Write-Output "listing contents of cwd"
 Get-ChildItem -Force | Out-String
 
 # TODO: delete these
-# try to find the gpg binary
-#Get-Command gpg
-#Get-Command gpg.exe
+# try to find the gpgv binary
+Get-Command gpgv
+Get-Command gpgv.exe
 #Get-ChildItem -Filter "*msys-bz2-1.dll" -Recurse C:\ | Out-String
-#Get-ChildItem -Filter "*msys-assuan-0.dll" -Recurse C:\ | Out-String
-#Get-ChildItem -Filter "*msys-gcrypt-20.dll" -Recurse C:\ | Out-String
-#Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
-#Get-ChildItem -Filter "*msys-gpg-error-0.dll" -Recurse C:\ | Out-String
 
 Write-Output 'INFO: Beginning execution'
 
@@ -120,7 +116,48 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
 
 # TODO: pip download & verify sigs with gpg before install
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade python-gnupg | Out-String
+#C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade python-gnupg | Out-String
+
+# INSTALL LATEST PIP PACKAGES
+# (this can only be done for packages that are cryptographically signed
+#  by the developer)
+
+# python-gnupg
+#  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
+#  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
+$tmpDir = Join-Path $Env:Temp $(New-Guid) | Out-String
+New-Item -Type Directory -Path $tmpDir | Out-String
+pushd "${tmpDir}"
+
+# download the latest version of the python-gnupg module
+C:\tmp\kivy_venv\Scripts\python.exe -m pip download python-gnupg | Out-String
+$filename = Get-ChildItem -Name | Select-Object -First 1 | Out-String
+
+# get the URL to download the detached signature file
+$signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#" | Out-String
+$signature_url = ($signature_url).matches | select -exp value | Out-String
+$signature_url = ($signature_url).replace( '#', '.asc' ) | Out-String
+wget "${signature_url}" | Out-String
+
+mkdir gnupg | Out-String
+#chmod 0700 gnupg
+popd | Out-String
+gpg --homedir "${tmpDir}\gnupg" --import "build\deps\python-gnupg.asc" | Out-String
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+# TODO: confirm this '||' actually works in powershell
+gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" || exit 1
+#if [[ $? -ne 0 ]]; then
+#	echo "ERROR: Invalid PGP signature!"
+#	exit 1
+#fi
+
+pushd "${tmpDir}" | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links "." "${filename}" | Out-String
+popd | Out-String
+rm -rf "${tmpDir}" | Out-String
 
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-
@@ -226,10 +263,22 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buski
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\buskill "dist/$env:ARCHIVE_DIR" | Out-String
+cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}" | Out-String
 
-cd dist
-Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
+# add in docs/ dir
+$docsDir = "dist\${env:ARCHIVE_DIR}\docs" | Out-String
+New-Item -Path "${docsDir}" -Type Directory | Out-String
+cp "docs\README.md" "${docsDir}\\" | Out-String
+cp "docs\attribution.rst" "${docsDir}\\" | Out-String
+cp "LICENSE" "${docsDir}\\" | Out-String
+cp "CHANGELOG" "${docsDir}\\" | Out-String
+cp "KEYS" "${docsDir}\\" | Out-String
+
+# TODO: fix zip-bomb
+Get-ChildItem -Path "dist" -Force | Out-String
+#cd dist
+#Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
+Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR | Out-String
 
 #######################
 # OUTPUT VERSION INFO #
