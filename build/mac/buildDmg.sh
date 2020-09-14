@@ -131,12 +131,15 @@ ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-in
 # (this can only be done for packages that are cryptographically signed
 #  by the developer)
 
+# (temporarily) re-enable internet access
+export all_proxy=''
+
 # python-gnupg
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
-${PYTHON} -m pip download python-gnupg
+${PIP_PATH} -m pip download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 wget "${signature_url}"
@@ -156,6 +159,11 @@ if [[ $? -ne 0 ]]; then
 fi
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
 rm -rf "${tmpDir}"
+
+# re-disable internet access
+export all_proxy='http://example.com:9999'
+
+# OTHER NON-PIP DEPENDS
 
 # libusb depend for MacOS, from:
 # * https://libusb.info/
