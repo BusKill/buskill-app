@@ -77,7 +77,7 @@ def BusKillCLI():
 		# the current platform isn't supported; show critical error window
 
 		msg = bk.ERR_PLATFORM_NOT_SUPPORTED
-		print( msg ); logging.error( msg )
+		print( msg ); logger.error( msg )
 		sys.exit(1)
 
 	if args.upgrade:
@@ -86,14 +86,14 @@ def BusKillCLI():
 		if bk.UPGRADED_TO:
 			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
 			msg = "INFO: A newer upgrade has already been installed. Thew new executable is '" +str(new_version_exe)+ "'"
-			print( msg ); logging.error( msg )
+			print( msg ); logger.error( msg )
 			sys.exit(1)
 
 		try:
 			new_version_exe = bk.upgrade()
 		except RuntimeWarning as e:
 			msg = "ERROR: Unable to upgrade buskill\n\t" +str(e)
-			print( msg ); logging.error( msg )
+			print( msg ); logger.error( msg )
 			sys.exit(1)
 
 		print( "Upgrade complete. New executable is '" +str(new_version_exe)+ "'" )
@@ -105,6 +105,6 @@ def BusKillCLI():
 
 	else:
 		msg = "Nothing to do."
-		print( msg ); logging.warning( msg )
+		print( msg ); logger.warning( msg )
 
 	return 0

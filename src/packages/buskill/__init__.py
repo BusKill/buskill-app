@@ -201,12 +201,12 @@ class BusKill:
 		# for upgraded_from.py)
 		sys.path.append( self.EXE_DIR )
 
-		msg = "INFO: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
-		msg+= "INFO: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
-		msg+= "INFO: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
-		msg+= "INFO: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
-		msg+= "INFO: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
-		msg+= "INFO: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+		msg = "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
+		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
+		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
+		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
+		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
+		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
 		print( msg ); logger.debug( msg )
 
 		# create a data dir in some safe place where we have write access
@@ -650,10 +650,14 @@ class BusKill:
 				self._cconn.send(None)
 
 			except Exception as e:
-				msg = "DEBUG: Exception thrown in child process: " +str(e)
+				msg = "DEBUG: Exception thrown in child process: " +str(e)+ "\n"
 				print( msg ); logger.debug( msg )
 
 				tb = traceback.format_exc()
+
+				msg = "DEBUG: Traceback: " +str(tb)
+				print( msg ); logger.debug( msg )
+
 				self._cconn.send((e, tb))
 
 		@property

@@ -27,6 +27,7 @@ import multiprocessing
 from multiprocessing import util
 
 import logging
+logger = logging.getLogger( __name__ )
 util.get_logger().setLevel(util.DEBUG)
 multiprocessing.log_to_stderr().setLevel( logging.DEBUG )
 #from multiprocessing import get_context
@@ -56,9 +57,6 @@ Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 from kivy.core.text import LabelBase
-
-import logging
-logger = logging.getLogger( __name__ )
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -128,7 +126,7 @@ class MainWindow(BoxLayout):
 			# a newer version has already been installed; skip upgrade() step and
 			# just prompt the user to restart to the newer version
 			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			self.upgrade4_restart_prompt()
 			return
 
@@ -278,7 +276,7 @@ class MainWindow(BoxLayout):
 			new_version_exe = self.upgrade_result
 
 		msg = "DEBUG: Exiting and launching " +str(new_version_exe)
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		try:
 			# replace this process with the newer version
@@ -364,7 +362,7 @@ class BusKillApp(App):
 			# the current platform isn't supported; show critical error window
 
 			msg = buskill.ERR_PLATFORM_NOT_SUPPORTED
-			print( msg ); logging.error( msg )
+			print( msg ); logger.error( msg )
 
 			crit = CriticalError()
 			crit.showError( buskill.ERR_PLATFORM_NOT_SUPPORTED )
