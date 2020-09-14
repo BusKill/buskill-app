@@ -179,7 +179,7 @@ class BusKill:
 
 			# on MacOS, the binary is 2 dirs below the .app dir
 			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
-			self.APP_DIR = '/'.join( self.EXE_PATH )
+			self.APP_DIR = '/'.join( self.APP_DIR )
 
 		# but if we're executing the code directly, then the APP_DIR is actually
 		# one dir higher
@@ -197,13 +197,13 @@ class BusKill:
 		 os.pathsep+ self.APP_DIR + \
 		 os.pathsep+ self.APPS_DIR
 
-		msg = "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
-		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
-		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
-		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
-		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
-		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
-		print( msg ); logging.debug( msg )
+		msg = "INFO: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
+		msg+= "INFO: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
+		msg+= "INFO: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
+		msg+= "INFO: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
+		msg+= "INFO: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
+		msg+= "INFO: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+		print( msg ); logging.info( msg )
 
 		# create a data dir in some safe place where we have write access
 		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
