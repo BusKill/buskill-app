@@ -87,6 +87,7 @@ if [[ "${VERSION}" = "dev" ]]; then
 fi
 
 DMG_FILENAME="${APP_NAME}-mac-${VERSION}-x86_64.dmg"
+APP_DIR_NAME="${APP_NAME}-${VERSION}.app"
 
 ###################
 # INSTALL DEPENDS #
@@ -235,7 +236,7 @@ coll = COLLECT(exe, Tree('../src/'),
                upx_exclude=[],
                name='${APP_NAME}')
 app = BUNDLE(coll,
-             name='${APP_NAME}.app',
+             name='${APP_DIR_NAME}',
              icon=None,
              bundle_identifier=None)
 EOF
@@ -243,6 +244,7 @@ EOF
 ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
 pushd dist
+ls -lah
 
 ########################
 # ADD ADDITIONAL FILES #
@@ -252,26 +254,28 @@ pushd dist
 # be *outside* the AppImage
 
 # docs/
-docsDir="${APP_NAME}.app/docs"
+docsDir="${APP_DIR_NAME}/docs"
 mkdir -p "${docsDir}"
 
-cp "docs/README.md" "${docsDir}/"
-cp "docs/attribution.rst" "${docsDir}/"
-cp "LICENSE" "${docsDir}/"
-cp "CHANGELOG" "${docsDir}/"
-cp "KEYS" "${docsDir}/"
+cp "../../docs/README.md" "${docsDir}/"
+cp "../../docs/attribution.rst" "${docsDir}/"
+cp "../../LICENSE" "${docsDir}/"
+cp "../../CHANGELOG" "${docsDir}/"
+cp "../../KEYS" "${docsDir}/"
 
 # change the timestamps of all the files in the appdir for reproducible builds
-find ${APP_NAME}.app -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
-mv ${APP_NAME}.app ${APP_NAME}-${VERSION}.app
+find ${APP_DIR_NAME} -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
+
+ls -lah "${APP_DIR_NAME}"
+ls -lah "${docsDir}"
 
 ############
 # MAKE DMG #
 ############
 
-We make a (7-zip compresssed) dmg image instead of a tarball for MacOS
+# we make a (7-zip compresssed) dmg image instead of a tarball for MacOS
 
-hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_NAME}-${VERSION}.app -ov
+hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_DIR_NAME} -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
 
 popd
