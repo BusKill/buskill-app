@@ -178,7 +178,7 @@ class BusKill:
 			self.TRIGGER_FUNCTION = self.triggerMac
 
 			# on MacOS, the binary is 2 dirs below the .app dir
-			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
+			self.APP_DIR = self.EXE_PATH.split('/')[0:-3]
 			self.APP_DIR = '/'.join( self.APP_DIR )
 
 		# but if we're executing the code directly, then the APP_DIR is actually
@@ -194,8 +194,12 @@ class BusKill:
 		# update PATH to include the dir where main.py lives (the second one is
 		# MacOS .app compatibility weirdness) so that we can find `gpg` there
 		os.environ['PATH'] += \
-		 os.pathsep+ self.APP_DIR + \
-		 os.pathsep+ self.APPS_DIR
+		 os.pathsep+ self.EXE_DIR + \
+		 os.pathsep+ self.APP_DIR
+
+		# also update sys.python, so `import` statements will look in there (eg:
+		# for upgraded_from.py)
+		sys.path.append( self.EXE_DIR )
 
 		msg = "INFO: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
 		msg+= "INFO: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
@@ -278,7 +282,7 @@ class BusKill:
 
 		# check to see if we're currently running a new version that is being
 		# executed for the first time after replacing an old version
-		if os.path.isfile( 'upgraded_from.py' ):
+		if os.path.isfile( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) ):
 			from upgraded_from import UPGRADED_FROM
 			if os.path.isdir( UPGRADED_FROM['APP_DIR'] ):
 
@@ -309,7 +313,7 @@ class BusKill:
 
 		# check to see if we're currently running an old version whose
 		# replacement version has already been installed
-		if os.path.isfile( 'upgraded_to.py' ):
+		if os.path.isfile( os.path.join( self.EXE_DIR, 'upgraded_to.py' ) ):
 			from upgraded_to import UPGRADED_TO
 			if os.path.exists( UPGRADED_TO['EXE_PATH'] ):
 				self.UPGRADED_TO = UPGRADED_TO
@@ -1214,6 +1218,7 @@ class BusKill:
 			with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
 
 				# get the path to the new executable
+				# TODO: change this to just get the dir name and append "\buskill.exe"
 				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
 				new_version_exe = self.APPS_DIR + '\\' + new_version_exe
 
@@ -1234,7 +1239,7 @@ class BusKill:
 			shutil.copytree( dmg_mnt_path +'/'+ app_path, self.APPS_DIR + '/' + app_path )
 			subprocess.run( ['hdiutil', 'detach', dmg_mnt_path] )
 
-			new_version_exe = self.APPS_DIR + '/' + app_path
+			new_version_exe = self.APPS_DIR+ '/' +app_path+ '/' +Contents+ '/' +MacOS+ '/buskill'
 
 		# create a file in new version's EXE_DIR so that it will know where the
 		# old version lives and be able to delete it on its first execution
