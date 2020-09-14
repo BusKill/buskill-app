@@ -1218,7 +1218,7 @@ class BusKill:
 			with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
 
 				# get the path to the new executable
-				# TODO: change this to just get the dir name and append "\buskill.exe"
+				# TODO: change this to just get the dir name and append "\buskill.exe" (see app_dir in MacOS below)
 				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
 				new_version_exe = self.APPS_DIR + '\\' + new_version_exe
 
@@ -1239,7 +1239,7 @@ class BusKill:
 			shutil.copytree( dmg_mnt_path +'/'+ app_path, self.APPS_DIR + '/' + app_path )
 			subprocess.run( ['hdiutil', 'detach', dmg_mnt_path] )
 
-			new_version_exe = self.APPS_DIR+ '/' +app_path+ '/' +Contents+ '/' +MacOS+ '/buskill'
+			new_version_exe = self.APPS_DIR+ '/' +app_path+ '/Contents/MacOS/buskill'
 
 		# create a file in new version's EXE_DIR so that it will know where the
 		# old version lives and be able to delete it on its first execution
