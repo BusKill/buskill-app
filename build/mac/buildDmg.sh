@@ -139,7 +139,7 @@ export all_proxy=''
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
-${PIP_PATH} -m pip download python-gnupg
+${PIP_PATH} download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 wget "${signature_url}"
