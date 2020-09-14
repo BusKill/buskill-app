@@ -207,7 +207,7 @@ class BusKill:
 		msg+= "INFO: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
 		msg+= "INFO: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
 		msg+= "INFO: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
-		print( msg ); logging.info( msg )
+		print( msg ); logger.debug( msg )
 
 		# create a data dir in some safe place where we have write access
 		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
@@ -230,7 +230,7 @@ class BusKill:
 		state = self.__dict__.copy()
 
 		msg = "DEBUG:__getstate__() pre:" +str( state.keys() )+ "|"
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		# remove instances of multiprocessing.Process() because they're not
 		# pickleable
@@ -242,7 +242,7 @@ class BusKill:
 				del state[instance_field]
 
 		msg = "DEBUG:__getstate__() post:|" +str( state.keys() )+ "|"
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		return state
 
@@ -259,7 +259,7 @@ class BusKill:
 			except ProcessLookupError as e:
 				msg = "DEBUG: Ignoring ProcessLookupError " +str(e)
 				msg += "\n\t" +str(e)+ "\n"
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 
 			self.usb_handler.join()
 		except:
@@ -288,12 +288,12 @@ class BusKill:
 
 				msg = "DEBUG: Detected first-run of new version. Deleting old version."
 				msg += "\n\t" +str(UPGRADED_FROM)+ "\n"
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 
 				# only proceed with this delete if the dir matches what we'd expect
 				if os.path.exists( os.path.join( UPGRADED_FROM['APP_DIR'], '.git' ) ):
 					msg = "DEBUG: Cowardly refusing to recursively delete an app that actually looks like a git sandbox."
-					print( msg ); logging.debug( msg )
+					print( msg ); logger.debug( msg )
 
 				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
 
@@ -309,7 +309,7 @@ class BusKill:
 
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
-					print( msg ); logging.debug( msg )
+					print( msg ); logger.debug( msg )
 
 		# check to see if we're currently running an old version whose
 		# replacement version has already been installed
@@ -319,7 +319,7 @@ class BusKill:
 				self.UPGRADED_TO = UPGRADED_TO
 				msg = "DEBUG: Detected that this version has already been upgraded. New version is:"
 				msg += "\n\t" +str(self.UPGRADED_TO)+ "\n"
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 
 	def setupDataDir(self):
 
@@ -347,7 +347,7 @@ class BusKill:
 				# we were unable to write to this data_dir; try the next one
 				msg = "DEBUG: Unable to write to '" +data_dir+ "'; skipping."
 				msg += "\n\t" +str(e)+ "\n"
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 				continue
 
 			# if we made it this far, we've confirmed that we can write to this
@@ -357,10 +357,10 @@ class BusKill:
 
 		try:
 			msg = "INFO: using DATA_DIR:|" +str(self.DATA_DIR)+ "|"
-			print( msg ); logging.info( msg )
+			print( msg ); logger.info( msg )
 		except:
 			msg = "WARNING: Unable to write to any DATA_DIR; not using one"
-			print( msg ); logging.warn( msg )
+			print( msg ); logger.warn( msg )
 			self.DATA_DIR = ''
 			return
 
@@ -651,7 +651,7 @@ class BusKill:
 
 			except Exception as e:
 				msg = "DEBUG: Exception thrown in child process: " +str(e)
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 
 				tb = traceback.format_exc()
 				self._cconn.send((e, tb))
@@ -818,7 +818,7 @@ class BusKill:
 #		if self.upgrade_pool.is_alive():
 		if not self.upgrade_is_finished():
 			msg = 'upgrade() is still running'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		# TODO; confirm that merely dereferencing this pointer to the ctypes array
@@ -859,7 +859,7 @@ class BusKill:
 
 		self.set_upgrade_status( "Starting Upgrade.." )
 		msg = "DEBUG: Called upgrade()"
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		# Note: While this upgrade solution does cryptographically verify the
 		# authenticity and integrity of new versions, it is still vulnerable to
@@ -888,26 +888,26 @@ class BusKill:
 		# only upgrade on linux, windows, and mac
 		if self.OS_NAME_SHORT == '':
 			msg = 'Upgrades not supported on this platform (' +CURRENT_PLATFORM+ ')'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		# skip upgrade if we can't write to disk
 		if self.DATA_DIR == '':
 			msg = 'Unable to upgrade. No DATA_DIR.'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		# make sure we can write to the dir where the new versions will be
 		# extracted
 		if not os.access(self.APPS_DIR, os.W_OK):
 			msg = 'Unable to upgrade. APPS_DIR not writeable (' +str(self.APPS_DIR)+ ')'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		# make sure we can delete the executable itself
 		if not os.access( os.path.join(self.EXE_DIR, self.EXE_FILE), os.W_OK):
 			msg = 'Unable to upgrade. EXE_FILE not writeable (' +str( os.path.join(self.EXE_DIR, self.EXE_FILE) )+ ')'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		#############
@@ -955,7 +955,7 @@ class BusKill:
 
 			self.set_upgrade_status( "Polling for latest update" )
 			msg = "DEBUG: Checking for updates at '" +str(mirror)+ "'"
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 
 			# try to download the metadata json file and its detached signature
 			files = [ mirror, mirror + '.asc' ]
@@ -972,7 +972,7 @@ class BusKill:
 						size_bytes = int(url.info().get('content-length'))
 						if size_bytes > 1048576:
 							msg = "\tMetadata too big; skipping (" +str(size_bytes)+ " bytes)"
-							print( msg ); logging.debug( msg )
+							print( msg ); logger.debug( msg )
 							break
 		
 						shutil.copyfileobj(url, out_file)
@@ -980,14 +980,14 @@ class BusKill:
 
 				except Exception as e:
 					msg = "\tFailed to fetch data from mirror; skipping (" +str(e)+ ")"
-					print( msg ); logging.debug( msg )
+					print( msg ); logger.debug( msg )
 					break
 
 		# CHECK SIGNATURE OF METADATA
 
 		self.set_upgrade_status( "Verifying metadata signature" )
 		msg = "\tDEBUG: Finished downloading update metadata. Checking signature."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 			
 		# open the detached signature and check it with gpg
 		with open( signature_filepath, 'rb' ) as fd:
@@ -998,7 +998,7 @@ class BusKill:
 		if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
 			self.wipeCache()
 			msg = 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		# extract from our list of signatures any signatures made with exactly the
@@ -1009,7 +1009,7 @@ class BusKill:
 		if sig_info == list():
 			self.wipeCache()
 			msg = 'ERROR: No valid signature found! Please report this as a bug.'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		else:
@@ -1020,17 +1020,17 @@ class BusKill:
 		if verified.status != 'signature valid':
 			self.wipeCache()
 			msg = 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		if sig_info['status'] != 'signature valid':
 			self.wipeCache()
 			msg = 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		msg = "\tDEBUG: Signature is valid (" +str(sig_info)+ ")."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		# try to load the metadata (this is done after signature so we don't load
 		# something malicious that may attack the json.loads() parser)
@@ -1039,13 +1039,13 @@ class BusKill:
 				metadata = json.loads( fd.read() ) 
 		except Exception as e:
 			msg = 'Unable to upgrade. Could not fetch metadata file (' +str(e)+ '.'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 			
 		# abort if it's empty
 		if metadata == '':
 			msg = 'Unable to upgrade. Could not fetch metadata contents.'
-			print( "DEBUG: " + msg ); logging.debug( msg )
+			print( "DEBUG: " + msg ); logger.debug( msg )
 			raise RuntimeWarning( msg )
 
 		###########################
@@ -1059,11 +1059,11 @@ class BusKill:
 
 		msg = "DEBUG: Current version: " +str(currentReleaseTime)+ ".\n"
 		msg += "DEBUG: Latest version: " +str(latestReleaseTime)+ "."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		if latestReleaseTime < currentReleaseTime:
 			msg = "INFO: Current version is latest version. No new updates available."
-			print( msg ); logging.info( msg )
+			print( msg ); logger.info( msg )
 			return self.set_upgrade_result( 1 )
 
 		# currently we only support x86_64 builds..
@@ -1103,7 +1103,7 @@ class BusKill:
 			for download in f:
 
 				msg = "DEBUG: Attempting to download '" +str(download)+ "'"
-				print( msg ); logging.debug( msg )
+				print( msg ); logger.debug( msg )
 
 				filename = download.split('/')[-1]
 				filepath = os.path.join( self.CACHE_DIR, filename )
@@ -1117,17 +1117,17 @@ class BusKill:
 						self.set_upgrade_status( "Downloading " +str(filename)+ " (" +str(math.ceil(size_bytes/1024/1024))+ "MB)" )
 						if size_bytes > 209715200:
 							msg = "\tFile too big; skipping (" +str(size_bytes)+ " bytes)"
-							print( msg ); logging.debug( msg )
+							print( msg ); logger.debug( msg )
 							continue
 		
 						shutil.copyfileobj(url, out_file)
 						msg = "\tDone"
-						print( msg ); logging.debug( msg )
+						print( msg ); logger.debug( msg )
 						break
 
 				except Exception as e:
 					msg = "\tFailed to download update; skipping (" +str(e)+ ")"
-					print( msg ); logging.debug( msg )
+					print( msg ); logger.debug( msg )
 					continue
 
 		####################
@@ -1136,7 +1136,7 @@ class BusKill:
 
 		self.set_upgrade_status( "Verifying signature" )
 		msg = "DEBUG: Finished downloading update files. Checking signature."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		# open the detached signature and check it with gpg
 		with open( signature_filepath, 'rb' ) as fd:
@@ -1147,7 +1147,7 @@ class BusKill:
 		if verified.fingerprint != RELEASE_KEY_SUB_FINGERPRINT:
 			self.wipeCache()
 			msg = 'ERROR: Invalid signature fingerprint (expected '+str(RELEASE_KEY_SUB_FINGERPRINT)+' but got '+str(verified.fingerprint)+')! Please report this as a bug.'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		# extract from our list of signatures any signatures made with exactly the
@@ -1158,7 +1158,7 @@ class BusKill:
 		if sig_info == list():
 			self.wipeCache()
 			msg = 'ERROR: No valid signature found! Please report this as a bug.'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		else:
@@ -1169,17 +1169,17 @@ class BusKill:
 		if verified.status != 'signature valid':
 			self.wipeCache()
 			msg = 'ERROR: No valid signature found! Please report this as a bug (' +str(sig_info)+ ').'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		if sig_info['status'] != 'signature valid':
 			self.wipeCache()
 			msg = 'ERROR: No valid sig_info signature found! Please report this as a bug (' +str(sig_info)+ ').'
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		msg = "DEBUG: Signature is valid (" +str(sig_info)+ ")."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		####################
 		# VERIFY INTEGRITY #
@@ -1188,12 +1188,12 @@ class BusKill:
 		if not self.integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
 			self.wipeCache()
 			msg = 'ERROR: Integrity check failed. '
-			print( msg ); logging.debug( msg )
+			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
 
 		self.set_upgrade_status( "Verifying integrity" )
 		msg = "DEBUG: New version's integrity is valid."
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		###########
 		# INSTALL #
@@ -1201,7 +1201,7 @@ class BusKill:
 		
 		self.set_upgrade_status( "Extracting archive" )
 		msg = "DEBUG: Extracting '" +str(archive_filepath)+ "' to '" +str(self.APPS_DIR)+ "'"
-		print( msg ); logging.debug( msg )
+		print( msg ); logger.debug( msg )
 
 		if self.OS_NAME_SHORT == 'lin':
 		
