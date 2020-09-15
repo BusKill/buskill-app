@@ -126,43 +126,18 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 $tmpDir = Join-Path $Env:Temp $(New-Guid)
-echo $tmpDir
 echo "${tmpDir}"
-ls $env:Temp
-ls $tmpDir
 New-Item -Path "${tmpDir}" -Type Directory | Out-String
-ls $env:Temp
-ls $tmpDir
-New-Item -Path "$tmpDir" -Type Directory | Out-String
-ls $env:Temp
-ls $tmpDir
-New-Item -Path ${tmpDir} -Type Directory | Out-String
-ls $env:Temp
-ls $tmpDir
-New-Item -Path $tmpDir -Type Directory | Out-String
-ls $env:Temp
-ls $tmpDir
-New-Item -Path "${tmpDir}" -Type Directory
-ls $env:Temp
-ls $tmpDir
-New-Item -Path "$tmpDir" -Type Directory
-ls $env:Temp
-ls $tmpDir
-New-Item -Path ${tmpDir} -Type Directory
-ls $env:Temp
-ls $tmpDir
-New-Item -Path $tmpDir -Type Directory
-ls $env:Temp
-ls $tmpDir
+ls "${env:Temp}"
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
 C:\tmp\kivy_venv\Scripts\python.exe -m pip download python-gnupg | Out-String
-$filename = Get-ChildItem -Name | Select-Object -First 1 | Out-String
+$filename = Get-ChildItem -Name | Select-Object -First 1
 echo $filename | Out-String
 
 # get the URL to download the detached signature file
-$signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#" | Out-String
+$signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#"
 echo $signature_url | Out-String
 $signature_url = ($signature_url).matches | select -exp value | Out-String
 echo $signature_url | Out-String
@@ -319,7 +294,8 @@ Get-ChildItem -Path "dist" -Force | Out-String
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "dist\$env:ARCHIVE_DIR" | Out-String
 pwd
 ls
-ls $env:ARCHIVE_DIR
+ls dist
+ls "dist\${env:ARCHIVE_DIR}"
 
 #######################
 # OUTPUT VERSION INFO #
