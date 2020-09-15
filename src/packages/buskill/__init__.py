@@ -586,7 +586,7 @@ class BusKill:
 
 		return 0
 
-	def armWin():
+	def armWin(self):
 
 		w = Notification()
 		win32gui.PumpMessages()

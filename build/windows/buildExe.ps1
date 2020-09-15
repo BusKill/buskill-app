@@ -115,9 +115,6 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 # install kivy and all other python dependencies with pip into our virtual env
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\Kivy-1.11.1-cp37-cp37m-win_amd64.whl | Out-String
 
-# TODO: pip download & verify sigs with gpg before install
-#C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade python-gnupg | Out-String
-
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
 #  by the developer)
@@ -134,7 +131,6 @@ if ( $LastExitCode -ne 0 ){
 	echo "ERROR: Failed to create tmpDir" | Out-String
 	exit 1 | Out-String
 }
-ls "${env:Temp}"
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
@@ -144,12 +140,9 @@ echo $filename | Out-String
 
 # get the URL to download the detached signature file
 $signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#"
-echo $signature_url | Out-String
 $signature_url = ($signature_url).matches | select -exp value | Out-String
-echo $signature_url | Out-String
 $signature_url = ($signature_url).replace( '#', '.asc' ) | Out-String
 echo $signature_url | Out-String
-ls 
 curl -OutFile "${filename}.asc" "${signature_url}" | Out-String
 ls 
 
@@ -157,17 +150,12 @@ ls
 mkdir gnupg | Out-String
 #chmod 0700 gnupg
 popd | Out-String
-ls "build\deps" | Out-String
-ls "${tmpDir}" | Out-String
-ls "${tmpDir}\gnupg" | Out-String
 gpg --homedir "${tmpDir}\gnupg" --import "build\deps\python-gnupg.asc" | Out-String
 ls "${tmpDir}\gnupg" | Out-String
 
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
-#gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
-gpgv --help
 gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
 echo "LastExitCode:" | Out-String
 echo $LastExitCode | Out-String
@@ -205,7 +193,6 @@ echo "# -*- mode: python ; coding: utf-8 -*-
 from kivy_deps import angle, glew, sdl2
 
 block_cipher = None
-
 
 a = Analysis(['..\\src\\main.py'],
              pathex=['.\\'],
@@ -297,15 +284,9 @@ cp "LICENSE" "${docsDir}\" | Out-String
 cp "CHANGELOG" "${docsDir}\" | Out-String
 cp "KEYS" "${docsDir}\" | Out-String
 
-# TODO: fix zip-bomb
 Get-ChildItem -Path "dist" -Force | Out-String
 cd dist
-#Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "$env:ARCHIVE_DIR" | Out-String
-pwd
-ls
-ls dist
-ls "dist\${env:ARCHIVE_DIR}"
 
 #######################
 # OUTPUT VERSION INFO #
@@ -314,6 +295,7 @@ ls "dist\${env:ARCHIVE_DIR}"
 Write-Output 'INFO: Dir contents'
 Get-ChildItem -Path "pyinstaller" -Force | Out-String
 Get-ChildItem -Path "pyinstaller\dist" -Force | Out-String
+Get-ChildItem -Path "dist" -Force | Out-String
 
 Write-Output 'INFO: Python versions info'
 
