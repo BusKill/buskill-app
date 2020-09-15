@@ -161,7 +161,8 @@ ls "${tmpDir}\gnupg" | Out-String
 # any BAD signatures, and exits 0 "if everything is fine"
 # TODO: confirm this '||' actually works in powershell
 #gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
-gpgv --homedir "${tmpDir}\gnupg" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
+gpgv --help
+gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
 echo "LastExitCode:" | Out-String
 echo $LastExitCode | Out-String
 if ( $LastExitCode -ne 0 ){
