@@ -143,7 +143,9 @@ $signature_url = ($signature_url).matches | select -exp value | Out-String
 echo $signature_url | Out-String
 $signature_url = ($signature_url).replace( '#', '.asc' ) | Out-String
 echo $signature_url | Out-String
-wget "${signature_url}" | Out-String
+ls 
+curl -OutFile "${filename}.asc" "${signature_url}" | Out-String
+ls 
 
 mkdir gnupg | Out-String
 #chmod 0700 gnupg
@@ -158,10 +160,11 @@ ls "${tmpDir}\gnupg" | Out-String
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
 # TODO: confirm this '||' actually works in powershell
-gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
+#gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
+gpgv --homedir "${tmpDir}\gnupg" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
 echo "LastExitCode:" | Out-String
 echo $LastExitCode | Out-String
-if ( $LastExitCode -eq 'dev' ){
+if ( $LastExitCode -ne 0 ){
 	echo "ERROR: Invalid PGP signature!" | Out-String
 	exit 1 | Out-String
 }
@@ -278,14 +281,14 @@ New-Item -Path dist -Type Directory | Out-String
 cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}" | Out-String
 
 # add in docs/ dir
-$docsDir = "dist\${env:ARCHIVE_DIR}\docs" | Out-String
+$docsDir = "dist\${env:ARCHIVE_DIR}\docs"
 echo $docsDir
 New-Item -Path "${docsDir}" -Type Directory | Out-String
-cp "docs\README.md" "${docsDir}\\" | Out-String
-cp "docs\attribution.rst" "${docsDir}\\" | Out-String
-cp "LICENSE" "${docsDir}\\" | Out-String
-cp "CHANGELOG" "${docsDir}\\" | Out-String
-cp "KEYS" "${docsDir}\\" | Out-String
+cp "docs\README.md" "${docsDir}\" | Out-String
+cp "docs\attribution.rst" "${docsDir}\" | Out-String
+cp "LICENSE" "${docsDir}\" | Out-String
+cp "CHANGELOG" "${docsDir}\" | Out-String
+cp "KEYS" "${docsDir}\" | Out-String
 
 # TODO: fix zip-bomb
 Get-ChildItem -Path "dist" -Force | Out-String
