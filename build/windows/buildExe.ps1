@@ -148,11 +148,13 @@ gpg --homedir "${tmpDir}\gnupg" --import "build\deps\python-gnupg.asc" | Out-Str
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
 # TODO: confirm this '||' actually works in powershell
-gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" || exit 1
-#if [[ $? -ne 0 ]]; then
-#	echo "ERROR: Invalid PGP signature!"
-#	exit 1
-#fi
+gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
+echo "LastExitCode:" | Out-String
+echo $LastExitCode | Out-String
+if ( $LastExitCode -eq 'dev' ){
+	echo "ERROR: Invalid PGP signature!" | Out-String
+	exit 1 | Out-String
+}
 
 pushd "${tmpDir}" | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links "." "${filename}" | Out-String
