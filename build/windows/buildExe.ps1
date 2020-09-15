@@ -125,9 +125,15 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 # python-gnupg
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
+
+# create temporary directory
 $tmpDir = Join-Path $Env:Temp $(New-Guid)
 echo "${tmpDir}"
 New-Item -Path "${tmpDir}" -Type Directory | Out-String
+if ( $LastExitCode -ne 0 ){
+	echo "ERROR: Failed to create tmpDir" | Out-String
+	exit 1 | Out-String
+}
 ls "${env:Temp}"
 pushd "${tmpDir}"
 
@@ -147,6 +153,7 @@ ls
 curl -OutFile "${filename}.asc" "${signature_url}" | Out-String
 ls 
 
+# prepare homedir and keyring for `gpgv`
 mkdir gnupg | Out-String
 #chmod 0700 gnupg
 popd | Out-String
@@ -159,7 +166,6 @@ ls "${tmpDir}\gnupg" | Out-String
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
-# TODO: confirm this '||' actually works in powershell
 #gpgv --homedir "${tmpDir}\gnupg" --keyring "${tmpDir}\gnupg\pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
 gpgv --help
 gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
@@ -173,7 +179,7 @@ if ( $LastExitCode -ne 0 ){
 pushd "${tmpDir}" | Out-String
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links "." "${filename}" | Out-String
 popd | Out-String
-rm -rf "${tmpDir}" | Out-String
+rm -Recurse -Force "${tmpDir}" | Out-String
 
 # output information about this build so the code can use it later in logs
 echo "# -*- mode: python ; coding: utf-8 -*-

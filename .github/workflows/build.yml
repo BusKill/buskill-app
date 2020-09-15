@@ -96,8 +96,11 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_ID: ${{ steps.create_release.outputs.id }}
       run: |
+        set -x
         cd dist
+        ls -lah
         RELEASE_FILE="`ls -1 | grep buskill-win*.zip | head -n1`"
+        echo ${RELEASE_FILE}
         curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
       shell: bash
 
