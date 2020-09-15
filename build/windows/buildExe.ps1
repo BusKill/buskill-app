@@ -125,17 +125,35 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 # python-gnupg
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
-$tmpDir = Join-Path $Env:Temp $(New-Guid) | Out-String
+$tmpDir = Join-Path $Env:Temp $(New-Guid)
 echo $tmpDir
 echo "${tmpDir}"
+ls $env:Temp
+ls $tmpDir
 New-Item -Path "${tmpDir}" -Type Directory | Out-String
+ls $env:Temp
+ls $tmpDir
 New-Item -Path "$tmpDir" -Type Directory | Out-String
+ls $env:Temp
+ls $tmpDir
 New-Item -Path ${tmpDir} -Type Directory | Out-String
+ls $env:Temp
+ls $tmpDir
 New-Item -Path $tmpDir -Type Directory | Out-String
+ls $env:Temp
+ls $tmpDir
 New-Item -Path "${tmpDir}" -Type Directory
+ls $env:Temp
+ls $tmpDir
 New-Item -Path "$tmpDir" -Type Directory
+ls $env:Temp
+ls $tmpDir
 New-Item -Path ${tmpDir} -Type Directory
+ls $env:Temp
+ls $tmpDir
 New-Item -Path $tmpDir -Type Directory
+ls $env:Temp
+ls $tmpDir
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
