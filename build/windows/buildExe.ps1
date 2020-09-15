@@ -127,7 +127,8 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 $tmpDir = Join-Path $Env:Temp $(New-Guid) | Out-String
 echo $tmpDir
-New-Item -Type Directory -Path $tmpDir | Out-String
+echo "${tmpDir}"
+New-Item -Path "${tmpDir}" -Type Directory | Out-String
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
