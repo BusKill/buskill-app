@@ -129,6 +129,13 @@ $tmpDir = Join-Path $Env:Temp $(New-Guid) | Out-String
 echo $tmpDir
 echo "${tmpDir}"
 New-Item -Path "${tmpDir}" -Type Directory | Out-String
+New-Item -Path "$tmpDir" -Type Directory | Out-String
+New-Item -Path ${tmpDir} -Type Directory | Out-String
+New-Item -Path $tmpDir -Type Directory | Out-String
+New-Item -Path "${tmpDir}" -Type Directory
+New-Item -Path "$tmpDir" -Type Directory
+New-Item -Path ${tmpDir} -Type Directory
+New-Item -Path $tmpDir -Type Directory
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
@@ -291,7 +298,7 @@ cp "KEYS" "${docsDir}\\" | Out-String
 Get-ChildItem -Path "dist" -Force | Out-String
 #cd dist
 #Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
-Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR | Out-String
+Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "dist\$env:ARCHIVE_DIR" | Out-String
 pwd
 ls
 ls $env:ARCHIVE_DIR
