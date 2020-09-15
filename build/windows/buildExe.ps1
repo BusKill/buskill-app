@@ -126,23 +126,32 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 $tmpDir = Join-Path $Env:Temp $(New-Guid) | Out-String
+echo $tmpDir
 New-Item -Type Directory -Path $tmpDir | Out-String
 pushd "${tmpDir}"
 
 # download the latest version of the python-gnupg module
 C:\tmp\kivy_venv\Scripts\python.exe -m pip download python-gnupg | Out-String
 $filename = Get-ChildItem -Name | Select-Object -First 1 | Out-String
+echo $filename | Out-String
 
 # get the URL to download the detached signature file
 $signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#" | Out-String
+echo $signature_url | Out-String
 $signature_url = ($signature_url).matches | select -exp value | Out-String
+echo $signature_url | Out-String
 $signature_url = ($signature_url).replace( '#', '.asc' ) | Out-String
+echo $signature_url | Out-String
 wget "${signature_url}" | Out-String
 
 mkdir gnupg | Out-String
 #chmod 0700 gnupg
 popd | Out-String
+ls "build\deps" | Out-String
+ls "${tmpDir}" | Out-String
+ls "${tmpDir}\gnupg" | Out-String
 gpg --homedir "${tmpDir}\gnupg" --import "build\deps\python-gnupg.asc" | Out-String
+ls "${tmpDir}\gnupg" | Out-String
 
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
@@ -269,6 +278,7 @@ cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}" | Out-String
 
 # add in docs/ dir
 $docsDir = "dist\${env:ARCHIVE_DIR}\docs" | Out-String
+echo $docsDir
 New-Item -Path "${docsDir}" -Type Directory | Out-String
 cp "docs\README.md" "${docsDir}\\" | Out-String
 cp "docs\attribution.rst" "${docsDir}\\" | Out-String
@@ -281,6 +291,9 @@ Get-ChildItem -Path "dist" -Force | Out-String
 #cd dist
 #Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR | Out-String
+pwd
+ls
+ls $env:ARCHIVE_DIR
 
 #######################
 # OUTPUT VERSION INFO #
