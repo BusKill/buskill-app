@@ -299,9 +299,9 @@ cp "KEYS" "${docsDir}\" | Out-String
 
 # TODO: fix zip-bomb
 Get-ChildItem -Path "dist" -Force | Out-String
-#cd dist
+cd dist
 #Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path $env:ARCHIVE_DIR\* | Out-String
-Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "dist\$env:ARCHIVE_DIR" | Out-String
+Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "$env:ARCHIVE_DIR" | Out-String
 pwd
 ls
 ls dist
