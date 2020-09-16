@@ -125,7 +125,11 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 				n_drive += 1
 	
 	class Notification:
-		def __init__(self):
+
+		def __init__( self, buskill ):
+
+			self.bk = buskill
+
 			message_map = {
 			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
 			}
@@ -162,7 +166,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
 	
-				self.triggerWin()
+				self.bk.triggerWin()
 	
 				msg = "hwnd:|" +str(hwnd)+ "|"
 				print( msg ); logger.debug( msg )
@@ -573,7 +577,7 @@ class BusKill:
 
 	def armWin(self):
 
-		w = Notification()
+		w = Notification( self )
 		win32gui.PumpMessages()
 
 	#####################
