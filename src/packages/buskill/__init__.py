@@ -29,17 +29,72 @@ logger = logging.getLogger( __name__ )
 CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'LINUX' ):
 	import usb1
-	
-if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-	import usb1
 
 if CURRENT_PLATFORM.startswith( 'WIN' ):
 	import win32api, win32con, win32gui
 	from ctypes import *
 	
-	############################
-	# WINDOWS HELPER FUNCTIONS #
-	############################
+if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+	import usb1
+
+################################################################################
+#                                  SETTINGS                                    #
+################################################################################
+
+# APP_DIR is the dir in which our buskill executable lives, which often
+# is some dir on the USB drive itself or could be somewhere on the computer
+global APP_DIR
+APP_DIR = sys.path[0]
+
+UPGRADE_MIRRORS = [
+ 'https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json',
+ 'https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json',
+ 'https://repo.buskill.in/buskill-app/v1/meta.json',
+ 'https://repo.michaelaltfield.net/buskill-app/v1/meta.json',
+]
+random.shuffle(UPGRADE_MIRRORS)
+
+RELEASE_KEY_FINGERPRINT = 'E0AFFF57DC00FBE0563587614AE21E1936CE786A'
+RELEASE_KEY_SUB_FINGERPRINT = '798DC1101F3DEC428ADE124D68B8BCB0C5023905'
+
+#####################
+# WINDOWS CONSTANTS #
+#####################
+
+if CURRENT_PLATFORM.startswith( 'WIN' ):
+
+	# Device change events (WM_DEVICECHANGE wParam)
+	DBT_DEVICEARRIVAL = 0x8000
+	DBT_DEVICEQUERYREMOVE = 0x8001
+	DBT_DEVICEQUERYREMOVEFAILED = 0x8002
+	DBT_DEVICEMOVEPENDING = 0x8003
+	DBT_DEVICEREMOVECOMPLETE = 0x8004
+	DBT_DEVICETYPESSPECIFIC = 0x8005
+	DBT_CONFIGCHANGED = 0x0018
+
+	# type of device in DEV_BROADCAST_HDR
+	DBT_DEVTYP_OEM = 0x00000000
+	DBT_DEVTYP_DEVNODE = 0x00000001
+	DBT_DEVTYP_VOLUME = 0x00000002
+	DBT_DEVTYPE_PORT = 0x00000003
+	DBT_DEVTYPE_NET = 0x00000004
+
+	# media types in DBT_DEVTYP_VOLUME
+	DBTF_MEDIA = 0x0001
+	DBTF_NET = 0x0002
+
+	WORD = c_ushort
+	DWORD = c_ulong
+
+################################################################################
+#                                   OBJECTS                                    #
+################################################################################
+
+##########################
+# WINDOWS HELPER CLASSES #
+##########################
+
+if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
 	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
@@ -133,59 +188,6 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 				print( msg ); logger.debug( msg )
 	
 			return 1
-
-################################################################################
-#                                  SETTINGS                                    #
-################################################################################
-
-# APP_DIR is the dir in which our buskill executable lives, which often
-# is some dir on the USB drive itself or could be somewhere on the computer
-global APP_DIR
-APP_DIR = sys.path[0]
-
-UPGRADE_MIRRORS = [
- 'https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json',
- 'https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json',
- 'https://repo.buskill.in/buskill-app/v1/meta.json',
- 'https://repo.michaelaltfield.net/buskill-app/v1/meta.json',
-]
-random.shuffle(UPGRADE_MIRRORS)
-
-RELEASE_KEY_FINGERPRINT = 'E0AFFF57DC00FBE0563587614AE21E1936CE786A'
-RELEASE_KEY_SUB_FINGERPRINT = '798DC1101F3DEC428ADE124D68B8BCB0C5023905'
-
-#####################
-# WINDOWS CONSTANTS #
-#####################
-
-if CURRENT_PLATFORM.startswith( 'WIN' ):
-
-	# Device change events (WM_DEVICECHANGE wParam)
-	DBT_DEVICEARRIVAL = 0x8000
-	DBT_DEVICEQUERYREMOVE = 0x8001
-	DBT_DEVICEQUERYREMOVEFAILED = 0x8002
-	DBT_DEVICEMOVEPENDING = 0x8003
-	DBT_DEVICEREMOVECOMPLETE = 0x8004
-	DBT_DEVICETYPESSPECIFIC = 0x8005
-	DBT_CONFIGCHANGED = 0x0018
-
-	# type of device in DEV_BROADCAST_HDR
-	DBT_DEVTYP_OEM = 0x00000000
-	DBT_DEVTYP_DEVNODE = 0x00000001
-	DBT_DEVTYP_VOLUME = 0x00000002
-	DBT_DEVTYPE_PORT = 0x00000003
-	DBT_DEVTYPE_NET = 0x00000004
-
-	# media types in DBT_DEVTYP_VOLUME
-	DBTF_MEDIA = 0x0001
-	DBTF_NET = 0x0002
-
-	WORD = c_ushort
-	DWORD = c_ulong
-
-################################################################################
-#                                   OBJECTS                                    #
-################################################################################
 
 class BusKill:
 
