@@ -145,7 +145,7 @@ class BusKill:
 
 		# if the executable is actually just the python interpreter, then what
 		# we want is the first argument
-		if re.match( ".*python[1-9\.]*$", self.EXE_PATH ):
+		if re.match( ".*python[1-9\.]*\s", self.EXE_PATH ):
 			self.EXE_PATH = os.path.abspath( sys.argv[0] )
 
 		# split the EXE_PATH into dir & file parts
