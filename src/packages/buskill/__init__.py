@@ -691,8 +691,8 @@ class BusKill:
 				filename = os.path.split( line[66:] )[1].strip()
 				sha256sums[filename] = checksum
 
-		# TODO: uncomment next line
-		print( 'sha256sums:|' +str(sha256sums)+ '|' )
+		msg = 'DEBUG: sha256sums:|' +str(sha256sums)+ '|'
+		print( str(msg) ); logger.debug( msg )
 
 		# now loop through each file that we were asked to check and confirm its
 		# checksum matches what was listed in the SHA256SUMS file
@@ -709,9 +709,9 @@ class BusKill:
 
 			checksum = sha256sum.hexdigest()
 
-			# TODO: uncomment next 2 lines
-			print( 'checksum:|' +str(checksum)+ '|' )
-			print( 'sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|' )
+			msg = 'DEBUG: checksum:|' +str(checksum)+ "|\n"
+			msg+= 'DEBUG: sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|' )
+			print( str(msg) ); logger.debug( msg )
 
 			if checksum != sha256sums[local_filename]:
 				return False
@@ -835,8 +835,7 @@ class BusKill:
 			self.upgrade_process = None
 			self.upgrade_status_msg = None
 			self.upgrade_result = None
-			# TODO: uncomment next line
-			#self.wipeCache()
+			self.wipeCache()
 
 			raise exception
 	
@@ -852,8 +851,7 @@ class BusKill:
 		self.upgrade_process = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
-		# TODO: uncomment next line
-		#self.wipeCache()
+		self.wipeCache()
 	
 		self.UPGRADED_TO = { 'EXE_PATH': upgrade_result }
 		return upgrade_result
@@ -1189,8 +1187,7 @@ class BusKill:
 		####################
 
 		if not self.integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
-			# TODO: uncomment next line
-			#self.wipeCache()
+			self.wipeCache()
 			msg = 'ERROR: Integrity check failed. '
 			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
