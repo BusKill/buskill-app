@@ -448,7 +448,7 @@ class BusKill:
 		if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 			# this is a usb removal event
 
-			msg = "calling " +str(SELF.TRIGGER_FUNCTION)
+			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
 			self.TRIGGER_FUNCTION
