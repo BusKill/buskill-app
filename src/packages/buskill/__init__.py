@@ -451,7 +451,7 @@ class BusKill:
 			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
-			self.TRIGGER_FUNCTION
+			self.TRIGGER_FUNCTION()
 
 	############################
 	# WINDOWS HELPER FUNCTIONS #
