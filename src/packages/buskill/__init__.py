@@ -692,7 +692,7 @@ class BusKill:
 				sha256sums[filename] = checksum
 
 		# TODO: uncomment next line
-		print( 'sha256sums:|' +sha256sums+ '|' )
+		print( 'sha256sums:|' +str(sha256sums)+ '|' )
 
 		# now loop through each file that we were asked to check and confirm its
 		# checksum matches what was listed in the SHA256SUMS file
@@ -835,7 +835,8 @@ class BusKill:
 			self.upgrade_process = None
 			self.upgrade_status_msg = None
 			self.upgrade_result = None
-			self.wipeCache()
+			# TODO: uncomment next line
+			#self.wipeCache()
 
 			raise exception
 	
@@ -851,7 +852,8 @@ class BusKill:
 		self.upgrade_process = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
-		self.wipeCache()
+		# TODO: uncomment next line
+		#self.wipeCache()
 	
 		self.UPGRADED_TO = { 'EXE_PATH': upgrade_result }
 		return upgrade_result
