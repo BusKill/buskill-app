@@ -442,13 +442,12 @@ class BusKill:
 	############################
 	# WINDOWS HELPER FUNCTIONS #
 	############################
-	# TODO: test this works after migrating BusKill to a class
 
 	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
 	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
 	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
 
-	if CURRENT_PLATFORM.startswith( 'WIN' ):
+	if self.OS_NAME_SHORT == 'win':
 
 		class DEV_BROADCAST_HDR(Structure):
 			_fields_ = [
@@ -508,11 +507,11 @@ class BusKill:
 			#  lParam - what's changed more exactly
 			def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
 		
-				dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
+				dev_broadcast_hdr = self.DEV_BROADCAST_HDR.from_address(lparam)
 		
 				if wparam == DBT_DEVICEREMOVECOMPLETE:
 		
-					triggerWin()
+					self.triggerWin()
 		
 					msg = "hwnd:|" +str(hwnd)+ "|"
 					print( msg ); logger.debug( msg )
