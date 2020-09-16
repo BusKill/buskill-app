@@ -447,7 +447,7 @@ class BusKill:
 	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
 	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
 
-	if self.OS_NAME_SHORT == 'win':
+	if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 		class DEV_BROADCAST_HDR(Structure):
 			_fields_ = [
