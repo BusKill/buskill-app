@@ -691,6 +691,9 @@ class BusKill:
 				filename = os.path.split( line[66:] )[1].strip()
 				sha256sums[filename] = checksum
 
+		# TODO: uncomment next line
+		print( 'sha256sums:|' +sha256sums+ '|' )
+
 		# now loop through each file that we were asked to check and confirm its
 		# checksum matches what was listed in the SHA256SUMS file
 		for local_file in local_filepaths:
@@ -705,6 +708,11 @@ class BusKill:
 	  				data_chunk = fd.read(1024)
 
 			checksum = sha256sum.hexdigest()
+
+			# TODO: uncomment next 2 lines
+			print( 'checksum:|' +str(checksum)+ '|' )
+			print( 'sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|' )
+
 			if checksum != sha256sums[local_filename]:
 				return False
 
@@ -1179,7 +1187,8 @@ class BusKill:
 		####################
 
 		if not self.integrity_is_ok( sha256sums_filepath, [ archive_filepath ] ):
-			self.wipeCache()
+			# TODO: uncomment next line
+			#self.wipeCache()
 			msg = 'ERROR: Integrity check failed. '
 			print( msg ); logger.debug( msg )
 			raise RuntimeError( msg )
