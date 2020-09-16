@@ -380,9 +380,6 @@ class BusKill:
 			msg = "DEBUG: attempting to disarm BusKill"
 			print( msg ); logger.debug( msg )
 
-			msg = "INFO: disarming BusKill (ignore the traceback below caused by killing the child process abruptly)"
-			print( msg ); logger.info( msg )
-
 			# disarm just means to terminate the child process in which the arm
 			# function was spawned. this works on all platforms.
 			try:
@@ -412,20 +409,9 @@ class BusKill:
 			msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
 			print( msg ); logger.info( msg )
 
-	# TODO: test this works after migrating BusKill to a class
 	# this is a callback function that is registered to be called when a usb
 	# hotplug event occurs using libusb (linux & macos)
 	def hotplugCallbackNix( self, *argv ):
-
-#		# the global scope variables appear to be undefined when this function is
-#		# called by libusb for some reason, so we have to add this platform logic
-#		# directly in this function too
-#		CURRENT_PLATFORM = platform.system().upper()
-#		if CURRENT_PLATFORM.startswith( 'LINUX' ):
-#			trigger_fun = triggerLin
-#
-#		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-#			trigger_fun = triggerMac
 
 		(context, device, event) = argv
 
