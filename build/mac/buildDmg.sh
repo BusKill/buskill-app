@@ -9,17 +9,16 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-07-09
-# Version: 0.3
+# Updated: 2020-09-17
+# Version: 0.4
 ################################################################################
 
 ############
 # SETTINGS #
 ############
 
-#PYTHON_PATH='/usr/local/bin/python3'
-PYTHON_PATH='/usr/local/Cellar/python@3.7/3.7.8_1/bin/python3'
-PIP_PATH='/usr/local/Cellar/python@3.7/3.7.8_1/bin/pip3'
+PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
 APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
