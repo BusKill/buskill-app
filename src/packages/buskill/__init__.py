@@ -29,13 +29,110 @@ logger = logging.getLogger( __name__ )
 CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'LINUX' ):
 	import usb1
+	
+if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+	import usb1
 
 if CURRENT_PLATFORM.startswith( 'WIN' ):
 	import win32api, win32con, win32gui
 	from ctypes import *
+	
+	############################
+	# WINDOWS HELPER FUNCTIONS #
+	############################
 
-if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-	import usb1
+	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
+	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
+	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
+
+	class DEV_BROADCAST_HDR(Structure):
+		_fields_ = [
+		 ("dbch_size", DWORD),
+		 ("dbch_devicetype", DWORD),
+		 ("dbch_reserved", DWORD)
+		]
+	
+	class DEV_BROADCAST_VOLUME(Structure):
+		_fields_ = [
+		 ("dbcv_size", DWORD),
+		 ("dbcv_devicetype", DWORD),
+		 ("dbcv_reserved", DWORD),
+		 ("dbcv_unitmask", DWORD),
+		 ("dbcv_flags", WORD)
+		]
+	
+	def drive_from_mask(mask):
+		n_drive = 0
+		while 1:
+			if (mask & (2 ** n_drive)):
+				return n_drive
+			else:
+				n_drive += 1
+	
+	class Notification:
+		def __init__(self):
+			message_map = {
+			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
+			}
+	
+			wc = win32gui.WNDCLASS()
+			hinst = wc.hInstance = win32api.GetModuleHandle(None)
+			wc.lpszClassName = "DeviceChangeDemo"
+			wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
+			wc.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
+			wc.hbrBackground = win32con.COLOR_WINDOW
+			wc.lpfnWndProc = message_map
+			classAtom = win32gui.RegisterClass(wc)
+			style = win32con.WS_OVERLAPPED | win32con.WS_SYSMENU
+			self.hwnd = win32gui.CreateWindow(
+			 classAtom,
+			 "Device Change Demo",
+			 style,
+			 0, 0,
+			 win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT,
+			 0, 0,
+			 hinst, None
+			)
+	
+		# this is a callback function that is registered to be called when a usb
+		# hotplug event occurs in windows
+		# WM_DEVICECHANGE:
+		#  wParam - type of change: arrival, removal etc.
+		#  lParam - what's changed?
+		#    if it's a volume then...
+		#  lParam - what's changed more exactly
+		def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
+	
+			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
+	
+			if wparam == DBT_DEVICEREMOVECOMPLETE:
+	
+				self.triggerWin()
+	
+				msg = "hwnd:|" +str(hwnd)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "message:|" +str(message)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg= "wparam:|" +str(wparam)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "lparam:|" +str(lparam)+ "|"
+				print( msg ); logger.debug( msg )
+	
+				dev_broadcast_volume = DEV_BROADCAST_VOLUME.from_address(lparam)
+				msg = "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|"
+				print( msg ); logger.debug( msg )
+
+				drive_letter = drive_from_mask(dev_broadcast_volume.dbcv_unitmask)
+				msg = "drive_letter:|" +str(drive_letter)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "ch( ord('A') + drive_letter):|" +str( chr(ord('A') + drive_letter) )+ '|'
+				print( msg ); logger.debug( msg )
+	
+			return 1
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -438,105 +535,6 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			self.TRIGGER_FUNCTION()
-
-	############################
-	# WINDOWS HELPER FUNCTIONS #
-	############################
-
-	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
-	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
-	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
-
-	if CURRENT_PLATFORM.startswith( 'WIN' ):
-
-		class DEV_BROADCAST_HDR(Structure):
-			_fields_ = [
-			 ("dbch_size", DWORD),
-			 ("dbch_devicetype", DWORD),
-			 ("dbch_reserved", DWORD)
-			]
-		
-		class DEV_BROADCAST_VOLUME(Structure):
-			_fields_ = [
-			 ("dbcv_size", DWORD),
-			 ("dbcv_devicetype", DWORD),
-			 ("dbcv_reserved", DWORD),
-			 ("dbcv_unitmask", DWORD),
-			 ("dbcv_flags", WORD)
-			]
-		
-		def drive_from_mask(mask):
-			n_drive = 0
-			while 1:
-				if (mask & (2 ** n_drive)):
-					return n_drive
-				else:
-					n_drive += 1
-		
-		class Notification:
-			def __init__(self):
-				message_map = {
-				 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
-				}
-		
-				wc = win32gui.WNDCLASS()
-				hinst = wc.hInstance = win32api.GetModuleHandle(None)
-				wc.lpszClassName = "DeviceChangeDemo"
-				wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
-				wc.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
-				wc.hbrBackground = win32con.COLOR_WINDOW
-				wc.lpfnWndProc = message_map
-				classAtom = win32gui.RegisterClass(wc)
-				style = win32con.WS_OVERLAPPED | win32con.WS_SYSMENU
-				self.hwnd = win32gui.CreateWindow(
-				 classAtom,
-				 "Device Change Demo",
-				 style,
-				 0, 0,
-				 win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT,
-				 0, 0,
-				 hinst, None
-				)
-		
-			# this is a callback function that is registered to be called when a usb
-			# hotplug event occurs in windows
-			# WM_DEVICECHANGE:
-			#  wParam - type of change: arrival, removal etc.
-			#  lParam - what's changed?
-			#    if it's a volume then...
-			#  lParam - what's changed more exactly
-			def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
-		
-				dev_broadcast_hdr = self.DEV_BROADCAST_HDR.from_address(lparam)
-		
-				if wparam == DBT_DEVICEREMOVECOMPLETE:
-		
-					self.triggerWin()
-		
-					msg = "hwnd:|" +str(hwnd)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "message:|" +str(message)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg= "wparam:|" +str(wparam)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "lparam:|" +str(lparam)+ "|"
-					print( msg ); logger.debug( msg )
-		
-					dev_broadcast_volume = DEV_BROADCAST_VOLUME.from_address(lparam)
-					msg = "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|"
-					print( msg ); logger.debug( msg )
-
-					drive_letter = drive_from_mask(dev_broadcast_volume.dbcv_unitmask)
-					msg = "drive_letter:|" +str(drive_letter)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "ch( ord('A') + drive_letter):|" +str( chr(ord('A') + drive_letter) )+ '|'
-					print( msg ); logger.debug( msg )
-		
-				return 1
 
 	####################
 	# ARMING FUNCTIONS #
