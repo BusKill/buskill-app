@@ -710,7 +710,7 @@ class BusKill:
 			checksum = sha256sum.hexdigest()
 
 			msg = 'DEBUG: checksum:|' +str(checksum)+ "|\n"
-			msg+= 'DEBUG: sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|' )
+			msg+= 'DEBUG: sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|'
 			print( str(msg) ); logger.debug( msg )
 
 			if checksum != sha256sums[local_filename]:
