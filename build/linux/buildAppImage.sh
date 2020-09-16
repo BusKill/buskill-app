@@ -88,7 +88,7 @@ print_debugging_info
 ###################
 
 sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync
+sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl
 sudo firecfg --clean
 
 ##################

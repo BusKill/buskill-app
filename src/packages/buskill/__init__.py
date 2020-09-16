@@ -33,7 +33,7 @@ if CURRENT_PLATFORM.startswith( 'LINUX' ):
 if CURRENT_PLATFORM.startswith( 'WIN' ):
 	import win32api, win32con, win32gui
 	from ctypes import *
-
+	
 if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 	import usb1
 
@@ -90,6 +90,109 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 #                                   OBJECTS                                    #
 ################################################################################
 
+##########################
+# WINDOWS HELPER CLASSES #
+##########################
+
+if CURRENT_PLATFORM.startswith( 'WIN' ):
+
+	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
+	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
+	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
+
+	class DEV_BROADCAST_HDR(Structure):
+		_fields_ = [
+		 ("dbch_size", DWORD),
+		 ("dbch_devicetype", DWORD),
+		 ("dbch_reserved", DWORD)
+		]
+	
+	class DEV_BROADCAST_VOLUME(Structure):
+		_fields_ = [
+		 ("dbcv_size", DWORD),
+		 ("dbcv_devicetype", DWORD),
+		 ("dbcv_reserved", DWORD),
+		 ("dbcv_unitmask", DWORD),
+		 ("dbcv_flags", WORD)
+		]
+	
+	def drive_from_mask(mask):
+		n_drive = 0
+		while 1:
+			if (mask & (2 ** n_drive)):
+				return n_drive
+			else:
+				n_drive += 1
+	
+	class Notification:
+
+		def __init__( self, buskill ):
+
+			self.bk = buskill
+
+			message_map = {
+			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
+			}
+	
+			wc = win32gui.WNDCLASS()
+			hinst = wc.hInstance = win32api.GetModuleHandle(None)
+			wc.lpszClassName = "DeviceChangeDemo"
+			wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
+			wc.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
+			wc.hbrBackground = win32con.COLOR_WINDOW
+			wc.lpfnWndProc = message_map
+			classAtom = win32gui.RegisterClass(wc)
+			style = win32con.WS_OVERLAPPED | win32con.WS_SYSMENU
+			self.hwnd = win32gui.CreateWindow(
+			 classAtom,
+			 "Device Change Demo",
+			 style,
+			 0, 0,
+			 win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT,
+			 0, 0,
+			 hinst, None
+			)
+	
+		# this is a callback function that is registered to be called when a usb
+		# hotplug event occurs in windows
+		# WM_DEVICECHANGE:
+		#  wParam - type of change: arrival, removal etc.
+		#  lParam - what's changed?
+		#    if it's a volume then...
+		#  lParam - what's changed more exactly
+		def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
+	
+			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
+	
+			if wparam == DBT_DEVICEREMOVECOMPLETE:
+	
+				self.bk.triggerWin()
+	
+				msg = "hwnd:|" +str(hwnd)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "message:|" +str(message)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg= "wparam:|" +str(wparam)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "lparam:|" +str(lparam)+ "|"
+				print( msg ); logger.debug( msg )
+	
+				dev_broadcast_volume = DEV_BROADCAST_VOLUME.from_address(lparam)
+				msg = "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|"
+				print( msg ); logger.debug( msg )
+
+				drive_letter = drive_from_mask(dev_broadcast_volume.dbcv_unitmask)
+				msg = "drive_letter:|" +str(drive_letter)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "ch( ord('A') + drive_letter):|" +str( chr(ord('A') + drive_letter) )+ '|'
+				print( msg ); logger.debug( msg )
+	
+			return 1
+
 class BusKill:
 
 	def __init__(self):
@@ -145,7 +248,7 @@ class BusKill:
 
 		# if the executable is actually just the python interpreter, then what
 		# we want is the first argument
-		if re.match( ".*python[1-9\.]*$", self.EXE_PATH ):
+		if re.match( ".*python[1-9\.]*\s", self.EXE_PATH ):
 			self.EXE_PATH = os.path.abspath( sys.argv[0] )
 
 		# split the EXE_PATH into dir & file parts
@@ -380,9 +483,6 @@ class BusKill:
 			msg = "DEBUG: attempting to disarm BusKill"
 			print( msg ); logger.debug( msg )
 
-			msg = "INFO: disarming BusKill (ignore the traceback below caused by killing the child process abruptly)"
-			print( msg ); logger.info( msg )
-
 			# disarm just means to terminate the child process in which the arm
 			# function was spawned. this works on all platforms.
 			try:
@@ -412,20 +512,9 @@ class BusKill:
 			msg+= "INFO: To disarm the CLI, exit with ^C or close this terminal"
 			print( msg ); logger.info( msg )
 
-	# TODO: test this works after migrating BusKill to a class
 	# this is a callback function that is registered to be called when a usb
 	# hotplug event occurs using libusb (linux & macos)
 	def hotplugCallbackNix( self, *argv ):
-
-#		# the global scope variables appear to be undefined when this function is
-#		# called by libusb for some reason, so we have to add this platform logic
-#		# directly in this function too
-#		CURRENT_PLATFORM = platform.system().upper()
-#		if CURRENT_PLATFORM.startswith( 'LINUX' ):
-#			trigger_fun = triggerLin
-#
-#		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-#			trigger_fun = triggerMac
 
 		(context, device, event) = argv
 
@@ -448,110 +537,10 @@ class BusKill:
 		if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 			# this is a usb removal event
 
-			msg = "calling " +str(SELF.TRIGGER_FUNCTION)
+			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
-			self.TRIGGER_FUNCTION
-
-	############################
-	# WINDOWS HELPER FUNCTIONS #
-	############################
-	# TODO: test this works after migrating BusKill to a class
-
-	# The windows WM_DEVICECHANGE code below was adapted from the following sources:
-	# * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html
-	# * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python
-
-	if CURRENT_PLATFORM.startswith( 'WIN' ):
-
-		class DEV_BROADCAST_HDR(Structure):
-			_fields_ = [
-			 ("dbch_size", DWORD),
-			 ("dbch_devicetype", DWORD),
-			 ("dbch_reserved", DWORD)
-			]
-		
-		class DEV_BROADCAST_VOLUME(Structure):
-			_fields_ = [
-			 ("dbcv_size", DWORD),
-			 ("dbcv_devicetype", DWORD),
-			 ("dbcv_reserved", DWORD),
-			 ("dbcv_unitmask", DWORD),
-			 ("dbcv_flags", WORD)
-			]
-		
-		def drive_from_mask(mask):
-			n_drive = 0
-			while 1:
-				if (mask & (2 ** n_drive)):
-					return n_drive
-				else:
-					n_drive += 1
-		
-		class Notification:
-			def __init__(self):
-				message_map = {
-				 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
-				}
-		
-				wc = win32gui.WNDCLASS()
-				hinst = wc.hInstance = win32api.GetModuleHandle(None)
-				wc.lpszClassName = "DeviceChangeDemo"
-				wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW
-				wc.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
-				wc.hbrBackground = win32con.COLOR_WINDOW
-				wc.lpfnWndProc = message_map
-				classAtom = win32gui.RegisterClass(wc)
-				style = win32con.WS_OVERLAPPED | win32con.WS_SYSMENU
-				self.hwnd = win32gui.CreateWindow(
-				 classAtom,
-				 "Device Change Demo",
-				 style,
-				 0, 0,
-				 win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT,
-				 0, 0,
-				 hinst, None
-				)
-		
-			# this is a callback function that is registered to be called when a usb
-			# hotplug event occurs in windows
-			# WM_DEVICECHANGE:
-			#  wParam - type of change: arrival, removal etc.
-			#  lParam - what's changed?
-			#    if it's a volume then...
-			#  lParam - what's changed more exactly
-			def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
-		
-				dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
-		
-				if wparam == DBT_DEVICEREMOVECOMPLETE:
-		
-					triggerWin()
-		
-					msg = "hwnd:|" +str(hwnd)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "message:|" +str(message)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg= "wparam:|" +str(wparam)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "lparam:|" +str(lparam)+ "|"
-					print( msg ); logger.debug( msg )
-		
-					dev_broadcast_volume = DEV_BROADCAST_VOLUME.from_address(lparam)
-					msg = "dev_broadcast_volume:|" +str(dev_broadcast_volume)+ "|"
-					print( msg ); logger.debug( msg )
-
-					drive_letter = drive_from_mask(dev_broadcast_volume.dbcv_unitmask)
-					msg = "drive_letter:|" +str(drive_letter)+ "|"
-					print( msg ); logger.debug( msg )
-
-					msg = "ch( ord('A') + drive_letter):|" +str( chr(ord('A') + drive_letter) )+ '|'
-					print( msg ); logger.debug( msg )
-		
-				return 1
+			self.TRIGGER_FUNCTION()
 
 	####################
 	# ARMING FUNCTIONS #
@@ -588,7 +577,7 @@ class BusKill:
 
 	def armWin(self):
 
-		w = self.Notification()
+		w = Notification( self )
 		win32gui.PumpMessages()
 
 	#####################
@@ -702,6 +691,9 @@ class BusKill:
 				filename = os.path.split( line[66:] )[1].strip()
 				sha256sums[filename] = checksum
 
+		msg = 'DEBUG: sha256sums:|' +str(sha256sums)+ '|'
+		print( str(msg) ); logger.debug( msg )
+
 		# now loop through each file that we were asked to check and confirm its
 		# checksum matches what was listed in the SHA256SUMS file
 		for local_file in local_filepaths:
@@ -716,6 +708,11 @@ class BusKill:
 	  				data_chunk = fd.read(1024)
 
 			checksum = sha256sum.hexdigest()
+
+			msg = 'DEBUG: checksum:|' +str(checksum)+ "|\n"
+			msg+= 'DEBUG: sha256sums[local_filename]:|' +str(sha256sums[local_filename])+ '|' )
+			print( str(msg) ); logger.debug( msg )
+
 			if checksum != sha256sums[local_filename]:
 				return False
 
