@@ -34,15 +34,15 @@ For instructions on downloading and cryptographically verifying our latest relea
 BusKill is simple. When armed, a USB removal will trigger the screen to lock or your computer to shutdown. Click the button to toggle between "armed" (red) and "disarmed" (blue).
 
 <p align="center">
-  <img src="docs/images/buskill_app_lin_arm2.gif?raw=true" alt="Click the button to arm BusKill"/>
+  <img src="docs/images/buskill_app_lin_arm2.gif?raw=true" alt="Click the button to arm BusKill" width="100px" />
 </p>
 
 BusKill runs in Linux, Windows, and MacOS.
 
 <p align="center" float="left">
-  <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux"/>
-  <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows"/>
-  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS"/>
+  <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux" width="200px" />
+  <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows" width="200px" />
+  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width="200px" />
 </p>
 
 ## Misconceptions
