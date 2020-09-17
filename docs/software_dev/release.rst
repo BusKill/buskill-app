@@ -178,16 +178,16 @@ When downloading the AppImage from the repo's GitHub releases page, make sure th
 	...
 	root@disp2781:~/buskill-app# 
 	
-	root@disp2781:~/buskill-app# sha256sum dist/buskill.AppImage
-	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
+	root@disp2781:~/buskill-app# sha256sum dist/*/*.AppImage
+	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  buskill-lin-v3.2.0-x86_64/buskill-v3.2.0.AppImage
 	root@disp2781:~/buskill-app# 
 	
 	root@disp2781:~/buskill-app# cd ..
-	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_linux/buskill-linux-x86_64.<epoch_seconds>.tar.bz2
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_linux/buskill-lin-v3.2.0-x86_64.tbz
 	...
-	root@disp2781:~# tar -xjf buskill-linux-x86_64.181376356.tar.bz2 
-	root@disp2781:~# sha256sum dist/buskill.AppImage 
-	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  dist/buskill.AppImage
+	root@disp2781:~# tar -xjf buskill-lin-v3.2.0-x86_64.tbz
+	root@disp2781:~# sha256sum */*.AppImage 
+	66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  buskill-lin-v3.2.0-x86_64/buskill-v3.2.0.AppImage
 	root@disp2781:~# 
 
 .. note::

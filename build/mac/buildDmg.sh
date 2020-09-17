@@ -80,7 +80,7 @@ if [ -z ${GITHUB_REF} ]; then
 	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
 fi
 
-VERSION=`git show-ref | head -n1 | awk '{print $2}' | awk -F '/' '{print $NF}'`
+VERSION=`git symbolic-ref HEAD | head -n1 | awk -F '/' '{print $NF}'`
 if [[ "${VERSION}" = "dev" ]]; then
 	VERSION="${SOURCE_DATE_EPOCH}"
 fi

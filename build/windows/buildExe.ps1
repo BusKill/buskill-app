@@ -58,7 +58,7 @@ if ( ! $env:GITHUB_SHA ){
 	$env:GITHUB_SHA="???"
 }
 
-$env:VERSION="$( git show-ref | select -first 1 )"
+$env:VERSION="$( git symbolic-ref HEAD | select -first 1 )"
 $env:VERSION="$( $env:VERSION.Split( "/") | select -last 1 )"
 if ( $env:VERSION -eq 'dev' ){
 	$env:VERSION="$env:SOURCE_DATE_EPOCH"
