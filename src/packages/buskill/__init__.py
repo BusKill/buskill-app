@@ -400,15 +400,13 @@ class BusKill:
 
 				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
 
-					# TODO: uncomment these lines to actually do the delete
-					print( 'skipping delete for now' )
 					# delete the old version's APP_DIR entirely
-					#self.UPGRADED_FROM = UPGRADED_FROM
-					#shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
+					self.UPGRADED_FROM = UPGRADED_FROM
+					shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
 
 					# and delete the 'upgraded_from.py' file so we don't try to
 					# delete the old version again
-					#os.unlink( 'upgraded_from.py' )
+					os.unlink( 'upgraded_from.py' )
 
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
