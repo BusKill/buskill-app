@@ -31,7 +31,7 @@ For instructions on downloading and cryptographically verifying our latest relea
 
 ## Screenshots
 
-BusKill is simple. When armed, a USB removal will trigger the screen to lock or your computer to shutdown. Click the button to toggle between "armed" and "disarmed"
+BusKill is simple. When armed, a USB removal will trigger the screen to lock (by default).
 
 BusKill runs in Linux, Windows, and MacOS.
 
