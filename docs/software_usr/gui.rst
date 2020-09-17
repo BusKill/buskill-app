@@ -12,6 +12,14 @@ BusKill always starts in the disarmed state.
 
 When BusKill is disarmed, events will never be triggered--even if the BusKill cable is unplugged.
 
+.. figure:: /images/buskill_app_lin_arm2.gif
+	:alt: Screenshot of BusKill in Linux
+	:align: center
+	:target: ../_images/buskill_app_lin_arm2.gif
+	:width: 200 px
+
+	Click the ``Arm`` button
+
 To arm BusKill, click the ``Arm`` button. BusKill can be armed whether or not the cable is plugged-in. Plugging-in the BusKill cable never triggers any BusKill events, regardless of whether or not BusKill is armed or disarmed.
 
 ..

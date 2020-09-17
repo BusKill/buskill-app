@@ -16,20 +16,36 @@ For more information on how to [buy](https://www.buskill.in/buy) or build your o
 
 ![](.github-assets/busKill_featuredImage.jpg)
 
-# Install
+# Documentation
+
+To read our comprehensive documentation, see:
+
+ * [docs.buskill.in](https://docs.buskill.in)
+
+## Install
 
 For instructions on downloading and cryptographically verifying our latest release, see:
 
  * [Downloading the BusKill App](https://docs.buskill.in/buskill-app/en/stable/software_usr/download.html)
  * [Verifying the Download](https://docs.buskill.in/buskill-app/en/stable/software_usr/signature.html)
 
-# Documentation
+## Screenshots
 
-To read our comprehensive docs, see:
+BusKill is simple. When armed, a USB removal will trigger the screen to lock or your computer to shutdown. Click the button to toggle between "armed" (red) and "disarmed" (blue).
 
- * [docs.buskill.in](https://docs.buskill.in)
+<p align="center">
+  <img src="docs/images/buskill_app_lin_arm2.gif?raw=true" alt="Click the button to arm BusKill"/>
+</p>
 
-# Misconceptions
+BusKill runs in Linux, Windows, and MacOS.
+
+<p align="center" float="left">
+  <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux"/>
+  <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows"/>
+  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS"/>
+</p>
+
+## Misconceptions
 
 > Q: Self-destruct?!? Will this brick my computer?
 > A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
