@@ -40,23 +40,15 @@ BusKill is simple. When armed, a USB removal will trigger the screen to lock or 
 BusKill runs in Linux, Windows, and MacOS.
 
 <p align="center" float="left">
-  <figure>
-   <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux" width="150px" />
-   <figcaption>Linux</figcaption>
-  </figure>
-  <figure>
-   <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows" width="150px" />
-   <figcaption>Windows</figcaption>
-  </figure>
-  <figure>
-   <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width==150px" />
-   <figcaption>MacOS</figcaption>
-  </figure>
+  <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux" width="150px" />
+  <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows" width="150px" />
+  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width=="150px" />
 </p>
 
 ## Misconceptions
 
 > Q: Self-destruct?!? Will this brick my computer?
+
 A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
 
 For more information, see our [Frequently Asked Questions](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html).
