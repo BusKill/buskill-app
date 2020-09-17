@@ -42,7 +42,7 @@ BusKill runs in Linux, Windows, and MacOS.
 <p align="center" float="left">
   <img src="docs/images/buskill_app_lin_disarmed1.jpg" alt="Screenshot of BusKill in Linux" width="150px" />
   <img src="docs/images/buskill_app_win_disarmed1.jpg" alt="Screenshot of BusKill in Windows" width="150px" />
-  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width=="150px" />
+  <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width="150px" />
 </p>
 
 ## Misconceptions
