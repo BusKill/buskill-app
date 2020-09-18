@@ -107,6 +107,11 @@ pushd /tmp
 popd
 mv /tmp/squashfs-root /tmp/kivy_appdir
 
+# for debugging reproducible builds
+sha256sum /tmp/python.AppImage
+ls -lah /tmp/kivy_appdir
+ls -lah /tmp/kivy_appdir/usr/bin/
+
 # INSTALL LOCAL PIP PACKAGES
 
 # install our pip depends from the files in the repo since pip doesn't provide
@@ -295,6 +300,9 @@ popd # leave /tmp
 ##################
 # BUILD APPIMAGE #
 ##################
+
+# for debugging reproducible builds
+ls -lah /tmp/kivy_appdir/usr/bin/
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)

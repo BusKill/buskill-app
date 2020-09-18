@@ -10,11 +10,18 @@ Determine Version Number
 
 The first thing you must do before creating a new release is determine the new (`semantic <https://semver.org/>`_) version number.
 
-In this example, we'll be using ``v3.2.0``. That's a ``MAJOR`` version ``3`` and ``MINOR`` version ``2``. The ``PATCH`` version is ``0``, and it should only be incremented for hotfixes to previous releases, which is a distinct workflow from what's documented here.
+In this example, we'll be using ``v3.2.0``. That's
+
+ * a ``MAJOR`` version ``3``,
+ * a ``MINOR`` version ``2``, and 
+ * a ``PATCH`` version ``0``
+
+For this workflow, the ``PATCH`` version must always be ``0``, and it should only be incremented for hotfixes to previous releases--which is a distinct workflow from what's documented here.
 
 ::
 
-	v3.2.0
+	    v 3 . 2 . 0 ⭠ PATCH
+	MAJOR ⮥   ⮤ MINOR
 
 Create Release Branch
 ---------------------

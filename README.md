@@ -41,6 +41,8 @@ BusKill runs in Linux, Windows, and MacOS.
   <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width="200px" />
 </p>
 
+For more information, see [BusKill App: Graphical User Interface](https://docs.buskill.in/buskill-app/en/stable/software_usr/gui.html)
+
 ## Misconceptions
 
 > Q: Self-destruct?!? Will this brick my computer?
@@ -48,6 +50,14 @@ BusKill runs in Linux, Windows, and MacOS.
 A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
 
 For more information, see our [Frequently Asked Questions](https://docs.buskill.in/buskill-app/en/stable/faq.html).
+
+## Contributing
+
+Please see [Contributing to BusKill](https://docs.buskill.in/buskill-app/en/stable/contributing.html) to learn how you can help the BusKill project.
+
+## Attribution
+
+Thank you to the countless [individuals and other open-source projects](https://docs.buskill.in/buskill-app/en/stable/attribution.html) that have contributed to to the BusKill project!
 
 # Press
 
