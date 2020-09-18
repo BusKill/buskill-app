@@ -95,8 +95,13 @@ sudo firecfg --clean
 # PREPARE APPDIR #
 ##################
 
-# first cleanup old appdir, if needed
+# first cleanup old tmp files/dirs, if needed
+rm -f /tmp/pyhon.AppImage
+rm -f /tmp/appimagetool.AppImage
+rm -f /tmp/squashfs4.4.tar.gz
 rm -rf /tmp/kivy_appdir
+rm -rf /tmp/appimagetool_appdir
+rm -rf /tmp/squashfs4.4
 
 # We use this python-appimage release as a base for building our own python
 # AppImage. We only have to add our code and depends to it.

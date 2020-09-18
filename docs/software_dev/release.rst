@@ -23,7 +23,6 @@ For this workflow, the ``PATCH`` version must always be ``0``, and it should onl
 	    v 3 . 2 . 0 ⭠ PATCH
 	MAJOR ⮥   ⮤ MINOR
 
-
 Create Release Branch
 ---------------------
 
