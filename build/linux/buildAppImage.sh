@@ -95,6 +95,10 @@ sudo apt-get update
 sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg
 sudo firecfg --clean
 
+# TODO: remove this
+sudo apt-get -y install docker.io
+sudo docker run hello-world
+
 ##################
 # PREPARE APPDIR #
 ##################
