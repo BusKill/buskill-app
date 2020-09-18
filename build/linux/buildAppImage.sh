@@ -40,6 +40,10 @@ print_debugging_info () {
 	date
 	uname -a
 	cat /etc/issue
+	which gpg
+	gpg --version
+	which gpg2
+	gpg2 --version
 	which python
 	python --version
 	python -m pip list
@@ -88,7 +92,7 @@ print_debugging_info
 ###################
 
 sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl
+sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg
 sudo firecfg --clean
 
 ##################
