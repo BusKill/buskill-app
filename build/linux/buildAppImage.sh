@@ -44,6 +44,7 @@ print_debugging_info () {
 	gpg --version
 	which gpg2
 	gpg2 --version
+	sha256sum /usr/bin/gpg
 	which python
 	python --version
 	python -m pip list
@@ -92,7 +93,7 @@ print_debugging_info
 ###################
 
 sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg
+sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg2
 sudo firecfg --clean
 
 # TODO: remove this
@@ -323,6 +324,7 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+sha256sum "${APP_NAME}-${VERSION}.AppImage"
 
 ########################
 # ADD ADDITIONAL FILES #
