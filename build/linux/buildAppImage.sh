@@ -87,7 +87,7 @@ print_debugging_info
 ###################
 
 ${SUDO} apt-get update
-${SUDO} apt-get -y install iptables python3-pip python3-setuptools python3-virtualenv rsync curl gnupg
+${SUDO} apt-get -y install iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg
 
 #################
 # FIX CONSTANTS #
