@@ -345,8 +345,8 @@ popd # leave /tmp
 ##################
 
 # attempting to fix permission mixmatch for reproducible builds
-chmod -R 0644 /tmp/kivy_appdir
-find /tmp/kivy_appdir -type d -exec chmod 0755 '{}' \;
+${SUDO} chmod -R 0644 /tmp/kivy_appdir
+${SUDO} find /tmp/kivy_appdir -type d -exec chmod 0755 '{}' \;
 
 # TODO remove me (from debugging)
 ls -lah /tmp/kivy_appdir
