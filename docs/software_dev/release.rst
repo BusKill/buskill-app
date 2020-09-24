@@ -162,7 +162,7 @@ After you've merged your release branch into the ``master`` branch, create a tag
 Build & Sign
 ------------
 
-For Linux, use the `build script <https://github.com/BusKill/buskill-app/blob/master/build/linux/buildAppImage.sh>`_ to build the new release locally on your machine in a fresh linux VM as root. Get the sha256 checksum of the new AppImage and confirm that it matches the AppImage built by GitHub's CI process. If it doesn't, don't proceed with signing it. Our Linux releases should be fully reproducible_.
+For Linux, use the docker `build script wrapper <https://github.com/BusKill/buskill-app/blob/master/build/linux/ubuntuWrapper.sh>`_ to build the new release locally on your machine in a an Ubuntu docker container as root. Get the sha256 checksum of the new AppImage and confirm that it matches the AppImage built by GitHub's CI process. If it doesn't, don't proceed with signing it. Our Linux releases should be fully reproducible_.
 
 When downloading the AppImage from the repo's GitHub releases page, make sure the commits and branches exactly match your local build, else the checksum will differ because the contents of ``buskill_version.py`` will have a distinct ``GITHUB_REF``, ``GITHUB_SHA``, and ``SOURCE_DATE_EPOCH``.
 
@@ -181,7 +181,7 @@ When downloading the AppImage from the repo's GitHub releases page, make sure th
 	* v3.2.0
 	root@disp2781:~/buskill-app# 
 	
-	root@disp2781:~/buskill-app# build/linux/buildAppImage.sh 
+	root@disp2781:~/buskill-app# build/linux/ubuntuWrapper.sh 
 	...
 	root@disp2781:~/buskill-app# 
 	
