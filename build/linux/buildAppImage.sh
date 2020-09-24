@@ -348,6 +348,7 @@ popd # leave /tmp
 ${SUDO} chmod -R 0644 /tmp/kivy_appdir
 ${SUDO} find /tmp/kivy_appdir -type d -exec chmod 0755 '{}' \;
 ${SUDO} chmod 0755 /tmp/kivy_appdir/AppRun
+${SUDO} chmod 0755 /tmp/kivy_appdir/opt/python*/bin/python*
 
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
