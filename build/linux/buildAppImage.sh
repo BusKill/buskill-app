@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-08-18
-# Version: 0.7
+# Updated: 2020-09-24
+# Version: 0.8
 ################################################################################
 
 ################################################################################
@@ -20,9 +20,6 @@ set -x
 ################################################################################
 
 APP_NAME='buskill'
-
-# https://reproducible-builds.org/docs/source-date-epoch/
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 # prevent apt from asking for things we can't respond to
 export DEBIAN_FRONTEND=noninteractive
@@ -62,24 +59,14 @@ print_debugging_info () {
 ################################################################################
 
 #################
-# FIX CONSTANTS #
+# SANITY CHECKS #
 #################
 
-# fill-in some constants if this script is not being run on GitHub
-if [ -z ${GITHUB_SHA} ]; then
-	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+# this script isn't robust enough
+if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
+	echo "ERROR: This script should only be executed from the root of the github dir."
+	exit 1
 fi
-
-if [ -z ${GITHUB_REF} ]; then
-	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
-fi
-
-VERSION=`git symbolic-ref HEAD | head -n1 | awk -F '/' '{print $NF}'`
-if [[ "${VERSION}" = "dev" ]]; then
-	VERSION="${SOURCE_DATE_EPOCH}"
-fi
-
-ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 	
 ###############
 # OUTPUT INFO #
@@ -96,9 +83,28 @@ sudo apt-get update
 sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg2
 sudo firecfg --clean
 
-# TODO: remove this
-sudo apt-get -y install docker.io
-sudo docker run hello-world
+#################
+# FIX CONSTANTS #
+#################
+
+# https://reproducible-builds.org/docs/source-date-epoch/
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
+# fill-in some constants if this script is not being run on GitHub
+if [ -z ${GITHUB_SHA} ]; then
+	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+fi
+
+if [ -z ${GITHUB_REF} ]; then
+	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
+fi
+
+VERSION=`git symbolic-ref HEAD | head -n1 | awk -F '/' '{print $NF}'`
+if [[ "${VERSION}" = "dev" ]]; then
+	VERSION="${SOURCE_DATE_EPOCH}"
+fi
+
+ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 
 ##################
 # PREPARE APPDIR #
@@ -324,7 +330,7 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
-sha256sum "${APP_NAME}-${VERSION}.AppImage"
+sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
 ########################
 # ADD ADDITIONAL FILES #
