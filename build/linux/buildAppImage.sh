@@ -27,9 +27,14 @@ export DEBIAN_FRONTEND=noninteractive
 SUDO='/bin/sudo'
 PYTHON='/tmp/kivy_appdir/AppRun'
 
-# we use firejail to prevent insecure package managers (like pip) from
-# having internet access; instead we install everything locally
-FIREJAIL='/usr/bin/firejail --noprofile --net=none'
+# check to see if we're inside a docker container or not
+# https://stackoverflow.com/a/51688023/1174102
+INODE_NUM=`ls -ali / | sed '2!d' |awk {'print $1'}`
+if [ $INODE_NUM -gt 3 ]; then
+	# a high inode means we're in docker, and in docker we don't use sudo
+	echo "INFO: Detected execution inside docker container"
+	SUDO=''
+fi
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -82,20 +87,11 @@ print_debugging_info
 ###################
 
 ${SUDO} apt-get update
-${SUDO} apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg2
-${SUDO} firecfg --clean
+${SUDO} apt-get -y install iptables python3-pip python3-setuptools python3-virtualenv rsync curl gnupg
 
 #################
 # FIX CONSTANTS #
 #################
-
-# check to see if we're inside a docker container or not
-# https://stackoverflow.com/a/51688023/1174102
-INODE_NUM=`ls -ali / | sed '2!d' |awk {'print $1'}`
-if [ $INODE_NUM -gt 3 ]; then
-	# a high inode means we're in docker, and in docker we don't use sudo
-	SUDO=''
-fi
 
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
@@ -115,6 +111,34 @@ if [[ "${VERSION}" = "dev" ]]; then
 fi
 
 ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
+
+##################
+# SETUP IPTABLES #
+##################
+
+# We setup iptables so that only the apt user (and therefore the apt command)
+# can access the internet. We don't want insecure tools like `pip` to download
+# unsafe code from the internet.
+
+iptables-save > /tmp/iptables-save.`date "+%Y%m%d_%H%M%S"`
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -s 127.0.0.1/32 -j DROP
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -j DROP
+iptables -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -j ACCEPT
+iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
+iptables -A OUTPUT -j DROP
+
+ip6tables-save > /tmp/ip6tables-save.`date "+%Y%m%d_%H%M%S"`
+ip6tables -A INPUT -i lo -j ACCEPT
+ip6tables -A INPUT -s ::1/128 -j DROP
+ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ip6tables -A INPUT -j DROP
+ip6tables -A OUTPUT -s ::1/128 -d ::1/128 -j ACCEPT
+ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
+ip6tables -A OUTPUT -j DROP
 
 ##################
 # PREPARE APPDIR #
@@ -147,9 +171,9 @@ ls -lah /tmp/kivy_appdir/usr/bin/
 # install our pip depends from the files in the repo since pip doesn't provide
 # decent authentication and integrity checks on what it downloads from PyPI
 #  * https://security.stackexchange.com/a/234098/213165
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
@@ -178,7 +202,7 @@ if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
 fi
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
 rm -rf "${tmpDir}"
 
 # add our code to the AppDir

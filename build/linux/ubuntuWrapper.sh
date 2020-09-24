@@ -28,7 +28,7 @@ fi
 # DOCKER RUN #
 ##############
 
-docker run --rm -it -v "`pwd`:/root/buskill-app" ubuntu:18.04 /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
+sudo docker run --rm -it -v "`pwd`:/root/buskill-app" ubuntu:18.04 /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 # clean exit
 exit 0
