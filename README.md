@@ -41,7 +41,7 @@ BusKill runs in Linux, Windows, and MacOS.
   <img src="docs/images/buskill_app_mac_disarmed1.jpg" alt="Screenshot of BusKill in MacOS" width="200px" />
 </p>
 
-For more information, see [BusKill App: Graphical User Interface](https://docs.buskill.in/buskill-app/en/stable/software_usr/gui.html)
+For more information on how to use the GUI, see [BusKill App: Graphical User Interface](https://docs.buskill.in/buskill-app/en/stable/software_usr/gui.html)
 
 ## Misconceptions
 

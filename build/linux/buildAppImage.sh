@@ -24,10 +24,12 @@ APP_NAME='buskill'
 # prevent apt from asking for things we can't respond to
 export DEBIAN_FRONTEND=noninteractive
 
+SUDO='/bin/sudo'
+PYTHON='/tmp/kivy_appdir/AppRun'
+
 # we use firejail to prevent insecure package managers (like pip) from
 # having internet access; instead we install everything locally
 FIREJAIL='/usr/bin/firejail --noprofile --net=none'
-PYTHON='/tmp/kivy_appdir/AppRun'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -79,13 +81,21 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg2
-sudo firecfg --clean
+${SUDO} apt-get update
+${SUDO} apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl gpg2
+${SUDO} firecfg --clean
 
 #################
 # FIX CONSTANTS #
 #################
+
+# check to see if we're inside a docker container or not
+# https://stackoverflow.com/a/51688023/1174102
+INODE_NUM=`ls -ali / | sed '2!d' |awk {'print $1'}`
+if [ $INODE_NUM -gt 3 ]; then
+	# a high inode means we're in docker, and in docker we don't use sudo
+	SUDO=''
+fi
 
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
@@ -294,7 +304,7 @@ pushd /tmp
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
-sudo apt-get -y install zlib1g-dev make
+${SUDO} apt-get -y install zlib1g-dev make
 make
 popd
 
