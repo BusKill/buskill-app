@@ -24,7 +24,7 @@ APP_NAME='buskill'
 # prevent apt from asking for things we can't respond to
 export DEBIAN_FRONTEND=noninteractive
 
-SUDO='/bin/sudo'
+SUDO='/usr/bin/sudo'
 PYTHON='/tmp/kivy_appdir/AppRun'
 
 # check to see if we're inside a docker container or not
