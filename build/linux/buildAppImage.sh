@@ -304,12 +304,14 @@ done
 # ADD MODULES #
 ###############
 
+# TODO: remove this if not needed. If it *is* needed, fix symlink to point to .../src/packages/garden/
+
 # add symlinks from the appdir's site-packages dir to our modules in src/
-mkdir -p "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
-gardenFlowers="navigationdrawer progressspinner"
-for flower in ${gardenFlowers}; do
-	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
-done
+#mkdir -p "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
+#gardenFlowers="navigationdrawer progressspinner"
+#for flower in ${gardenFlowers}; do
+#	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
+#done
 
 ########################
 # PREPARE APPIMAGETOOL #
