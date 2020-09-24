@@ -348,9 +348,6 @@ popd # leave /tmp
 ${SUDO} chmod -R 0644 /tmp/kivy_appdir
 ${SUDO} find /tmp/kivy_appdir -type d -exec chmod 0755 '{}' \;
 
-# TODO remove me (from debugging)
-ls -lah /tmp/kivy_appdir
-
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir -p "dist/${ARCHIVE_DIR}"
@@ -358,10 +355,6 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
-
-# TODO remove me (from debugging)
-dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage --appimage-extract
-ls -lah squashfs-root
 
 ########################
 # ADD ADDITIONAL FILES #
