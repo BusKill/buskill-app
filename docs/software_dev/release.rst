@@ -205,7 +205,7 @@ After verifying the reproducibility of the Linux build, download the Windows and
 
 ::
 
-	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/buskill-windows-x86_64.<epoch_seconds>.zip
+	root@disp2781:~# wget --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/buskill-win-v3.2.0-x86_64.zip
 	...
 	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/SHA256SUMS
 	...
@@ -220,11 +220,16 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
 	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
 	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
-	root@disp2781:~# sha256sum -c SHA256SUMS
-	buskill-windows-x86_64.189828725.zip: OK
 	root@disp2781:~# 
 
-	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/buskill-mac-x86_64.<epoch_seconds>.tar.bz2
+	root@disp2781:~# sha256sum -c SHA256SUMS
+	buskill-win-v0.2.0-x86_64.zip: OK
+	root@disp2781:~# 
+
+	root@disp2781:~# rm SHA256SUMS*
+	root@disp2781:~# 
+
+	root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/buskill-mac-v3.2.0-x86_64.dmg
 	...
 	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_mac/SHA256SUMS
 	...
@@ -240,31 +245,30 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
 	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
 	root@disp2781:~# sha256sum -c SHA256SUMS
-	buskill-mac-x86_64.189828725.tar.bz2: OK
+	buskill-mac-v3.2.0-x86_64.dmg: OK
 	root@disp2781:~# 
 
 
-Once you've verified the integrity of all three compressed archives, move them to your dragon-protected basement-safe laptop, rename them, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
+Once you've verified the integrity of all three compressed archives, move them to your dragon-protected basement-safe laptop, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
 
 ::
 
 	user@vault:~$ ls
-	buskill-linux-x86_64.189828725.tar.bz2  buskill-windows-x86_64.189828725.zip
-	buskill-mac-x86_64.189828725.tar.bz2
-	user@vault:~$ mv buskill-linux-x86_64.189828725.tar.bz2 buskill-linux-x86_64.v0.1.0.tar.bz2 
-	user@vault:~$ mv buskill-windows-x86_64.189828725.zip buskill-windows-x86_64.v0.1.0.zip 
-	user@vault:~$ mv buskill-mac-x86_64.189828725.tar.bz2 buskill-mac-x86_64.v0.1.0.tar.bz2 
-	user@vault:~$ ls
-	buskill-linux-x86_64.v0.1.0.tar.bz2  buskill-windows-x86_64.v0.1.0.zip
-	buskill-mac-x86_64.v0.1.0.tar.bz2
+	buskill-lin-v3.2.0-x86_64.tbz  buskill-win-v3.2.0-x86_64.zip
+	buskill-mac-v3.2.0-x86_64.dmg
 	user@vault:~$ 
+
 	user@vault:~$ sha256sum * > SHA256SUMS
+	user@vault:~$
+
 	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b SHA256SUMS
 	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
+	user@vault:~$
+
 	user@vault:~$ ls
-	buskill-linux-x86_64.v0.1.0.tar.bz2  SHA256SUMS
-	buskill-mac-x86_64.v0.1.0.tar.bz2    SHA256SUMS.asc
-	buskill-windows-x86_64.v0.1.0.zip
+	buskill-lin-v3.2.0-x86_64.tar.bz2  SHA256SUMS
+	buskill-mac-v3.2.0-x86_64.tar.bz2  SHA256SUMS.asc
+	buskill-win-v3.2.0-x86_64.zip
 	user@vault:~$ 
 
 Upload
@@ -275,5 +279,183 @@ Copy all of the above files off your airgapped machine.
 Finally, upload the files to the tag's release using the github.com WUI
 
  * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>`_
+
+Update updates repo metadata
+------
+
+At this point, users will be able to download v3.2.0 of the BusKill app from github.com, but existing users will not be able to click the update button in the app to upgrade their existing install to the latest version.
+
+For apps to be able to know about the new version, we must update the ``meta.json`` file on the ``UPGRADE_MIRRORS`` hard-coded into the app:
+
+ # `https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.j
+ # `https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json
+ # `https://repo.buskill.in/buskill-app/v1/meta.json
+ # `https://repo.michaelaltfield.net/buskill-app/v1/meta.json
+
+First, update the file in the github repo in the v3.2.0 branch.
+
+::
+
+	user@host:~/buskill-app$ git checkout v0.2.0
+	warning: refname 'v0.2.0' is ambiguous.
+	Switched to branch 'v0.2.0'
+	user@host:~/buskill-app$ 
+
+	user@host:~/buskill-app$ git pull origin v0.2.0
+	From github.com:BusKill/buskill-app
+ 	* tag               v0.2.0     -> FETCH_HEAD
+	Already up to date.
+	user@host:~/buskill-app$ 
+
+	user@host:~/buskill-app$ vim updates/v1/meta.json
+
+Edit the file by hand. In the future, we'll switch to tuf when it's safe to do so
+
+ * https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395
+ * https://github.com/theupdateframework/tuf/issues/1109
+
+In ``meta.json``, make the following changes:
+
+ # Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
+
+ # Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
+
+ # Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
+
+After updating the ``meta.json`` file, copy it to your airgapped machine and sign it to create ``meta.json.asc``
+
+Finally, upload the files to the tag's release using the github.com WUI
+
+ * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>`_
+
+Update updates repo metadata
+------
+
+At this point, users will be able to download v3.2.0 of the BusKill app from github.com, but existing users will not be able to click the update button in the app to upgrade their existing install to the latest version.
+
+For apps to be able to know about the new version, we must update the ``meta.json`` file on the ``UPGRADE_MIRRORS`` hard-coded into the app:
+
+ # `https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json <https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json>`_
+ # `https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json <https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json>`_
+ # `https://repo.buskill.in/buskill-app/v1/meta.json <https://repo.buskill.in/buskill-app/v1/meta.json>`_
+ # `https://repo.michaelaltfield.net/buskill-app/v1/meta.json <https://repo.michaelaltfield.net/buskill-app/v1/meta.json>`_
+
+First, update the file in the github repo in the v3.2.0 branch.
+
+::
+
+	user@host:~/buskill-app$ git checkout v0.2.0
+	warning: refname 'v0.2.0' is ambiguous.
+	Switched to branch 'v0.2.0'
+	user@host:~/buskill-app$ 
+
+	user@host:~/buskill-app$ git pull origin v0.2.0
+	From github.com:BusKill/buskill-app
+ 	* tag               v0.2.0     -> FETCH_HEAD
+	Already up to date.
+	user@host:~/buskill-app$ 
+
+	user@host:~/buskill-app$ vim updates/v1/meta.json
+
+Edit the file by hand. In the future, we'll switch to tuf when it's safe to do so
+
+ * `https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395 <https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395>`_
+ * `https://github.com/theupdateframework/tuf/issues/1109 <https://github.com/theupdateframework/tuf/issues/1109>`_
+
+In ``meta.json``, make the following changes:
+
+ # Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
+
+ # Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
+
+ # Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
+
+::
+
+	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b meta.json
+	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
+	user@vault:~$
+
+	user@vault:~$ ls
+	meta.json  meta.json.asc
+	user@vault:~$ 
+
+Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrite the existing ``meta.json.asc`` file in your ``buskill-app`` sandbox. Commit, merge, and push.
+
+::
+
+	user@host:~/buskill-app$ git branch -l
+	  dev
+	  master
+	* v3.2.0
+	user@host:~/buskill-app/$
+
+	user@host:~/buskill-app/$ git commit -am 'updated meta.json to latest version for in-app updates'
+	user@host:~/buskill-app$
+
+	user@host:~/buskill-app$ git checkout dev
+	Switched to branch 'dev'
+	user@host:~/buskill-app$ git pull origin dev
+	From github.com:BusKill/buskill-app
+	 * branch            dev        -> FETCH_HEAD
+	Already up to date.
+
+	user@host:~/buskill-app$ git merge refs/heads/v3.2.0
+	Updating f9e692a..3c1a6d5
+	Fast-forward
+	 docs/software_dev/index.rst   |  2 +-
+	 docs/software_dev/release.rst | 54 +++++++++++++++++++++++++++++++++++++++++++
+	 docs/software_dev/repo.rst    |  6 -----
+	 3 files changed, 55 insertions(+), 7 deletions(-)
+	 create mode 100644 docs/software_dev/release.rst
+	 delete mode 100644 docs/software_dev/repo.rst
+
+	user@host:~/buskill-app$ git checkout master
+	Switched to branch 'master'
+	Your branch is up to date with 'origin/master'.
+	user@host:~/buskill-app$ git pull origin master
+	From github.com:BusKill/buskill-app
+	 * branch            master     -> FETCH_HEAD
+	Already up to date.
+
+	user@host:~/buskill-app$ git refs/heads/merge v3.2.0
+	Updating ab223f3..3c1a6d5
+	Fast-forward
+	 docs/_extensions/affiliatelinks.py  |  66 ++++++++++++++++++++++++++++
+	 docs/attribution.rst                |   1 +
+	 docs/conf.py                        |  13 ++++++
+	 docs/contributing.rst               |   3 +-
+	 docs/hardware_dev/assembly.rst      |   7 +++
+	 docs/hardware_dev/bom.rst           |  83 ++++++++++++++++++++++++++++++++++++
+	 docs/hardware_dev/index.rst         |   7 ++-
+	 docs/images/buskill_cable_usb_a.jpg | Bin 0 -> 457480 bytes
+	 docs/index.rst                      |   7 +++
+	 docs/software_dev/index.rst         |   2 +-
+	 docs/software_dev/release.rst       |  54 +++++++++++++++++++++++
+	 docs/software_dev/repo.rst          |   6 ---
+	 12 files changed, 239 insertions(+), 10 deletions(-)
+	 create mode 100644 docs/_extensions/affiliatelinks.py
+	 create mode 100644 docs/hardware_dev/assembly.rst
+	 create mode 100644 docs/hardware_dev/bom.rst
+	 create mode 100644 docs/images/buskill_cable_usb_a.jpg
+	 create mode 100644 docs/software_dev/release.rst
+	 delete mode 100644 docs/software_dev/repo.rst
+
+	user@host:~/buskill-app$ git checkout v3.2.0
+	Switched to branch 'v3.2.0'
+
+	user@host:~/buskill-app$ git push
+	Enumerating objects: 10, done.
+	Counting objects: 100% (10/10), done.
+	Delta compression using up to 4 threads
+	Compressing objects: 100% (6/6), done.
+	Writing objects: 100% (6/6), 2.10 KiB | 63.00 KiB/s, done.
+	Total 6 (delta 3), reused 0 (delta 0)
+	remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+	To github.com:BusKill/buskill-app.git
+	   f9e692a..3c1a6d5  dev -> dev
+	   ab223f3..3c1a6d5  master -> master
+	   f9e692a..3c1a6d5  v3.2.0 -> v3.2.0
+	user@host:~/buskill-app$ 
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3

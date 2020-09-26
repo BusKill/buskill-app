@@ -47,7 +47,7 @@ For more information on how to use the GUI, see [BusKill App: Graphical User Int
 
 > Q: Self-destruct?!? Will this brick my computer?
 
-A: [No](https://docs.buskill.in/buskill-app/en/stable/introduction/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
+A: [No](https://docs.buskill.in/buskill-app/en/stable/faq.html#q-self-destruct-will-this-brick-my-computer). The BusKill app does not have the ability to harm your hardware and our app ships with non-destructive triggers only.
 
 For more information, see our [Frequently Asked Questions](https://docs.buskill.in/buskill-app/en/stable/faq.html).
 

@@ -24,6 +24,16 @@ if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
 	exit 1
 fi
 
+###################
+# INSTALL DEPENDS #
+###################
+
+# TODO: add distro detection and commands for other package managers, if needed
+#       currently this has only been tested on Debian 10
+
+sudo apt-get -y install docker.io
+sudo docker pull ubuntu:18.04
+
 ##############
 # DOCKER RUN #
 ##############
