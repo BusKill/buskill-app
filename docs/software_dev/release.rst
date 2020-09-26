@@ -82,7 +82,7 @@ When testing is finished, merge all the commits into both the ``master`` and ``d
 	 * branch            dev        -> FETCH_HEAD
 	Already up to date.
 
-	user@host:~/buskill-app$ git merge v3.2.0
+	user@host:~/buskill-app$ git merge refs/heads/v3.2.0
 	Updating f9e692a..3c1a6d5
 	Fast-forward
 	 docs/software_dev/index.rst   |  2 +-
@@ -100,7 +100,7 @@ When testing is finished, merge all the commits into both the ``master`` and ``d
 	 * branch            master     -> FETCH_HEAD
 	Already up to date.
 
-	user@host:~/buskill-app$ git merge v3.2.0
+	user@host:~/buskill-app$ git refs/heads/merge v3.2.0
 	Updating ab223f3..3c1a6d5
 	Fast-forward
 	 docs/_extensions/affiliatelinks.py  |  66 ++++++++++++++++++++++++++++
