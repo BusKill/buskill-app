@@ -391,71 +391,67 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 	user@host:~/buskill-app/$
 
 	user@host:~/buskill-app/$ git commit -am 'updated meta.json to latest version for in-app updates'
+	[v0.2.0 daa5241] updated meta.json to latest version for in-app updates
+	 2 files changed, 8 insertions(+), 8 deletions(-)
 	user@host:~/buskill-app$
 
 	user@host:~/buskill-app$ git checkout dev
 	Switched to branch 'dev'
+	Your branch is up to date with 'origin/dev'.
+	user@host:~/buskill-app$
+
 	user@host:~/buskill-app$ git pull origin dev
 	From github.com:BusKill/buskill-app
 	 * branch            dev        -> FETCH_HEAD
 	Already up to date.
+	user@host:~/buskill-app$
 
 	user@host:~/buskill-app$ git merge refs/heads/v3.2.0
-	Updating f9e692a..3c1a6d5
+	Updating 352f0e5..daa5241
 	Fast-forward
-	 docs/software_dev/index.rst   |  2 +-
-	 docs/software_dev/release.rst | 54 +++++++++++++++++++++++++++++++++++++++++++
-	 docs/software_dev/repo.rst    |  6 -----
-	 3 files changed, 55 insertions(+), 7 deletions(-)
-	 create mode 100644 docs/software_dev/release.rst
-	 delete mode 100644 docs/software_dev/repo.rst
+	 updates/v1/meta.json          |  8  +-
+	 updates/v1/meta.json.asc      |  16 ++++
+	 2 files changed, 24 insertions(+), 8 deletions(-)
+	user@host:~/buskill-app$
 
 	user@host:~/buskill-app$ git checkout master
 	Switched to branch 'master'
 	Your branch is up to date with 'origin/master'.
+	user@host:~/buskill-app$
+
 	user@host:~/buskill-app$ git pull origin master
 	From github.com:BusKill/buskill-app
 	 * branch            master     -> FETCH_HEAD
 	Already up to date.
+	user@host:~/buskill-app$ 
 
 	user@host:~/buskill-app$ git refs/heads/merge v3.2.0
-	Updating ab223f3..3c1a6d5
+	Updating 352f0e5..daa5241
 	Fast-forward
-	 docs/_extensions/affiliatelinks.py  |  66 ++++++++++++++++++++++++++++
-	 docs/attribution.rst                |   1 +
-	 docs/conf.py                        |  13 ++++++
-	 docs/contributing.rst               |   3 +-
-	 docs/hardware_dev/assembly.rst      |   7 +++
-	 docs/hardware_dev/bom.rst           |  83 ++++++++++++++++++++++++++++++++++++
-	 docs/hardware_dev/index.rst         |   7 ++-
-	 docs/images/buskill_cable_usb_a.jpg | Bin 0 -> 457480 bytes
-	 docs/index.rst                      |   7 +++
-	 docs/software_dev/index.rst         |   2 +-
-	 docs/software_dev/release.rst       |  54 +++++++++++++++++++++++
-	 docs/software_dev/repo.rst          |   6 ---
-	 12 files changed, 239 insertions(+), 10 deletions(-)
-	 create mode 100644 docs/_extensions/affiliatelinks.py
-	 create mode 100644 docs/hardware_dev/assembly.rst
-	 create mode 100644 docs/hardware_dev/bom.rst
-	 create mode 100644 docs/images/buskill_cable_usb_a.jpg
-	 create mode 100644 docs/software_dev/release.rst
-	 delete mode 100644 docs/software_dev/repo.rst
+	 updates/v1/meta.json          |  8  +-
+	 updates/v1/meta.json.asc      |  16 ++++
+	 2 files changed, 24 insertions(+), 8 deletions(-)
+	user@host:~/buskill-app$ 
 
 	user@host:~/buskill-app$ git checkout v3.2.0
-	Switched to branch 'v3.2.0'
+	warning: refname 'v0.2.0' is ambiguous.
+	Switched to branch 'v0.2.0'
+	user@host:~/buskill-app$ 
 
 	user@host:~/buskill-app$ git push
-	Enumerating objects: 10, done.
-	Counting objects: 100% (10/10), done.
+	Enumerating objects: 23, done.
+	Counting objects: 100% (23/23), done.
 	Delta compression using up to 4 threads
-	Compressing objects: 100% (6/6), done.
-	Writing objects: 100% (6/6), 2.10 KiB | 63.00 KiB/s, done.
-	Total 6 (delta 3), reused 0 (delta 0)
-	remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+	Compressing objects: 100% (13/13), done.
+	Writing objects: 100% (14/14), 4.20 KiB | 860.00 KiB/s, done.
+	Total 14 (delta 8), reused 0 (delta 0)
+	remote: Resolving deltas: 100% (8/8), completed with 8 local objects.
 	To github.com:BusKill/buskill-app.git
-	   f9e692a..3c1a6d5  dev -> dev
-	   ab223f3..3c1a6d5  master -> master
-	   f9e692a..3c1a6d5  v3.2.0 -> v3.2.0
+	   352f0e5..daa5241  dev -> dev
+	   352f0e5..daa5241  master -> master
+	   caaf2e8..daa5241  v3.2.0 -> v3.2.0
 	user@host:~/buskill-app$ 
+
+Now you should test that in-app upgrades from the previous version are functioning properly.
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3
