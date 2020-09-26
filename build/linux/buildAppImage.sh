@@ -19,8 +19,7 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
-APP_NAME='buskill'
-
+APP_NAME='buskill' 
 # prevent apt from asking for things we can't respond to
 export DEBIAN_FRONTEND=noninteractive
 
@@ -139,6 +138,8 @@ ip6tables -A OUTPUT -s ::1/128 -d ::1/128 -j ACCEPT
 ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
 ip6tables -A OUTPUT -j DROP
+
+# TODO: attempt to access the internet as root. If it works, exit 1
 
 ##################
 # PREPARE APPDIR #
