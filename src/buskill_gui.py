@@ -122,7 +122,7 @@ class MainWindow(BoxLayout):
 		self.nav_drawer.toggle_state()
 
 		# check to see if an upgrade was already done
-		if bk.UPGRADED_TO:
+		if bk.UPGRADED_TO and bk.UPGRADED_TO['EXE_PATH'] != '1':
 			# a newer version has already been installed; skip upgrade() step and
 			# just prompt the user to restart to the newer version
 			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
