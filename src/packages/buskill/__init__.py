@@ -1060,7 +1060,7 @@ class BusKill:
 		msg += "DEBUG: Latest version: " +str(latestReleaseTime)+ "."
 		print( msg ); logger.debug( msg )
 
-		if latestReleaseTime < currentReleaseTime:
+		if latestReleaseTime <= currentReleaseTime:
 			msg = "INFO: Current version is latest version. No new updates available."
 			print( msg ); logger.info( msg )
 			return self.set_upgrade_result( 1 )
