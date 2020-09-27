@@ -55,6 +55,7 @@ Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
 from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+Config.set('kivy', 'window_icon', 'icon.png')
 
 from kivy.core.text import LabelBase
 
@@ -350,6 +351,11 @@ class BusKillApp(App):
 
 		global bk
 		self.bk = bk
+
+		Config.set('kivy', 'window_icon', 'icon.png')
+		self.icon = 'icon.png'
+		icon = 'icon.png'
+		print( 'self.get_application_icon():|' +str(self.get_application_icon())+ '|' )
 
 		# is the OS that we're running on supported?
 		if self.bk.IS_PLATFORM_SUPPORTED:
