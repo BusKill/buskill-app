@@ -10,8 +10,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-09-24
-# Updated: 2020-09-24
-# Version: 0.1
+# Updated: 2020-09-27
+# Version: 0.2
 ################################################################################
 
 #################
@@ -38,7 +38,7 @@ sudo docker pull ubuntu:18.04
 # DOCKER RUN #
 ##############
 
-sudo docker run --rm -it -v "`pwd`:/root/buskill-app" ubuntu:18.04 /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
+sudo docker run --rm -it --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" ubuntu:18.04 /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 # clean exit
 exit 0

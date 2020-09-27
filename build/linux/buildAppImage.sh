@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-09-24
-# Version: 0.8
+# Updated: 2020-09-27
+# Version: 0.9
 ################################################################################
 
 ################################################################################
@@ -25,6 +25,10 @@ export DEBIAN_FRONTEND=noninteractive
 
 SUDO='/usr/bin/sudo'
 PYTHON='/tmp/kivy_appdir/AppRun'
+
+# this is the command we use to run commands as the _apt user so they have
+# internet (only use this for apps that are trustworthy. eg: not pip)
+SU='/bin/su _apt -s /bin/bash'
 
 # check to see if we're inside a docker container or not
 # https://stackoverflow.com/a/51688023/1174102
@@ -139,7 +143,12 @@ ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
 ip6tables -A OUTPUT -j DROP
 
-# TODO: attempt to access the internet as root. If it works, exit 1
+# attempt to access the internet as root. If it works, exit 1
+curl -s 1.1.1.1
+if [ $? -eq 0 ]; then
+	echo "ERROR: iptables isn't blocking internet access to unsafe tools. You may need to run this as root (and you should do it inside a VM)"
+	exit 1
+fi
 
 ##################
 # PREPARE APPDIR #
@@ -160,7 +169,9 @@ chmod +x /tmp/python.AppImage
 pushd /tmp
 /tmp/python.AppImage --appimage-extract
 popd
-mv /tmp/squashfs-root /tmp/kivy_appdir
+rm -rf /tmp/kivy_appdir
+mv /tmp/squashfs-root/* /tmp/kivy_appdir
+mv /tmp/squashfs-root/.* /tmp/kivy_appdir
 
 # for debugging reproducible builds
 sha256sum /tmp/python.AppImage
@@ -184,11 +195,12 @@ ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
+chown _apt:root "${tmpDir}"
 pushd "${tmpDir}"
-${PYTHON} -m pip download python-gnupg
+${SU} -c "${PYTHON} -m pip download python-gnupg"
 filename="`ls -1 | head -n1`"
-signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-wget "${signature_url}"
+signature_url=`${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+${SU} -c "wget \"${signature_url}\""
 
 mkdir gnupg
 chmod 0700 gnupg
