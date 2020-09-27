@@ -248,7 +248,7 @@ class BusKill:
 
 		# if the executable is actually just the python interpreter, then what
 		# we want is the first argument
-		if re.match( ".*python[1-9\.]*\s", self.EXE_PATH ):
+		if re.match( ".*python([1-9]\.?)*$", self.EXE_PATH ):
 			self.EXE_PATH = os.path.abspath( sys.argv[0] )
 
 		# split the EXE_PATH into dir & file parts
@@ -1051,6 +1051,18 @@ class BusKill:
 		# DOWNLOAD LATEST VERSION #
 		###########################
 
+		# the only reason the SOURCE_DATE_EPOCH would be missing is if we're executing
+		# the python files directly (eg we're testing) and we can just get it from git
+		if BUSKILL_VERSION['SOURCE_DATE_EPOCH'] == '':
+			result = subprocess.run( [
+			 'git',
+			 '--git-dir=/home/user/sandbox/buskill-app/.git',
+			 'log',
+			 '-1',
+			 '--pretty=%ct'
+			], capture_output = True )
+			BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = int( result.stdout )
+
 		# check metadata to see if there's a newer version than what we're running
 		# note we use SOURCE_DATE_EPOCH to make version comparisons easy
 		latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
@@ -1208,6 +1220,8 @@ class BusKill:
 			with tarfile.open( archive_filepath ) as archive_tarfile:
 
 				# get the path to the new executable
+				# TODO: fix this .pop() be more specific. Since we added the docs, it now
+				#       defaults to the first item alphabetically = docs/attribution.rst
 				new_version_exe = self.APPS_DIR + '/' + archive_tarfile.getnames().pop()
 				archive_tarfile.extractall( path=self.APPS_DIR )
 
