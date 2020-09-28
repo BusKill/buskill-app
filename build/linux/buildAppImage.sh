@@ -119,6 +119,14 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 # SETUP IPTABLES #
 ##################
 
+# TODO remove these debug lines
+${SUDO} ip a
+${SUDO} ip r
+${SUDO} ss -plan
+${SUDO} netstat -plan
+${SUDO} ps -ef
+exit 1
+
 # We setup iptables so that only the apt user (and therefore the apt command)
 # can access the internet. We don't want insecure tools like `pip` to download
 # unsafe code from the internet.
