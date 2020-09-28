@@ -151,7 +151,7 @@ ${SUDO} cat /etc/passwd
 sleep 1
 ${SUDO} cat /etc/group
 sleep 1
-#exit 1
+exit 1
 
 # We setup iptables so that only the apt user (and therefore the apt command)
 # can access the internet. We don't want insecure tools like `pip` to download
