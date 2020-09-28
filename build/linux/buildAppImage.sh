@@ -122,13 +122,15 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 # TODO remove these debug lines
 ${SUDO} su -
 whoami
-${SUDO} su
+${SUDO} su -s /bin/bash
 whoami
 su -
 whoami
-su
+su -s /bin/bash
 whoami
-runuser --user root /bin/bash
+${SUDO} runuser root
+whoami
+${SUDO} runuser --user root /bin/bash
 whoami
 
 sleep 1
