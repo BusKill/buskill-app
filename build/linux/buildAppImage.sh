@@ -128,6 +128,8 @@ su -
 whoami
 su
 whoami
+runuser --user root /bin/bash
+whoami
 
 sleep 1
 ${SUDO} ip a
