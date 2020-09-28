@@ -120,6 +120,8 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 ##################
 
 # TODO remove these debug lines
+${SUDO} su -
+
 sleep 1
 ${SUDO} ip a
 sleep 1
@@ -153,6 +155,7 @@ ${SUDO} iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
 # TODO: simplify these tests
 ${SUDO} iptables -A OUTPUT -m owner --uid-owner provisioner -j ACCEPT
 ${SUDO} iptables -A OUTPUT -m owner --uid-owner runneradmin -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner runner -j ACCEPT
 ${SUDO} iptables -A OUTPUT -d 10.1.0.0/16 -j ACCEPT
 
 ${SUDO} iptables -A OUTPUT -j DROP
