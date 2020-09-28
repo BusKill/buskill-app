@@ -10,15 +10,15 @@ on:
 jobs:
 
   linux:
-    runs-on: ubuntu-latest
-    #container: debian:buster-slim
+    #runs-on: ubuntu-latest
+    container: debian:buster-slim
 
     steps:
 
     - uses: actions/checkout@v2
 
     - name: Execute script to build linux AppImage
-      run: "sudo build/linux/buildAppImage.sh"
+      run: "build/linux/buildAppImage.sh"
       shell: bash
 
     - uses: actions/upload-artifact@v2
