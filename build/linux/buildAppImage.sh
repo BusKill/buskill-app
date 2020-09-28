@@ -120,12 +120,22 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 ##################
 
 # TODO remove these debug lines
+sleep 1
 ${SUDO} ip a
+sleep 1
 ${SUDO} ip r
+sleep 1
 ${SUDO} ss -plan
-${SUDO} netstat -plan
+sleep 1
+#${SUDO} netstat -plan
+sleep 1
 ${SUDO} ps -ef
-exit 1
+sleep 1
+${SUDO} cat /etc/passwd
+sleep 1
+${SUDO} cat /etc/group
+sleep 1
+#exit 1
 
 # We setup iptables so that only the apt user (and therefore the apt command)
 # can access the internet. We don't want insecure tools like `pip` to download
@@ -139,17 +149,24 @@ ${SUDO} iptables -A INPUT -j DROP
 ${SUDO} iptables -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -j ACCEPT
 ${SUDO} iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ${SUDO} iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
+
+# TODO: simplify these tests
+${SUDO} iptables -A OUTPUT -m owner --uid-owner provisioner -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner Runner.Listener -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner Runner.Worker -j ACCEPT
+${SUDO} iptables -A OUTPUT -s 10.1.0.4/16 -d 10.1.0.4/16 -j ACCEPT
+
 ${SUDO} iptables -A OUTPUT -j DROP
 
-${SUDO} ip6tables-save > /tmp/ip6tables-save.`date "+%Y%m%d_%H%M%S"`
-${SUDO} ip6tables -A INPUT -i lo -j ACCEPT
-${SUDO} ip6tables -A INPUT -s ::1/128 -j DROP
-${SUDO} ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-${SUDO} ip6tables -A INPUT -j DROP
-${SUDO} ip6tables -A OUTPUT -s ::1/128 -d ::1/128 -j ACCEPT
-${SUDO} ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-${SUDO} ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
-${SUDO} ip6tables -A OUTPUT -j DROP
+#${SUDO} ip6tables-save > /tmp/ip6tables-save.`date "+%Y%m%d_%H%M%S"`
+#${SUDO} ip6tables -A INPUT -i lo -j ACCEPT
+#${SUDO} ip6tables -A INPUT -s ::1/128 -j DROP
+#${SUDO} ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#${SUDO} ip6tables -A INPUT -j DROP
+#${SUDO} ip6tables -A OUTPUT -s ::1/128 -d ::1/128 -j ACCEPT
+#${SUDO} ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#${SUDO} ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
+#${SUDO} ip6tables -A OUTPUT -j DROP
 
 # attempt to access the internet as root. If it works, exit 1
 curl -s 1.1.1.1
