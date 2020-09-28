@@ -152,9 +152,7 @@ ${SUDO} iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
 
 # TODO: simplify these tests
 ${SUDO} iptables -A OUTPUT -m owner --uid-owner provisioner -j ACCEPT
-${SUDO} iptables -A OUTPUT -m owner --uid-owner runner -j ACCEPT
-${SUDO} iptables -A OUTPUT -m owner --uid-owner Runner.Listener -j ACCEPT
-${SUDO} iptables -A OUTPUT -m owner --uid-owner Runner.Worker -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner runneradmin -j ACCEPT
 ${SUDO} iptables -A OUTPUT -s 10.1.0.4/16 -d 10.1.0.4/16 -j ACCEPT
 
 ${SUDO} iptables -A OUTPUT -j DROP
