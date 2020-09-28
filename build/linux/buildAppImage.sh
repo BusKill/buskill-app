@@ -121,6 +121,13 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 
 # TODO remove these debug lines
 ${SUDO} su -
+whoami
+${SUDO} su
+whoami
+su -
+whoami
+su
+whoami
 
 sleep 1
 ${SUDO} ip a
