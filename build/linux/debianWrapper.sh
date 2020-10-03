@@ -52,7 +52,8 @@ find /root/.docker/trust -type f -exec sha256sum '{}' \;
 output=`sudo DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim`
 
 # did docker download a root key and dumbly trust it, bypassing all security?
-if [[ `$output | grep "200 when retrieving metadata for root" ]]; then
+echo $output | grep "200 when retrieving metadata for root"
+if [[ $? -eq 0 ]]; then
 	echo "ERROR: Failed to pin root signing key for debian image"
 	exit 1
 fi
