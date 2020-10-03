@@ -24,6 +24,14 @@ if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
 	exit 1
 fi
 
+# re-run this as root if we're not already (needed for docker host stuff)
+if [[ `whoami` != "root" ]]; then
+        sudo ./build/linux/debianWrapper.sh || exit $?
+
+        # this exits the parent process run by the user
+        exit 0
+fi
+
 ###################
 # INSTALL DEPENDS #
 ###################
@@ -31,7 +39,7 @@ fi
 # TODO: add distro detection and commands for other package managers, if needed
 #       currently this has only been tested on Debian 10
 
-sudo apt-get -y install docker.io
+apt-get -y install docker.io
 
 ##################
 # DOWNLOAD IMAGE #
@@ -49,7 +57,7 @@ mkdir -p /root/.docker/trust/tuf/
 cp -r build/deps/docker.io /root/.docker/trust/tuf/
 find /root/.docker/trust -type f -exec sha256sum '{}' \;
 
-output=`sudo DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim`
+output=`DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim`
 
 # did docker download a root key and dumbly trust it, bypassing all security?
 echo $output | grep "200 when retrieving metadata for root"
@@ -62,7 +70,7 @@ fi
 # DOCKER RUN #
 ##############
 
-sudo docker run --rm -it --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" debian:stable-slim /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
+docker run --rm -it --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" debian:stable-slim /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 # clean exit
 exit 0
