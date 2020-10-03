@@ -52,12 +52,13 @@ apt-get -y install docker.io
 #  * https://security.stackexchange.com/questions/238529/how-to-list-all-of-the-known-root-keys-in-docker-docker-content-trust
 #  * https://github.com/docker/cli/issues/2752
 
-find /root/.docker/trust -type f -exec sha256sum '{}' \;
-mkdir -p /root/.docker/trust/tuf/
-cp -r build/deps/docker.io /root/.docker/trust/tuf/
-find /root/.docker/trust -type f -exec sha256sum '{}' \;
+find ${HOME}/.docker/trust -type f -exec sha256sum '{}' \;
+mkdir -p ${HOME}/.docker/trust/tuf/
+cp -r build/deps/docker.io ${HOME}/.docker/trust/tuf/
+find ${HOME}/.docker/trust -type f -exec sha256sum '{}' \;
 
-output=`DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim`
+output=`DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim 2>&1`
+echo $output
 
 # did docker download a root key and dumbly trust it, bypassing all security?
 echo $output | grep "200 when retrieving metadata for root"
