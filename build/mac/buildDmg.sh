@@ -240,7 +240,7 @@ coll = COLLECT(exe, Tree('../src/'),
                name='${APP_NAME}')
 app = BUNDLE(coll,
              name='${APP_DIR_NAME}',
-             icon='buskill-icon-150.png',
+             icon='../src/images/buskill-icon-150.png',
              bundle_identifier=None)
 EOF
 
