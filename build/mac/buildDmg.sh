@@ -243,6 +243,7 @@ app = BUNDLE(coll,
              icon='../src/images/buskill-icon-150.png',
              bundle_identifier=None)
 EOF
+cat ${APP_NAME}.spec
 
 ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
@@ -266,6 +267,9 @@ cp "../../LICENSE" "${docsDir}/"
 cp "../../CHANGELOG" "${docsDir}/"
 cp "../../KEYS" "${docsDir}/"
 
+# icon
+cp "../src/images/buskill-icon-150.png" "${APP_DIR_NAME}/.VolumeIcon.icns"
+
 # change the timestamps of all the files in the appdir for reproducible builds
 find ${APP_DIR_NAME} -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
 
@@ -280,6 +284,14 @@ ls -lah "${docsDir}"
 
 hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_DIR_NAME} -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
+
+# add the dmg icon
+cp ../src/images/buskill-icon-150.png buskill-icon-150.png
+sips -i buskill-icon-150.png
+DeRez -only icns buskill-icon-150.png > icns.rsrc
+Rez -append icns.rsrc -o ./${DMG_FILENAME}
+SetFile -c icnC "${DMG_FILENAME}/.VolumeIcon.icns"
+SetFile -a C ./${DMG_FILENAME}
 
 popd
 
