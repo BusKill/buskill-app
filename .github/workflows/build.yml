@@ -11,14 +11,14 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
-    container: debian:buster-slim
+    #container: debian:buster-slim
 
     steps:
 
     - uses: actions/checkout@v2
 
     - name: Execute script to build linux AppImage
-      run: "build/linux/buildAppImage.sh"
+      run: "build/linux/debianWrapper.sh"
       shell: bash
 
     - uses: actions/upload-artifact@v2
