@@ -205,7 +205,11 @@ block_cipher = None
 a = Analysis(['../src/main.py'],
              pathex=['./'],
              binaries=[],
-             datas=[ ( '../KEYS', '.' ), ('/usr/local/bin/gpg', '.') ],
+             datas=[
+              ( '../KEYS', '.' ),
+              ('../src/images/buskill-icon-150.png', '.')
+              ('/usr/local/bin/gpg', '.')
+             ],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
              runtime_hooks=[],
@@ -236,7 +240,7 @@ coll = COLLECT(exe, Tree('../src/'),
                name='${APP_NAME}')
 app = BUNDLE(coll,
              name='${APP_DIR_NAME}',
-             icon=None,
+             icon='buskill-icon-150.png',
              bundle_identifier=None)
 EOF
 

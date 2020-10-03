@@ -55,7 +55,9 @@ Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
 from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-Config.set('kivy', 'window_icon', 'icon.png')
+
+# TODO: remove if not needed on MacOS & Windows
+#Config.set('kivy', 'window_icon', 'icon.png')
 
 from kivy.core.text import LabelBase
 
@@ -356,9 +358,9 @@ class BusKillApp(App):
 		# kivy icons with ours, but that's done in the linux build script
 		#  * https://github.com/kivy/kivy/issues/2202
 
-		Config.set('kivy', 'window_icon', 'icon.png')
-		self.icon = 'icon.png'
-		icon = 'icon.png'
+		Config.set('kivy', 'window_icon', 'buskill-icon-150.png')
+		self.icon = 'buskill-icon-150.png'
+		icon = 'buskill-icon-150.png'
 		print( 'self.get_application_icon():|' +str(self.get_application_icon())+ '|' )
 
 		# is the OS that we're running on supported?
