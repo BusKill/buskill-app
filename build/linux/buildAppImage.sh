@@ -120,37 +120,37 @@ ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 ##################
 
 # TODO remove these debug lines
-${SUDO} su - root
-whoami
-${SUDO} su root -s /bin/bash
-whoami
-su -
-whoami
-su root -s /bin/bash
-whoami
-${SUDO} runuser root
-whoami
-${SUDO} runuser --user root /bin/bash
-whoami
-${SUDO} -u root /bin/bash
-whoami
-${SUDO} -u root whoami
-
-sleep 1
-${SUDO} ip a
-sleep 1
-${SUDO} ip r
-sleep 1
-${SUDO} ss -plan
-sleep 1
-#${SUDO} netstat -plan
-sleep 1
-${SUDO} ps -ef
-sleep 1
-${SUDO} cat /etc/passwd
-sleep 1
-${SUDO} cat /etc/group
-sleep 1
+#${SUDO} su - root
+#whoami
+#${SUDO} su root -s /bin/bash
+#whoami
+#su -
+#whoami
+#su root -s /bin/bash
+#whoami
+#${SUDO} runuser root
+#whoami
+#${SUDO} runuser --user root /bin/bash
+#whoami
+#${SUDO} -u root /bin/bash
+#whoami
+#${SUDO} -u root whoami
+#
+#sleep 1
+#${SUDO} ip a
+#sleep 1
+#${SUDO} ip r
+#sleep 1
+#${SUDO} ss -plan
+#sleep 1
+##${SUDO} netstat -plan
+#sleep 1
+#${SUDO} ps -ef
+#sleep 1
+#${SUDO} cat /etc/passwd
+#sleep 1
+#${SUDO} cat /etc/group
+#sleep 1
 #exit 1
 
 # We setup iptables so that only the apt user (and therefore the apt command)
