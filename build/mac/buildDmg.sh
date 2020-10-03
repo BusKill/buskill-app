@@ -207,7 +207,7 @@ a = Analysis(['../src/main.py'],
              binaries=[],
              datas=[
               ( '../KEYS', '.' ),
-              ('../src/images/buskill-icon-150.png', '.')
+              ('../src/images/buskill-icon-150.png', '.'),
               ('/usr/local/bin/gpg', '.')
              ],
              hiddenimports=['pkg_resources.py2_warn'],
