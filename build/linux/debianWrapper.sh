@@ -71,6 +71,10 @@ fi
 # DOCKER RUN #
 ##############
 
+# first cleanup the temp shared volume since this can't be done inside the
+# docker container
+rm -rf /tmp/kivy_appdir
+
 docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" debian:stable-slim /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 ###########
