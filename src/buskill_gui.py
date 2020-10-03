@@ -352,6 +352,10 @@ class BusKillApp(App):
 		global bk
 		self.bk = bk
 
+		# this doesn't work in Linux, so instead we just overwrite the built-in
+		# kivy icons with ours, but that's done in the linux build script
+		#  * https://github.com/kivy/kivy/issues/2202
+
 		Config.set('kivy', 'window_icon', 'icon.png')
 		self.icon = 'icon.png'
 		icon = 'icon.png'

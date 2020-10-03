@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-09-27
-# Version: 0.9
+# Updated: 2020-10-03
+# Version: 1.0
 ################################################################################
 
 ################################################################################
@@ -234,10 +234,14 @@ cp KEYS /tmp/kivy_appdir/opt/src/
 # and our gpg binary
 cp /usr/bin/gpg /tmp/kivy_appdir/opt/src/
 
-# and our gpg binary
-cp icon.png /tmp/kivy_appdir/opt/src/
-cp icon.png /tmp/kivy_appdir/opt/
-cp icon.png /tmp/kivy_appdir/
+# replace kivy icons with our icons since kivy has a bug with icons in linux
+#  * https://github.com/kivy/kivy/issues/2202
+cp src/images/buskill-icon-128.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-128.png
+cp src/images/buskill-icon-64.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-64.png
+cp src/images/buskill-icon-48.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-48.png
+cp src/images/buskill-icon-32.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-32.png
+cp src/images/buskill-icon-24.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-25.png
+cp src/images/buskill-icon-16.png opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-16.png
 
 # output information about this build so the code can use it later in logs
 cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
