@@ -73,5 +73,12 @@ fi
 
 docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" debian:stable-slim /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
-# clean exit
+###########
+# CLEANUP #
+###########
+
+# make sure the resulting dist/ dir permissions let subsequent CI steps upload
+# the build's artifacts
+chown -R ${SUDO_USER} dist
+
 exit 0
