@@ -11,8 +11,8 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2020-07-11
-# Version: 0.2
+# Updated: 2020-10-04
+# Version: 0.3
 ################################################################################
 
 ######################################
@@ -200,6 +200,7 @@ a = Analysis(['..\\src\\main.py'],
              datas=
               [
                ( '..\\KEYS', '.' ),
+               ( '..\\src\\images\\buskill-icon-150.png', '.' ),
                ('C:\\Program Files\\Git\\usr\\bin\\gpg.exe', '.'),
                ('C:\\msys64\\usr\\bin\\msys-bz2-1.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-assuan-0.dll', '.'),
@@ -232,6 +233,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          icon='..\\src\\images\\buskill-icon-150.png',
           console=True )
 coll = COLLECT(exe, Tree('..\\src\\'),
                a.binaries,
