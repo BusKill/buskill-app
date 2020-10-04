@@ -227,6 +227,9 @@ a = Analysis(['../src/main.py'],
              binaries=[],
              datas=[
               ( '../KEYS', '.' ),
+              # needed for the taskbar icon when the app is running (kivy)
+              ('../src/images/buskill-icon-150.png', '.'),
+              # needed for the icon of the .app when viewed in Finder
               ('buskill-icon.icns', '.'),
               ('/usr/local/bin/gpg', '.')
              ],
