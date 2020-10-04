@@ -290,7 +290,13 @@ Get-ChildItem -Path "dist" -Force | Out-String
 cd dist
 
 # create symlink (shortcut)
-cmd /C mklink ${env:ARCHIVE_DIR}\buskill ${env:ARCHIVE_DIR}\buskill.exe
+ls
+cd ${env:ARCHIVE_DIR}
+ls
+cmd /C mklink buskill ${env:ARCHIVE_DIR}\buskill.exe
+ls
+cd ..
+ls
 
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "$env:ARCHIVE_DIR" | Out-String
 
