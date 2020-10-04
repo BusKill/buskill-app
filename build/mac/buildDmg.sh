@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-09-17
-# Version: 0.4
+# Updated: 2020-10-04
+# Version: 0.5
 ################################################################################
 
 ############
@@ -227,7 +227,6 @@ a = Analysis(['../src/main.py'],
              binaries=[],
              datas=[
               ( '../KEYS', '.' ),
-              ('../src/images/buskill-icon-150.png', '.'),
               ('buskill-icon.icns', '.'),
               ('/usr/local/bin/gpg', '.')
              ],
@@ -306,6 +305,7 @@ ls -lah "${docsDir}"
 hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_DIR_NAME} -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
 
+# TODO: fix this so the dmg itself has the buskill icon
 # add the dmg icon
 Rez -append ../icns.rsrc -o ./${DMG_FILENAME}
 SetFile -c icnC "${DMG_FILENAME}/.VolumeIcon.icns"
