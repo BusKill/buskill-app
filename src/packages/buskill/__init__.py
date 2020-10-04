@@ -271,8 +271,9 @@ class BusKill:
 			self.ARM_FUNCTION = self.armWin
 			self.TRIGGER_FUNCTION = self.triggerWin
 
-			# on Windows, the buskill binary is directly inside the APP_DIR
-			self.APP_DIR = self.EXE_DIR
+			# on Windows, the buskill binary is 1 dir below the APP_DIR
+			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
+			self.APP_DIR = '/'.join( self.APP_DIR )
 
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
