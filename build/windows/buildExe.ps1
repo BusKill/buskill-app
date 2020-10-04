@@ -294,7 +294,7 @@ cd dist
 ls
 cd ${env:ARCHIVE_DIR}
 ls
-cmd /C mklink buskill ${env:ARCHIVE_SUBDIR}\buskill.exe
+cmd /C mklink buskill .\${env:ARCHIVE_SUBDIR}\buskill.exe
 ls
 cd ..
 ls
