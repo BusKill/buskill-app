@@ -196,6 +196,26 @@ EOF
 mkdir pyinstaller
 pushd pyinstaller
 
+# ICONS
+cp ../src/images/buskill-icon-150.png buskill-icon-150.png
+sips -i buskill-icon-150.png
+DeRez -only icns buskill-icon-150.png > icns.rsrc
+
+# icon set https://stackoverflow.com/a/20703594
+mkdir buskill-icon.iconset
+sips -z 16 16     buskill-icon-150.png --out buskill-icon.iconset/icon_16x16.png
+sips -z 32 32     buskill-icon-150.png --out buskill-icon.iconset/icon_16x16@2x.png
+sips -z 32 32     buskill-icon-150.png --out buskill-icon.iconset/icon_32x32.png
+sips -z 64 64     buskill-icon-150.png --out buskill-icon.iconset/icon_32x32@2x.png
+sips -z 128 128   buskill-icon-150.png --out buskill-icon.iconset/icon_128x128.png
+#sips -z 256 256   buskill-icon-150.png --out buskill-icon.iconset/icon_128x128@2x.png
+#sips -z 256 256   buskill-icon-150.png --out buskill-icon.iconset/icon_256x256.png
+#sips -z 512 512   buskill-icon-150.png --out buskill-icon.iconset/icon_256x256@2x.png
+#sips -z 512 512   buskill-icon-150.png --out buskill-icon.iconset/icon_512x512.png
+#cp buskill-icon-150.png buskill-icon.iconset/icon_512x512@2x.png
+iconutil -c icns buskill-icon.iconset
+rm -R buskill-icon.iconset
+
 cat > ${APP_NAME}.spec <<EOF
 # -*- mode: python ; coding: utf-8 -*-
 
@@ -208,6 +228,7 @@ a = Analysis(['../src/main.py'],
              datas=[
               ( '../KEYS', '.' ),
               ('../src/images/buskill-icon-150.png', '.'),
+              ('../src/images/buskill-icon.icns', '.'),
               ('/usr/local/bin/gpg', '.')
              ],
              hiddenimports=['pkg_resources.py2_warn'],
@@ -240,7 +261,7 @@ coll = COLLECT(exe, Tree('../src/'),
                name='${APP_NAME}')
 app = BUNDLE(coll,
              name='${APP_DIR_NAME}',
-             icon='../src/images/buskill-icon-150.png',
+             icon='buskill-icon.icns',
              bundle_identifier=None)
 EOF
 cat ${APP_NAME}.spec
@@ -268,7 +289,7 @@ cp "../../CHANGELOG" "${docsDir}/"
 cp "../../KEYS" "${docsDir}/"
 
 # icon
-cp "../src/images/buskill-icon-150.png" "${APP_DIR_NAME}/.VolumeIcon.icns"
+cp "buskill-icon.icns" "${APP_DIR_NAME}/.VolumeIcon.icns"
 
 # change the timestamps of all the files in the appdir for reproducible builds
 find ${APP_DIR_NAME} -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
@@ -286,10 +307,7 @@ hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_DIR_NAME} -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
 
 # add the dmg icon
-cp ../src/images/buskill-icon-150.png buskill-icon-150.png
-sips -i buskill-icon-150.png
-DeRez -only icns buskill-icon-150.png > icns.rsrc
-Rez -append icns.rsrc -o ./${DMG_FILENAME}
+Rez -append ../icns.rsrc -o ./${DMG_FILENAME}
 SetFile -c icnC "${DMG_FILENAME}/.VolumeIcon.icns"
 SetFile -a C ./${DMG_FILENAME}
 
