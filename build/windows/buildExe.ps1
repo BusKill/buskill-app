@@ -233,7 +233,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          icon='..\\src\\images\\buskill-icon-150.png',
+          icon='..\\src\\images\\buskill-icon-150.ico',
           console=True )
 coll = COLLECT(exe, Tree('..\\src\\'),
                a.binaries,
