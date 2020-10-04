@@ -65,6 +65,7 @@ if ( $env:VERSION -eq 'dev' ){
 }
 
 $env:ARCHIVE_DIR="buskill-win-$env:VERSION-x86_64"
+$env:ARCHIVE_SUBDIR="buskill-$env:VERSION-x86_64"
 
 ########
 # INFO #
@@ -274,7 +275,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buski
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}" | Out-String
+cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}/${env:ARCHIVE_SUBDIR}" | Out-String
 
 # add in docs/ dir
 $docsDir = "dist\${env:ARCHIVE_DIR}\docs"
@@ -293,7 +294,7 @@ cd dist
 ls
 cd ${env:ARCHIVE_DIR}
 ls
-cmd /C mklink buskill ${env:ARCHIVE_DIR}\buskill.exe
+cmd /C mklink buskill ${env:ARCHIVE_SUBDIR}\buskill.exe
 ls
 cd ..
 ls
