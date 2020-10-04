@@ -288,6 +288,10 @@ cp "KEYS" "${docsDir}\" | Out-String
 
 Get-ChildItem -Path "dist" -Force | Out-String
 cd dist
+
+# create symlink (shortcut)
+cmd /C mklink buskill ${env:ARCHIVE_DIR}\buskill.exe
+
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "$env:ARCHIVE_DIR" | Out-String
 
 #######################
