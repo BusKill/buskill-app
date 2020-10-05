@@ -945,6 +945,7 @@ class BusKill:
 
 		# loop through each of our mirrors until we get one that's online
 		metadata = ''
+		random.shuffle(UPGRADE_MIRRORS)
 		for mirror in UPGRADE_MIRRORS:
 
 			# break out of loop if we've already downloaded the metadata from
