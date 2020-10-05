@@ -20,6 +20,7 @@ For more info, see: https://buskill.in/
 import platform, multiprocessing, traceback, subprocess
 import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
+from distutils.version import LooseVersion
 from hashlib import sha256
 
 import logging
@@ -1052,15 +1053,14 @@ class BusKill:
 		###########################
 
 		# check metadata to see if there's a newer version than what we're running
-		# note we use SOURCE_DATE_EPOCH to make version comparisons easy
-		latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
-		currentReleaseTime = int(BUSKILL_VERSION['SOURCE_DATE_EPOCH'])
+		latestRelease = metadata['latest']['buskill-app']['stable']
+		currentRelease = BUSKILL_VERSION['VERSION']
 
-		msg = "DEBUG: Current version: " +str(currentReleaseTime)+ ".\n"
-		msg += "DEBUG: Latest version: " +str(latestReleaseTime)+ "."
+		msg = "DEBUG: Current version: " +str(currentRelease)+ ".\n"
+		msg += "DEBUG: Latest version: " +str(latestRelease)+ "."
 		print( msg ); logger.debug( msg )
 
-		if latestReleaseTime < currentReleaseTime:
+		if LooseVersion(latestRelease) < LooseVersion(currentRelease):
 			msg = "INFO: Current version is latest version. No new updates available."
 			print( msg ); logger.info( msg )
 			return self.set_upgrade_result( 1 )
@@ -1068,13 +1068,13 @@ class BusKill:
 		# currently we only support x86_64 builds..
 		arch = 'x86_64'
 
-		sha256sums_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS']
+		sha256sums_urls = metadata['updates']['buskill-app'][str(latestRelease)]['SHA256SUMS']
 		sha256sums_filepath = os.path.join( self.CACHE_DIR, 'SHA256SUMS' )
 
-		signature_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS.asc']
+		signature_urls = metadata['updates']['buskill-app'][str(latestRelease)]['SHA256SUMS.asc']
 		signature_filepath = os.path.join( self.CACHE_DIR, 'SHA256SUMS.asc' )
 
-		archive_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)][self.OS_NAME_SHORT][arch]['archive']['url']
+		archive_urls = metadata['updates']['buskill-app'][str(latestRelease)][self.OS_NAME_SHORT][arch]['archive']['url']
 		archive_filename = archive_urls[0].split('/')[-1]
 		archive_filepath = os.path.join( self.CACHE_DIR, archive_filename )
 
