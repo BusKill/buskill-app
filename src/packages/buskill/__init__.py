@@ -414,7 +414,10 @@ class BusKill:
 					msg = "DEBUG: Cowardly refusing to recursively delete an app that actually looks like a git sandbox."
 					print( msg ); logger.debug( msg )
 
-				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
+				# note that this actually works for both *nix & windows and doesn't
+				# fail with "unterminated character" errors
+				#  * https://stackoverflow.com/a/54134464
+				elif re.match( ".*buskill-[^\\" +os.sep+ "]*$", UPGADED_FROM['APP_DIR'] ):
 
 					# delete the old version's APP_DIR entirely
 					self.UPGRADED_FROM = UPGRADED_FROM
