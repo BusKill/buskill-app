@@ -100,7 +100,7 @@ When testing is finished, merge all the commits into both the ``master`` and ``d
 	 * branch            master     -> FETCH_HEAD
 	Already up to date.
 
-	user@host:~/buskill-app$ git refs/heads/merge v3.2.0
+	user@host:~/buskill-app$ git merge refs/heads/v3.2.0
 	Updating ab223f3..3c1a6d5
 	Fast-forward
 	 docs/_extensions/affiliatelinks.py  |  66 ++++++++++++++++++++++++++++
@@ -425,7 +425,7 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 	Already up to date.
 	user@host:~/buskill-app$ 
 
-	user@host:~/buskill-app$ git refs/heads/merge v3.2.0
+	user@host:~/buskill-app$ git merge refs/heads/v3.2.0
 	Updating 352f0e5..daa5241
 	Fast-forward
 	 updates/v1/meta.json          |  8  +-
