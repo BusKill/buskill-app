@@ -219,7 +219,6 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	gpg:          There is no indication that the signature belongs to the owner.
 	Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
 	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
-	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
 	root@disp2781:~# 
 
 	root@disp2781:~# sha256sum -c SHA256SUMS
@@ -243,7 +242,6 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	gpg:          There is no indication that the signature belongs to the owner.
 	Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
 	     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
-	gpg: WARNING: not a detached signature; file 'SHA256SUMS' was NOT verified!
 	root@disp2781:~# sha256sum -c SHA256SUMS
 	buskill-mac-v3.2.0-x86_64.dmg: OK
 	root@disp2781:~# 
