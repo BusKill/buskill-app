@@ -16,7 +16,7 @@ In this example, we'll be using ``v3.2.0``. That's
  * a ``MINOR`` version ``2``, and 
  * a ``PATCH`` version ``0``
 
-For this workflow, the ``PATCH`` version must always be ``0``, and it should only be incremented for hotfixes to previous releases--which is a distinct workflow from what's documented here.
+For this workflow, the ``PATCH`` version must always be ``0``, and it should only be incremented for hotfixes to previous releases--which is a :ref:`distinct workflow <hotfix>` from what's documented here.
 
 ::
 
@@ -151,13 +151,15 @@ After you've merged your release branch into the ``master`` branch, create a tag
 	Switched to branch 'master'
 	Your branch is up to date with 'origin/master'.
 
-	user@host:~/buskill-app$ git tag v0.1.0
+	user@host:~/buskill-app$ git tag v3.2.0
 
-	user@host:~/buskill-app$ git push origin refs/tags/v0.1.0
+	user@host:~/buskill-app$ git push origin refs/tags/v3.2.0
 	Total 0 (delta 0), reused 0 (delta 0)
 	To github.com:BusKill/buskill-app.git
-	 * [new tag]         v0.1.0 -> v0.1.0
+	 * [new tag]         v3.2.0 -> v3.2.0
 	user@host:~/buskill-app$ 
+
+.. _release_build:
 
 Build & Sign
 ------------
@@ -168,7 +170,6 @@ When downloading the AppImage from the repo's GitHub releases page, make sure th
 
 ::
 
-	user@disp2781:~$ 
 	user@disp2781:~$ sudo su -
 	root@disp2781:~#	
  	
@@ -276,7 +277,7 @@ Copy all of the above files off your airgapped machine.
 
 Finally, upload the files to the tag's release using the github.com WUI
 
- * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>`_
+ * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v3.2.0>`_
 
 Update updates repo metadata
 ------
