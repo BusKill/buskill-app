@@ -287,58 +287,13 @@ At this point, users will be able to download v3.2.0 of the BusKill app from git
 
 For apps to be able to know about the new version, we must update the ``meta.json`` file on the ``UPGRADE_MIRRORS`` hard-coded into the app:
 
- # `https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.j
- # `https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json
- # `https://repo.buskill.in/buskill-app/v1/meta.json
- # `https://repo.michaelaltfield.net/buskill-app/v1/meta.json
+#. `https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json <https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json>`_
 
-First, update the file in the github repo in the v3.2.0 branch.
+#. `https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json <https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json>`_
 
-::
+#. `https://repo.buskill.in/buskill-app/v1/meta.json <https://repo.buskill.in/buskill-app/v1/meta.json>`_
 
-	user@host:~/buskill-app$ git checkout v0.2.0
-	warning: refname 'v0.2.0' is ambiguous.
-	Switched to branch 'v0.2.0'
-	user@host:~/buskill-app$ 
-
-	user@host:~/buskill-app$ git pull origin v0.2.0
-	From github.com:BusKill/buskill-app
- 	* tag               v0.2.0     -> FETCH_HEAD
-	Already up to date.
-	user@host:~/buskill-app$ 
-
-	user@host:~/buskill-app$ vim updates/v1/meta.json
-
-Edit the file by hand. In the future, we'll switch to tuf when it's safe to do so
-
- * https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395
- * https://github.com/theupdateframework/tuf/issues/1109
-
-In ``meta.json``, make the following changes:
-
- # Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
-
- # Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
-
- # Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
-
-After updating the ``meta.json`` file, copy it to your airgapped machine and sign it to create ``meta.json.asc``
-
-Finally, upload the files to the tag's release using the github.com WUI
-
- * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v0.1.0>`_
-
-Update updates repo metadata
-------
-
-At this point, users will be able to download v3.2.0 of the BusKill app from github.com, but existing users will not be able to click the update button in the app to upgrade their existing install to the latest version.
-
-For apps to be able to know about the new version, we must update the ``meta.json`` file on the ``UPGRADE_MIRRORS`` hard-coded into the app:
-
- # `https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json <https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json>`_
- # `https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json <https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json>`_
- # `https://repo.buskill.in/buskill-app/v1/meta.json <https://repo.buskill.in/buskill-app/v1/meta.json>`_
- # `https://repo.michaelaltfield.net/buskill-app/v1/meta.json <https://repo.michaelaltfield.net/buskill-app/v1/meta.json>`_
+#. `https://repo.michaelaltfield.net/buskill-app/v1/meta.json <https://repo.michaelaltfield.net/buskill-app/v1/meta.json>`_
 
 First, update the file in the github repo in the v3.2.0 branch.
 
@@ -364,11 +319,13 @@ Edit the file by hand. In the future, we'll switch to tuf when it's safe to do s
 
 In ``meta.json``, make the following changes:
 
- # Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
+ #. Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
 
- # Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
+ #. Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
 
- # Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
+ #. Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
+
+After updating the ``meta.json`` file, copy it to your airgapped machine and sign it to create ``meta.json.asc``
 
 ::
 
