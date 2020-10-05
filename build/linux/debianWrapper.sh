@@ -39,6 +39,7 @@ fi
 # TODO: add distro detection and commands for other package managers, if needed
 #       currently this has only been tested on Debian 10
 
+apt-get clean
 apt-get -y install docker.io
 
 ##################
@@ -58,7 +59,7 @@ cp -r build/deps/docker.io ${HOME}/.docker/trust/tuf/
 find ${HOME}/.docker/trust -type f -exec sha256sum '{}' \;
 
 output=`DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim 2>&1`
-echo $output
+#echo $output
 
 # did docker download a root key and dumbly trust it, bypassing all security?
 echo $output | grep "200 when retrieving metadata for root"

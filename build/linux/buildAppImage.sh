@@ -89,7 +89,8 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-${SUDO} apt-get update
+${SUDO} apt-get clean
+${SUDO} apt-get update || exit 1
 ${SUDO} apt-get -y install iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg
 
 #################
