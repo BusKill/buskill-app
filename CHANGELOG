@@ -1,5 +1,8 @@
 buskill-app changelog
 
+[0.3.0] - 2020-10-05
++ Added buskill icon
+
 [0.2.0] - 2020-09-26
 + Added (user-triggered) (auto-)update functionality
 + Special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
