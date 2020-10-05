@@ -222,7 +222,7 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	root@disp2781:~# 
 
 	root@disp2781:~# sha256sum -c SHA256SUMS
-	buskill-win-v0.2.0-x86_64.zip: OK
+	buskill-win-v3.2.0-x86_64.zip: OK
 	root@disp2781:~# 
 
 	root@disp2781:~# rm SHA256SUMS*
@@ -297,14 +297,14 @@ First, update the file in the github repo in the v3.2.0 branch.
 
 ::
 
-	user@host:~/buskill-app$ git checkout v0.2.0
-	warning: refname 'v0.2.0' is ambiguous.
-	Switched to branch 'v0.2.0'
+	user@host:~/buskill-app$ git checkout v3.2.0
+	warning: refname 'v3.2.0' is ambiguous.
+	Switched to branch 'v3.2.0'
 	user@host:~/buskill-app$ 
 
-	user@host:~/buskill-app$ git pull origin v0.2.0
+	user@host:~/buskill-app$ git pull origin v3.2.0
 	From github.com:BusKill/buskill-app
- 	* tag               v0.2.0     -> FETCH_HEAD
+ 	* tag               v3.2.0     -> FETCH_HEAD
 	Already up to date.
 	user@host:~/buskill-app$ 
 
@@ -346,7 +346,7 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 	user@host:~/buskill-app/$
 
 	user@host:~/buskill-app/$ git commit -am 'updated meta.json to latest version for in-app updates'
-	[v0.2.0 daa5241] updated meta.json to latest version for in-app updates
+	[v3.2.0 daa5241] updated meta.json to latest version for in-app updates
 	 2 files changed, 8 insertions(+), 8 deletions(-)
 	user@host:~/buskill-app$
 
@@ -389,8 +389,8 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 	user@host:~/buskill-app$ 
 
 	user@host:~/buskill-app$ git checkout v3.2.0
-	warning: refname 'v0.2.0' is ambiguous.
-	Switched to branch 'v0.2.0'
+	warning: refname 'v3.2.0' is ambiguous.
+	Switched to branch 'v3.2.0'
 	user@host:~/buskill-app$ 
 
 	user@host:~/buskill-app$ git push
