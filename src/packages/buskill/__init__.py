@@ -368,6 +368,19 @@ class BusKill:
 			self.usb_handler.join()
 		except:
 			pass
+		try:
+
+			# if we don't kill this child process on exit, the UI will freeze
+			try:
+				self.upgrade_process.kill()
+			except ProcessLookupError as e:
+				msg = "DEBUG: Ignoring ProcessLookupError " +str(e)
+				msg += "\n\t" +str(e)+ "\n"
+				print( msg ); logger.debug( msg )
+
+			self.upgrade_process.join()
+		except:
+			pass
 
 		try:
 			# delete cache dir
@@ -407,7 +420,7 @@ class BusKill:
 
 					# and delete the 'upgraded_from.py' file so we don't try to
 					# delete the old version again
-					os.unlink( 'upgraded_from.py' )
+					os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
 
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
