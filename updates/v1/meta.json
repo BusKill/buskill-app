@@ -1,12 +1,12 @@
 {
 	"latest":{
 		"buskill-app":{
-			"stable":"1601882288"
+			"stable":"v0.3.0"
 		}
 	},
 	"updates":{
 		"buskill-app":{
-			"1601882288":{
+			"v0.3.0":{
 				"lin":{
 					"x86_64":{
 						"archive":{
