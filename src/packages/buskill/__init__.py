@@ -238,7 +238,8 @@ class BusKill:
 		# 4. APP_DIR = the root directory for a given version of the buskill app,
 		#              which is 'buskill-<lin|win|mac>-<version>-x86_64' and:
 		#                 [a] the dir containing the EXE_FILE file in Linux
-		#                 [b] the dir containing the EXE_FILE file in Windows
+		#                 [b] 1 dir above the dir containing the EXE_FILE in
+		#                     Windows
 		#                 [c] 2 dirs above the dir containing the EXE_FILE in
 		#                     MacOS
 		# 4. APPS_DIR = the directory where the app dirs live (one dir above
@@ -273,8 +274,8 @@ class BusKill:
 			self.TRIGGER_FUNCTION = self.triggerWin
 
 			# on Windows, the buskill binary is 1 dir below the APP_DIR
-			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
-			self.APP_DIR = '/'.join( self.APP_DIR )
+			self.APP_DIR = self.EXE_PATH.split('\\')[0:-2]
+			self.APP_DIR = '\\'.join( self.APP_DIR )
 
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
