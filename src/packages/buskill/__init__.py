@@ -1237,11 +1237,10 @@ class BusKill:
 			with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
 
 				# get the path to the new executable
-				# TODO: change this to just get the dir name and append "\buskill.exe" (see app_dir in MacOS below)
 				print( '========================================' )
 				print( archive_zipfile.namelist() )
 				print( '========================================' )
-				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
+				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*buskill\.exe$", file ) ][0]
 				new_version_exe = self.APPS_DIR + '\\' + new_version_exe
 
 				archive_zipfile.extractall( path=self.APPS_DIR )
