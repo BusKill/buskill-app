@@ -421,11 +421,19 @@ class BusKill:
 
 					# delete the old version's APP_DIR entirely
 					self.UPGRADED_FROM = UPGRADED_FROM
-					shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
 
-					# and delete the 'upgraded_from.py' file so we don't try to
-					# delete the old version again
-					os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
+					# Don't exit on error. this may require a double-tap on Windows.
+					# It'll finish on the next execution
+					try:
+						shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
+
+						# and delete the 'upgraded_from.py' file so we don't try to
+						# delete the old version again
+						os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
+					except Exception as e:
+						msg = "WARNING: Unable to delete old release (" +str(self.UPGRADED_FROM['APP_DIR'])+ ")"
+						msg+= "\n\t" +str(e)
+						print( msg ); logger.warn( msg )
 
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
