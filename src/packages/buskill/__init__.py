@@ -20,6 +20,7 @@ For more info, see: https://buskill.in/
 import platform, multiprocessing, traceback, subprocess
 import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
 from buskill_version import BUSKILL_VERSION
+from distutils.version import LooseVersion
 from hashlib import sha256
 
 import logging
@@ -237,7 +238,8 @@ class BusKill:
 		# 4. APP_DIR = the root directory for a given version of the buskill app,
 		#              which is 'buskill-<lin|win|mac>-<version>-x86_64' and:
 		#                 [a] the dir containing the EXE_FILE file in Linux
-		#                 [b] the dir containing the EXE_FILE file in Windows
+		#                 [b] 1 dir above the dir containing the EXE_FILE in
+		#                     Windows
 		#                 [c] 2 dirs above the dir containing the EXE_FILE in
 		#                     MacOS
 		# 4. APPS_DIR = the directory where the app dirs live (one dir above
@@ -368,6 +370,19 @@ class BusKill:
 			self.usb_handler.join()
 		except:
 			pass
+		try:
+
+			# if we don't kill this child process on exit, the UI will freeze
+			try:
+				self.upgrade_process.kill()
+			except ProcessLookupError as e:
+				msg = "DEBUG: Ignoring ProcessLookupError " +str(e)
+				msg += "\n\t" +str(e)+ "\n"
+				print( msg ); logger.debug( msg )
+
+			self.upgrade_process.join()
+		except:
+			pass
 
 		try:
 			# delete cache dir
@@ -399,7 +414,10 @@ class BusKill:
 					msg = "DEBUG: Cowardly refusing to recursively delete an app that actually looks like a git sandbox."
 					print( msg ); logger.debug( msg )
 
-				elif re.match( ".*buskill-[^" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
+				# note that this actually works for both *nix & windows and doesn't
+				# fail with "unterminated character" errors
+				#  * https://stackoverflow.com/a/54134464
+				elif re.match( ".*buskill-[^\\" +os.sep+ "]*$", UPGADED_FROM['APP_DIR'] ):
 
 					# delete the old version's APP_DIR entirely
 					self.UPGRADED_FROM = UPGRADED_FROM
@@ -408,6 +426,7 @@ class BusKill:
 					# and delete the 'upgraded_from.py' file so we don't try to
 					# delete the old version again
 					os.unlink( 'upgraded_from.py' )
+					os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
 
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
@@ -945,6 +964,7 @@ class BusKill:
 
 		# loop through each of our mirrors until we get one that's online
 		metadata = ''
+		random.shuffle(UPGRADE_MIRRORS)
 		for mirror in UPGRADE_MIRRORS:
 
 			# break out of loop if we've already downloaded the metadata from
@@ -1065,15 +1085,14 @@ class BusKill:
 			BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = int( result.stdout )
 
 		# check metadata to see if there's a newer version than what we're running
-		# note we use SOURCE_DATE_EPOCH to make version comparisons easy
-		latestReleaseTime = int(metadata['latest']['buskill-app']['stable'])
-		currentReleaseTime = int(BUSKILL_VERSION['SOURCE_DATE_EPOCH'])
+		latestRelease = metadata['latest']['buskill-app']['stable']
+		currentRelease = BUSKILL_VERSION['VERSION']
 
-		msg = "DEBUG: Current version: " +str(currentReleaseTime)+ ".\n"
-		msg += "DEBUG: Latest version: " +str(latestReleaseTime)+ "."
+		msg = "DEBUG: Current version: " +str(currentRelease)+ ".\n"
+		msg += "DEBUG: Latest version: " +str(latestRelease)+ "."
 		print( msg ); logger.debug( msg )
 
-		if latestReleaseTime <= currentReleaseTime:
+		if LooseVersion(latestRelease) < LooseVersion(currentRelease):
 			msg = "INFO: Current version is latest version. No new updates available."
 			print( msg ); logger.info( msg )
 			return self.set_upgrade_result( 1 )
@@ -1081,13 +1100,13 @@ class BusKill:
 		# currently we only support x86_64 builds..
 		arch = 'x86_64'
 
-		sha256sums_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS']
+		sha256sums_urls = metadata['updates']['buskill-app'][str(latestRelease)]['SHA256SUMS']
 		sha256sums_filepath = os.path.join( self.CACHE_DIR, 'SHA256SUMS' )
 
-		signature_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)]['SHA256SUMS.asc']
+		signature_urls = metadata['updates']['buskill-app'][str(latestRelease)]['SHA256SUMS.asc']
 		signature_filepath = os.path.join( self.CACHE_DIR, 'SHA256SUMS.asc' )
 
-		archive_urls = metadata['updates']['buskill-app'][str(latestReleaseTime)][self.OS_NAME_SHORT][arch]['archive']['url']
+		archive_urls = metadata['updates']['buskill-app'][str(latestRelease)][self.OS_NAME_SHORT][arch]['archive']['url']
 		archive_filename = archive_urls[0].split('/')[-1]
 		archive_filepath = os.path.join( self.CACHE_DIR, archive_filename )
 
@@ -1221,9 +1240,8 @@ class BusKill:
 			with tarfile.open( archive_filepath ) as archive_tarfile:
 
 				# get the path to the new executable
-				# TODO: fix this .pop() be more specific. Since we added the docs, it now
-				#       defaults to the first item alphabetically = docs/attribution.rst
-				new_version_exe = self.APPS_DIR + '/' + archive_tarfile.getnames().pop()
+				new_version_exe = [ file for file in archive_tarfile.getnames() if re.match( ".*buskill-[^/]+\.AppImage$", file ) ][0]
+				new_version_exe = self.APPS_DIR + '/' + new_version_exe
 				archive_tarfile.extractall( path=self.APPS_DIR )
 
 		elif self.OS_NAME_SHORT == 'win':
@@ -1232,8 +1250,7 @@ class BusKill:
 			with zipfile.ZipFile( archive_filepath ) as archive_zipfile:
 
 				# get the path to the new executable
-				# TODO: change this to just get the dir name and append "\buskill.exe" (see app_dir in MacOS below)
-				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*\.exe$", file ) ][0]
+				new_version_exe = [ file for file in archive_zipfile.namelist() if re.match( ".*buskill\.exe$", file ) ][0]
 				new_version_exe = self.APPS_DIR + '\\' + new_version_exe
 
 				archive_zipfile.extractall( path=self.APPS_DIR )
@@ -1270,5 +1287,8 @@ class BusKill:
 		self.UPGRADED_TO = { 'EXE_PATH': new_version_exe }
 		with open( os.path.join( self.EXE_DIR, 'upgraded_to.py' ), 'w' ) as fd:
 			fd.write( 'UPGRADED_TO = ' +str(self.UPGRADED_TO) )
+
+		msg = "INFO: Installed new version executable to  '" +str(new_version_exe)
+		print( msg ); logger.info( msg )
 
 		return self.set_upgrade_result( new_version_exe )
