@@ -336,14 +336,23 @@ class CriticalError(BoxLayout):
 
 class BusKillApp(App):
 
-	# register font aiases so we don't have to specify their full file path
-	# when setting font names in our kivy language .kv files
-	LabelBase.register( "Roboto", "fonts/Roboto-Regular.ttf",  )
-	LabelBase.register( "RobotoMedium", "fonts/Roboto-Medium.ttf",  )
-	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
-
 	global bk
 	bk = packages.buskill.BusKill()
+
+	# register font aiases so we don't have to specify their full file path
+	# when setting font names in our kivy language .kv files
+	LabelBase.register(
+	 "Roboto",
+	 os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
+	)
+	LabelBase.register(
+	 "RobotoMedium",
+	 os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
+	)
+	LabelBase.register(
+	 "mdicons",
+	 os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
+	)
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
