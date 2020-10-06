@@ -417,7 +417,7 @@ class BusKill:
 				# note that this actually works for both *nix & windows and doesn't
 				# fail with "unterminated character" errors
 				#  * https://stackoverflow.com/a/54134464
-				elif re.match( ".*buskill-[^\\" +os.sep+ "]*$", UPGADED_FROM['APP_DIR'] ):
+				elif re.match( ".*buskill-[^\\" +os.sep+ "]*$", UPGRADED_FROM['APP_DIR'] ):
 
 					# delete the old version's APP_DIR entirely
 					self.UPGRADED_FROM = UPGRADED_FROM
