@@ -425,7 +425,6 @@ class BusKill:
 
 					# and delete the 'upgraded_from.py' file so we don't try to
 					# delete the old version again
-					os.unlink( 'upgraded_from.py' )
 					os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
 
 				else:
