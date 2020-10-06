@@ -57,6 +57,7 @@ logging.basicConfig(
  level = logging.DEBUG
 )
 logging.debug("===============================================================================")
+logging.info( "INFO: Writing to log file '" +str(log_file_path)+ "'" )
 logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
