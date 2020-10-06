@@ -274,8 +274,8 @@ class BusKill:
 			self.TRIGGER_FUNCTION = self.triggerWin
 
 			# on Windows, the buskill binary is 1 dir below the APP_DIR
-			self.APP_DIR = self.EXE_PATH.split('/')[0:-2]
-			self.APP_DIR = '/'.join( self.APP_DIR )
+			self.APP_DIR = self.EXE_PATH.split( os.sep )[0:-2]
+			self.APP_DIR = os.sep.join( self.APP_DIR )
 
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
@@ -284,8 +284,8 @@ class BusKill:
 			self.TRIGGER_FUNCTION = self.triggerMac
 
 			# on MacOS, the binary is 2 dirs below the .app dir
-			self.APP_DIR = self.EXE_PATH.split('/')[0:-3]
-			self.APP_DIR = '/'.join( self.APP_DIR )
+			self.APP_DIR = self.EXE_PATH.split( os.sep )[0:-3]
+			self.APP_DIR = os.sep..join( self.APP_DIR )
 
 		# but if we're executing the code directly, then the APP_DIR is actually
 		# one dir higher
