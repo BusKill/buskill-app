@@ -1091,7 +1091,7 @@ class BusKill:
 		msg += "DEBUG: Latest version: " +str(latestRelease)+ "."
 		print( msg ); logger.debug( msg )
 
-		if LooseVersion(latestRelease) < LooseVersion(currentRelease):
+		if LooseVersion(latestRelease) <= LooseVersion(currentRelease):
 			msg = "INFO: Current version is latest version. No new updates available."
 			print( msg ); logger.info( msg )
 			return self.set_upgrade_result( 1 )
