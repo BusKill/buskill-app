@@ -285,7 +285,7 @@ class BusKill:
 
 			# on MacOS, the binary is 2 dirs below the .app dir
 			self.APP_DIR = self.EXE_PATH.split( os.sep )[0:-3]
-			self.APP_DIR = os.sep..join( self.APP_DIR )
+			self.APP_DIR = os.sep.join( self.APP_DIR )
 
 		# but if we're executing the code directly, then the APP_DIR is actually
 		# one dir higher
