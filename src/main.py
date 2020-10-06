@@ -28,7 +28,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 #                                   IMPORTS                                    #
 ################################################################################
 
-import argparse, logging, sys, multiprocessing
+import argparse, logging, sys, multiprocessing, tempfile
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -47,10 +47,7 @@ from buskill_version import BUSKILL_VERSION
 
 # TODO: disable logging by default; enable it with an argument
 # TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
-if CURRENT_PLATFORM.startswith( 'WIN' ):
-	log_file_path = os.path.join( 'buskill.log' )
-else:
-	log_file_path = os.path.join( os.sep, 'tmp', 'buskill.log' )
+log_file_path = os.path.join( tempfile.gettempdir(), 'buskill.log' )
 
 logging.basicConfig(
  filename = log_file_path,
