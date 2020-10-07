@@ -435,6 +435,9 @@ class BusKill:
 						msg+= "\n\t" +str(e)
 						print( msg ); logger.warn( msg )
 
+						# restarting app
+						os.execv( self.EXE_PATH, [self.EXE_PATH] )
+
 				else:
 					msg = "DEBUG: Cowardly refusing to recursively delete an old version that doesn't match our expected regex"
 					print( msg ); logger.debug( msg )
