@@ -366,11 +366,7 @@ class BusKillApp(App):
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script
 		#  * https://github.com/kivy/kivy/issues/2202
-
-		#Config.set('kivy', 'window_icon', 'buskill-icon-150.png')
 		self.icon = 'buskill-icon-150.png'
-		#icon = 'buskill-icon-150.png'
-		print( 'self.get_application_icon():|' +str(self.get_application_icon())+ '|' )
 
 		# is the OS that we're running on supported?
 		if self.bk.IS_PLATFORM_SUPPORTED:
