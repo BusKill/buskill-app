@@ -121,7 +121,7 @@ class MainWindow(BoxLayout):
 			# the buskill app has already been updated; let's prompt the user to
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
-		elif bk.UPGRADED_FROM['DELETE_FAILED']:
+		elif bk.UPGRADED_FROM and bk.UPGRADED_FROM['DELETE_FAILED']:
 			# the buskill app was just updated, but it failed to delete the old
 			# version. when this happens, we need the user to manually restart
 
