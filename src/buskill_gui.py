@@ -279,11 +279,30 @@ class MainWindow(BoxLayout):
 		print( msg ); logger.debug( msg )
 
 		try:
+			# TODO: remove me
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
+			# cleanup env; remove references to now-old version
+			oldVersionDir = os.path.split(sys.argv[0])[0]
+			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if oldVersionDir not in path ] )
+			if 'SSL_CERT_FILE' in os.environ:
+				os.unsetenv( SSL_CERT_FILE )
+
+			# TODO: remove me
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
 			# replace this process with the newer version
 			bk.close()
 			os.execv( new_version_exe, [new_version_exe] )
 
-		except:
+		except Exception as e:
+
+			msg = "DEBUG: Restart failed (" +str(e) + ")"
+			print( msg ); logger.debug( msg )
 
 			# close the dialog if it's already opened
 			if self.dialog != None:
