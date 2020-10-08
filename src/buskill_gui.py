@@ -130,7 +130,7 @@ class MainWindow(BoxLayout):
 				self.dialog.dismiss()
 
 			# open a new dialog that tells the user the error that occurred
-			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+			new_version_exe = bk.EXE_PATH
 			msg = "To complete the update, this app must be manually restarted. Click OK to exit, then manually execute the new version at the following location.\n\n" + str(new_version_exe)
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue923[/size][/font] Restart Required',
