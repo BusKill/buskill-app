@@ -56,9 +56,6 @@ from kivy.config import Config
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
-# TODO: remove if not needed on MacOS & Windows
-#Config.set('kivy', 'window_icon', 'icon.png')
-
 from kivy.core.text import LabelBase
 
 ################################################################################
@@ -118,13 +115,15 @@ class MainWindow(BoxLayout):
 
 	def handle_upgrades( self, dt ):
 
-		# TODO remove me
-		#self.upgrade5_restart()
-
 		if bk.UPGRADED_TO:
 			# the buskill app has already been updated; let's prompt the user to
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
+
+		# TODO: fix the restart on Windows so that the recursive delete after
+		#       upgrade works and doesn't require a manual restart. See also:
+		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
+		#  * buskill_gui.py's upgrade5_restart()
 		elif bk.UPGRADED_FROM and bk.UPGRADED_FROM['DELETE_FAILED']:
 			# the buskill app was just updated, but it failed to delete the old
 			# version. when this happens, we need the user to manually restart
@@ -135,7 +134,7 @@ class MainWindow(BoxLayout):
 
 			# open a new dialog that tells the user the error that occurred
 			new_version_exe = bk.EXE_PATH
-			msg = "To complete the update, this app must be manually restarted. Click OK to exit, then manually execute the new version at the following location.\n\n" + str(new_version_exe)
+			msg = "To complete the update, this app must be manually restarted. Click to restart, then manually execute the new version at the following location.\n\n" + str(new_version_exe)
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue923[/size][/font] Restart Required',
 			 body = msg,
@@ -301,10 +300,6 @@ class MainWindow(BoxLayout):
 
 	def upgrade5_restart( self ):
 
-		# TODO: remove me
-		#bk.UPGRADED_TO = dict()
-		#bk.UPGRADED_TO['EXE_PATH'] = 'fail'
-
 		if bk.UPGRADED_TO:
 			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
 		else:
@@ -313,8 +308,13 @@ class MainWindow(BoxLayout):
 		msg = "DEBUG: Exiting and launching " +str(new_version_exe)
 		print( msg ); logger.debug( msg )
 
+		# TODO: fix the restart on Windows so that the recursive delete after
+		#       upgrade works and doesn't require a manual restart. See also:
+		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
+		#  * buskill_gui.py's handle_upgrades()
 		try:
-			# TODO: remove me
+
+			# TODO: remove me (after fixing Windows restart fail)
 			msg = 'os.environ|' +str(os.environ)+ "|\n"
 			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
 			print( msg ); logger.debug( msg )
@@ -325,7 +325,7 @@ class MainWindow(BoxLayout):
 			if 'SSL_CERT_FILE' in os.environ:
 				os.unsetenv( SSL_CERT_FILE )
 
-			# TODO: remove me
+			# TODO: remove me (after fixing Windows restart fail)
 			msg = 'os.environ|' +str(os.environ)+ "|\n"
 			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
 			print( msg ); logger.debug( msg )

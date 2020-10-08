@@ -422,15 +422,22 @@ class BusKill:
 					# delete the old version's APP_DIR entirely
 					self.UPGRADED_FROM = UPGRADED_FROM
 
-					# Don't exit on error. this may require a double-tap on Windows.
-					# It'll finish on the next execution
+					# don't exit on error
 					try:
+
+						# TODO: fix the restart on Windows so that the recursive
+						#       delete after upgrade works and doesn't require a
+						#       manual restart. See Also:
+						#  * buskill_gui.py's handle_upgrades()
+						#  * buskill_gui.py's upgrade5_restart()
 						self.UPGRADED_FROM['DELETE_FAILED'] = False
+
 						shutil.rmtree( self.UPGRADED_FROM['APP_DIR'] )
 
 						# and delete the 'upgraded_from.py' file so we don't try to
 						# delete the old version again
 						os.unlink( os.path.join( self.EXE_DIR, 'upgraded_from.py' ) )
+
 					except Exception as e:
 						self.UPGRADED_FROM['DELETE_FAILED'] = True
 
