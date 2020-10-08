@@ -296,9 +296,8 @@ class MainWindow(BoxLayout):
 
 			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if not re.match( ".*(" +"|".join(oldVersionPaths)+ ").*", path) ] )
 
-			# TODO: remove if unnecessary
-			#if 'SSL_CERT_FILE' in os.environ:
-			#	os.unsetenv( SSL_CERT_FILE )
+			if 'SSL_CERT_FILE' in os.environ:
+				os.unsetenv( SSL_CERT_FILE )
 
 			# TODO: remove me
 			msg = 'os.environ|' +str(os.environ)+ "|\n"
