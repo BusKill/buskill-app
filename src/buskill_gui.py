@@ -121,6 +121,27 @@ class MainWindow(BoxLayout):
 			# the buskill app has already been updated; let's prompt the user to
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
+		elif bk.UPGRADED_FROM['DELETE_FAILED']:
+			# the buskill app was just updated, but it failed to delete the old
+			# version. when this happens, we need the user to manually restart
+
+			# close the dialog if it's already opened
+			if self.dialog != None:
+				self.dialog.dismiss()
+
+			# open a new dialog that tells the user the error that occurred
+			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+			msg = "To complete the update, this app must be manually restarted. Click OK to exit, then manually execute the new version at the following location.\n\n" + str(new_version_exe)
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue923[/size][/font] Restart Required',
+			 body = msg,
+			 button = "",
+			 continue_function=None
+			)
+			self.dialog.b_cancel.text = "Exit Now"
+			self.dialog.b_cancel.on_release = self.close
+			self.dialog.auto_dismiss = False
+			self.dialog.open()
 
 	def upgrade1(self):
 
