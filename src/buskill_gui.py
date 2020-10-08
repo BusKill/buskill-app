@@ -92,6 +92,10 @@ class MainWindow(BoxLayout):
 
 		super(MainWindow, self).__init__(**kwargs)
 
+	# called to close the app
+	def close( self, *args ):
+		sys.exit(0)
+
 	def toggle_menu(self):
 
 		self.nav_drawer.toggle_state()
