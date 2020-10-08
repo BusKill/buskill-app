@@ -5,8 +5,8 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2020-06-23
-  Version: 0.1
+  Updated: 2020-10-08
+  Version: 0.2
 
 This is the code to launch the BusKill GUI app
 
@@ -21,7 +21,7 @@ import packages.buskill
 from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 
-import os, webbrowser
+import os, sys, webbrowser
 
 import multiprocessing
 from multiprocessing import util
@@ -113,6 +113,9 @@ class MainWindow(BoxLayout):
 			self.actionview.background_color = self.color_primary
 
 	def handle_upgrades( self, dt ):
+
+		# TODO remove me
+		#self.upgrade5_restart()
 
 		if bk.UPGRADED_TO:
 			# the buskill app has already been updated; let's prompt the user to
@@ -273,6 +276,10 @@ class MainWindow(BoxLayout):
 
 	def upgrade5_restart( self ):
 
+		# TODO: remove me
+		#bk.UPGRADED_TO = dict()
+		#bk.UPGRADED_TO['EXE_PATH'] = 'fail'
+
 		if bk.UPGRADED_TO:
 			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
 		else:
@@ -282,11 +289,30 @@ class MainWindow(BoxLayout):
 		print( msg ); logger.debug( msg )
 
 		try:
+			# TODO: remove me
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
+			# cleanup env; remove references to now-old version
+			oldVersionDir = os.path.split(sys.argv[0])[0]
+			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if oldVersionDir not in path ] )
+			if 'SSL_CERT_FILE' in os.environ:
+				os.unsetenv( SSL_CERT_FILE )
+
+			# TODO: remove me
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
 			# replace this process with the newer version
 			bk.close()
 			os.execv( new_version_exe, [new_version_exe] )
 
-		except:
+		except Exception as e:
+
+			msg = "DEBUG: Restart failed (" +str(e) + ")"
+			print( msg ); logger.debug( msg )
 
 			# close the dialog if it's already opened
 			if self.dialog != None:
@@ -343,15 +369,18 @@ class BusKillApp(App):
 	# when setting font names in our kivy language .kv files
 	LabelBase.register(
 	 "Roboto",
-	 os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
+	 os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
 	)
 	LabelBase.register(
 	 "RobotoMedium",
-	 os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
+	 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
 	)
 	LabelBase.register(
 	 "mdicons",
-	 os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
+	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
 	)
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
