@@ -21,7 +21,7 @@ import packages.buskill
 from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 
-import os, webbrowser
+import os, sys, webbrowser
 
 import multiprocessing
 from multiprocessing import util
@@ -286,6 +286,11 @@ class MainWindow(BoxLayout):
 
 			# cleanup env; remove references to now-old version
 			oldVersionDir = os.path.split(sys.argv[0])[0]
+
+			# TODO: remove me
+			msg = 'DEBUG: removing oldVersionDir from PATH (' +str(oldVersionDir)+ ')'
+			print( msg ); logger.debug( msg )
+
 			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if oldVersionDir not in path ] )
 			if 'SSL_CERT_FILE' in os.environ:
 				os.unsetenv( SSL_CERT_FILE )
