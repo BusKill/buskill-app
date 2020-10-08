@@ -287,7 +287,7 @@ class MainWindow(BoxLayout):
 			# cleanup env; remove references to now-old version
 			oldVersionPaths = [
 			 #os.path.split( sys.argv[0] )[0],
-			 sys.argv[0].split( os.sep )[-1],
+			 sys.argv[0].split( os.sep )[-2],
 			 os.path.split( bk.APP_DIR )[1]
 			]
 			# TODO: remove me
