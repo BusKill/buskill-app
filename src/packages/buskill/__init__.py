@@ -199,6 +199,7 @@ class BusKill:
 
 		# instantiate instance fields
 		self.CURRENT_PLATFORM = None
+		self.KERNEL_VERSION = None
 		self.IS_PLATFORM_SUPPORTED = False
 		self.OS_NAME_SHORT = None
 		self.ERR_PLATFORM_NOT_SUPPORTED = None
@@ -277,6 +278,7 @@ class BusKill:
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
 			self.OS_NAME_SHORT = 'mac'
+			self.KERNEL_VERSION = str(platform.release()).split('.')[0]
 			self.ARM_FUNCTION = self.armNix
 			self.TRIGGER_FUNCTION = self.triggerMac
 
@@ -600,15 +602,21 @@ class BusKill:
 
 		windll.user32.LockWorkStation()
 
+#TODO test on other mac kernel version for sierra - big sur
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
-
-		try:
-			subprocess.run( ['pmset', 'displaysleepnow'] )
-		except FileNotFoundError as e:
-			subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] )
-
+		if self.KERNEL_VERSION.startswith('19'): # Catalina
+			subprocess.run(['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend']) 
+		#elif self.KERNEL_VERSION.startswith('18'): # Mojave
+			# Find which command works
+		#elif self.KERNEL_VERSION.startswith('17'): # High Sierra
+			# Find which command works
+		#elif self.KERNEL_VERSION.startswith('16'): # Sierra
+		else:
+			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
+			print( msg ); logger.error(msg)
+# subprocess.run( ['pmset', 'displaysleepnow'] )
 	#####################
 	# UPGRADE FUNCTIONS #
 	#####################
