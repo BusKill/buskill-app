@@ -20,6 +20,7 @@ For more info, see: https://buskill.in/
 import packages.buskill
 from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
+from buskill_version import BUSKILL_VERSION
 
 import os, sys, re, webbrowser
 
@@ -145,6 +146,24 @@ class MainWindow(BoxLayout):
 			self.dialog.b_cancel.on_release = self.close
 			self.dialog.auto_dismiss = False
 			self.dialog.open()
+
+	def about(self):
+
+		# first close the navigation drawer
+		self.nav_drawer.toggle_state()
+
+		msg = "For latest news about BusKill, see our website at https://buskill.in\n\n"
+		msg+= "For help, see our documentation at https://docs.buskill.in"
+
+		self.dialog = DialogConfirmation(
+		 title='BusKill ' +str(BUSKILL_VERSION['VERSION']),
+		 body = msg,
+		 button = "",
+		 continue_function = None,
+		)
+		self.dialog.b_cancel.text = "OK"
+		self.dialog.open()
+
 
 	def upgrade1(self):
 
