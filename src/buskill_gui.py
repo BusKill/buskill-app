@@ -364,12 +364,6 @@ class MainWindow(BoxLayout):
 			print( msg ); logger.debug( msg )
 
 			# cleanup env; remove references to now-old version
-			oldVersionDir = os.path.split(sys.argv[0])[0]
-			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if oldVersionDir not in path ] )
-			if 'SSL_CERT_FILE' in os.environ:
-				os.unsetenv( SSL_CERT_FILE )
-
-			# cleanup env; remove references to now-old version
 			oldVersionPaths = [
 			 #os.path.split( sys.argv[0] )[0],
 			 sys.argv[0].split( os.sep )[-2],
