@@ -294,6 +294,24 @@ class BusKill:
 			 os.path.join( self.APP_DIR, os.pardir)
 			)
 
+		# We package our .zip inside a single root dir to prevent zip-bombing.
+		# When extracted on most platforms, this root dir is dropped into the
+		# the cwd. But when using the Windows file Explorer GUI to extract
+		# our .zip release, it actually creates an additional root dir with
+		# the same name as our .zip file (minus the .zip extension). This
+		# inconsistency means that we may have to go one dir up again
+		if re.match(
+		 "^buskill-" +str(self.OS_NAME_SHORT)+ "-.*",
+		 self.APP_DIR.split(os.sep)[-2]
+		):
+			# the dir that we expected to be our APP_DIR is actually inside of
+			# another dir that has the name "buskil-...", so let's make
+			# *that* dir our APP_DIR
+
+			self.APP_DIR = os.path.abspath(
+			 os.path.join( self.APP_DIR, os.pardir)
+			)
+
 		# the APPS_DIR is one dir above the APP_DIR
 		self.APPS_DIR = os.path.abspath( os.path.join(self.APP_DIR, os.pardir) )
 
