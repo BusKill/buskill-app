@@ -152,8 +152,9 @@ class MainWindow(BoxLayout):
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
 
-		msg = "For latest news about BusKill, see our website at https://buskill.in\n\n"
-		msg+= "For help, see our documentation at https://docs.buskill.in"
+		msg = "For latest news about BusKill, see our website at [ref=website][u]https://buskill.in[/u][/ref]\n\n"
+		msg+= "For help, see our documentation at [ref=gui_help][u]https://docs.buskill.in[/u][/ref]\n\n"
+		msg+= "Want to help? See [ref=contribute][u]contributing[/u][/ref]"
 
 		self.dialog = DialogConfirmation(
 		 title='BusKill ' +str(BUSKILL_VERSION['VERSION']),
@@ -162,7 +163,31 @@ class MainWindow(BoxLayout):
 		 continue_function = None,
 		)
 		self.dialog.b_cancel.text = "OK"
+		self.dialog.l_body.on_ref_press = self.about_ref_press
 		self.dialog.open()
+
+	def about_ref_press(self, ref):
+		if ref == 'gui_help':
+			return self.webbrowser_open_docs_gui()
+		elif ref == 'contribute':
+			return self.webbrowser_open_docs_contribute()
+
+		return self.webbrowser_open_website()
+
+	def webbrowser_open_website(self):
+		webbrowser.open( 'https://buskill.in/' )
+
+	def webbrowser_open_docs(self):
+		webbrowser.open( 'https://docs.buskill.in/' )
+
+	def webbrowser_open_docs_bugs(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
+
+	def webbrowser_open_docs_gui(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/' +str(BUSKILL_VERSION['VERSION'])+ '/software_usr/gui.html' )
+
+	def webbrowser_open_docs_contribute(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/contributing.html' )
 
 
 	def upgrade1(self):
