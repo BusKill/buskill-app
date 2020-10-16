@@ -1,5 +1,8 @@
 buskill-app changelog
 
+[0.4.0] - 2020-10-16
+* added "About" button to navigation drawer
+
 [0.3.1] - 2020-10-08
 * patched various in-app update bugs
 
