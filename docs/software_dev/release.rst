@@ -318,9 +318,9 @@ Edit the file by hand. In the future, we'll switch to tuf when it's safe to do s
 
 In ``meta.json``, make the following changes:
 
- #. Change ``latest`` -> ``buskill-app`` -> ``stable`` to the time in epoch seconds of the latest commit. This is *not* the epoch seconds of the build! To determine this value, execute the latest release with the ``--version`` argument and use the epcoh seconds on ``SOURCE_DATE_EPOCH``
+ #. Change ``latest`` -> ``buskill-app`` -> ``stable`` to the latest version (eg ``v3.2.0``).
 
- #. Add a new dictionary section to ``updates`` -> ``buskill-app`` with a numerical value the same as the epoch seconds timestamp of the latest commit for the build that was set to ``stable`` in the previous step
+ #. Add a new dictionary section to ``updates`` -> ``buskill-app`` with a value the same as the latest version that was set to ``stable`` in the previous step
 
  #. Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
 
