@@ -627,10 +627,8 @@ class BusKill:
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
-		if self.KERNEL_VERSION.startswith('17') or self.KERNEL_VERSION.startswith('19'): # High Sierra or Catalina
+		if self.KERNEL_VERSION.startswith('17') or self.KERNEL_VERSION.startswith('18') or self.KERNEL_VERSION.startswith('19'): # High Sierra or Mojave or Catalina
 			subprocess.run(['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend']) 
-		#elif self.KERNEL_VERSION.startswith('18'): # Mojave
-			# Find which command works
 		else:
 			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
 			print( msg ); logger.error(msg)
