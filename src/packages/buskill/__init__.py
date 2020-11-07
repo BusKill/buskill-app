@@ -3,9 +3,9 @@
 ::
 
   File:    buskill.py
-  Authors: Michael Altfield <michael@buskill.in>
+  Authors: Michael Altfield <michael@buskill.in>, Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2020-08-09
+  Updated: 2020-10-14
   Version: 0.2
 
 This is the heart of the buskill app, shared by both the cli and gui
@@ -19,8 +19,10 @@ For more info, see: https://buskill.in/
 
 import platform, multiprocessing, traceback, subprocess
 import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
+import os.path
 from buskill_version import BUSKILL_VERSION
 from hashlib import sha256
+from ConfigParser import SafeConfigParser()
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -199,6 +201,7 @@ class BusKill:
 
 		# instantiate instance fields
 		self.CURRENT_PLATFORM = None
+		self.KERNEL_VERSION = None
 		self.IS_PLATFORM_SUPPORTED = False
 		self.OS_NAME_SHORT = None
 		self.ERR_PLATFORM_NOT_SUPPORTED = None
@@ -224,6 +227,25 @@ class BusKill:
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
+		config = SafeConfigParser()
+
+		self.CONFIG = None
+
+		# NOTE self.config will change to a dictionary if the file is found 
+		# 	if not a startup routine should begin 
+		#	Dictionary keys will be the setting and the value the variable 
+		# 	i.e. Trigger would be the key, the trigger file location would be the value 
+
+		if os.file.exists(APP_DIR, 'buskill.conf'):
+			self.CONFIG = dict()
+			config.read('buskill.conf')
+			for name, value in config.options():
+				self.config[name] == value
+		else:
+			do_something = None	
+		# NOTE This a placeholder!!!! 
+		# Here there should be a setup wizard which will create the config file (TODO Make the function to create Config files)
+		# 	 
 		# NOTE about instance fields used for storing path info relative to the
 		#      buskill executable:
 		#
@@ -277,6 +299,7 @@ class BusKill:
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
 			self.OS_NAME_SHORT = 'mac'
+			self.KERNEL_VERSION = str(platform.release()).split('.')[0]
 			self.ARM_FUNCTION = self.armNix
 			self.TRIGGER_FUNCTION = self.triggerMac
 
@@ -600,15 +623,18 @@ class BusKill:
 
 		windll.user32.LockWorkStation()
 
+#TODO test on other mac kernel version for sierra - big sur
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
-
-		try:
-			subprocess.run( ['pmset', 'displaysleepnow'] )
-		except FileNotFoundError as e:
-			subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] )
-
+		if self.KERNEL_VERSION.startswith('17') or self.KERNEL_VERSION.startswith('19'): # High Sierra or Catalina
+			subprocess.run(['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend']) 
+		#elif self.KERNEL_VERSION.startswith('18'): # Mojave
+			# Find which command works
+		else:
+			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
+			print( msg ); logger.error(msg)
+# subprocess.run( ['pmset', 'displaysleepnow'] )
 	#####################
 	# UPGRADE FUNCTIONS #
 	#####################
