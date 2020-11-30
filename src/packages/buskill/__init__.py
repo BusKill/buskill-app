@@ -603,7 +603,6 @@ class BusKill:
 
 		windll.user32.LockWorkStation()
 
-#TODO test on other mac kernel version for sierra - big sur
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
