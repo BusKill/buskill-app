@@ -22,7 +22,6 @@ import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, rando
 import os.path
 from buskill_version import BUSKILL_VERSION
 from hashlib import sha256
-from ConfigParser import SafeConfigParser()
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -227,7 +226,6 @@ class BusKill:
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
-	 
 		# NOTE about instance fields used for storing path info relative to the
 		#      buskill executable:
 		#
@@ -605,17 +603,15 @@ class BusKill:
 
 		windll.user32.LockWorkStation()
 
-#TODO test on big sur 
-
+#TODO test on other mac kernel version for sierra - big sur
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
-		if self.KERNEL_VERSION.startswith('17') or self.KERNEL_VERSION.startswith('18') or self.KERNEL_VERSION.startswith('19'): # High Sierra or Mojave or Catalina
+		try:
 			subprocess.run(['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend']) 
-		else:
+		except:
 			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
 			print( msg ); logger.error(msg)
-
 	#####################
 	# UPGRADE FUNCTIONS #
 	#####################
