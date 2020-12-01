@@ -17,49 +17,49 @@ set -x
 # SETTINGS #
 ############
 
-find /usr/local/Cellar -type f -wholename bin/python3*
+find /usr/local/Cellar -type f -wholename *bin/python3*
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort -u
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort -u
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort -un
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort -un
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort | uniq
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort | uniq
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort -n | uniq
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort -n | uniq
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort -un | head -n1
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort -un | head -n1
 sleep 1
 echo '====================================='
-find /usr/local/Cellar -type f -wholename bin/python3* | sort -u | uniq | head -n1
+find /usr/local/Cellar -type f -wholename *bin/python3* | sort -u | uniq | head -n1
 sleep 1
 echo '====================================='
 echo '====================================='
 echo '====================================='
 
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3*
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -u
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -u
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -un
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -un
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort | uniq
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort | uniq
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -n | uniq
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -un | head -n1
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -un | head -n1
 sleep 1
 echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -u | uniq | head -n1
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -u | uniq | head -n1
 sleep 1
 echo '====================================='
 echo '====================================='
