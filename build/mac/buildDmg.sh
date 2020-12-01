@@ -17,13 +17,75 @@ set -x
 # SETTINGS #
 ############
 
+find /usr/local/Cellar -type f -wholename bin/python3*
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort -u
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort -un
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort | uniq
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort -n | uniq
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
+find /usr/local/Cellar -type f -wholename bin/python3* | sort -u | uniq | head -n1
+sleep 1
+echo '====================================='
+echo '====================================='
+echo '====================================='
+
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3*
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -u
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -un
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort | uniq
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -n | uniq
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
+find /usr/local/Cellar/python@3* -type f -wholename bin/python3* | sort -u | uniq | head -n1
+sleep 1
+echo '====================================='
+echo '====================================='
+echo '====================================='
+
 find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1
+sleep 1
+echo '====================================='
 find /usr/local/Cellar/python@3* -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 find /usr/local/opt/python/Cellar/python@3* -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 find /usr/local/opt/python -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 find /usr/local/opt -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 find /usr/local -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 find /usr -type f -name python3* | sort -un | head -n1
+sleep 1
+echo '====================================='
 
 PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
