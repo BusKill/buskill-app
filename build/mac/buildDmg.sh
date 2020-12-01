@@ -17,78 +17,8 @@ set -x
 # SETTINGS #
 ############
 
-find /usr/local/Cellar -type f -wholename *bin/python3*
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort -u
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort -un
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort | uniq
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort -n | uniq
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/Cellar -type f -wholename *bin/python3* | sort -u | uniq | head -n1
-sleep 1
-echo '====================================='
-echo '====================================='
-echo '====================================='
-
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -u
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -un
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort | uniq
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -u | uniq | head -n1
-sleep 1
-echo '====================================='
-echo '====================================='
-echo '====================================='
-
-find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/Cellar/python@3* -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/opt/python/Cellar/python@3* -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/opt/python -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local/opt -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr/local -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-find /usr -type f -name python3* | sort -un | head -n1
-sleep 1
-echo '====================================='
-
-PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
-PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
@@ -118,7 +48,6 @@ export HOMEBREW_CACHE="`pwd`/build/deps/"
 # print some info for debugging failed builds
 uname -a
 sw_vers
-ls -lah /usr/local/Cellar/
 find /usr/local/Cellar -maxdepth 1
 which python2
 python2 --version
