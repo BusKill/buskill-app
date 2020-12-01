@@ -17,6 +17,8 @@ set -x
 # SETTINGS #
 ############
 
+find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1
+find /usr/local/Cellar/python@3* -type f -name python3* | sort -un | head -n1
 PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
 APP_NAME='buskill'
@@ -48,6 +50,7 @@ export HOMEBREW_CACHE="`pwd`/build/deps/"
 # print some info for debugging failed builds
 uname -a
 sw_vers
+ls -lah /usr/local/Cellar
 which python2
 python2 --version
 which python3
