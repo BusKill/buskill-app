@@ -5,8 +5,8 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2020-06-23
-  Version: 0.1
+  Updated: 2020-10-08
+  Version: 0.2
 
 This is the code to launch the BusKill GUI app
 
@@ -20,8 +20,9 @@ For more info, see: https://buskill.in/
 import packages.buskill
 from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
+from buskill_version import BUSKILL_VERSION
 
-import os, webbrowser
+import os, sys, re, webbrowser
 
 import multiprocessing
 from multiprocessing import util
@@ -89,6 +90,10 @@ class MainWindow(BoxLayout):
 
 		super(MainWindow, self).__init__(**kwargs)
 
+	# called to close the app
+	def close( self, *args ):
+		sys.exit(0)
+
 	def toggle_menu(self):
 
 		self.nav_drawer.toggle_state()
@@ -116,13 +121,82 @@ class MainWindow(BoxLayout):
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
 
+		# TODO: fix the restart on Windows so that the recursive delete after
+		#       upgrade works and doesn't require a manual restart. See also:
+		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
+		#  * buskill_gui.py's upgrade5_restart()
+		elif bk.UPGRADED_FROM and bk.UPGRADED_FROM['DELETE_FAILED']:
+			# the buskill app was just updated, but it failed to delete the old
+			# version. when this happens, we need the user to manually restart
+
+			# close the dialog if it's already opened
+			if self.dialog != None:
+				self.dialog.dismiss()
+
+			# open a new dialog that tells the user the error that occurred
+			new_version_exe = bk.EXE_PATH
+			msg = "To complete the update, this app must be manually restarted. Click to restart, then manually execute the new version at the following location.\n\n" + str(new_version_exe)
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue923[/size][/font] Restart Required',
+			 body = msg,
+			 button = "",
+			 continue_function=None
+			)
+			self.dialog.b_cancel.text = "Exit Now"
+			self.dialog.b_cancel.on_release = self.close
+			self.dialog.auto_dismiss = False
+			self.dialog.open()
+
+	def about(self):
+
+		# first close the navigation drawer
+		self.nav_drawer.toggle_state()
+
+		msg = "For latest news about BusKill, see our website at [ref=website][u]https://buskill.in[/u][/ref]\n\n"
+		msg+= "For help, see our documentation at [ref=gui_help][u]https://docs.buskill.in[/u][/ref]\n\n"
+		msg+= "Want to help? See [ref=contribute][u]contributing[/u][/ref]"
+
+		self.dialog = DialogConfirmation(
+		 title='BusKill ' +str(BUSKILL_VERSION['VERSION']),
+		 body = msg,
+		 button = "",
+		 continue_function = None,
+		)
+		self.dialog.b_cancel.text = "OK"
+		self.dialog.l_body.on_ref_press = self.about_ref_press
+		self.dialog.open()
+
+	def about_ref_press(self, ref):
+		if ref == 'gui_help':
+			return self.webbrowser_open_docs_gui()
+		elif ref == 'contribute':
+			return self.webbrowser_open_docs_contribute()
+
+		return self.webbrowser_open_website()
+
+	def webbrowser_open_website(self):
+		webbrowser.open( 'https://buskill.in/' )
+
+	def webbrowser_open_docs(self):
+		webbrowser.open( 'https://docs.buskill.in/' )
+
+	def webbrowser_open_docs_bugs(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
+
+	def webbrowser_open_docs_gui(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/' +str(BUSKILL_VERSION['VERSION'])+ '/software_usr/gui.html' )
+
+	def webbrowser_open_docs_contribute(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/contributing.html' )
+
+
 	def upgrade1(self):
 
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
 
 		# check to see if an upgrade was already done
-		if bk.UPGRADED_TO:
+		if bk.UPGRADED_TO and bk.UPGRADED_TO['EXE_PATH'] != '1':
 			# a newer version has already been installed; skip upgrade() step and
 			# just prompt the user to restart to the newer version
 			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
@@ -278,19 +352,53 @@ class MainWindow(BoxLayout):
 		msg = "DEBUG: Exiting and launching " +str(new_version_exe)
 		print( msg ); logger.debug( msg )
 
+		# TODO: fix the restart on Windows so that the recursive delete after
+		#       upgrade works and doesn't require a manual restart. See also:
+		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
+		#  * buskill_gui.py's handle_upgrades()
 		try:
+
+			# TODO: remove me (after fixing Windows restart fail)
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
+			# cleanup env; remove references to now-old version
+			oldVersionPaths = [
+			 #os.path.split( sys.argv[0] )[0],
+			 sys.argv[0].split( os.sep )[-2],
+			 os.path.split( bk.APP_DIR )[1]
+			]
+
+			# TODO: remove me (after fixing Windows restart fail)
+			msg = 'DEBUG: removing oldVersionPaths from PATH (' +str(oldVersionPaths)+ ')'
+			print( msg ); logger.debug( msg )
+
+			os.environ['PATH'] = os.pathsep.join( [ path for path in os.environ['PATH'].split(os.pathsep) if not re.match( ".*(" +"|".join(oldVersionPaths)+ ").*", path) ] )
+
+			if 'SSL_CERT_FILE' in os.environ:
+				del os.environ['SSL_CERT_FILE']
+
+			# TODO: remove me (after fixing Windows restart fail)
+			msg = 'os.environ|' +str(os.environ)+ "|\n"
+			msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+			print( msg ); logger.debug( msg )
+
 			# replace this process with the newer version
 			bk.close()
 			os.execv( new_version_exe, [new_version_exe] )
 
-		except:
+		except Exception as e:
+
+			msg = "DEBUG: Restart failed (" +str(e) + ")"
+			print( msg ); logger.debug( msg )
 
 			# close the dialog if it's already opened
 			if self.dialog != None:
 				self.dialog.dismiss()
 
 			# open a new dialog that tells the user the error that occurred
-			msg = "Sorry, we were unable to restart the BusKill App. Please execute it manually at the following location.\n\n" + str(self.upgrade_result)
+			msg = "Sorry, we were unable to restart the BusKill App. Please execute it manually at the following location.\n\n" + str(new_version_exe)
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue002[/size][/font] Restart Error',
 			 body = msg,
@@ -333,14 +441,26 @@ class CriticalError(BoxLayout):
 
 class BusKillApp(App):
 
-	# register font aiases so we don't have to specify their full file path
-	# when setting font names in our kivy language .kv files
-	LabelBase.register( "Roboto", "fonts/Roboto-Regular.ttf",  )
-	LabelBase.register( "RobotoMedium", "fonts/Roboto-Medium.ttf",  )
-	LabelBase.register( "mdicons", "fonts/MaterialIcons-Regular.ttf" )
-
 	global bk
 	bk = packages.buskill.BusKill()
+
+	# register font aiases so we don't have to specify their full file path
+	# when setting font names in our kivy language .kv files
+	LabelBase.register(
+	 "Roboto",
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
+	 os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
+	)
+	LabelBase.register(
+	 "RobotoMedium",
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
+	 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
+	)
+	LabelBase.register(
+	 "mdicons",
+	 #os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
+	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
+	)
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
@@ -350,6 +470,11 @@ class BusKillApp(App):
 
 		global bk
 		self.bk = bk
+
+		# this doesn't work in Linux, so instead we just overwrite the built-in
+		# kivy icons with ours, but that's done in the linux build script
+		#  * https://github.com/kivy/kivy/issues/2202
+		self.icon = 'buskill-icon-150.png'
 
 		# is the OS that we're running on supported?
 		if self.bk.IS_PLATFORM_SUPPORTED:

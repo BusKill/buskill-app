@@ -11,8 +11,8 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2020-07-11
-# Version: 0.2
+# Updated: 2020-10-04
+# Version: 0.3
 ################################################################################
 
 ######################################
@@ -58,13 +58,14 @@ if ( ! $env:GITHUB_SHA ){
 	$env:GITHUB_SHA="???"
 }
 
-$env:VERSION="$( git show-ref | select -first 1 )"
+$env:VERSION="$( git symbolic-ref HEAD | select -first 1 )"
 $env:VERSION="$( $env:VERSION.Split( "/") | select -last 1 )"
 if ( $env:VERSION -eq 'dev' ){
 	$env:VERSION="$env:SOURCE_DATE_EPOCH"
 }
 
 $env:ARCHIVE_DIR="buskill-win-$env:VERSION-x86_64"
+$env:ARCHIVE_SUBDIR="buskill-$env:VERSION-x86_64"
 
 ########
 # INFO #
@@ -200,6 +201,7 @@ a = Analysis(['..\\src\\main.py'],
              datas=
               [
                ( '..\\KEYS', '.' ),
+               ( '..\\src\\images\\buskill-icon-150.png', '.' ),
                ('C:\\Program Files\\Git\\usr\\bin\\gpg.exe', '.'),
                ('C:\\msys64\\usr\\bin\\msys-bz2-1.dll', '.'),
                ('C:\\msys64\\usr\\bin\\msys-assuan-0.dll', '.'),
@@ -232,6 +234,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          icon='..\\src\\images\\buskill-icon-150.ico',
           console=True )
 coll = COLLECT(exe, Tree('..\\src\\'),
                a.binaries,
@@ -272,7 +275,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buski
 cd .. | Out-String
 
 New-Item -Path dist -Type Directory | Out-String
-cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}" | Out-String
+cp -r .\pyinstaller\dist\buskill "dist/${env:ARCHIVE_DIR}/${env:ARCHIVE_SUBDIR}" | Out-String
 
 # add in docs/ dir
 $docsDir = "dist\${env:ARCHIVE_DIR}\docs"
@@ -286,6 +289,17 @@ cp "KEYS" "${docsDir}\" | Out-String
 
 Get-ChildItem -Path "dist" -Force | Out-String
 cd dist
+
+# create symlink (shortcut)
+ls
+cd ${env:ARCHIVE_DIR}
+ls
+# TOOD fix this link
+#cmd /C mklink buskill .\${env:ARCHIVE_SUBDIR}\buskill.exe
+ls
+cd ..
+ls
+
 Compress-Archive -DestinationPath "$env:ARCHIVE_DIR.zip" -Path "$env:ARCHIVE_DIR" | Out-String
 
 #######################

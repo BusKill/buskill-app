@@ -28,7 +28,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 #                                   IMPORTS                                    #
 ################################################################################
 
-import argparse, logging, sys, multiprocessing
+import argparse, logging, sys, multiprocessing, tempfile
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -41,38 +41,40 @@ from buskill_version import BUSKILL_VERSION
 #                                  MAIN BODY                                   #
 ################################################################################
 
-#################
-# SETUP LOGGING #
-#################
-
-# TODO: disable logging by default; enable it with an argument
-# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
-if CURRENT_PLATFORM.startswith( 'WIN' ):
-	log_file_path = os.path.join( 'buskill.log' )
-else:
-	log_file_path = os.path.join( os.sep, 'tmp', 'buskill.log' )
-
-logging.basicConfig(
- filename = log_file_path,
- filemode = 'a',
- format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
- datefmt = '%H:%M:%S',
- level = logging.DEBUG
-)
-logging.debug("===============================================================================")
-logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
-logging.debug( 'os.environ|' +str(os.environ)+ '|' )
-logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
-logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
-logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )
-logging.debug( 'sys.path|' +str(sys.path)+ '|' )
-logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
-logging.debug( 'sys.prefix|' +str(sys.prefix)+ '|' )
-logging.debug( 'sys.version|' +str(sys.version)+ '|' )
-logging.debug( 'sys.api_version|' +str(sys.api_version)+ '|' )
-logging.debug( 'sys.version_info|' +str(sys.version_info)+ '|' )
-
 if __name__ == '__main__':
+
+	#################
+	# SETUP LOGGING #
+	#################
+
+	# TODO: disable logging by default; enable it with an argument
+	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
+	log_file_path = os.path.join( tempfile.gettempdir(), 'buskill.log' )
+
+	logging.basicConfig(
+	 filename = log_file_path,
+	 filemode = 'a',
+	 format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+	 datefmt = '%H:%M:%S',
+	 level = logging.DEBUG
+	)
+	logging.debug("===============================================================================")
+	logging.info( "INFO: Writing to log file '" +str(log_file_path)+ "'" )
+	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
+	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
+	logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
+	logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
+	logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )
+	logging.debug( 'sys.path|' +str(sys.path)+ '|' )
+	logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
+	logging.debug( 'sys.prefix|' +str(sys.prefix)+ '|' )
+	logging.debug( 'sys.version|' +str(sys.version)+ '|' )
+	logging.debug( 'sys.api_version|' +str(sys.api_version)+ '|' )
+	logging.debug( 'sys.version_info|' +str(sys.version_info)+ '|' )
+
+	###########
+	# PREREQS #
+	###########
 
 	CURRENT_PLATFORM = platform.system().upper()
 
@@ -86,6 +88,12 @@ if __name__ == '__main__':
 
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
+
+	#############
+	# LAUNCH UI #
+	#############
+
+	global ui
 
 	# did we get any command-line arguments?
 	if len(sys.argv) < 2:

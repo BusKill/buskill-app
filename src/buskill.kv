@@ -74,16 +74,28 @@
 				orientation: 'lr-tb'
 			
 				Button:
-					text: '[font=Roboto][size=24]    [/size][/font][font=mdicons][size=24]\ue923[/size][/font]     [font=RobotoMedium][size=16]Update[/size][/font]'
+					text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue923[/size][/font]     [font=RobotoMedium][size=16]Update[/size][/font]'
 					markup: True
 					halign: 'left'
 					valign: 'center'
 					text_size: self.size
 					size_hint: 1, None
-					height: 60
+					height: 50
 					background_normal: ''
 					background_color: root.color_menu_bg
 					on_release: root.upgrade1()
+
+				Button:
+					text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
+					markup: True
+					halign: 'left'
+					valign: 'center'
+					text_size: self.size
+					size_hint: 1, None
+					height: 50
+					background_normal: ''
+					background_color: root.color_menu_bg
+					on_release: root.about()
 
 				Widget:
 					id: separator

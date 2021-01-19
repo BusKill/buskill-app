@@ -14,7 +14,7 @@ This section documents how to build the BusKill App.
 Linux
 -----
 
-Our build script is executed on GitHub's shared runners, which use Ubuntu. For more information on the specific version of Ubuntu you should use for best results, see:
+Our build script is executed on GitHub's shared runners, which use Ubuntu. For better reproducibility, the build script itself is executed inside a wrapper script that installs and executes the build script in a debian docker container. For more information, see:
 
 #. The `list of Ubuntu versions in GitHub's documentation <https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources>`_
 #. Our `build logs <https://github.com/BusKill/buskill-app/actions?query=workflow%3Abuild>`_
@@ -25,7 +25,7 @@ Our build script is executed on GitHub's shared runners, which use Ubuntu. For m
 	sudo apt-get install git
 	git clone https://github.com/BusKill/buskill-app.git
 	cd buskill-app/
-	build/linux/buildAppImage.sh 
+	build/linux/debianWrapper.sh 
 
 .. note::
 

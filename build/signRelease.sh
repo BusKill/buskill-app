@@ -56,7 +56,7 @@ du -sh *
 sha256sum * > SHA256SUMS
 
 echo "${BUSKILL_PRERELEASE_PGP_KEY}" | gpg --import
-gpg --armor --clearsign SHA256SUMS
+gpg --armor --detach-sign SHA256SUMS
 
 #####################
 # UPLOAD NEW ASSETS #

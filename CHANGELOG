@@ -1,12 +1,24 @@
 buskill-app changelog
 
-[0.2.0] - 2020-09-17
-- Added (user-triggered) (auto-)update functionality
-- Special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
+[0.4.0] - 2020-10-16
+* added "About" button to navigation drawer
+
+[0.3.1] - 2020-10-08
+* patched various in-app update bugs
+
+[0.3.0] - 2020-10-05
++ Added buskill icon
+
+[0.2.1] - 2020-10-06
+* patched various in-app update bugs
+
+[0.2.0] - 2020-09-26
++ Added in-app update functionality
++ Special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
 
 [0.1.0] - 2020-07-31
-- Initial version with self-contained releases for Linux, Windows, and MacOS
-- Functionality is limited to arming and disarming from the CLI or GUI
-- The only trigger supported is lockscreen
-- The trigger is executed when *any* USB device is removed
-- Thank you to Michael Altfield, cyberkryption, Steven Johnson, and Jacob Neplokh
++ Initial version with self-contained releases for Linux, Windows, and MacOS
++ Functionality is limited to arming and disarming from the CLI or GUI
++ The only trigger supported is lockscreen
++ The trigger is executed when *any* USB device is removed
++ Thank you to Michael Altfield, cyberkryption, Steven Johnson, and Jacob Neplokh

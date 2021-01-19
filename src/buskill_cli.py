@@ -18,6 +18,8 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import packages.buskill
+from buskill_version import BUSKILL_VERSION
+
 import argparse, sys, platform
 
 import logging
@@ -42,7 +44,13 @@ def BusKillCLI():
 	# we use ArgmentParser to handle the user's command-line arguents
 	parser = argparse.ArgumentParser(
 	 prog = "buskill",
-	 description  = 'App for arming and configuring BusKill.'
+	 description  = 'App for arming and configuring BusKill. For help, see https://docs.buskill.in'
+	)
+
+	parser.add_argument(
+	 "--version",
+	 help="print version and exit.",
+	 action="store_true"
 	)
 
 	parser.add_argument(
@@ -69,6 +77,13 @@ def BusKillCLI():
 	#############
 	# MAIN BODY #
 	#############
+
+	if args.version:
+		print( "BusKill " +str(BUSKILL_VERSION['VERSION']) )
+		print( "Build from branch " +str(BUSKILL_VERSION['GITHUB_REF']) )
+		print( "Build from commit " +str(BUSKILL_VERSION['GITHUB_SHA']) )
+		print( "Commit timestamp " +str(BUSKILL_VERSION['SOURCE_DATE_EPOCH']) )
+		sys.exit(0)
 
 	bk = packages.buskill.BusKill()
 
