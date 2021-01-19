@@ -9,16 +9,16 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-09-17
-# Version: 0.4
+# Updated: 2020-10-04
+# Version: 0.5
 ################################################################################
 
 ############
 # SETTINGS #
 ############
 
-PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
-PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
@@ -48,6 +48,7 @@ export HOMEBREW_CACHE="`pwd`/build/deps/"
 # print some info for debugging failed builds
 uname -a
 sw_vers
+find /usr/local/Cellar -maxdepth 1
 which python2
 python2 --version
 which python3
@@ -80,7 +81,7 @@ if [ -z ${GITHUB_REF} ]; then
 	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
 fi
 
-VERSION=`git show-ref | head -n1 | awk '{print $2}' | awk -F '/' '{print $NF}'`
+VERSION=`git symbolic-ref HEAD | head -n1 | awk -F '/' '{print $NF}'`
 if [[ "${VERSION}" = "dev" ]]; then
 	VERSION="${SOURCE_DATE_EPOCH}"
 fi
@@ -196,6 +197,26 @@ EOF
 mkdir pyinstaller
 pushd pyinstaller
 
+# ICONS
+cp ../src/images/buskill-icon-150.png buskill-icon-150.png
+sips -i buskill-icon-150.png
+DeRez -only icns buskill-icon-150.png > icns.rsrc
+
+# icon set https://stackoverflow.com/a/20703594
+mkdir buskill-icon.iconset
+sips -z 16 16     buskill-icon-150.png --out buskill-icon.iconset/icon_16x16.png
+sips -z 32 32     buskill-icon-150.png --out buskill-icon.iconset/icon_16x16@2x.png
+sips -z 32 32     buskill-icon-150.png --out buskill-icon.iconset/icon_32x32.png
+sips -z 64 64     buskill-icon-150.png --out buskill-icon.iconset/icon_32x32@2x.png
+sips -z 128 128   buskill-icon-150.png --out buskill-icon.iconset/icon_128x128.png
+#sips -z 256 256   buskill-icon-150.png --out buskill-icon.iconset/icon_128x128@2x.png
+#sips -z 256 256   buskill-icon-150.png --out buskill-icon.iconset/icon_256x256.png
+#sips -z 512 512   buskill-icon-150.png --out buskill-icon.iconset/icon_256x256@2x.png
+#sips -z 512 512   buskill-icon-150.png --out buskill-icon.iconset/icon_512x512.png
+#cp buskill-icon-150.png buskill-icon.iconset/icon_512x512@2x.png
+iconutil -c icns buskill-icon.iconset
+rm -R buskill-icon.iconset
+
 cat > ${APP_NAME}.spec <<EOF
 # -*- mode: python ; coding: utf-8 -*-
 
@@ -205,7 +226,14 @@ block_cipher = None
 a = Analysis(['../src/main.py'],
              pathex=['./'],
              binaries=[],
-             datas=[ ( '../KEYS', '.' ), ('/usr/local/bin/gpg', '.') ],
+             datas=[
+              ( '../KEYS', '.' ),
+              # needed for the taskbar icon when the app is running (kivy)
+              ('../src/images/buskill-icon-150.png', '.'),
+              # needed for the icon of the .app when viewed in Finder
+              ('buskill-icon.icns', '.'),
+              ('/usr/local/bin/gpg', '.')
+             ],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
              runtime_hooks=[],
@@ -236,9 +264,10 @@ coll = COLLECT(exe, Tree('../src/'),
                name='${APP_NAME}')
 app = BUNDLE(coll,
              name='${APP_DIR_NAME}',
-             icon=None,
+             icon='buskill-icon.icns',
              bundle_identifier=None)
 EOF
+cat ${APP_NAME}.spec
 
 ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
@@ -262,6 +291,9 @@ cp "../../LICENSE" "${docsDir}/"
 cp "../../CHANGELOG" "${docsDir}/"
 cp "../../KEYS" "${docsDir}/"
 
+# icon
+cp "buskill-icon.icns" "${APP_DIR_NAME}/.VolumeIcon.icns"
+
 # change the timestamps of all the files in the appdir for reproducible builds
 find ${APP_DIR_NAME} -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
 
@@ -276,6 +308,12 @@ ls -lah "${docsDir}"
 
 hdiutil create ./${DMG_FILENAME} -srcfolder ${APP_DIR_NAME} -ov
 touch -h -d "@${SOURCE_DATE_EPOCH}" "${DMG_FILENAME}"
+
+# TODO: fix this so the dmg itself has the buskill icon
+# add the dmg icon
+Rez -append ../icns.rsrc -o ./${DMG_FILENAME}
+SetFile -c icnC "${DMG_FILENAME}/.VolumeIcon.icns"
+SetFile -a C ./${DMG_FILENAME}
 
 popd
 

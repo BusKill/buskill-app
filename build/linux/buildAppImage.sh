@@ -11,26 +11,33 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-08-18
-# Version: 0.7
+# Updated: 2020-10-03
+# Version: 1.0
 ################################################################################
 
 ################################################################################
 #                                  SETTINGS                                    #
 ################################################################################
 
-APP_NAME='buskill'
-
-# https://reproducible-builds.org/docs/source-date-epoch/
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
-
+APP_NAME='buskill' 
 # prevent apt from asking for things we can't respond to
 export DEBIAN_FRONTEND=noninteractive
 
-# we use firejail to prevent insecure package managers (like pip) from
-# having internet access; instead we install everything locally
-FIREJAIL='/usr/bin/firejail --noprofile --net=none'
+SUDO='/usr/bin/sudo'
 PYTHON='/tmp/kivy_appdir/AppRun'
+
+# this is the command we use to run commands as the _apt user so they have
+# internet (only use this for apps that are trustworthy. eg: not pip)
+SU='/bin/su _apt -s /bin/bash'
+
+# check to see if we're inside a docker container or not
+# https://stackoverflow.com/a/51688023/1174102
+INODE_NUM=`ls -ali / | sed '2!d' |awk {'print $1'}`
+if [ $INODE_NUM -gt 3 ]; then
+	# a high inode means we're in docker, and in docker we don't use sudo
+	echo "INFO: Detected execution inside docker container"
+	SUDO=''
+fi
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -40,6 +47,11 @@ print_debugging_info () {
 	date
 	uname -a
 	cat /etc/issue
+	which gpg
+	gpg --version
+	which gpg2
+	gpg2 --version
+	sha256sum /usr/bin/gpg
 	which python
 	python --version
 	python -m pip list
@@ -57,24 +69,14 @@ print_debugging_info () {
 ################################################################################
 
 #################
-# FIX CONSTANTS #
+# SANITY CHECKS #
 #################
 
-# fill-in some constants if this script is not being run on GitHub
-if [ -z ${GITHUB_SHA} ]; then
-	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+# this script isn't robust enough
+if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
+	echo "ERROR: This script should only be executed from the root of the github dir."
+	exit 1
 fi
-
-if [ -z ${GITHUB_REF} ]; then
-	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
-fi
-
-VERSION=`git show-ref | head -n1 | awk '{print $2}' | awk -F '/' '{print $NF}'`
-if [[ "${VERSION}" = "dev" ]]; then
-	VERSION="${SOURCE_DATE_EPOCH}"
-fi
-
-ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
 	
 ###############
 # OUTPUT INFO #
@@ -87,16 +89,88 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-sudo apt-get update
-sudo apt-get -y install python3-pip python3-setuptools python3-virtualenv firejail rsync curl
-sudo firecfg --clean
+${SUDO} rm -rf /var/lib/apt/lists/*
+${SUDO} apt-get clean
+${SUDO} apt-get update -o Acquire::CompressionTypes::Order::=gz || exit 1
+#${SUDO} apt-get update || exit 1
+${SUDO} apt-get -y install iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg
+
+#################
+# FIX CONSTANTS #
+#################
+
+# https://reproducible-builds.org/docs/source-date-epoch/
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+
+# fill-in some constants if this script is not being run on GitHub
+if [ -z ${GITHUB_SHA} ]; then
+	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`
+fi
+
+if [ -z ${GITHUB_REF} ]; then
+	GITHUB_REF=`git show-ref | head -n1 | awk '{print $2}'`
+fi
+
+VERSION=`git symbolic-ref HEAD | head -n1 | awk -F '/' '{print $NF}'`
+if [[ "${VERSION}" = "dev" ]]; then
+	VERSION="${SOURCE_DATE_EPOCH}"
+fi
+
+ARCHIVE_DIR="buskill-lin-${VERSION}-x86_64"
+
+##################
+# SETUP IPTABLES #
+##################
+
+# We setup iptables so that only the apt user (and therefore the apt command)
+# can access the internet. We don't want insecure tools like `pip` to download
+# unsafe code from the internet.
+
+${SUDO} iptables-save > /tmp/iptables-save.`date "+%Y%m%d_%H%M%S"`
+${SUDO} iptables -A INPUT -i lo -j ACCEPT
+${SUDO} iptables -A INPUT -s 127.0.0.1/32 -j DROP
+${SUDO} iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+${SUDO} iptables -A INPUT -j DROP
+${SUDO} iptables -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -j ACCEPT
+${SUDO} iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
+
+# TODO: simplify these tests
+${SUDO} iptables -A OUTPUT -m owner --uid-owner provisioner -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner runneradmin -j ACCEPT
+${SUDO} iptables -A OUTPUT -m owner --uid-owner runner -j ACCEPT
+${SUDO} iptables -A OUTPUT -d 10.1.0.0/16 -j ACCEPT
+
+${SUDO} iptables -A OUTPUT -j DROP
+
+${SUDO} ip6tables-save > /tmp/ip6tables-save.`date "+%Y%m%d_%H%M%S"`
+${SUDO} ip6tables -A INPUT -i lo -j ACCEPT
+${SUDO} ip6tables -A INPUT -s ::1/128 -j DROP
+${SUDO} ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+${SUDO} ip6tables -A INPUT -j DROP
+${SUDO} ip6tables -A OUTPUT -s ::1/128 -d ::1/128 -j ACCEPT
+${SUDO} ip6tables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+${SUDO} ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
+${SUDO} ip6tables -A OUTPUT -j DROP
+
+# attempt to access the internet as root. If it works, exit 1
+curl 1.1.1.1
+if [ $? -eq 0 ]; then
+	echo "ERROR: iptables isn't blocking internet access to unsafe tools. You may need to run this as root (and you should do it inside a VM)"
+	exit 1
+fi
 
 ##################
 # PREPARE APPDIR #
 ##################
 
-# first cleanup old appdir, if needed
+# first cleanup old tmp files/dirs, if needed
+rm -f /tmp/pyhon.AppImage
+rm -f /tmp/appimagetool.AppImage
+rm -f /tmp/squashfs4.4.tar.gz
 rm -rf /tmp/kivy_appdir
+rm -rf /tmp/appimagetool_appdir
+rm -rf /tmp/squashfs4.4
 
 # We use this python-appimage release as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
@@ -105,16 +179,23 @@ chmod +x /tmp/python.AppImage
 pushd /tmp
 /tmp/python.AppImage --appimage-extract
 popd
-mv /tmp/squashfs-root /tmp/kivy_appdir
+rm -rf /tmp/kivy_appdir
+mv /tmp/squashfs-root/* /tmp/kivy_appdir
+mv /tmp/squashfs-root/.* /tmp/kivy_appdir
+
+# for debugging reproducible builds
+sha256sum /tmp/python.AppImage
+ls -lah /tmp/kivy_appdir
+ls -lah /tmp/kivy_appdir/usr/bin/
 
 # INSTALL LOCAL PIP PACKAGES
 
 # install our pip depends from the files in the repo since pip doesn't provide
 # decent authentication and integrity checks on what it downloads from PyPI
 #  * https://security.stackexchange.com/a/234098/213165
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
@@ -124,11 +205,12 @@ ${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir bu
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
+chown _apt:root "${tmpDir}"
 pushd "${tmpDir}"
-${PYTHON} -m pip download python-gnupg
+${SU} -c "${PYTHON} -m pip download python-gnupg"
 filename="`ls -1 | head -n1`"
-signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-wget "${signature_url}"
+signature_url=`${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+${SU} -c "wget \"${signature_url}\""
 
 mkdir gnupg
 chmod 0700 gnupg
@@ -143,7 +225,7 @@ if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
 fi
-${FIREJAIL} ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
 rm -rf "${tmpDir}"
 
 # add our code to the AppDir
@@ -154,6 +236,15 @@ cp KEYS /tmp/kivy_appdir/opt/src/
 
 # and our gpg binary
 cp /usr/bin/gpg /tmp/kivy_appdir/opt/src/
+
+# replace kivy icons with our icons since kivy has a bug with icons in linux
+#  * https://github.com/kivy/kivy/issues/2202
+cp src/images/buskill-icon-128.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-128.png
+cp src/images/buskill-icon-64.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-64.png
+cp src/images/buskill-icon-48.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-48.png
+cp src/images/buskill-icon-32.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-32.png
+cp src/images/buskill-icon-24.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-25.png
+cp src/images/buskill-icon-16.png /tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-16.png
 
 # output information about this build so the code can use it later in logs
 cat > /tmp/kivy_appdir/opt/src/buskill_version.py <<EOF
@@ -241,17 +332,6 @@ for item in $(echo "${unnecessary}"); do
 
 done
 
-###############
-# ADD MODULES #
-###############
-
-# add symlinks from the appdir's site-packages dir to our modules in src/
-mkdir -p "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/"
-gardenFlowers="navigationdrawer progressspinner"
-for flower in ${gardenFlowers}; do
-	ln -s "../../../../../src/garden/${flower}" "/tmp/kivy_appdir/opt/python3.7/lib/python3.7/site-packages/garden/${flower}"
-done
-
 ########################
 # PREPARE APPIMAGETOOL #
 ########################
@@ -269,7 +349,7 @@ pushd /tmp
 #  * https://github.com/BusKill/buskill-app/issues/3
 tar -xzvf squashfs4.4.tar.gz
 pushd squashfs4.4/squashfs-tools
-sudo apt-get -y install zlib1g-dev make
+${SUDO} apt-get -y install zlib1g-dev make
 make
 popd
 
@@ -296,12 +376,19 @@ popd # leave /tmp
 # BUILD APPIMAGE #
 ##################
 
+# attempting to fix permission mixmatch for reproducible builds
+${SUDO} chmod -R 0644 /tmp/kivy_appdir
+${SUDO} find /tmp/kivy_appdir -type d -exec chmod 0755 '{}' \;
+${SUDO} chmod 0755 /tmp/kivy_appdir/AppRun
+${SUDO} chmod 0755 /tmp/kivy_appdir/opt/python*/bin/python*
+
 # create the dist dir for our result to be uploaded as an artifact
 # note tha gitlab will only accept artifacts that are in the build dir (cwd)
 mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
 ########################
 # ADD ADDITIONAL FILES #

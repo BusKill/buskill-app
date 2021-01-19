@@ -14,7 +14,6 @@ For more info, see:
 
   A wise user that's adding our keys to their keyring for the first-time would cross-validate the PGP fingerprint listed on this website against other sources, such as:
    * The `official BusKill project website <https://www.buskill.in/>`_
-   * The `official BusKill keybase account <https://keybase.io/buskill/>`_
    * The `official BusKill mastodon account <https://mastodon.social/@buskillin>`_
    * The `KEYS file <keys_file_>`_ at the root of our GitHub repo
    * A popular `gpg keyserver <https://keys.openpgp.org/search?q=releases%40buskill.in>`_
