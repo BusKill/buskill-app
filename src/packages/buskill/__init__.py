@@ -282,6 +282,7 @@ class BusKill:
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
 			self.OS_NAME_SHORT = 'mac'
+
 			self.KERNEL_VERSION = str(platform.release()).split('.')[0]
 			self.ARM_FUNCTION = self.armNix
 			self.TRIGGER_FUNCTION = self.triggerMac
