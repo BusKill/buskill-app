@@ -195,7 +195,6 @@ ls -lah /tmp/kivy_appdir/usr/bin/
 #  * https://security.stackexchange.com/a/234098/213165
 ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
 ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-manylinux2010_x86_64.whl
-${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file:///`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
 # (this can only be done for packages that are cryptographically signed
@@ -216,6 +215,33 @@ mkdir gnupg
 chmod 0700 gnupg
 popd
 gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+rm -rf "${tmpDir}"
+
+# libusb1
+#  * https://github.com/vpelletier/python-libusb1/issues/54
+#  * https://github.com/BusKill/buskill-app/issues/17
+tmpDir="`mktemp -d`" || exit 1
+chown _apt:root "${tmpDir}"
+pushd "${tmpDir}"
+${SU} -c "${PYTHON} -m pip download libusb1"
+filename="`ls -1 | head -n1`"
+signature_url=`${SU} -c "curl -s https://pypi.org/simple/libusb1/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+${SU} -c "wget \"${signature_url}\""
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/libusb1.asc"
 gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
 
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
