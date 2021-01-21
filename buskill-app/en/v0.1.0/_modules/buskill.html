@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>buskill &mdash; BusKill version documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_dev/index.html">Software Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>buskill</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for buskill</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3.7</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">::</span>
+
+<span class="sd">  File:    buskill.py</span>
+<span class="sd">  Authors: Michael Altfield &lt;michael@buskill.in&gt;</span>
+<span class="sd">  Created: 2020-06-23</span>
+<span class="sd">  Updated: 2020-06-28</span>
+<span class="sd">  Version: 0.1</span>
+
+<span class="sd">This is the heart of the buskill app, shared by both the cli and gui</span>
+
+<span class="sd">For more info, see: https://buskill.in/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                   IMPORTS                                    #</span>
+<span class="c1">################################################################################</span>
+
+<span class="kn">import</span> <span class="nn">platform</span><span class="o">,</span> <span class="nn">multiprocessing</span><span class="o">,</span> <span class="nn">subprocess</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span> <span class="vm">__name__</span> <span class="p">)</span>
+
+<span class="c1"># platform-specific modules</span>
+<span class="n">CURRENT_PLATFORM</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;LINUX&#39;</span> <span class="p">):</span>
+	<span class="kn">import</span> <span class="nn">usb1</span>
+
+<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;WIN&#39;</span> <span class="p">):</span>
+	<span class="kn">import</span> <span class="nn">win32api</span><span class="o">,</span> <span class="nn">win32con</span><span class="o">,</span> <span class="nn">win32gui</span>
+	<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;DARWIN&#39;</span> <span class="p">):</span>
+	<span class="kn">import</span> <span class="nn">usb1</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                  SETTINGS                                    #</span>
+<span class="c1">################################################################################</span>
+
+<span class="c1">#####################</span>
+<span class="c1"># WINDOWS CONSTANTS #</span>
+<span class="c1">#####################</span>
+
+<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;WIN&#39;</span> <span class="p">):</span>
+
+	<span class="c1"># Device change events (WM_DEVICECHANGE wParam)</span>
+	<span class="n">DBT_DEVICEARRIVAL</span> <span class="o">=</span> <span class="mh">0x8000</span>
+	<span class="n">DBT_DEVICEQUERYREMOVE</span> <span class="o">=</span> <span class="mh">0x8001</span>
+	<span class="n">DBT_DEVICEQUERYREMOVEFAILED</span> <span class="o">=</span> <span class="mh">0x8002</span>
+	<span class="n">DBT_DEVICEMOVEPENDING</span> <span class="o">=</span> <span class="mh">0x8003</span>
+	<span class="n">DBT_DEVICEREMOVECOMPLETE</span> <span class="o">=</span> <span class="mh">0x8004</span>
+	<span class="n">DBT_DEVICETYPESSPECIFIC</span> <span class="o">=</span> <span class="mh">0x8005</span>
+	<span class="n">DBT_CONFIGCHANGED</span> <span class="o">=</span> <span class="mh">0x0018</span>
+
+	<span class="c1"># type of device in DEV_BROADCAST_HDR</span>
+	<span class="n">DBT_DEVTYP_OEM</span> <span class="o">=</span> <span class="mh">0x00000000</span>
+	<span class="n">DBT_DEVTYP_DEVNODE</span> <span class="o">=</span> <span class="mh">0x00000001</span>
+	<span class="n">DBT_DEVTYP_VOLUME</span> <span class="o">=</span> <span class="mh">0x00000002</span>
+	<span class="n">DBT_DEVTYPE_PORT</span> <span class="o">=</span> <span class="mh">0x00000003</span>
+	<span class="n">DBT_DEVTYPE_NET</span> <span class="o">=</span> <span class="mh">0x00000004</span>
+
+	<span class="c1"># media types in DBT_DEVTYP_VOLUME</span>
+	<span class="n">DBTF_MEDIA</span> <span class="o">=</span> <span class="mh">0x0001</span>
+	<span class="n">DBTF_NET</span> <span class="o">=</span> <span class="mh">0x0002</span>
+
+	<span class="n">WORD</span> <span class="o">=</span> <span class="n">c_ushort</span>
+	<span class="n">DWORD</span> <span class="o">=</span> <span class="n">c_ulong</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                  FUNCTIONS                                   #</span>
+<span class="c1">################################################################################</span>
+
+<div class="viewcode-block" id="init"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.init">[docs]</a><span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+
+	<span class="k">global</span> <span class="n">buskill_is_armed</span>
+	<span class="n">buskill_is_armed</span> <span class="o">=</span> <span class="kc">False</span>
+
+	<span class="k">global</span> <span class="n">usb_handler</span>
+
+	<span class="k">global</span> <span class="n">ERR_PLATFORM_NOT_SUPPORTED</span>
+	<span class="n">ERR_PLATFORM_NOT_SUPPORTED</span> <span class="o">=</span> <span class="s1">&#39;ERROR: Your platform (&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">())</span><span class="o">+</span> <span class="s1">&#39;) is not supported. If you believe this is an error, please file a bug report:</span><span class="se">\n\n</span><span class="s1">https://github.com/BusKill/buskill-app/issues&#39;</span>
+
+	<span class="k">global</span> <span class="n">CURRENT_PLATFORM</span>
+	<span class="n">CURRENT_PLATFORM</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+	<span class="c1"># platform-specific setup</span>
+	<span class="k">global</span> <span class="n">arm_fun</span>
+	<span class="k">global</span> <span class="n">disarm_fun</span>
+	<span class="k">global</span> <span class="n">trigger_fun</span>
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;LINUX&#39;</span> <span class="p">):</span>
+		<span class="n">arm_fun</span> <span class="o">=</span> <span class="n">armNix</span>
+		<span class="n">trigger_fun</span> <span class="o">=</span> <span class="n">triggerLin</span>
+
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;WIN&#39;</span> <span class="p">):</span>
+		<span class="n">arm_fun</span> <span class="o">=</span> <span class="n">armWin</span>
+		<span class="n">trigger_fun</span> <span class="o">=</span> <span class="n">triggerWin</span>
+
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;DARWIN&#39;</span> <span class="p">):</span>
+		<span class="n">arm_fun</span> <span class="o">=</span> <span class="n">armNix</span>
+		<span class="n">trigger_fun</span> <span class="o">=</span> <span class="n">triggerMac</span></div>
+
+<span class="c1"># this is called when the GUI is closed </span>
+<div class="viewcode-block" id="close"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.close">[docs]</a><span class="k">def</span> <span class="nf">close</span><span class="p">():</span>
+
+	<span class="c1"># if we don&#39;t kill this child process on kill, the UI will freeze</span>
+	<span class="n">usb_handler</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+	<span class="n">usb_handler</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="isPlatformSupported"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.isPlatformSupported">[docs]</a><span class="k">def</span> <span class="nf">isPlatformSupported</span><span class="p">():</span>
+
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;LINUX&#39;</span> <span class="p">)</span> \
+	 <span class="ow">or</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;WIN&#39;</span> <span class="p">)</span> \
+	 <span class="ow">or</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;DARWIN&#39;</span> <span class="p">):</span>
+		<span class="k">return</span> <span class="kc">True</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="isArmed"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.isArmed">[docs]</a><span class="k">def</span> <span class="nf">isArmed</span><span class="p">():</span>
+	<span class="k">return</span> <span class="n">buskill_is_armed</span></div>
+
+<div class="viewcode-block" id="toggle"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.toggle">[docs]</a><span class="k">def</span> <span class="nf">toggle</span><span class="p">():</span>
+
+	<span class="k">global</span> <span class="n">buskill_is_armed</span>
+	<span class="k">global</span> <span class="n">usb_handler</span>
+
+	<span class="k">if</span> <span class="n">isArmed</span><span class="p">():</span>
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: attempting to disarm BusKill&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;INFO: disarming BusKill (ignore the traceback below caused by killing the child process abruptly)&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+		<span class="c1"># disarm just means to terminate the child process in which the arm</span>
+		<span class="c1"># function was spawned. this works on all platforms.</span>
+		<span class="n">usb_handler</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+		<span class="n">usb_handler</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+		<span class="n">buskill_is_armed</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;INFO: BusKill is disarmed.&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: attempting to arm BusKill&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+		<span class="c1"># launch an asynchronous child process that&#39;ll loop and listen for</span>
+		<span class="c1"># usb events</span>
+		<span class="n">usb_handler</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
+		 <span class="n">target</span> <span class="o">=</span> <span class="n">arm_fun</span>
+		<span class="p">)</span>
+		<span class="n">usb_handler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+		<span class="n">buskill_is_armed</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<span class="c1"># this is a callback function that is registered to be called when a usb</span>
+<span class="c1"># hotplug event occurs using libusb (linux &amp; macos)</span>
+<div class="viewcode-block" id="hotplugCallbackNix"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.hotplugCallbackNix">[docs]</a><span class="k">def</span> <span class="nf">hotplugCallbackNix</span><span class="p">(</span> <span class="o">*</span><span class="n">argv</span> <span class="p">):</span>
+
+	<span class="c1"># the global scope variables appear to be undefined when this function is</span>
+	<span class="c1"># called by libusb for some reason, so we have to add this platform logic</span>
+	<span class="c1"># directly in this function too</span>
+	<span class="n">CURRENT_PLATFORM</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;LINUX&#39;</span> <span class="p">):</span>
+		<span class="n">trigger_fun</span> <span class="o">=</span> <span class="n">triggerLin</span>
+
+	<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;DARWIN&#39;</span> <span class="p">):</span>
+		<span class="n">trigger_fun</span> <span class="o">=</span> <span class="n">triggerMac</span>
+
+	<span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span> <span class="o">=</span> <span class="n">argv</span>
+
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: called hotplugCallbackNix()&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;context:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;device:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;event:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;usb1.HOTPLUG_EVENT_DEVICE_LEFT:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">usb1</span><span class="o">.</span><span class="n">HOTPLUG_EVENT_DEVICE_LEFT</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="c1"># is this from a usb device being inserted or removed? </span>
+	<span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="n">usb1</span><span class="o">.</span><span class="n">HOTPLUG_EVENT_DEVICE_LEFT</span><span class="p">:</span>
+		<span class="c1"># this is a usb removal event</span>
+
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;calling &quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">trigger_fun</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+		<span class="n">trigger_fun</span><span class="p">()</span></div>
+
+<span class="c1">############################</span>
+<span class="c1"># WINDOWS HELPER FUNCTIONS #</span>
+<span class="c1">############################</span>
+
+<span class="c1"># The windows WM_DEVICECHANGE code below was adapted from the following sources:</span>
+<span class="c1"># * http://timgolden.me.uk/python/win32_how_do_i/detect-device-insertion.html</span>
+<span class="c1"># * https://stackoverflow.com/questions/38689090/detect-media-insertion-on-windows-in-python</span>
+
+<span class="k">if</span> <span class="n">CURRENT_PLATFORM</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span> <span class="s1">&#39;WIN&#39;</span> <span class="p">):</span>
+
+	<span class="k">class</span> <span class="nc">DEV_BROADCAST_HDR</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+		<span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+		 <span class="p">(</span><span class="s2">&quot;dbch_size&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbch_devicetype&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbch_reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">)</span>
+		<span class="p">]</span>
+	
+	<span class="k">class</span> <span class="nc">DEV_BROADCAST_VOLUME</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+		<span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+		 <span class="p">(</span><span class="s2">&quot;dbcv_size&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbcv_devicetype&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbcv_reserved&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbcv_unitmask&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+		 <span class="p">(</span><span class="s2">&quot;dbcv_flags&quot;</span><span class="p">,</span> <span class="n">WORD</span><span class="p">)</span>
+		<span class="p">]</span>
+	
+	<span class="k">def</span> <span class="nf">drive_from_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+		<span class="n">n_drive</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">n_drive</span><span class="p">)):</span>
+				<span class="k">return</span> <span class="n">n_drive</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">n_drive</span> <span class="o">+=</span> <span class="mi">1</span>
+	
+	<span class="k">class</span> <span class="nc">Notification</span><span class="p">:</span>
+		<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+			<span class="n">message_map</span> <span class="o">=</span> <span class="p">{</span>
+			 <span class="n">win32con</span><span class="o">.</span><span class="n">WM_DEVICECHANGE</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hotplugCallbackWin</span>
+			<span class="p">}</span>
+	
+			<span class="n">wc</span> <span class="o">=</span> <span class="n">win32gui</span><span class="o">.</span><span class="n">WNDCLASS</span><span class="p">()</span>
+			<span class="n">hinst</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">hInstance</span> <span class="o">=</span> <span class="n">win32api</span><span class="o">.</span><span class="n">GetModuleHandle</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+			<span class="n">wc</span><span class="o">.</span><span class="n">lpszClassName</span> <span class="o">=</span> <span class="s2">&quot;DeviceChangeDemo&quot;</span>
+			<span class="n">wc</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="n">win32con</span><span class="o">.</span><span class="n">CS_VREDRAW</span> <span class="o">|</span> <span class="n">win32con</span><span class="o">.</span><span class="n">CS_HREDRAW</span>
+			<span class="n">wc</span><span class="o">.</span><span class="n">hCursor</span> <span class="o">=</span> <span class="n">win32gui</span><span class="o">.</span><span class="n">LoadCursor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">win32con</span><span class="o">.</span><span class="n">IDC_ARROW</span><span class="p">)</span>
+			<span class="n">wc</span><span class="o">.</span><span class="n">hbrBackground</span> <span class="o">=</span> <span class="n">win32con</span><span class="o">.</span><span class="n">COLOR_WINDOW</span>
+			<span class="n">wc</span><span class="o">.</span><span class="n">lpfnWndProc</span> <span class="o">=</span> <span class="n">message_map</span>
+			<span class="n">classAtom</span> <span class="o">=</span> <span class="n">win32gui</span><span class="o">.</span><span class="n">RegisterClass</span><span class="p">(</span><span class="n">wc</span><span class="p">)</span>
+			<span class="n">style</span> <span class="o">=</span> <span class="n">win32con</span><span class="o">.</span><span class="n">WS_OVERLAPPED</span> <span class="o">|</span> <span class="n">win32con</span><span class="o">.</span><span class="n">WS_SYSMENU</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">hwnd</span> <span class="o">=</span> <span class="n">win32gui</span><span class="o">.</span><span class="n">CreateWindow</span><span class="p">(</span>
+			 <span class="n">classAtom</span><span class="p">,</span>
+			 <span class="s2">&quot;Device Change Demo&quot;</span><span class="p">,</span>
+			 <span class="n">style</span><span class="p">,</span>
+			 <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+			 <span class="n">win32con</span><span class="o">.</span><span class="n">CW_USEDEFAULT</span><span class="p">,</span> <span class="n">win32con</span><span class="o">.</span><span class="n">CW_USEDEFAULT</span><span class="p">,</span>
+			 <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+			 <span class="n">hinst</span><span class="p">,</span> <span class="kc">None</span>
+			<span class="p">)</span>
+	
+		<span class="c1"># this is a callback function that is registered to be called when a usb</span>
+		<span class="c1"># hotplug event occurs in windows</span>
+		<span class="c1"># WM_DEVICECHANGE:</span>
+		<span class="c1">#  wParam - type of change: arrival, removal etc.</span>
+		<span class="c1">#  lParam - what&#39;s changed?</span>
+		<span class="c1">#    if it&#39;s a volume then...</span>
+		<span class="c1">#  lParam - what&#39;s changed more exactly</span>
+		<span class="k">def</span> <span class="nf">hotplugCallbackWin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hwnd</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">wparam</span><span class="p">,</span> <span class="n">lparam</span><span class="p">):</span>
+	
+			<span class="n">dev_broadcast_hdr</span> <span class="o">=</span> <span class="n">DEV_BROADCAST_HDR</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">lparam</span><span class="p">)</span>
+	
+			<span class="k">if</span> <span class="n">wparam</span> <span class="o">==</span> <span class="n">DBT_DEVICEREMOVECOMPLETE</span><span class="p">:</span>
+	
+				<span class="n">triggerWin</span><span class="p">()</span>
+	
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;hwnd:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">hwnd</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;message:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+				<span class="n">msg</span><span class="o">=</span> <span class="s2">&quot;wparam:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">wparam</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;lparam:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lparam</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+	
+				<span class="n">dev_broadcast_volume</span> <span class="o">=</span> <span class="n">DEV_BROADCAST_VOLUME</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">lparam</span><span class="p">)</span>
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;dev_broadcast_volume:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dev_broadcast_volume</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+				<span class="n">drive_letter</span> <span class="o">=</span> <span class="n">drive_from_mask</span><span class="p">(</span><span class="n">dev_broadcast_volume</span><span class="o">.</span><span class="n">dbcv_unitmask</span><span class="p">)</span>
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;drive_letter:|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">drive_letter</span><span class="p">)</span><span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+				<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;ch( ord(&#39;A&#39;) + drive_letter):|&quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">drive_letter</span><span class="p">)</span> <span class="p">)</span><span class="o">+</span> <span class="s1">&#39;|&#39;</span>
+				<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+	
+			<span class="k">return</span> <span class="mi">1</span>
+
+<span class="c1">####################</span>
+<span class="c1"># ARMING FUNCTIONS #</span>
+<span class="c1">####################</span>
+
+<span class="c1"># this works for both linux and mac</span>
+<div class="viewcode-block" id="armNix"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.armNix">[docs]</a><span class="k">def</span> <span class="nf">armNix</span><span class="p">():</span>
+
+	<span class="k">with</span> <span class="n">usb1</span><span class="o">.</span><span class="n">USBContext</span><span class="p">()</span> <span class="k">as</span> <span class="n">context</span><span class="p">:</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">context</span><span class="o">.</span><span class="n">hasCapability</span><span class="p">(</span><span class="n">usb1</span><span class="o">.</span><span class="n">CAP_HAS_HOTPLUG</span><span class="p">):</span>
+			<span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;ERROR: Hotplug support is missing&#39;</span>
+			<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+			<span class="k">return</span> <span class="n">msg</span>
+
+		<span class="n">opaque</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">hotplugRegisterCallback</span><span class="p">(</span> <span class="n">hotplugCallbackNix</span> <span class="p">)</span>
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;INFO: BusKill is armed. Listening for removal event.</span><span class="se">\n</span><span class="s2">&quot;</span>
+		<span class="n">msg</span><span class="o">+=</span> <span class="s2">&quot;INFO: To disarm the CLI, exit with ^C or close this terminal&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+				<span class="c1"># this call is blocking (with a default timeout of 60 seconds)</span>
+				<span class="c1"># afaik there&#39;s no way to tell USBContext.handleEvents() to exit</span>
+				<span class="c1"># safely, so instead we just make the whole call to this arming</span>
+				<span class="c1"># function in a new child process and kill it on disarm with</span>
+				<span class="c1"># terminate() this approach isn&#39;t very nice and it dumps a</span>
+				<span class="c1"># traceback to output, but it *does* immediately disarm without</span>
+				<span class="c1"># having wait for the timeout..</span>
+				<span class="n">context</span><span class="o">.</span><span class="n">handleEvents</span><span class="p">()</span>
+
+		<span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">SystemExit</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Exiting&#39;</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="armWin"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.armWin">[docs]</a><span class="k">def</span> <span class="nf">armWin</span><span class="p">():</span>
+
+	<span class="n">w</span> <span class="o">=</span> <span class="n">Notification</span><span class="p">()</span>
+	<span class="n">win32gui</span><span class="o">.</span><span class="n">PumpMessages</span><span class="p">()</span></div>
+<span class="c1">#####################</span>
+<span class="c1"># TRIGGER FUNCTIONS #</span>
+<span class="c1">#####################</span>
+
+<span class="c1"># TODO: add other triggers besides lockscreens</span>
+
+<div class="viewcode-block" id="triggerLin"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.triggerLin">[docs]</a><span class="k">def</span> <span class="nf">triggerLin</span><span class="p">():</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: BusKill lockscreen trigger executing now&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;xdg-screensaver&#39;</span><span class="p">,</span> <span class="s1">&#39;lock&#39;</span><span class="p">]</span> <span class="p">)</span>
+		<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;xscreensaver&#39;</span><span class="p">,</span> <span class="s1">&#39;-lock&#39;</span><span class="p">]</span> <span class="p">)</span>
+	<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="k">pass</span></div>
+
+<div class="viewcode-block" id="triggerWin"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.triggerWin">[docs]</a><span class="k">def</span> <span class="nf">triggerWin</span><span class="p">():</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: BusKill lockscreen trigger executing now&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="n">windll</span><span class="o">.</span><span class="n">user32</span><span class="o">.</span><span class="n">LockWorkStation</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="triggerMac"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill.triggerMac">[docs]</a><span class="k">def</span> <span class="nf">triggerMac</span><span class="p">():</span>
+	<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: BusKill lockscreen trigger executing now&quot;</span>
+	<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;pmset&#39;</span><span class="p">,</span> <span class="s1">&#39;displaysleepnow&#39;</span><span class="p">]</span> <span class="p">)</span>
+	<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession&#39;</span><span class="p">,</span> <span class="s1">&#39;-suspend&#39;</span><span class="p">]</span> <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Michael Altfield and the BusKill team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: v0.1.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/libusb1-depend-update/">libusb1-depend-update</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/v0.1.0/buskill-docs_en_v0.1.0.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/v0.1.0/buskill-docs_en_v0.1.0.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
