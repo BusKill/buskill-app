@@ -52,7 +52,7 @@ jobs:
       run: |
         cd dist
         RELEASE_FILE="`ls -1 | grep buskill-lin*.tbz | head -n1`"
-        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/x-bzip2" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/x-bzip2" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
 
     # workflows can't trigger other workflows (actually, the ephemeral
     # GITHUB_TOKEN is blocked from launching other workflows), so we get
@@ -61,7 +61,7 @@ jobs:
       env:
         BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
       run: |
-        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/buskill/buskill-app/dispatches
+        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches
       shell: bash
 
   windows:
@@ -101,14 +101,14 @@ jobs:
         ls -lah
         RELEASE_FILE="`ls -1 | grep buskill-win*.zip | head -n1`"
         echo ${RELEASE_FILE}
-        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
       shell: bash
 
     - name: Trigger cryptographic signature workflow
       env:
         BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
       run: |
-        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/buskill/buskill-app/dispatches
+        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches
       shell: bash
 
   mac:
@@ -146,12 +146,12 @@ jobs:
       run: |
         cd dist
         RELEASE_FILE="`ls -1 | grep buskill-mac*.dmg | head -n1`"
-        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/buskill/buskill-app/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+        curl --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
 
     - name: Trigger cryptographic signature workflow
       env:
         BUSKILL_BOT_DISPATCH_TOKEN: ${{ secrets.BUSKILL_BOT_DISPATCH_TOKEN }}
       run: |
-        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/buskill/buskill-app/dispatches
+        curl -i --header "Authorization: Bearer ${BUSKILL_BOT_DISPATCH_TOKEN}" -d '{"event_type":"sign_release", "client_payload": {"release_id":"${{ steps.create_release.outputs.id }}"}}' https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches
       shell: bash
 
