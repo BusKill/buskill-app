@@ -23,7 +23,6 @@ import os.path
 from buskill_version import BUSKILL_VERSION
 from distutils.version import LooseVersion
 from hashlib import sha256
-from ConfigParser import SafeConfigParser()
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -228,12 +227,6 @@ class BusKill:
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
 
-		config = SafeConfigParser()
-
-		self.CONFIG = None
-
-		# NOTE self.config will change to a dictionary if the file is found 
-		# 	if not a startup routine should begin 
 		#	Dictionary keys will be the setting and the value the variable 
 		# 	i.e. Trigger would be the key, the trigger file location would be the value 
 
