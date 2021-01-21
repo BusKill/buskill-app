@@ -125,7 +125,6 @@ ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-in
 
 # install kivy and all other python dependencies with pip
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
-${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
@@ -149,6 +148,32 @@ mkdir gnupg
 chmod 0700 gnupg
 popd
 gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+rm -rf "${tmpDir}"
+
+# libusb1
+#  * https://github.com/vpelletier/python-libusb1/issues/54
+#  * https://github.com/BusKill/buskill-app/issues/17
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+${PIP_PATH} download libusb1
+filename="`ls -1 | head -n1`"
+signature_url=`curl -s https://pypi.org/simple/libusb1/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+wget "${signature_url}"
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/libusb1.asc"
 gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
 
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
