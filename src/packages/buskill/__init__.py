@@ -663,7 +663,7 @@ class BusKill:
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
 		try:
-			subprocess.run(['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend']) 
+			subprocess.call( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] ) 
 		except:
 			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
 			print( msg ); logger.error(msg)
@@ -774,7 +774,7 @@ class BusKill:
 
 		return True
 
-	def get_upgrade_status(self):
+f	def get_upgrade_status(self):
 
 		# is the message (upgrade_status_msg) a string that we can read from
 		# directly (running synchronously) or a multiprocessing.Array() because
