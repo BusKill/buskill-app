@@ -63,6 +63,12 @@ ls -lah /usr/local/bin | grep -Ei 'pip|python'
 find /usr/local/Cellar | grep -i 'bin/pip'
 find /usr/local/Cellar/python@3*
 find /usr/local/Cellar/python@3* -type f
+find /usr/local/Cellar/python@3* -type f | grep -i 'bin/python3'
+find /usr/local/Cellar/python@3* -type f | grep -i 'bin/pip3'
+find /usr/local/Cellar/python@3* -type f -exec realpath '{}' \; | grep -i 'bin/python3'
+find /usr/local/Cellar/python@3* -type f -exec realpath '{}' \; | grep -i 'bin/pip3'
+find /usr/local/Cellar/python@3* -type f -ipath *bin/python3*
+find /usr/local/Cellar/python@3* -type f -ipath *bin/pip3*
 find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
 find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3*
 brew list
