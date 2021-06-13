@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-10-04
-# Version: 0.5
+# Updated: 2021-06-13
+# Version: 0.6
 ################################################################################
 
 ############
@@ -61,6 +61,10 @@ ls -lah /usr/local/opt/python/libexec/
 ls -lah /usr/local/opt/python/libexec/bin
 ls -lah /usr/local/bin | grep -Ei 'pip|python'
 find /usr/local/Cellar | grep -i 'bin/pip'
+find /usr/local/Cellar/python@3*
+find /usr/local/Cellar/python@3* -type f
+find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
+find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3*
 brew list
 brew info python
 echo $PATH
