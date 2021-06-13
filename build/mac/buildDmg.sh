@@ -54,6 +54,7 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
+${PIP_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
@@ -61,12 +62,10 @@ ls -lah /usr/local/opt/python/libexec/
 ls -lah /usr/local/opt/python/libexec/bin
 ls -lah /usr/local/bin | grep -Ei 'pip|python'
 find /usr/local/Cellar | grep -i 'bin/pip'
-find /usr/local/Cellar/python@3*
+#find /usr/local/Cellar/python@3*
 find /usr/local/Cellar/python@3* -type f
 find /usr/local/Cellar/python@3* -type f | grep -i 'bin/python3'
 find /usr/local/Cellar/python@3* -type f | grep -i 'bin/pip3'
-find /usr/local/Cellar/python@3* -type f -exec realpath '{}' \; | grep -i 'bin/python3'
-find /usr/local/Cellar/python@3* -type f -exec realpath '{}' \; | grep -i 'bin/pip3'
 find /usr/local/Cellar/python@3* -type f -ipath *bin/python3*
 find /usr/local/Cellar/python@3* -type f -ipath *bin/pip3*
 find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
@@ -149,7 +148,9 @@ export all_proxy=''
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
+# TOOO: stick to only one of these
 ${PIP_PATH} download python-gnupg
+${PYTHON_PATH} -m pip download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 wget "${signature_url}"
@@ -371,6 +372,7 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
+${PIP_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
