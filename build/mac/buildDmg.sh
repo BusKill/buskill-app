@@ -54,7 +54,10 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
+echo '---'
 ${PIP_PATH} --version
+${PIP_PATH} --version
+echo '---'
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
