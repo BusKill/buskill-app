@@ -122,6 +122,7 @@ brew -v uninstall --ignore-dependencies python
 brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python/ -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
 ls -lah /usr/local/Cellar/python/
