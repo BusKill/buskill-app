@@ -120,6 +120,7 @@ brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 
 brew -v uninstall --ignore-dependencies python
 brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
@@ -132,6 +133,8 @@ cat ${PIP_PATH}
 
 # get python essential dependencies
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+PIP_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/setuptools-49.1.0-py3-none-any.whl
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/wheel-0.34.2-py2.py3-none-any.whl
 
