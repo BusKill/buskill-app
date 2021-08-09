@@ -119,8 +119,8 @@ brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
-ls -lah /usr/local/Cellar/python/
-find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
 
 brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
