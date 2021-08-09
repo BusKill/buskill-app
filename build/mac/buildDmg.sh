@@ -17,8 +17,8 @@ set -x
 # SETTINGS #
 ############
 
-PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
-PIP_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
@@ -54,25 +54,21 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
-echo '---'
 ${PIP_PATH} --version
-${PIP_PATH} --version
-echo '---'
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
-ls -lah /usr/local/opt/python/libexec/
-ls -lah /usr/local/opt/python/libexec/bin
-ls -lah /usr/local/bin | grep -Ei 'pip|python'
-find /usr/local/Cellar | grep -i 'bin/pip'
-#find /usr/local/Cellar/python@3*
-find /usr/local/Cellar/python@3* -type f
-find /usr/local/Cellar/python@3* -type f | grep -i 'bin/python3'
-find /usr/local/Cellar/python@3* -type f | grep -i 'bin/pip3'
-find /usr/local/Cellar/python@3* -type f -ipath *bin/python3*
-find /usr/local/Cellar/python@3* -type f -ipath *bin/pip3*
-find /usr/local/Cellar/python@3* -type f -wholename *bin/python3*
-find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3*
+#ls -lah /usr/local/opt/python/libexec/
+#ls -lah /usr/local/opt/python/libexec/bin
+#ls -lah /usr/local/bin | grep -Ei 'pip|python'
+#find /usr/local/Cellar | grep -i 'bin/pip'
+#find /usr/local/Cellar/python -type f
+#find /usr/local/Cellar/python -type f | grep -i 'bin/python3'
+#find /usr/local/Cellar/python -type f | grep -i 'bin/pip3'
+#find /usr/local/Cellar/python -type f -ipath *bin/python3*
+#find /usr/local/Cellar/python -type f -ipath *bin/pip3*
+find /usr/local/Cellar/python -type f -wholename *bin/python3*
+find /usr/local/Cellar/python -type f -wholename *bin/pip3*
 brew list
 brew info python
 echo $PATH
@@ -120,9 +116,7 @@ brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 
 brew -v uninstall --ignore-dependencies python
 brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
-PYTHON_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
-PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
-PYTHON_PATH="`find /usr/local/Cellar/python/ -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
 ls -lah /usr/local/Cellar/python/
@@ -139,21 +133,20 @@ cat ${PIP_PATH}
 
 # get python essential dependencies
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-PIP_PATH="`find /usr/local/Cellar/python@3* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
-PIP_PATH="`find /usr/local/Cellar/python/ -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 
 # get more info post-pip install
-ls -lah /usr/local/Cellar/python/
-find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
-find /usr/local/Cellar/python/* -type f -wholename *bin/pip3*
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
+#find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
 
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/setuptools-49.1.0-py3-none-any.whl
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/wheel-0.34.2-py2.py3-none-any.whl
 
 # get more info post-python install
-ls -lah /usr/local/Cellar/python/
-find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
-find /usr/local/Cellar/python/* -type f -wholename *bin/pip3*
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
+#find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
 
 # install kivy and all other python dependencies with pip
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
@@ -403,6 +396,8 @@ ls -lah /usr/local/opt/python/libexec/
 ls -lah /usr/local/opt/python/libexec/bin
 ls -lah /usr/local/bin | grep -Ei 'pip|python'
 find /usr/local/Cellar | grep -i 'bin/pip'
+find /usr/local/Cellar/python -type f -wholename *bin/python3*
+find /usr/local/Cellar/python -type f -wholename *bin/pip3*
 brew list
 brew info python
 echo $PATH
