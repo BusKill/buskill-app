@@ -9,16 +9,16 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2020-10-04
-# Version: 0.5
+# Updated: 2021-08-09
+# Version: 0.7
 ################################################################################
 
 ############
 # SETTINGS #
 ############
 
-PYTHON_PATH="`find /usr/local/Cellar/python@3.7 -type f -name python3.7 | head -n1`"
-PIP_PATH="`find /usr/local/Cellar/python@3.7 -type f -name pip3.7 | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 APP_NAME='buskill'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
@@ -48,18 +48,27 @@ export HOMEBREW_CACHE="`pwd`/build/deps/"
 # print some info for debugging failed builds
 uname -a
 sw_vers
+find /usr/local/Cellar -maxdepth 1
 which python2
 python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
+${PIP_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
-ls -lah /usr/local/opt/python/libexec/
-ls -lah /usr/local/opt/python/libexec/bin
-ls -lah /usr/local/bin | grep -Ei 'pip|python'
-find /usr/local/Cellar | grep -i 'bin/pip'
+#ls -lah /usr/local/opt/python/libexec/
+#ls -lah /usr/local/opt/python/libexec/bin
+#ls -lah /usr/local/bin | grep -Ei 'pip|python'
+#find /usr/local/Cellar | grep -i 'bin/pip'
+#find /usr/local/Cellar/python -type f
+#find /usr/local/Cellar/python -type f | grep -i 'bin/python3'
+#find /usr/local/Cellar/python -type f | grep -i 'bin/pip3'
+#find /usr/local/Cellar/python -type f -ipath *bin/python3*
+#find /usr/local/Cellar/python -type f -ipath *bin/pip3*
+find /usr/local/Cellar/python -type f -wholename *bin/python3*
+find /usr/local/Cellar/python -type f -wholename *bin/pip3*
 brew list
 brew info python
 echo $PATH
@@ -107,6 +116,11 @@ brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 
 brew -v uninstall --ignore-dependencies python
 brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+PYTHON_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+
+# get more info immediately post-python install
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
 
 brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
 brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
@@ -119,12 +133,23 @@ cat ${PIP_PATH}
 
 # get python essential dependencies
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+PIP_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+
+# get more info post-pip install
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
+#find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
+
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/setuptools-49.1.0-py3-none-any.whl
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/wheel-0.34.2-py2.py3-none-any.whl
 
+# get more info post-python install
+#ls -lah /usr/local/Cellar/python/
+#find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
+#find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
+
 # install kivy and all other python dependencies with pip
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
-${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/libusb1-1.8.tar.gz
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/PyInstaller-3.6.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
@@ -139,7 +164,9 @@ export all_proxy=''
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
+# TOOO: stick to only one of these
 ${PIP_PATH} download python-gnupg
+${PYTHON_PATH} -m pip download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 wget "${signature_url}"
@@ -148,6 +175,32 @@ mkdir gnupg
 chmod 0700 gnupg
 popd
 gpg --homedir "${tmpDir}/gnupg" --import "build/deps/python-gnupg.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links "file:///${tmpDir}" "${tmpDir}/${filename}"
+rm -rf "${tmpDir}"
+
+# libusb1
+#  * https://github.com/vpelletier/python-libusb1/issues/54
+#  * https://github.com/BusKill/buskill-app/issues/17
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+${PIP_PATH} download libusb1
+filename="`ls -1 | head -n1`"
+signature_url=`curl -s https://pypi.org/simple/libusb1/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+wget "${signature_url}"
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/libusb1.asc"
 gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/${filename}.asc" "${tmpDir}/${filename}"
 
 # confirm that the signature is valid. `gpgv` would exit 2 if the signature
@@ -335,6 +388,7 @@ python2 --version
 which python3
 python3 --version
 ${PYTHON_PATH} --version
+${PIP_PATH} --version
 ${PYTHON_PATH} -m pip list
 which pip3
 pip3 list
@@ -342,6 +396,8 @@ ls -lah /usr/local/opt/python/libexec/
 ls -lah /usr/local/opt/python/libexec/bin
 ls -lah /usr/local/bin | grep -Ei 'pip|python'
 find /usr/local/Cellar | grep -i 'bin/pip'
+find /usr/local/Cellar/python -type f -wholename *bin/python3*
+find /usr/local/Cellar/python -type f -wholename *bin/pip3*
 brew list
 brew info python
 echo $PATH

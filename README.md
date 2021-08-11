@@ -53,7 +53,11 @@ For more information, see our [Frequently Asked Questions](https://docs.buskill.
 
 ## Contributing
 
-Please see [Contributing to BusKill](https://docs.buskill.in/buskill-app/en/stable/contributing.html) to learn how you can help the BusKill project.
+BusKill is an open-source project run by volunteers that create and maintain open-source hardware and software. Please see [Contributing to BusKill](https://docs.buskill.in/buskill-app/en/stable/contributing.html) to learn how you can help the BusKill project.
+
+You can also [donate with bitcoin, monero, paypal, or credit card](https://buskill.in/donate).
+
+Contributions of any amount and kind are greatly appreciated <3
 
 ## Attribution
 
