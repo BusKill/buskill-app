@@ -185,6 +185,9 @@ BUSKILL_VERSION = {
 # PREPARE BUILD WITH PYINSTALLER #
 ##################################
 
+# TODO: consider pinning instead of online upgrade via pip (which introduces
+# supply chain risks because pip is not secure)
+#  * https://security.stackexchange.com/a/234098
 Write-Output 'INFO: Prepare our exe'
 C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller | Out-String
 New-Item -Path pyinstaller -Type Directory | Out-String
@@ -234,8 +237,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          icon='..\\src\\images\\buskill-icon-150.ico',
-          console=True )
+          icon='..\\src\\images\\buskill-icon-150.ico' )
 coll = COLLECT(exe, Tree('..\\src\\'),
                a.binaries,
                a.zipfiles,
@@ -262,7 +264,7 @@ coll = COLLECT(exe, Tree('..\\src\\'),
 $env:KIVY_GL_BACKEND="angle_sdl2"
 
 # build it from the spec file
-C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --noconsole --onefile .\buskill.spec | Out-String
+C:\tmp\kivy_venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile .\buskill.spec | Out-String
 
 # attempt to execute it?
 #.\dist\buskill\buskill.exe | Out-String
