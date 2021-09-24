@@ -10,9 +10,15 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-03
-# Updated: 2020-10-03
-# Version: 0.1
+# Updated: 2021-09-24
+# Version: 0.2
 ################################################################################
+
+############
+# SETTINGS #
+############
+
+DOCKER_IMAGE_NAME='debian:bullseye-slim'
 
 #################
 # SANITY CHECKS #
@@ -58,7 +64,7 @@ mkdir -p ${HOME}/.docker/trust/tuf/
 cp -r build/deps/docker.io ${HOME}/.docker/trust/tuf/
 find ${HOME}/.docker/trust -type f -exec sha256sum '{}' \;
 
-output=`DOCKER_CONTENT_TRUST=1 docker -D pull debian:stable-slim 2>&1`
+output=`DOCKER_CONTENT_TRUST=1 docker -D pull ${DOCKER_IMAGE_NAME} 2>&1`
 #echo $output
 
 # did docker download a root key and dumbly trust it, bypassing all security?
@@ -76,7 +82,7 @@ fi
 # docker container
 rm -rf /tmp/kivy_appdir
 
-docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" debian:stable-slim /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
+docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" ${DOCKER_IMAGE_NAME} /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 ###########
 # CLEANUP #
