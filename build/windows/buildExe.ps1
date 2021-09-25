@@ -11,8 +11,8 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2020-10-04
-# Version: 0.3
+# Updated: 2021-09-25
+# Version: 0.4
 ################################################################################
 
 ######################################
@@ -128,7 +128,7 @@ C:\tmp\kivy_venv\Scripts\python.exe -m pip install --ignore-installed --upgrade 
 $tmpDir = Join-Path $Env:Temp $(New-Guid)
 echo "${tmpDir}"
 New-Item -Path "${tmpDir}" -Type Directory | Out-String
-if ( $LastExitCode -ne 0 ){
+if ( $? -ne 0 ){
 	echo "ERROR: Failed to create tmpDir" | Out-String
 	exit 1 | Out-String
 }
@@ -158,9 +158,7 @@ ls "${tmpDir}\gnupg" | Out-String
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
 gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
-echo "LastExitCode:" | Out-String
-echo $LastExitCode | Out-String
-if ( $LastExitCode -ne 0 ){
+if ( $? -ne 0 ){
 	echo "ERROR: Invalid PGP signature!" | Out-String
 	exit 1 | Out-String
 }
