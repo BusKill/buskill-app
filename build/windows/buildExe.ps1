@@ -158,7 +158,7 @@ ls "${tmpDir}\gnupg" | Out-String
 # isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
 # any BAD signatures, and exits 0 "if everything is fine"
 gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\${filename}.asc" "${tmpDir}\${filename}" | Out-String
-if ( $? -ne 0 ){
+if ( $? -ne 0 -or $LastExitCode -ne 0 )}
 	echo "ERROR: Invalid PGP signature!" | Out-String
 	exit 1 | Out-String
 }
