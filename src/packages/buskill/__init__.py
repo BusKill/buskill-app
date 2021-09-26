@@ -3,7 +3,8 @@
 ::
 
   File:    buskill.py
-  Authors: Michael Altfield <michael@buskill.in>, Steven Johnson <steven.j2019@protonmail.com>
+  Authors: Michael Altfield <michael@buskill.in>
+  Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
   Updated: 2020-11-30
   Version: 0.2
