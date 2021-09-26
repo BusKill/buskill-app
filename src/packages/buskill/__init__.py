@@ -6,8 +6,8 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2020-11-30
-  Version: 0.2
+  Updated: 2021-09-26
+  Version: 0.3
 
 This is the heart of the buskill app, shared by both the cli and gui
 
@@ -663,11 +663,21 @@ class BusKill:
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
+
 		try:
-			subprocess.call( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] ) 
-		except:
-			msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
-			print( msg ); logger.error(msg)
+			# this should work for most MacOS versions
+			subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] ) 
+
+		except Exception as e:
+
+			try:
+				# fall-back on `pmset`
+				subprocess.run( ['pmset', 'displaysleepnow'] )
+
+			except Exception as e:
+				msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
+				print( msg ); logger.error(msg)
+
 	#####################
 	# UPGRADE FUNCTIONS #
 	#####################
@@ -775,7 +785,7 @@ class BusKill:
 
 		return True
 
-f	def get_upgrade_status(self):
+	def get_upgrade_status(self):
 
 		# is the message (upgrade_status_msg) a string that we can read from
 		# directly (running synchronously) or a multiprocessing.Array() because
