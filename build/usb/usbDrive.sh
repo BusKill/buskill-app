@@ -149,7 +149,18 @@ popd
 # AUTORUN #
 ###########
 
-# TODO: Windows autorun script
+pushd dist/usbRoot
+
+# Windows autorun file
+cat >> Autorun.inf <<EOF
+[AutoRun]
+OPEN=buskill-Windows/buskill.exe
+ICON=buskill-Windows/buskill.exe
+ACTION=Start my application
+LABEL=BusKill
+EOF
+
+popd
 
 #############################
 # CREATE COMPRESSED ARCHIVE #
@@ -158,6 +169,8 @@ popd
 pushd dist
 
 # note this must be extracted with `7z x` and not `7z e`
+# note also we use 7zip instead of tarballs or .zip because .7z files support
+# symlinks and are very cross-platform
 ${P7Z} a "buskill_usbRoot_${latest_version}.7z" usbRoot/
 
 ##################
