@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-02
-# Updated: 2020-10-02
-# Version: 0.1
+# Updated: 2020-10-03
+# Version: 0.2
 ################################################################################
 
 ################################################################################
@@ -19,8 +19,10 @@ set -x
 
 # n/a
 WGET='/usr/bin/wget --continue --no-verbose'
+ZIP='/usr/bin/zip'
 UNZIP='/usr/bin/unzip -q'
 P7Z='/usr/bin/7z'
+#RAR='/usr/bin/rar'
 TAR='/bin/tar'
 
 ################################################################################
@@ -49,7 +51,8 @@ ${SUDO} rm -rf /var/lib/apt/lists/*
 ${SUDO} apt-get clean
 ${SUDO} apt-get update -o Acquire::CompressionTypes::Order::=gz || exit 1
 #${SUDO} apt-get update || exit 1
-${SUDO} apt-get -y install git wget gnupg unzip bzip2 p7zip-full
+#${SUDO} apt-get -y install git wget gnupg unzip rar bzip2 p7zip-full
+${SUDO} apt-get -y install git wget gnupg zip unzip bzip2 p7zip-full
 
 ###################################
 # DOWNLOAD LATEST STABLE RELEASES #
@@ -120,7 +123,7 @@ fi
 # are super-easy to use for users without additional steps
 
 # windows
-unzip "${win_release_filename}"
+${UNZIP} "${win_release_filename}"
 mv "${win_release_dir}" ../buskill-Windows
 
 # linux
@@ -172,6 +175,12 @@ pushd dist
 # note also we use 7zip instead of tarballs or .zip because .7z files support
 # symlinks and are very cross-platform
 ${P7Z} a "buskill_usbRoot_${latest_version}.7z" usbRoot/
+
+${ZIP} --recurse-paths "buskill_usbRoot_${latest_version}.zip" usbRoot/
+
+${TAR} -cjvf "buskill_usbRoot_${latest_version}.tbz" usbRoot/
+
+#${RAR} a "buskill_usbRoot_${latest_version}.rar" usbRoot/
 
 ##################
 # CLEANUP & EXIT #
