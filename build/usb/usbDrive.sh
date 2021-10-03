@@ -176,7 +176,7 @@ pushd dist
 # symlinks and are very cross-platform
 ${P7Z} a "buskill_usbRoot_${latest_version}.7z" usbRoot/
 
-${ZIP} --recurse-paths "buskill_usbRoot_${latest_version}.zip" usbRoot/
+${ZIP} --symlinks --recurse-paths "buskill_usbRoot_${latest_version}.zip" usbRoot/
 
 ${TAR} -cjvf "buskill_usbRoot_${latest_version}.tbz" usbRoot/
 
