@@ -1,0 +1,77 @@
+################################################################################
+# File:    .github/workflows/unicode_warn.yml
+# Version: 0.1
+# Purpose: Detects Unicode in PRs and comments the results of findings in PR
+#           * https://tech.michaelaltfield.net/bidi-unicode-github-defense/
+# Authors: Michael Altfield <michael@michaelaltfield.net>
+# Created: 2021-11-20
+# Updated: 2021-11-20
+################################################################################
+name: malicious_sanity_checks
+ 
+# execute this workflow automatically on all PRs
+on: [pull_request]
+ 
+jobs:
+ 
+  unicode_warn:
+ 
+    runs-on: ubuntu-latest
+    container: debian:bullseye-slim
+ 
+    steps:
+ 
+    - name: Prereqs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        apt-get update
+        apt-get install -y git bsdmainutils
+        git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+      shell: bash
+ 
+    - name: Check diff for unicode
+      id: unicode_diff
+      run: |
+        set -x
+        diff=`git diff --unified=0 ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -E "^[+]" | grep -Ev '^(--- a/|\+\+\+ b/)'`
+        unicode_diff=`echo -n "${diff}" | grep -oP "[^\x00-\x7F]*"`
+        unicode_grep_exit_code=$?
+        echo "${unicode_diff}"
+ 
+        unicode_diff_hexdump=`echo -n "${unicode_diff}" | hd`
+        echo "${unicode_diff_hexdump}"
+ 
+        # did we select any unicode characters?
+        if [[ "${unicode_diff_hexdump}" == "" ]]; then
+          # we didn't find any unicode characters
+          human_result="INFO: No unicode characters found in PR's commits"
+          echo "${human_result}"
+ 
+        else
+          # we found at least 1 unicode character
+          human_result="^^ WARNING: Unicode characters found in diff!"
+          echo "${human_result}"
+          echo "${diff}"
+ 
+        fi
+ 
+        echo "UNICODE_HUMAN_RESULT=${human_result}" >> $GITHUB_ENV
+ 
+      shell: bash {0}
+ 
+    # leave a comment on the PR. See also
+    #  * https://stackoverflow.com/a/64126737
+    # make sure this doesn't open command injection risks
+    #  * https://github.com/victoriadrake/github-guestbook/issues/1#issuecomment-657121754
+    - name: Leave comment on PR
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "${{ env.UNICODE_HUMAN_RESULT }}"
+          })
