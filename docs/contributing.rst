@@ -73,4 +73,6 @@ If you have more money than free time, you can also help BusKill by making a don
 
   XMR 4B5ra5N1SN4d7BqDtkxAE5G5kGNz5mA5oCob41RzzoduM1uPAcr7QmNLzXtci5HvtkNXC7SowkxMjUUCXF2hm57MMS4jwkx
 
+You can also make a one-time or recurring monthly donation via fiat (eg credit card) on our `Open Collective page <https://opencollective.com/buskill>`_.
+
 Donations of any amount are **greatly** appreciated. Thank you!
