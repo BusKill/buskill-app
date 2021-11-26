@@ -3,6 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. |nbsp| unicode:: 0xA0
+   :trim:
+
+
 Welcome to BusKill's documentation!
 ===================================
 
@@ -20,6 +24,10 @@ For information on how to build your own BusKill cable, see :ref:`hardware_dev`.
 .. note:: If you're looking to order a pre-assembled BusKill cable, you can `buy a BusKill cable here <https://buskill.in/buy>`_.
 
 	Revenue from `BusKill cable purchases <https://buskill.in/buy>`_ go to supporting this open-source project. Please consider purchasing a cable or making a :ref:`donation <donate>` if you build your own.
+
+..
+   Hack to fix bug where figure below gets put inside the note above
+|nbsp| 
 
 .. figure:: /images/buskill_featuredImageLight.jpg
   :align: center
