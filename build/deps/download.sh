@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 set -x
 ################################################################################
 # File:    build/deps/download.sh
@@ -10,8 +10,8 @@ set -x
 # Note:    This script was built to be run in Debian or TAILS
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-07-08
-# Updated: 2021-11-28
-# Version: 0.2
+# Updated: 2020-07-08
+# Version: 0.1
 ################################################################################
 
 sudo apt-get -y install python3-pip python3-setuptools
@@ -42,7 +42,7 @@ ${PYTHON} -m pip download --no-cache-dir pip==20.1.1
 ${PYTHON} -m pip install --upgrade pip==20.1.1
 
 # pip (all platforms)
-${PYTHON} -m pip download --no-cache-dir kivy==1.11.1 libusb1==1.8 pyinstaller==4.7 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0 setuptools==49.1.0 wheel==0.34.2 virtualenv==20.0.26
+${PYTHON} -m pip download --no-cache-dir kivy==1.11.1 libusb1==1.8 pyinstaller==3.6 altgraph==0.17 macholib==1.14 future==0.18.2 pefile==2019.4.18 pywin32-ctypes==0.2.0 setuptools==49.1.0 wheel==0.34.2 virtualenv==20.0.26
 
 # pip (platform-specific binaries/wheels)
 ${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-1.11.1-cp37-cp37m-win_amd64.whl#'`
