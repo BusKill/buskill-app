@@ -9,13 +9,13 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2021-08-09
-# Version: 0.7
+# Updated: 2021-12-02
+# Version: 0.8
 ################################################################################
 
-############
-# SETTINGS #
-############
+################################################################################
+#                                  SETTINGS                                    #
+################################################################################
 
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
@@ -40,41 +40,50 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 export HOMEBREW_NO_AUTO_UPDATE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
-
-########
-# INFO #
-########
+################################################################################
+#                                  FUNCTIONS                                   #
+################################################################################
 
 # print some info for debugging failed builds
-uname -a
-sw_vers
-find /usr/local/Cellar -maxdepth 1
-which python2
-python2 --version
-which python3
-python3 --version
-${PYTHON_PATH} --version
-${PIP_PATH} --version
-${PYTHON_PATH} -m pip list
-which pip3
-pip3 list
-#ls -lah /usr/local/opt/python/libexec/
-#ls -lah /usr/local/opt/python/libexec/bin
-#ls -lah /usr/local/bin | grep -Ei 'pip|python'
-#find /usr/local/Cellar | grep -i 'bin/pip'
-#find /usr/local/Cellar/python -type f
-#find /usr/local/Cellar/python -type f | grep -i 'bin/python3'
-#find /usr/local/Cellar/python -type f | grep -i 'bin/pip3'
-#find /usr/local/Cellar/python -type f -ipath *bin/python3*
-#find /usr/local/Cellar/python -type f -ipath *bin/pip3*
-find /usr/local/Cellar/python -type f -wholename *bin/python3*
-find /usr/local/Cellar/python -type f -wholename *bin/pip3*
-brew list
-brew info python
-echo $PATH
-pwd
-ls -lah
-env
+print_debugging_info () {
+	date
+	uname -a
+	sw_vers
+	find /usr/local/Cellar -maxdepth 1
+	which python2
+	python2 --version
+	which python3
+	python3 --version
+	${PYTHON_PATH} --version
+	${PIP_PATH} --version
+	${PYTHON_PATH} -m pip list
+	which pip3
+	pip3 list
+	#ls -lah /usr/local/opt/python/libexec/
+	#ls -lah /usr/local/opt/python/libexec/bin
+	#ls -lah /usr/local/bin | grep -Ei 'pip|python'
+	#find /usr/local/Cellar | grep -i 'bin/pip'
+	#find /usr/local/Cellar/python -type f
+	#find /usr/local/Cellar/python -type f | grep -i 'bin/python3'
+	#find /usr/local/Cellar/python -type f | grep -i 'bin/pip3'
+	#find /usr/local/Cellar/python -type f -ipath *bin/python3*
+	#find /usr/local/Cellar/python -type f -ipath *bin/pip3*
+	find /usr/local/Cellar/python -type f -wholename *bin/python3*
+	find /usr/local/Cellar/python -type f -wholename *bin/pip3*
+	brew list
+	brew info python
+	echo $PATH
+	pwd
+	ls -lah
+	env
+}
+
+################################################################################
+#                                 MAIN BODY                                    #
+################################################################################
+
+# info for debugging failed builds
+print_debugging_info
 
 #################
 # FIX CONSTANTS #
@@ -96,6 +105,16 @@ fi
 
 DMG_FILENAME="${APP_NAME}-mac-${VERSION}-x86_64.dmg"
 APP_DIR_NAME="${APP_NAME}-${VERSION}.app"
+
+#################
+# SANITY CHECKS #
+#################
+
+# this script isn't robust enough
+if [ ! -e "`pwd`/build/linux/buildDmg.sh" ]; then
+	echo "ERROR: This script should only be executed from the root of the github dir."
+	exit 1
+fi
 
 ###################
 # INSTALL DEPENDS #
@@ -381,29 +400,7 @@ cp "dist/${DMG_FILENAME}" ../dist/
 # OUTPUT VERSION INFO #
 #######################
 
-uname -a
-sw_vers
-which python2
-python2 --version
-which python3
-python3 --version
-${PYTHON_PATH} --version
-${PIP_PATH} --version
-${PYTHON_PATH} -m pip list
-which pip3
-pip3 list
-ls -lah /usr/local/opt/python/libexec/
-ls -lah /usr/local/opt/python/libexec/bin
-ls -lah /usr/local/bin | grep -Ei 'pip|python'
-find /usr/local/Cellar | grep -i 'bin/pip'
-find /usr/local/Cellar/python -type f -wholename *bin/python3*
-find /usr/local/Cellar/python -type f -wholename *bin/pip3*
-brew list
-brew info python
-echo $PATH
-pwd
-ls -lah
-ls -lah dist
+print_debugging_info
 
 ##################
 # CLEANUP & EXIT #
