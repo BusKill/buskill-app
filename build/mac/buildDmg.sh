@@ -111,7 +111,7 @@ APP_DIR_NAME="${APP_NAME}-${VERSION}.app"
 #################
 
 # this script isn't robust enough
-if [ ! -e "`pwd`/build/linux/buildDmg.sh" ]; then
+if [ ! -e "`pwd`/build/mac/buildDmg.sh" ]; then
 	echo "ERROR: This script should only be executed from the root of the github dir."
 	exit 1
 fi
