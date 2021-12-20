@@ -49,3 +49,4 @@ The reader may be interested to investigate the following similar projects:
  * `cryptsetup-nuke-keys <https://gitlab.com/kalilinux/packages/cryptsetup-nuke-keys>`_
  * `TAILS Memory Erasure <https://tails.boum.org/contribute/design/memory_erasure/>`_
  * `TEDD (Transparent Emergency Data Destruction) <https://bitbucket.org/ausiv4/tedd/src/default/>`_
+ * `s53 <https://github.com/BrassHornCommunications/s53>`_
