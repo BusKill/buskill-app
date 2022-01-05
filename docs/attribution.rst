@@ -50,3 +50,4 @@ The reader may be interested to investigate the following similar projects:
  * `TAILS Memory Erasure <https://tails.boum.org/contribute/design/memory_erasure/>`_
  * `TEDD (Transparent Emergency Data Destruction) <https://bitbucket.org/ausiv4/tedd/src/default/>`_
  * `s53 <https://github.com/BrassHornCommunications/s53>`_
+ * `swatd <https://github.com/defuse/swatd>`_
