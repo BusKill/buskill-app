@@ -4,7 +4,7 @@
 
 This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](https://www.buskill.in). It works in Linux, Windows, and MacOS.
 
-BusKill is a laptop kill cord that can trigger your computer to lock or shutdown when it's physically seperated from you.
+BusKill is a laptop kill cord that can trigger your computer to lock or shutdown when it's physically separated from you.
 
 <p align="center">
   <img src=".github-assets/busKill_demo.gif?raw=true" alt="BusKill Demo Video"/>
