@@ -7,7 +7,7 @@ This section will describe how to assemble the hardware BusKill cable prior to u
 
 For information on how to use the BusKill cable, see :ref:`hardware_usr`
 
-.. image:: /images/buskill_assemble2.gif
+.. image:: /images/buskill_assemble3.gif
 	:alt: image shows the assembly of the BusKill cable
 	:align: center
 

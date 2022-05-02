@@ -143,6 +143,8 @@ popd
 # create symlinks to executables to create an easy UX
 
 # windows shortcut file
+# 2022-05: This works for .zip files created in Linux and extracted in Linux.
+#          It does not work for .zip files created in Linux and extracted in Windows.
 pushd dist/usbRoot/buskill-Windows
 win_exe_file_path=`find . -type f -name buskill.exe | head -n1 2>/dev/null`
 ln -s "${win_exe_file_path}" .
@@ -162,6 +164,19 @@ ICON=buskill-Windows/buskill.exe
 ACTION=Start my application
 LABEL=BusKill
 EOF
+
+# Human-Readable README file
+cat >> README.txt <<EOF
+Thank you for purchasing a BusKill cable!
+
+The software included on this USB drive must be installed on your computer in order to function. For instructions on how to get started using your BusKill cable, please visit:
+
+ * https://buskill.in/start
+EOF
+
+# checksum
+# Note: This MUST be the very last file to be created!
+sha256sum `find . -type f` > SHA256SUMS
 
 popd
 

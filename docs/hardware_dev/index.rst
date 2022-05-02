@@ -12,3 +12,4 @@ For information on how to setup and use the BusKill cable before using the BusKi
 
    bom
    assembly
+   storage
