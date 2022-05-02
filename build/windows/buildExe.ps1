@@ -187,7 +187,7 @@ BUSKILL_VERSION = {
 # supply chain risks because pip is not secure)
 #  * https://security.stackexchange.com/a/234098
 Write-Output 'INFO: Prepare our exe'
-C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller | Out-String
+#C:\tmp\kivy_venv\Scripts\python.exe -m pip install --upgrade pyinstaller | Out-String
 New-Item -Path pyinstaller -Type Directory | Out-String
 cd pyinstaller | Out-String
 
