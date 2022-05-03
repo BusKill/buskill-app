@@ -82,7 +82,7 @@ fi
 # docker container
 rm -rf /tmp/kivy_appdir
 
-docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" ${DOCKER_IMAGE_NAME} /bin/bash -c "cd /root/buskill-app && build/usb/usbDrive.sh"
+docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" ${DOCKER_IMAGE_NAME} /bin/bash -c "cd /root/buskill-app && build/usb/usbDrive.sh --yes"
 
 ###########
 # CLEANUP #

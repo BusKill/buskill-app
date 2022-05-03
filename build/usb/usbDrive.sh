@@ -18,16 +18,44 @@ set -x
 ################################################################################
 
 # n/a
-WGET='/usr/bin/wget --continue --no-verbose'
-ZIP='/usr/bin/zip'
-UNZIP='/usr/bin/unzip -q'
-P7Z='/usr/bin/7z'
+ECHO="`which echo`"
+GREP="`which grep`"
+WGET='`which wget` --continue --no-verbose'
+ZIP='`which zip`'
+UNZIP='`which unzip` -q'
+P7Z='`which 7z`'
 #RAR='/usr/bin/rar'
-TAR='/bin/tar'
+TAR='`which tar`'
+
+USB_ROOT_PATH='dist/usbRoot/'
+SIGS_PATH="{USB_ROOT_PATH}/sigs"
 
 ################################################################################
 #                                 MAIN BODY                                    #
 ################################################################################
+
+###########
+# CONFIRM #
+###########
+
+# for safety, exit if this script is executed without a '--yes' argument
+${ECHO} "${@}" | ${GREP} '\--yes' &> /dev/null
+if [ $? -ne 0 ]; then
+  ${ECHO} "WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING"
+  ${ECHO} "================================================================================"
+  ${ECHO} "WARNING: THIS SCRIPT WAS DESIGNED TO RUN INSIDE AN EPHEMERAL DOCKER CONTAINER."
+  ${ECHO} "         IT MAY ALTER OR DAMANGE YOUR SYSTEM IF RUN OUTSIDE A DOCKER CONTAINER!"
+  ${ECHO} "================================================================================"
+  ${ECHO} "WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING"
+  ${ECHO}
+  ${ECHO} "Cowardly refusing to execute without the '--yes' argument for your protection. If really you want to proceed with damaging your system, retry with the '--yes' argument"
+  ${ECHO}
+  ${ECHO} "You can run this script inside a docker container by executing this instead:"
+  ${ECHO}
+  ${ECHO} "  build/usb/debianWrapper.sh"
+  ${ECHO} "  ^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  exit 1
+fi
 
 # this script isn't robust enough
 if [ ! -e "`pwd`/build/usb/usbDrive.sh" ]; then
@@ -42,6 +70,14 @@ if [[ `whoami` != "root" ]]; then
         # this exits the parent process run by the user
         exit 0
 fi
+
+####################
+# CLEANUP LAST RUN #
+####################
+
+${SUDO} rm -rf "${USB_ROOT_PATH}.old"
+${SUDO} mv "${USB_ROOT_PATH}" "${USB_ROOT_PATH}.old"
+mkdir -p "${USB_ROOT_PATH}"
 
 ###################
 # INSTALL DEPENDS #
@@ -77,8 +113,9 @@ win_release_url="${release_url_prefix}/${win_release_filename}"
 mac_release_url="${release_url_prefix}/${mac_release_filename}"
 
 # download releases
-mkdir -p dist/usbRoot/sigs
-pushd dist/usbRoot/sigs
+sigs_path=
+mkdir -p "${SIGS_PATH}"
+pushd "${SIGS_PATH}"
 ${WGET} "${lin_release_url}"
 ${WGET} "${win_release_url}"
 ${WGET} "${mac_release_url}"
@@ -145,10 +182,13 @@ popd
 # windows shortcut file
 # 2022-05: This works for .zip files created in Linux and extracted in Linux.
 #          It does not work for .zip files created in Linux and extracted in Windows.
-pushd dist/usbRoot/buskill-Windows
-win_exe_file_path=`find . -type f -name buskill.exe | head -n1 2>/dev/null`
-ln -s "${win_exe_file_path}" .
-popd
+#pushd dist/usbRoot/buskill-Windows
+#win_exe_file_path=`find . -type f -name buskill.exe | head -n1 2>/dev/null`
+#ln -s "${win_exe_file_path}" .
+#popd
+
+# TODO: make a batch or powershell script to create windows links after writing
+#       to the USB drive itself
 
 ###########
 # AUTORUN #
