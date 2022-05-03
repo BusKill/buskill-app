@@ -246,7 +246,24 @@ Plug the BusKill Cable into the computer again.
   :align: center
   :target: ../_images/buskill_usb_storage_plug_in.jpg
 
-Open 
+Double-click the ``BUSKILL`` drive when it appears
+
+        TODO: screenshot
+
+Double-click `provision`
+
+        TODO: screenshot
+
+If the window says "FAIL," then something is wrong with the drive. Go back to the "Format" step above and retry.
+
+If the window says "PASS" then everything worked. Safely eject the drive.
+
+.. figure:: /images/buskill_usb_storage_win_eject.png
+  :alt: screenshot shows the right-click menu for the "BUSKILL" drive and the "Eject" option highlighted
+  :align: center
+  :target: ../_images/buskill_usb_storage_win_eject.png
+
+After the drive is no longer visible, physically remove the USB Storage Drive.
 
 TODO: Step to verify the integrity of the data after it's written
 

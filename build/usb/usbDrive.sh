@@ -260,6 +260,11 @@ popd
 # CREATE COMPRESSED ARCHIVE #
 #############################
 
+# cleanup old compressed archives
+rm -f "buskill_usbRoot_${latest_version}.7z"
+rm -f "buskill_usbRoot_${latest_version}.zip"
+rm -f "buskill_usbRoot_${latest_version}.tbz"
+
 pushd dist
 
 # note this must be extracted with `7z x` and not `7z e`
