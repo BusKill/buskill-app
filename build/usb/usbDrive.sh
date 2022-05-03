@@ -20,12 +20,12 @@ set -x
 # n/a
 ECHO="`which echo`"
 GREP="`which grep`"
-WGET='`which wget` --continue --no-verbose'
-ZIP='`which zip`'
-UNZIP='`which unzip` -q'
-P7Z='`which 7z`'
+WGET="`which wget` --continue --no-verbose"
+ZIP="`which zip`"
+UNZIP="`which unzip` -q"
+P7Z="`which 7z`"
 #RAR='/usr/bin/rar'
-TAR='`which tar`'
+TAR="`which tar`"
 
 USB_ROOT_PATH='dist/usbRoot'
 SIGS_PATH="{USB_ROOT_PATH}/sigs"
