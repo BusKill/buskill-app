@@ -283,7 +283,9 @@ pushd ${USB_ROOT_PATH}
 cat >> README.txt <<EOF
 Thank you for purchasing a BusKill cable!
 
-The software included on this USB drive must be installed on your computer in order to function. For instructions on how to get started using your BusKill cable, please visit:
+The software included on this USB drive must be installed on your computer in
+order to function. For instructions on how to get started using your BusKill
+cable, please visit:
 
  * https://buskill.in/start
 EOF
@@ -298,12 +300,12 @@ popd
 # CREATE COMPRESSED ARCHIVE #
 #############################
 
+pushd dist
+
 # cleanup old compressed archives
 rm -f "buskill_usbRoot_${latest_version}.7z"
 rm -f "buskill_usbRoot_${latest_version}.zip"
 rm -f "buskill_usbRoot_${latest_version}.tbz"
-
-pushd dist
 
 # note this must be extracted with `7z x` and not `7z e`
 # note also we use 7zip instead of tarballs or .zip because .7z files support
