@@ -203,8 +203,6 @@ pushd ${USB_ROOT_PATH}
 # * https://superuser.com/a/455383/551559
 
 cat >> provision.bat <<EOF
-@echo off
-
 set TMP_SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
 set USB_ROOT_PATH=%~dp0
 
@@ -216,6 +214,12 @@ echo oLink.Save >> %TMP_SCRIPT%
 
 cscript /nologo %TMP_SCRIPT%
 del %TMP_SCRIPT%
+
+echo "INFO: PASS or FAIL?"
+echo ""
+echo "INFO: PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS"
+echo "INFO: PASS. USB Storage Drive Initialized Successfully."
+
 del %0
 EOF
 

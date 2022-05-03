@@ -239,6 +239,15 @@ After the drive is no longer visible, physically remove the USB Storage Drive.
 Step 5: Verify Integrity
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Plug the BusKill Cable into the computer again.
+
+.. figure:: /images/buskill_usb_storage_plug_in.jpg
+  :alt: picture showing the fully-assembled BusKill cable with the USB Storage Drive connected to the magnetic breakaway connected to a laptop's USB port
+  :align: center
+  :target: ../_images/buskill_usb_storage_plug_in.jpg
+
+Open 
+
 TODO: Step to verify the integrity of the data after it's written
 
  * https://superuser.com/questions/566113/does-windows-calculate-crcs-to-check-every-file-operation?rq=1
