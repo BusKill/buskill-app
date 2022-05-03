@@ -17,15 +17,11 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
-# n/a
+# paths
 ECHO="`which echo`"
 GREP="`which grep`"
-WGET="`which wget` --continue --no-verbose"
-ZIP="`which zip`"
-UNZIP="`which unzip` -q"
-P7Z="`which 7z`"
-#RAR='/usr/bin/rar'
-TAR="`which tar`"
+APT_GET="`which apt-get`"
+SUDO="`which sudo`"
 
 USB_ROOT_PATH='dist/usbRoot'
 SIGS_PATH="{USB_ROOT_PATH}/sigs"
@@ -84,11 +80,20 @@ mkdir -p "${USB_ROOT_PATH}"
 ###################
 
 ${SUDO} rm -rf /var/lib/apt/lists/*
-${SUDO} apt-get clean
-${SUDO} apt-get update -o Acquire::CompressionTypes::Order::=gz || exit 1
-#${SUDO} apt-get update || exit 1
-#${SUDO} apt-get -y install git wget gnupg unzip rar bzip2 p7zip-full
-${SUDO} apt-get -y install git wget gnupg zip unzip bzip2 p7zip-full
+${SUDO} ${APT_GET} clean
+${SUDO} ${APT_GET} update -o Acquire::CompressionTypes::Order::=gz || exit 1
+#${SUDO} ${APT_GET} update || exit 1
+#${SUDO} ${APT_GET} -y install git wget gnupg unzip rar bzip2 p7zip-full
+${SUDO} ${APT_GET} -y install git wget gnupg zip unzip bzip2 p7zip-full
+
+# get paths of newly-installed commands
+WGET="`which wget` --continue --no-verbose"
+ZIP="`which zip`"
+UNZIP="`which unzip` -q"
+P7Z="`which 7z`"
+#RAR=`which rar`"
+TAR="`which tar`"
+
 
 ###################################
 # DOWNLOAD LATEST STABLE RELEASES #
