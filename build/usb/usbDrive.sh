@@ -24,7 +24,7 @@ APT_GET="`which apt-get`"
 SUDO="`which sudo`"
 
 USB_ROOT_PATH='dist/usbRoot'
-SIGS_PATH="{USB_ROOT_PATH}/sigs"
+SIGS_PATH="${USB_ROOT_PATH}/sigs"
 
 ################################################################################
 #                                 MAIN BODY                                    #
@@ -86,7 +86,7 @@ ${SUDO} ${APT_GET} update -o Acquire::CompressionTypes::Order::=gz || exit 1
 #${SUDO} ${APT_GET} -y install git wget gnupg unzip rar bzip2 p7zip-full
 ${SUDO} ${APT_GET} -y install git wget gnupg zip unzip bzip2 p7zip-full
 
-# get paths of newly-installed commands
+# get absolute paths of newly-installed commands and set args
 WGET="`which wget` --continue --no-verbose"
 ZIP="`which zip`"
 UNZIP="`which unzip` -q"
@@ -118,7 +118,6 @@ win_release_url="${release_url_prefix}/${win_release_filename}"
 mac_release_url="${release_url_prefix}/${mac_release_filename}"
 
 # download releases
-sigs_path=
 mkdir -p "${SIGS_PATH}"
 pushd "${SIGS_PATH}"
 ${WGET} "${lin_release_url}"
@@ -186,7 +185,9 @@ popd
 
 # windows shortcut file
 # 2022-05: This works for .zip files created in Linux and extracted in Linux.
-#          It does not work for .zip files created in Linux and extracted in Windows.
+#          This does not work for .zip files created in Linux and extracted in
+#          Windows.
+#            * https://github.com/BusKill/buskill-app/issues/22
 #pushd dist/usbRoot/buskill-Windows
 #win_exe_file_path=`find . -type f -name buskill.exe | head -n1 2>/dev/null`
 #ln -s "${win_exe_file_path}" .
@@ -194,6 +195,9 @@ popd
 
 # TODO: make a batch or powershell script to create windows links after writing
 #       to the USB drive itself
+
+# It's not easy to create shortcuts in Windows CLI
+# * https://superuser.com/a/455383/551559
 
 ###########
 # AUTORUN #
