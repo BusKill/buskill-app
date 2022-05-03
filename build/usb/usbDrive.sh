@@ -88,7 +88,7 @@ ${SUDO} ${APT_GET} -y install git wget gnupg zip unzip bzip2 p7zip-full
 
 # get absolute paths of newly-installed commands and set args
 WGET="`which wget` --continue --no-verbose"
-ZIP="`which zip`"
+ZIP="`which zip` --quiet"
 UNZIP="`which unzip` -q"
 P7Z="`which 7z`"
 #RAR=`which rar`"
@@ -182,6 +182,7 @@ popd
 ###################
 
 # create symlinks to executables to create an easy UX
+pushd ${USB_ROOT_PATH}
 
 # windows shortcut file
 # 2022-05: This works for .zip files created in Linux and extracted in Linux.
@@ -193,26 +194,48 @@ popd
 #ln -s "${win_exe_file_path}" .
 #popd
 
-# TODO: make a batch or powershell script to create windows links after writing
-#       to the USB drive itself
+# shortcuts are very important for Windows users' UX
+# since we can't create shortcuts and store them in the archive, we create a
+# simple script that can be double-clicked to create the shortcut directly on
+# the USB drive after the files are copied to the USB drive.
 
 # It's not easy to create shortcuts in Windows CLI
 # * https://superuser.com/a/455383/551559
+
+cat >> provision.bat <<EOF
+@echo off
+
+set TMP_SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
+set USB_ROOT_PATH=%~dp0
+
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %TMP_SCRIPT%
+echo sLinkFile = "%USB_ROOT_PATH%\buskill-Windows\buskill.lnk" >> %TMP_SCRIPT%
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %TMP_SCRIPT%
+echo oLink.TargetPath = "%USB_ROOT_PATH%\buskill-Windows\buskill-v0.4.0-x86_64\buskill.exe" >> %TMP_SCRIPT%
+echo oLink.Save >> %TMP_SCRIPT%
+
+cscript /nologo %TMP_SCRIPT%
+del %TMP_SCRIPT%
+del %0
+EOF
+
+popd
 
 ###########
 # AUTORUN #
 ###########
 
-pushd dist/usbRoot
+pushd ${USB_ROOT_PATH}
 
 # Windows autorun file
-cat >> Autorun.inf <<EOF
-[AutoRun]
-OPEN=buskill-Windows/buskill.exe
-ICON=buskill-Windows/buskill.exe
-ACTION=Start my application
-LABEL=BusKill
-EOF
+# 2022-05: I couldn't get this to work. Is it still a thing in Windows 10?
+#cat >> Autorun.inf <<EOF
+#[AutoRun]
+#OPEN=buskill-Windows/buskill.exe
+#ICON=buskill-Windows/buskill.exe
+#ACTION=Start my application
+#LABEL=BusKill
+#EOF
 
 # Human-Readable README file
 cat >> README.txt <<EOF
@@ -242,7 +265,7 @@ ${P7Z} a "buskill_usbRoot_${latest_version}.7z" usbRoot/
 
 ${ZIP} --symlinks --recurse-paths "buskill_usbRoot_${latest_version}.zip" usbRoot/
 
-${TAR} -cjvf "buskill_usbRoot_${latest_version}.tbz" usbRoot/
+${TAR} -cjf "buskill_usbRoot_${latest_version}.tbz" usbRoot/
 
 #${RAR} a "buskill_usbRoot_${latest_version}.rar" usbRoot/
 
@@ -252,6 +275,8 @@ ${TAR} -cjvf "buskill_usbRoot_${latest_version}.tbz" usbRoot/
 
 # make sure the resulting dist/ dir permissions let subsequent CI steps upload
 # the build's artifacts
-chown -R ${SUDO_USER} dist
+if [[ ${SUDO_USER} ]]; then
+	chown -R ${SUDO_USER} dist
+fi
 
 exit 0
