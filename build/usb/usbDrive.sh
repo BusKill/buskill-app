@@ -203,24 +203,62 @@ pushd ${USB_ROOT_PATH}
 # * https://superuser.com/a/455383/551559
 
 cat >> provision.bat <<EOF
+@echo off
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: File:    provision.bat
+:: Version: 0.1
+:: Purpose: Preforms final step (which can't be done otherwise) when
+::          initializing the USB Storage Drive for BusKill. For more info, see:
+::           * https://github.com/BusKill/buskill-app/issues/22
+::           * https://docs.buskill.in/buskill-app/en/dev/hardware_dev/storage.html
+:: Authors: Michael Altfield <michael@michaelaltfield.net>
+:: Created: 2022-05-03
+:: Updated: 2022-05-03
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::
+:: CREATE SHORTCUTS ::
+::::::::::::::::::::::
+
+:: shortcuts (as opposed to symlinks) in Windows can't be created in with a
+:: simple PowerShell or cmd command. Rather, we have to awkwardly create this
+:: visual basic script, execute it, then delete it :/
+::  * https://superuser.com/a/455383/551559
 set TMP_SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
 set USB_ROOT_PATH=%~dp0
 
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %TMP_SCRIPT%
 echo sLinkFile = "%USB_ROOT_PATH%\buskill-Windows\buskill.lnk" >> %TMP_SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %TMP_SCRIPT%
-echo oLink.TargetPath = "%USB_ROOT_PATH%\buskill-Windows\buskill-v0.4.0-x86_64\buskill.exe" >> %TMP_SCRIPT%
+echo oLink.TargetPath = "%USB_ROOT_PATH%\buskill-Windows\buskill-${latest_version}-x86_64\buskill.exe" >> %TMP_SCRIPT%
 echo oLink.Save >> %TMP_SCRIPT%
 
 cscript /nologo %TMP_SCRIPT%
 del %TMP_SCRIPT%
 
-echo "INFO: PASS or FAIL?"
-echo ""
-echo "INFO: PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS"
-echo "INFO: PASS. USB Storage Drive Initialized Successfully."
+::::::::::::::::::::::::::
+:: FILE INTEGRITY CHECK ::
+::::::::::::::::::::::::::
 
-del %0
+:: TODO: Check all the files on the disk to make sure they match SHA256SUMS
+
+::::::::::::::::::
+:: HUMAN OUTPUT ::
+::::::::::::::::::
+
+echo INFO: PASS or FAIL?
+echo:
+echo INFO: PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS. PASS
+echo INFO: PASS. USB Storage Drive Initialized Successfully.
+
+::::::::::::::::
+:: CLEAN EXIT ::
+::::::::::::::::
+
+:: commit suicide (delete this script)
+:: leave the command window open so the human can read the output
+del %0 & pause
 EOF
 
 popd
