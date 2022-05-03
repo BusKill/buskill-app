@@ -27,7 +27,7 @@ P7Z='`which 7z`'
 #RAR='/usr/bin/rar'
 TAR='`which tar`'
 
-USB_ROOT_PATH='dist/usbRoot/'
+USB_ROOT_PATH='dist/usbRoot'
 SIGS_PATH="{USB_ROOT_PATH}/sigs"
 
 ################################################################################
