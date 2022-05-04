@@ -242,6 +242,8 @@ del %TMP_SCRIPT%
 ::::::::::::::::::::::::::
 
 :: TODO: Check all the files on the disk to make sure they match SHA256SUMS
+::       ...or at least count the number of files with
+::          dir /b * /s | find /c /v ""
 
 ::::::::::::::::::
 :: HUMAN OUTPUT ::
