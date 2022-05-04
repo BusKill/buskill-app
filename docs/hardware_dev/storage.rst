@@ -84,7 +84,9 @@ After the format completes, close the windows.
 In the File Explorer, you should now see a drive named ``BusKill``
 
 .. figure:: /images/buskill_usb_storage_win_this_pc_now_says_buskill_label_on_drive.png
+  :alt: screenshot shows the USB Drive under "This PC" is named "BUSKILL"
   :align: center
+  :target: ../_images/buskill_usb_storage_win_open_new_file_explorer_window.png
 
 Step 4: Download, Verify, Extract Archive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -248,29 +250,35 @@ Plug the BusKill Cable into the computer again.
 
 Double-click the ``BUSKILL`` drive when it appears
 
-        TODO: screenshot
-
-Double-click `provision`
-
-        TODO: screenshot
-
-If the window says "FAIL," then something is wrong with the drive. Go back to the "Format" step above and retry.
-
-If the window says "PASS" then everything worked. Safely eject the drive.
-
-.. figure:: /images/buskill_usb_storage_win_eject.png
-  :alt: screenshot shows the right-click menu for the "BUSKILL" drive and the "Eject" option highlighted
+.. figure:: /images/buskill_usb_storage_win_this_pc_now_says_buskill_label_on_drive.png
+  :alt: screenshot shows the USB Drive under "This PC" is named "BUSKILL"
   :align: center
-  :target: ../_images/buskill_usb_storage_win_eject.png
+  :target: ../_images/buskill_usb_storage_win_open_new_file_explorer_window.png
+
+Double-click ``provision``
+
+.. figure:: /images/buskill_usb_storage_win_click_provision.png
+  :alt: screenshot shows the file "provision" selected at the root of the USB Storage Drive
+  :align: center
+  :target: ../_images/buskill_usb_storage_win_click_provision.png
+
+If the window says ``FAIL``, then something is wrong with the drive. Go back to the "Format" step above and retry.
+
+If the window says ``PASS`` then everything worked. Close the command prompt window and safely eject the drive.
+
+.. list-table::
+
+	* - .. figure:: /images/buskill_usb_storage_win_pass.png
+		:alt: screenshot shows how to close the command prompt window, with the "X" on the top-right highlighted
+		:align: center
+		:target: ../_images/buskill_usb_storage_win_pass.png
+
+	  - .. figure:: /images/buskill_usb_storage_win_eject.png
+		:alt: screenshot shows the right-click menu for the "BUSKILL" drive and the "Eject" option highlighted
+		:align: center
+		:target: ../_images/buskill_usb_storage_win_eject.png
 
 After the drive is no longer visible, physically remove the USB Storage Drive.
-
-TODO: Step to verify the integrity of the data after it's written
-
- * https://superuser.com/questions/566113/does-windows-calculate-crcs-to-check-every-file-operation?rq=1
- * https://stackoverflow.com/questions/72087842/windows-equivalent-to-sha256sum-c-cryptographic-hash-digest-file-recursive
- * https://serverfault.com/questions/1099949/windows-equivalent-to-sha256sum-c-cryptographic-hash-digest-file-recursive
- * https://superuser.com/questions/1719053/windows-equivalent-to-sha256sum-c-cryptographic-hash-digest-file-recursive
 
 Linux
 -----
