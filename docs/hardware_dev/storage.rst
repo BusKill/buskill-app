@@ -223,6 +223,11 @@ Step 4: Safely Eject
 
 Right-click on the ``BUSKILL`` USB Storage Drive and click ``Eject``
 
+.. figure:: /images/buskill_usb_storage_win_eject.png
+  :alt: screenshot shows the right-click menu for the "BUSKILL" drive and the "Eject" option highlighted
+  :align: center
+  :target: ../_images/buskill_usb_storage_win_eject.png
+
 .. warning::
 
   Do *not* simply remove the USB Storage Drive from your computer without first ejecting it as shown above!!
@@ -231,12 +236,14 @@ Right-click on the ``BUSKILL`` USB Storage Drive and click ``Eject``
 
   If the data isn't fully written to the disk before it's removed, the software on the USB Storage Drive could be corrupt. This means the **software won't work for the customer**, so this is a **critical QA step**.
 
-After the drive is no longer visible, physically remove the USB Storage Drive.
+Wait until the drive disappears from the File Explorer window.
 
-.. figure:: /images/buskill_usb_storage_win_eject.png
-  :alt: screenshot shows the right-click menu for the "BUSKILL" drive and the "Eject" option highlighted
+.. figure:: /images/buskill_usb_storage_win_physically_remove.png
+  :alt: screenshot shows that the USB Drive named "BusKill" is no longer visible in the File Explorer window
   :align: center
-  :target: ../_images/buskill_usb_storage_win_eject.png
+  :target: ../_images/buskill_usb_storage_win_physically_remove.png
+
+After the drive is no longer visible, physically remove the USB Storage Drive.
 
 Step 5: Verify Integrity
 ^^^^^^^^^^^^^^^^^^^^^^^^
