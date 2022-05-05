@@ -97,8 +97,8 @@ Step 4: Download, Verify, Extract Archive
 
 You should have already recieved:
 
-1. A download link to the "usbRoot" compressed archive and
-1. A SHA256 Hash for this file
+#. A download link to the "usbRoot" compressed archive and
+#. A SHA256 Hash for this file
 
 Download the archive using the provided link and put it in your ``Downloads`` folder. This archive contains the files that will be extracted onto the newly formatted USB Storage Drive.
    
