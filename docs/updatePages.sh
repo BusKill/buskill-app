@@ -86,9 +86,11 @@ for current_version in ${versions}; do
 		sphinx-build -b html docs/ docs/_build/html/${current_language}/${current_version} -D language="${current_language}"
 
 		# PDF #
-		sphinx-build -b rinoh docs/ docs/_build/rinoh -D language="${current_language}"
-		mkdir -p "${docroot}/buskill-app/${current_language}/${current_version}"
-		cp "docs/_build/rinoh/target.pdf" "${docroot}/buskill-app/${current_language}/${current_version}/buskill-docs_${current_language}_${current_version}.pdf"
+# 2022-05-05: commenting this out as it's breaking our jobs trying to create an infinite
+#             number of pages
+#		sphinx-build -b rinoh docs/ docs/_build/rinoh -D language="${current_language}"
+#		mkdir -p "${docroot}/buskill-app/${current_language}/${current_version}"
+#		cp "docs/_build/rinoh/target.pdf" "${docroot}/buskill-app/${current_language}/${current_version}/buskill-docs_${current_language}_${current_version}.pdf"
 
 		# EPUB #
 		sphinx-build -b epub docs/ docs/_build/epub -D language="${current_language}"
