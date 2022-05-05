@@ -32,6 +32,8 @@ Plug the assembled BusKill Cable (with the USB drive attached *through* the Magn
 
 .. note:: By plugging in the USB Storage Drive into the computer *via* the magnetic breakaway cable (as opposed to plugging the USB Storage Drive directly into the machine), you also verify the functionality of the cable's pinout.
 
+.. _format_usb_drive:
+
 Step 3: Format
 ^^^^^^^^^^^^^^
 
@@ -45,7 +47,7 @@ Click on "This PC"
 .. figure:: /images/buskill_usb_storage_win_click_this_pc.png
   :align: center
         
-Under "Devices and drives", right-click on the USB drive and choose "Format"
+Under ``Devices and drives``, right-click on the USB drive and choose ``Format``
 
 .. figure:: /images/buskill_usb_storage_win_click_format.png
   :align: center
@@ -154,14 +156,14 @@ If the hash matches, close the PowerShell window and extract its contents.
   :align: center
   :target: ../_images/buskill_usb_storage_win_close_powershell.png
 
-Right-click on the archive and click "Extract All..."
+Right-click on the archive and click ``Extract All...``
 
 .. figure:: /images/buskill_usb_storage_win_extract_all.png
   :alt: screenshot shows 
   :align: center
   :target: ../_images/buskill_usb_storage_win_extract_all.png
 
-Click "Extract"
+Click ``Extract``
 
 .. figure:: /images/buskill_usb_storage_win_extract.png
   :alt: screenshot shows the "Extract Compressed (Zipped) Folders" wizard and highlights the "Extract" button to proceed
@@ -197,7 +199,7 @@ Click ``Home`` -> ``Copy to`` -> ``Choose location...``
   :align: center
   :target: ../_images/buskill_usb_storage_win_copy_to.png
 
-Under "This PC" select the ``BUSKILL`` USB Storage Drive and click ``Copy``
+Under ``This PC`` select the ``BUSKILL`` USB Storage Drive and click ``Copy``
 
 .. figure:: /images/buskill_usb_storage_win_copy_to_usb.png
   :alt: screenshot shows the "Copy Items" popup window and "BUSKILL" selected as the destination, with the "Copy" button selected
@@ -269,7 +271,7 @@ Double-click ``provision``
   :align: center
   :target: ../_images/buskill_usb_storage_win_click_provision.png
 
-If the window says ``FAIL``, then something is wrong with the drive. Go back to the "Format" step above and retry.
+If the window says ``FAIL``, then something is wrong with the drive. Go back to the :ref:`Format <format_usb_drive>` step above and retry.
 
 If the window says ``PASS`` then everything worked. Close the command prompt window and safely eject the drive.
 
