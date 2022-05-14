@@ -1,6 +1,6 @@
-.. _usb_storage_initalization:
+﻿.. _usb_storage_initialization:
 
-(optional) Initalize USB Storage
+(optional) Initialize USB Storage
 ================================
 
 This section will describe how format the USB storage drive and put the BusKill software on it.
@@ -73,7 +73,7 @@ In the new window:
 .. note::
   Make sure the ``Volume label`` is ``BusKill`` with an upper-case ``B`` and ``K`` -- not ``Buskill`` nor ``buskill``.
 
-Double-check that you've selected the **correct drive** before clicking ``OK`` in the WARNING prompt. If you proceed with formatting the wrong drive, it will immedetialy lead to **loss of all your data** on that drive.
+Double-check that you've selected the **correct drive** before clicking ``OK`` in the WARNING prompt. If you proceed with formatting the wrong drive, it will immediately lead to **loss of all your data** on that drive.
 
 .. figure:: /images/buskill_usb_storage_win_format_warning.png
   :align: center
@@ -95,9 +95,9 @@ Step 4: Download, Verify, Extract Archive
 
 .. note::
 
-   You only need to do ths step once. If you've already downloaded, verified, and extracted the archive to your computer, then skip this step
+   You only need to do this step once. If you've already downloaded, verified, and extracted the archive to your computer, then skip this step
 
-You should have already recieved:
+You should have already received:
 
 #. A download link to the "usbRoot" compressed archive and
 #. A SHA256 Hash for this file
@@ -122,7 +122,7 @@ Open a new File Explorer Window (File -> New Window) and open your Downloads fol
 		:align: center
 		:target: ../_images/buskill_usb_storage_win_click_downloads.png
 
-Before extracting the archive's contents, check the integrity of the compressed archive via its SHA256 checksum. This is the "hash" or "checksum" that you should have recieved with the download link.
+Before extracting the archive's contents, check the integrity of the compressed archive via its SHA256 checksum. This is the "hash" or "checksum" that you should have received with the download link.
 
 Check the integrity of the archive in PowerShell (Start -> Windows PowerShell).
 
