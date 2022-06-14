@@ -13,7 +13,8 @@ For more info, see:
   This documentation is hosted on GitHub Pages, and :ref:`you should not trust <security_infrastructure>` its contents.
 
   A wise user that's adding our keys to their keyring for the first-time would cross-validate the PGP fingerprint listed on this website against other sources, such as:
-   * The `official BusKill project website <https://www.buskill.in/>`_
+   * The `official BusKill project website (clearnet) <https://www.buskill.in/>`_
+   * The `official BusKill project website (darknet) <http://buskillvampfih2iucxhit3qp36i2zzql3u6pmkeafvlxs3tlmot5yad.onion/>`_
    * The `official BusKill mastodon account <https://mastodon.social/@buskillin>`_
    * The `KEYS file <keys_file_>`_ at the root of our GitHub repo
    * A popular `gpg keyserver <https://keys.openpgp.org/search?q=releases%40buskill.in>`_
