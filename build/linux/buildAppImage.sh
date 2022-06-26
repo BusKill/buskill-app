@@ -26,9 +26,13 @@ export DEBIAN_FRONTEND=noninteractive
 SUDO='/usr/bin/sudo'
 PYTHON='/tmp/kivy_appdir/AppRun'
 
+DOWNLOAD_USERNAME='_apt'
+CURRENT_USER=$(whoami)
+CURRENT_GROUP=$(groups | cut -d' ' -f 1)
+
 # this is the command we use to run commands as the _apt user so they have
 # internet (only use this for apps that are trustworthy. eg: not pip)
-SU='/bin/su _apt -s /bin/bash'
+SU="/bin/su ${DOWNLOAD_USERNAME} -s /bin/bash"
 
 # check to see if we're inside a docker container or not
 # https://stackoverflow.com/a/51688023/1174102
@@ -217,7 +221,8 @@ ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
-${SUDO} chown _apt:root "${tmpDir}"
+${SUDO} chown ${DOWNLOAD_USERNAME}:${CURRENT_GROUP} "${tmpDir}"
+${SUDO} chmod 0770 "${tmpDir}"
 pushd "${tmpDir}"
 ${SUDO} ${SU} -c "${PYTHON} -m pip download python-gnupg"
 filename="`ls -1 | head -n1`"
@@ -244,7 +249,8 @@ rm -rf "${tmpDir}"
 #  * https://github.com/vpelletier/python-libusb1/issues/54
 #  * https://github.com/BusKill/buskill-app/issues/17
 tmpDir="`mktemp -d`" || exit 1
-chown _apt:root "${tmpDir}"
+${SUDO} chown ${DOWNLOAD_USERNAME}:${CURRENT_GROUP} "${tmpDir}"
+${SUDO} chmod 0770 "${tmpDir}"
 pushd "${tmpDir}"
 ${SUDO} ${SU} -c "${PYTHON} -m pip download libusb1"
 filename="`ls -1 | head -n1`"
