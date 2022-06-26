@@ -39,6 +39,8 @@ if [ $INODE_NUM -gt 3 ]; then
 	SUDO=''
 fi
 
+APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg'
+
 ################################################################################
 #                                  FUNCTIONS                                   #
 ################################################################################
@@ -89,11 +91,21 @@ print_debugging_info
 # INSTALL DEPENDS #
 ###################
 
-${SUDO} rm -rf /var/lib/apt/lists/*
-${SUDO} apt-get clean
-${SUDO} apt-get update -o Acquire::CompressionTypes::Order::=gz || exit 1
-#${SUDO} apt-get update || exit 1
-${SUDO} apt-get -y install iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg
+# check to see if all the packages we need are already installed
+dpkg --robot --no-pager --list ${APT_PACKAGES}
+
+# are all of the packages we need already installed?
+if [[ $? -eq 0 ]]; then
+	# all packages installed already
+	echo "INFO: All apt dependencies found. skipping apt install."
+else
+	# one or more of the packages are missing; install them
+	${SUDO} rm -rf /var/lib/apt/lists/*
+	${SUDO} apt-get clean
+	${SUDO} apt-get update -o Acquire::CompressionTypes::Order::=gz || exit 1
+	#${SUDO} apt-get update || exit 1
+	${SUDO} apt-get -y install ${APT_PACKAGES}
+fi
 
 #################
 # FIX CONSTANTS #
@@ -154,7 +166,7 @@ ${SUDO} ip6tables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT
 ${SUDO} ip6tables -A OUTPUT -j DROP
 
 # attempt to access the internet as root. If it works, exit 1
-curl 1.1.1.1
+time curl --connect-timeout 5 1.1.1.1
 if [ $? -eq 0 ]; then
 	echo "ERROR: iptables isn't blocking internet access to unsafe tools. You may need to run this as root (and you should do it inside a VM)"
 	exit 1
@@ -180,6 +192,7 @@ pushd /tmp
 /tmp/python.AppImage --appimage-extract
 popd
 rm -rf /tmp/kivy_appdir
+mkdir /tmp/kivy_appdir
 mv /tmp/squashfs-root/* /tmp/kivy_appdir
 mv /tmp/squashfs-root/.* /tmp/kivy_appdir
 
