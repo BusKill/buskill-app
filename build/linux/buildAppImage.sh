@@ -217,12 +217,12 @@ ${PYTHON} -m pip install --ignore-installed --upgrade --cache-dir build/deps/ --
 #  * https://bitbucket.org/vinay.sajip/python-gnupg/issues/137/pgp-key-accessibility
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
-chown _apt:root "${tmpDir}"
+${SUDO} chown _apt:root "${tmpDir}"
 pushd "${tmpDir}"
-${SU} -c "${PYTHON} -m pip download python-gnupg"
+${SUDO} ${SU} -c "${PYTHON} -m pip download python-gnupg"
 filename="`ls -1 | head -n1`"
-signature_url=`${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-${SU} -c "wget \"${signature_url}\""
+signature_url=`${SUDO} ${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+${SUDO} ${SU} -c "wget \"${signature_url}\""
 
 mkdir gnupg
 chmod 0700 gnupg
@@ -246,10 +246,10 @@ rm -rf "${tmpDir}"
 tmpDir="`mktemp -d`" || exit 1
 chown _apt:root "${tmpDir}"
 pushd "${tmpDir}"
-${SU} -c "${PYTHON} -m pip download libusb1"
+${SUDO} ${SU} -c "${PYTHON} -m pip download libusb1"
 filename="`ls -1 | head -n1`"
-signature_url=`${SU} -c "curl -s https://pypi.org/simple/libusb1/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-${SU} -c "wget \"${signature_url}\""
+signature_url=`${SUDO} ${SU} -c "curl -s https://pypi.org/simple/libusb1/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+${SUDO} ${SU} -c "wget \"${signature_url}\""
 
 mkdir gnupg
 chmod 0700 gnupg
