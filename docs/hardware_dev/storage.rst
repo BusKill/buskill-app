@@ -1,7 +1,7 @@
 ﻿.. _usb_storage_initialization:
 
 (optional) Initialize USB Storage
-================================
+=================================
 
 This section will describe how format the USB storage drive and put the BusKill software on it.
 

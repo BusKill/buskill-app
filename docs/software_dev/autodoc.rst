@@ -24,7 +24,9 @@ main.py
 buskill.py
 ----------
 
-.. automodule:: buskill
+.. automodule:: packages.buskill
+  :members:
+  :undoc-members:
 
 buskill_cli.py
 --------------
