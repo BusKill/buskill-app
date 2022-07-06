@@ -10,8 +10,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-03
-# Updated: 2021-09-24
-# Version: 0.2
+# Updated: 2022-07-06
+# Version: 0.3
 ################################################################################
 
 ############
@@ -25,7 +25,7 @@ DOCKER_IMAGE_NAME='debian:bullseye-slim'
 #################
 
 # this script isn't robust enough
-if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
+if [ ! -e "`pwd`/build/linux/$(basename $0)" ]; then
 	echo "ERROR: This script should only be executed from the root of the github dir."
 	exit 1
 fi

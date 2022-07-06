@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2020-10-03
-# Version: 1.0
+# Updated: 2021-07-06
+# Version: 1.1
 ################################################################################
 
 ################################################################################
@@ -79,7 +79,7 @@ print_debugging_info () {
 #################
 
 # this script isn't robust enough
-if [ ! -e "`pwd`/build/linux/buildAppImage.sh" ]; then
+if [ ! -e "`pwd`/build/linux/$(basename $0)" ]; then
 	echo "ERROR: This script should only be executed from the root of the github dir."
 	exit 1
 fi

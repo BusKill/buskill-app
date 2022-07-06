@@ -5,8 +5,8 @@
   File:    buskill_cli.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2020-06-23
-  Version: 0.1
+  Updated: 2022-07-06
+  Version: 0.2
 
 This is the code to handle the BusKill app via CLI
 
@@ -66,6 +66,12 @@ def BusKillCLI():
 	)
 
 	parser.add_argument(
+	 "-l", "--list-triggers",
+	 help="List triggers and exit",
+	 action="store_true"
+	)
+
+	parser.add_argument(
 	 "-U", "--upgrade",
 	 help="Download & upgrade latest version of BusKill",
 	 action="store_true"
@@ -95,6 +101,13 @@ def BusKillCLI():
 		print( msg ); logger.error( msg )
 		sys.exit(1)
 
+	# did the user ask us to enumerate all the triggers available?
+	if args.list_triggers:
+
+		print( 'oh hai' )
+		sys.exit(0)
+
+	# did the user ask us to do a software upgrade?
 	if args.upgrade:
 
 		# check to see if this version has already been upgraded

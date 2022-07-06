@@ -31,6 +31,25 @@ Our build script is executed on GitHub's shared runners, which use Ubuntu. For b
 
 	When first setting up your build environment, it may be helpful to reference our `GitHub build workflow for Linux <https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L12-L22>`_.
 
+After you've successfully built the app once, you can iterate more quickly by using the python binary used to build the AppImage to execute the ``src/main.py`` script directly. Call it with no arguments to execute it in GUI mode. If you add arguments, it will execute in CLI mode. For example
+
+::
+
+	user@buskill:~/sandbox/buskill-app$ /tmp/kivy_appdir/opt/python*/bin/python* src/main.py --help
+	buskill version {'VERSION': '', 'GITHUB_REF': '', 'GITHUB_SHA': '', 'SOURCE_DATE_EPOCH': ''}
+	usage: buskill [-h] [--version] [-v] [-a] [-l] [-U]
+	
+	App for arming and configuring BusKill. For help, see https://docs.buskill.in
+	
+	optional arguments:
+  	-h, --help           show this help message and exit
+  	--version            print version and exit.
+  	-v, --verbose        increase output verbosity
+  	-a, --arm            Arms BusKill
+  	-l, --list-triggers  List triggers and exit
+  	-U, --upgrade        Download & upgrade latest version of BusKill
+	user@buskill:~/sandbox/buskill-app$ 
+
 Windows
 -------
 
