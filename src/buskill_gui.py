@@ -49,6 +49,7 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
+from kivy.uix.screenmanager import Screen
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -146,6 +147,47 @@ class MainWindow(BoxLayout):
 			self.dialog.b_cancel.on_release = self.close
 			self.dialog.auto_dismiss = False
 			self.dialog.open()
+
+	def bugReport1(self):
+
+		# first close the navigation drawer
+		self.nav_drawer.toggle_state()
+
+		return BugReport()
+
+		# attempt to get debug log contents
+		if logger.root.hasHandlers():
+			logfile_path = logger.root.handlers[0].baseFilename
+
+			with open(logfile_path) as log_file:
+				debug_log = log_file.read()
+
+		msg = debug_log
+		# TODO: change screens and display msg in textarea
+
+	def about_ref_press(self, ref):
+		if ref == 'gui_help':
+			return self.webbrowser_open_docs_gui()
+		elif ref == 'contribute':
+			return self.webbrowser_open_docs_contribute()
+
+		return self.webbrowser_open_website()
+
+	def webbrowser_open_website(self):
+		webbrowser.open( 'https://buskill.in/' )
+
+	def webbrowser_open_docs(self):
+		webbrowser.open( 'https://docs.buskill.in/' )
+
+	def webbrowser_open_docs_bugs(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
+
+	def webbrowser_open_docs_gui(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/' +str(BUSKILL_VERSION['VERSION'])+ '/software_usr/gui.html' )
+
+	def webbrowser_open_docs_contribute(self):
+		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/contributing.html' )
+
 
 	def about(self):
 
@@ -438,6 +480,10 @@ class CriticalError(BoxLayout):
 		# TODO: make this a redirect on buskill.in so old versions aren't tied
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
+
+class BugReport(BoxLayout):
+
+	pass
 
 class BusKillApp(App):
 

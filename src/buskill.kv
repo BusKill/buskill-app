@@ -4,8 +4,8 @@
 #          For more info, see: https://buskill.in/
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-23
-# Updated: 2020-06-23
-# Version: 0.1
+# Updated: 2022-07-08
+# Version: 0.2
 ################################################################################
 
 <CriticalError>:
@@ -30,8 +30,6 @@
 		on_release: root.fileBugReport()
 
 <MainWindow>:
-	orientation: 'vertical'
-
 	color_main_bg: 0.188, 0.188, 0.188, 1
 	color_menu_bg: 0.259, 0.259, 0.259, 1
 
@@ -43,105 +41,120 @@
 	status: status
 	nav_drawer: nav_drawer
 
-	ActionBar:
+	BoxLayout:
+		orientation: 'vertical'
 
-		ActionView:
-			id: actionview
-			background_image: 'images/white.png'
-			background_color: 0.129, 0.588, 0.953, 1
+		ActionBar:
 
-			ActionPrevious:
-				with_previous: False
-				app_icon: 'images/menu.png'
-				markup: True
-				title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
-				on_release: root.toggle_menu()
+			ActionView:
+				id: actionview
+				background_image: 'images/white.png'
+				background_color: 0.129, 0.588, 0.953, 1
 
-	NavigationDrawer:
-		id: nav_drawer
-		anim_type: 'slide_above_simple'
-		side_panel_width: min( dp(300), 0.8*self.width )
-
-		# this is the distance from the left side of the app from which the user
-		# can drag the navigation drawer open by touch gesture. It must be low else
-		# it will block other taps on other buttons in that left-side band
-		#touch_accept_width: min( dp(300), 0.8*self.width )
-		touch_accept_width: dp(15)
-
-		ScrollView:
-
-			StackLayout:
-				orientation: 'lr-tb'
-			
-				Button:
-					text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue923[/size][/font]     [font=RobotoMedium][size=16]Update[/size][/font]'
+				ActionPrevious:
+					with_previous: False
+					app_icon: 'images/menu.png'
 					markup: True
-					halign: 'left'
-					valign: 'center'
-					text_size: self.size
-					size_hint: 1, None
-					height: 50
-					background_normal: ''
-					background_color: root.color_menu_bg
-					on_release: root.upgrade1()
+					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
+					on_release: root.toggle_menu()
 
-				Button:
-					text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
-					markup: True
-					halign: 'left'
-					valign: 'center'
-					text_size: self.size
-					size_hint: 1, None
-					height: 50
-					background_normal: ''
-					background_color: root.color_menu_bg
-					on_release: root.about()
+		NavigationDrawer:
+			id: nav_drawer
+			anim_type: 'slide_above_simple'
+			side_panel_width: min( dp(300), 0.8*self.width )
 
-				Widget:
-					id: separator
-					height: 1
-					size_hint: 1, None
-					canvas:
-						Color:
-							rgb: 0.349, 0.349, 0.349, 1
-						Rectangle:
-							pos: 0, separator.y
-							size: self.width, 1
+			# this is the distance from the left side of the app from which the user
+			# can drag the navigation drawer open by touch gesture. It must be low else
+			# it will block other taps on other buttons in that left-side band
+			#touch_accept_width: min( dp(300), 0.8*self.width )
+			touch_accept_width: dp(15)
 
-		BoxLayout:
+			ScrollView:
 
-			orientation: 'vertical'
-			size_hint: ( 1, 0.95 )
-			pos_hint: {'top': 1}
+				StackLayout:
+					orientation: 'lr-tb'
+				
+					Button:
+						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue923[/size][/font]     [font=RobotoMedium][size=16]Update[/size][/font]'
+						markup: True
+						halign: 'left'
+						valign: 'center'
+						text_size: self.size
+						size_hint: 1, None
+						height: 50
+						background_normal: ''
+						background_color: root.color_menu_bg
+						on_release: root.upgrade1()
+
+					Button:
+						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue868[/size][/font]     [font=RobotoMedium][size=16]Report Bug[/size][/font]'
+						markup: True
+						halign: 'left'
+						valign: 'center'
+						text_size: self.size
+						size_hint: 1, None
+						height: 50
+						background_normal: ''
+						background_color: root.color_menu_bg
+						on_release: root.bugReport1()
+
+					Button:
+						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
+						markup: True
+						halign: 'left'
+						valign: 'center'
+						text_size: self.size
+						size_hint: 1, None
+						height: 50
+						background_normal: ''
+						background_color: root.color_menu_bg
+						on_release: root.about()
+
+					Widget:
+						id: separator
+						height: 1
+						size_hint: 1, None
+						canvas:
+							Color:
+								rgb: 0.349, 0.349, 0.349, 1
+							Rectangle:
+								pos: 0, separator.y
+								size: self.width, 1
 
 			BoxLayout:
 
 				orientation: 'vertical'
-				size_hint: ( 0.9, 1 )
-				pos_hint: {'center_x': 0.5, 'top': 1}
-				spacing: 10
+				size_hint: ( 1, 0.95 )
+				pos_hint: {'top': 1}
 
-				Label:
-					id: status 
-					text: "BusKill is currently disarmed."
-					size_hint: (1,2)
-					text_size: self.size
-					halign: 'center'
-					valign: 'middle'
-					font_name: "Roboto"
-					font_size: 16
+				BoxLayout:
 
-				Button:
-					id: toggle_btn
-					text: "Arm"
-					font_name: "Roboto"
-					font_size: 16
-					background_normal: ''
-					background_color: 0.129, 0.588, 0.953, 1
-					size_hint: (1,1)
-					halign: 'center'
-					valign: 'middle'
-					on_release: root.toggle_buskill()
+					orientation: 'vertical'
+					size_hint: ( 0.9, 1 )
+					pos_hint: {'center_x': 0.5, 'top': 1}
+					spacing: 10
+
+					Label:
+						id: status 
+						text: "BusKill is currently disarmed."
+						size_hint: (1,2)
+						text_size: self.size
+						halign: 'center'
+						valign: 'middle'
+						font_name: "Roboto"
+						font_size: 16
+
+					Button:
+						id: toggle_btn
+						text: "Arm"
+						font_name: "Roboto"
+						font_size: 16
+						background_normal: ''
+						background_color: 0.129, 0.588, 0.953, 1
+						size_hint: (1,1)
+						halign: 'center'
+						valign: 'middle'
+						on_release: root.toggle_buskill()
 
 <DialogConfirmation>:
 	id: upgrade_dialog1
@@ -209,3 +222,10 @@
 				background_normal: ''
 				background_color: 0, 0, 0, 0
 				on_release: upgrade_dialog1.dismiss()
+
+<BugReport>:
+	BoxLayout:
+
+		Button:
+			text: 'go back'
+			on_release: root.go_back() #TODO change these
