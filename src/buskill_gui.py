@@ -484,6 +484,8 @@ class CriticalError(BoxLayout):
 
 class BugReport(Screen):
 
+	debug_log = ObjectProperty(None)
+
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
@@ -491,6 +493,13 @@ class BugReport(Screen):
 		self.bk = bk
 
 		super(BugReport, self).__init__(**kwargs)
+
+	def on_pre_enter(self, *args):
+		if logger.root.hasHandlers():
+			logfile_path = logger.root.handlers[0].baseFilename
+
+			with open(logfile_path) as log_file:
+				self.debug_log.text = log_file.read()
 
 	def go_back(self):
 		self.manager.switch_to('main')
