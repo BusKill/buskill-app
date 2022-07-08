@@ -96,7 +96,10 @@
 						height: 50
 						background_normal: ''
 						background_color: root.color_menu_bg
-						on_release: root.bugReport1()
+						on_release:
+							root.sm.transition.direction = 'left'
+							root.sm.current = 'bug-report'
+							root.bugReport1()
 
 					Button:
 						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
@@ -225,7 +228,39 @@
 
 <BugReport>:
 	BoxLayout:
+		orientation: 'vertical'
 
-		Button:
-			text: 'go back'
-			on_release: root.go_back() #TODO change these
+		ActionBar:
+
+			ActionView:
+				id: actionview
+				background_image: 'images/white.png'
+				background_color: 0.129, 0.588, 0.953, 1
+
+				ActionPrevious:
+					with_previous: False
+					app_icon: 'images/menu.png'
+					markup: True
+					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
+					on_release:
+						root.sm.transition.direction = 'right'
+						root.sm.current = 'main'
+
+		StackLayout:
+			orientation: 'rl-tb'
+			spacing: '14dp'
+			padding: 0, '18dp', 0, 0
+			size_hint: 1, None
+			height: self.minimum_height
+
+			Button:
+				id: go_back
+				text: 'Back'
+				size_hint: None, None
+				size: self.texture_size
+				padding: '8dp', '8dp'
+				background_normal: ''
+				background_color: 0, 0, 0, 0
+				on_release:
+					root.sm.transition.direction = 'right'
+					root.sm.current = 'main'

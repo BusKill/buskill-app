@@ -165,9 +165,6 @@ class MainWindow(Screen):
 
 		msg = debug_log
 
-		# change to the "bug-report" screen
-		self.sm.current = 'bug-report'
-
 		# TODO: actually display the contents of msg in a textarea
 
 	def about_ref_press(self, ref):
@@ -498,7 +495,7 @@ class BugReport(Screen):
 		super(BugReport, self).__init__(**kwargs)
 
 	def go_back(self):
-		self.sm.current = 'main'
+		self.sm.switch_to('main')
 
 class BusKillApp(App):
 
