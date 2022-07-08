@@ -97,8 +97,8 @@
 						background_normal: ''
 						background_color: root.color_menu_bg
 						on_release:
-							root.sm.transition.direction = 'left'
-							root.sm.current = 'bug-report'
+							root.manager.transition.direction = 'left'
+							root.manager.current = 'bug-report'
 							root.bugReport1()
 
 					Button:
@@ -241,24 +241,46 @@
 					markup: True
 					title: '[font=RobotoMedium][size=18]   Report Bug[/size][/font]'
 					on_release:
-						root.sm.transition.direction = 'right'
-						root.sm.current = 'main'
+						root.manager.transition.direction = 'right'
+						root.manager.current = 'main'
 
-		StackLayout:
-			orientation: 'rl-tb'
-			spacing: '14dp'
-			padding: 0, '18dp', 0, 0
-			size_hint: 1, None
-			height: self.minimum_height
+		BoxLayout:
 
-			Button:
-				id: go_back
-				text: 'Back'
-				size_hint: None, None
-				size: self.texture_size
-				padding: '8dp', '8dp'
-				background_normal: ''
-				background_color: 0, 0, 0, 0
-				on_release:
-					root.sm.transition.direction = 'right'
-					root.sm.current = 'main'
+			orientation: 'vertical'
+			size_hint: ( 1, 0.95 )
+			pos_hint: {'top': 1}
+
+			BoxLayout:
+
+				orientation: 'vertical'
+				size_hint: ( 0.9, 1 )
+				pos_hint: {'center_x': 0.5, 'top': 1}
+				spacing: 10
+
+				Label:
+					id: status 
+					text: "Debug Log Below"
+					size_hint: (1,1)
+					text_size: self.size
+					halign: 'center'
+					valign: 'middle'
+					font_name: "Roboto"
+					font_size: 16
+
+				TextInput:
+					id: debug_log
+					text: "TODO"
+					font_name: "Roboto"
+					font_size: 16
+					background_normal: ''
+					size_hint: (1,20)
+					halign: 'center'
+					valign: 'middle'
+					readonly: True
+
+				Button:
+					size_hint: (1,2)
+					text: 'Click to file a bug report'
+					halign: 'center'
+					valign: 'middle'
+					on_release: root.fileBugReport()

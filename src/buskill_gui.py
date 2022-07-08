@@ -82,9 +82,8 @@ class MainWindow(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		global bk, sm
+		global bk
 		self.bk = bk
-		self.sm = sm
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
@@ -163,7 +162,7 @@ class MainWindow(Screen):
 			with open(logfile_path) as log_file:
 				debug_log = log_file.read()
 
-		msg = debug_log
+		#self.debug_log.text = debug_log
 
 		# TODO: actually display the contents of msg in a textarea
 
@@ -488,22 +487,21 @@ class BugReport(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		global bk, sm
+		global bk
 		self.bk = bk
-		self.sm = sm
 
 		super(BugReport, self).__init__(**kwargs)
 
 	def go_back(self):
-		self.sm.switch_to('main')
+		self.manager.switch_to('main')
 
 class BusKillApp(App):
 
 	# instantiate our global BusKill object instance and screen manager so they can
 	# be accessed by other objects for doing Buskill stuff & changing the kivy screen
-	global bk, sm
+	global bk
 	bk = packages.buskill.BusKill()
-	sm = ScreenManager()
+	manager = ScreenManager()
 
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
@@ -530,9 +528,8 @@ class BusKillApp(App):
 	def build(self):
 
 		# set local instance fields that reference our global variables
-		global bk, sm
+		global bk
 		self.bk = bk
-		self.sm = sm
 
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script
@@ -545,9 +542,9 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
-			self.sm.add_widget( MainWindow(name='main') )
-			self.sm.add_widget( BugReport(name='bug-report') )
-			return self.sm
+			self.manager.add_widget( MainWindow(name='main') )
+			self.manager.add_widget( BugReport(name='bug-report') )
+			return self.manager
 
 		else:
 			# the current platform isn't supported; show critical error window
