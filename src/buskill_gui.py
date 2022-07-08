@@ -525,6 +525,10 @@ class BusKillApp(App):
 	 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
 	)
 	LabelBase.register(
+	 "RobotoMono",
+	 os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
+	)
+	LabelBase.register(
 	 "mdicons",
 	 #os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
 	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
