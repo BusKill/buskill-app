@@ -49,7 +49,7 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -70,7 +70,7 @@ from kivy.core.text import LabelBase
 #                                   CLASSES                                    #
 ################################################################################
 
-class MainWindow(BoxLayout):
+class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
 	status = ObjectProperty(None)
@@ -81,9 +81,10 @@ class MainWindow(BoxLayout):
 
 	def __init__(self, **kwargs):
 
-		# instantiate our global BusKill object instance
-		global bk
+		# set local instance fields that reference our global variables
+		global bk, sm
 		self.bk = bk
+		self.sm = sm
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
@@ -153,9 +154,9 @@ class MainWindow(BoxLayout):
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
 
-		return BugReport()
-
 		# attempt to get debug log contents
+		# https://stackoverflow.com/questions/72910245/how-to-get-log-file-path-from-logging-after-getlogger
+		# https://stackoverflow.com/questions/72910372/how-to-get-all-previous-logs-written-during-current-run-python-logging/
 		if logger.root.hasHandlers():
 			logfile_path = logger.root.handlers[0].baseFilename
 
@@ -163,7 +164,11 @@ class MainWindow(BoxLayout):
 				debug_log = log_file.read()
 
 		msg = debug_log
-		# TODO: change screens and display msg in textarea
+
+		# change to the "bug-report" screen
+		self.sm.current = 'bug-report'
+
+		# TODO: actually display the contents of msg in a textarea
 
 	def about_ref_press(self, ref):
 		if ref == 'gui_help':
@@ -481,14 +486,27 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class BugReport(BoxLayout):
+class BugReport(Screen):
 
-	pass
+	def __init__(self, **kwargs):
+
+		# set local instance fields that reference our global variables
+		global bk, sm
+		self.bk = bk
+		self.sm = sm
+
+		super(BugReport, self).__init__(**kwargs)
+
+	def go_back(self):
+		self.sm.current = 'main'
 
 class BusKillApp(App):
 
-	global bk
+	# instantiate our global BusKill object instance and screen manager so they can
+	# be accessed by other objects for doing Buskill stuff & changing the kivy screen
+	global bk, sm
 	bk = packages.buskill.BusKill()
+	sm = ScreenManager()
 
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
@@ -514,8 +532,10 @@ class BusKillApp(App):
 
 	def build(self):
 
-		global bk
+		# set local instance fields that reference our global variables
+		global bk, sm
 		self.bk = bk
+		self.sm = sm
 
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script
@@ -527,7 +547,10 @@ class BusKillApp(App):
 
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
-			return MainWindow()
+
+			self.sm.add_widget( MainWindow(name='main') )
+			self.sm.add_widget( BugReport(name='bug-report') )
+			return self.sm
 
 		else:
 			# the current platform isn't supported; show critical error window
