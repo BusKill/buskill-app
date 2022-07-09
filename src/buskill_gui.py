@@ -148,7 +148,7 @@ class MainWindow(Screen):
 			self.dialog.auto_dismiss = False
 			self.dialog.open()
 
-	def bugReport1(self):
+	def debug_log1(self):
 
 		# first close the navigation drawer
 		self.nav_drawer.toggle_state()
@@ -482,7 +482,7 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class BugReport(Screen):
+class DebugLog(Screen):
 
 	debug_log = ObjectProperty(None)
 
@@ -492,7 +492,7 @@ class BugReport(Screen):
 		global bk
 		self.bk = bk
 
-		super(BugReport, self).__init__(**kwargs)
+		super(DebugLog, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 		if logger.root.hasHandlers():
@@ -556,7 +556,7 @@ class BusKillApp(App):
 			Window.bind( on_request_close = self.close )
 
 			self.manager.add_widget( MainWindow(name='main') )
-			self.manager.add_widget( BugReport(name='bug-report') )
+			self.manager.add_widget( DebugLog(name='debug_log') )
 			return self.manager
 
 		else:

@@ -98,8 +98,8 @@
 						background_color: root.color_menu_bg
 						on_release:
 							root.manager.transition.direction = 'left'
-							root.manager.current = 'bug-report'
-							root.bugReport1()
+							root.manager.current = 'debug_log'
+							root.debug_log1()
 
 					Button:
 						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
@@ -226,7 +226,7 @@
 				background_color: 0, 0, 0, 0
 				on_release: upgrade_dialog1.dismiss()
 
-<BugReport>:
+<DebugLog>:
 
 	debug_log: debug_log
 
@@ -261,7 +261,6 @@
 				spacing: 10
 
 				Label:
-					id: status 
 					text: "Debug Log Below"
 					size_hint: (1,1)
 					text_size: self.size
