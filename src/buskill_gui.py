@@ -24,7 +24,7 @@ from buskill_version import BUSKILL_VERSION
 
 import os, sys, re, webbrowser
 
-import multiprocessing
+import multiprocessing, threading
 from multiprocessing import util
 
 import logging
@@ -33,13 +33,11 @@ util.get_logger().setLevel(util.DEBUG)
 multiprocessing.log_to_stderr().setLevel( logging.DEBUG )
 #from multiprocessing import get_context
 
-import kivy
-#kivy.require('1.0.6') # replace with your current kivy version !
-
 from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
 
+from kivy.core.clipboard import Clipboard
 from kivy.core.window import Window
 Window.size = ( 300, 500 )
 
@@ -491,6 +489,7 @@ class DebugLog(Screen):
 		# set local instance fields that reference our global variables
 		global bk
 		self.bk = bk
+		self.show_debug_log_thread = None
 
 		super(DebugLog, self).__init__(**kwargs)
 
@@ -499,7 +498,23 @@ class DebugLog(Screen):
 			logfile_path = logger.root.handlers[0].baseFilename
 
 			with open(logfile_path) as log_file:
-				self.debug_log.text = log_file.read()
+				self.debug_log_contents = log_file.read()
+
+			# we use treading.Thread() instead of multiprocessing.Process
+			# because it can update the widget's contents directly without
+			# us having to pass data in-memory between the child process.
+			# Con: We can't kill threads, so it should only be used for
+			# short-running background tasks that won't get stuck
+			self.show_debug_log_thread = threading.Thread(
+			 target = self.show_debug_log
+			)
+			self.show_debug_log_thread.start()
+
+	def show_debug_log( self ):
+		self.debug_log.text = self.debug_log_contents
+
+	def copy_debug_log( self ):
+		Clipboard.copy( self.debug_log_contents )
 
 	def go_back(self):
 		self.manager.switch_to('main')
