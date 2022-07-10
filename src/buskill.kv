@@ -8,6 +8,7 @@
 # Version: 0.2
 ################################################################################
 
+
 <CriticalError>:
 
 	msg: msg
@@ -63,9 +64,10 @@
 			anim_type: 'slide_above_simple'
 			side_panel_width: min( dp(300), 0.8*self.width )
 
-			# this is the distance from the left side of the app from which the user
-			# can drag the navigation drawer open by touch gesture. It must be low else
-			# it will block other taps on other buttons in that left-side band
+			# this is the distance from the left side of the app from which the
+			# user can drag the navigation drawer open by touch gesture. It must be
+			# low else it will block other taps on other buttons in that left-side
+			# band
 			#touch_accept_width: min( dp(300), 0.8*self.width )
 			touch_accept_width: dp(15)
 
@@ -226,9 +228,19 @@
 				background_color: 0, 0, 0, 0
 				on_release: upgrade_dialog1.dismiss()
 
+<DebugLogLines@Label>:
+	debug_log: debug_log
+	id: debug_log
+	text: "Loading Log. Please wait."
+	font_name: "RobotoMono"
+	font_size: 10
+	halign: 'left'
+	valign: 'middle'
+
 <DebugLog>:
 
-	debug_log: debug_log
+	#debug_log: debug_log
+	rv: rv
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -269,15 +281,19 @@
 					font_name: "Roboto"
 					font_size: 16
 
-				TextInput:
-					id: debug_log
-					text: "Loading Log. Please wait."
-					font_name: "RobotoMono"
-					font_size: 10
-					halign: 'left'
+				RecycleView:
+					viewclass: 'DebugLogLines'
+					id: rv
 					size_hint: (1,15)
-					valign: 'middle'
-					readonly: True
+					scroll_type: ['bars', 'content']
+					bar_width: 25
+
+					RecycleBoxLayout:
+						default_size: None, dp(25)
+						default_size_hint: 1, None
+						size_hint_y: None
+						height: self.minimum_height
+						orientation: 'vertical'
 
 				BoxLayout:
 					orientation: 'horizontal'

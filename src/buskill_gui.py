@@ -511,7 +511,11 @@ class DebugLog(Screen):
 			self.show_debug_log_thread.start()
 
 	def show_debug_log( self ):
-		self.debug_log.text = self.debug_log_contents
+		#self.debug_log.text = self.debug_log_contents
+		lines = []
+		for line in self.debug_log_contents.splitlines(keepends=False):
+			lines.append({'text': line})
+		self.rv.data = lines
 
 	def copy_debug_log( self ):
 		Clipboard.copy( self.debug_log_contents )
