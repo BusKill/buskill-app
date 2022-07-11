@@ -229,20 +229,11 @@
 				on_release: upgrade_dialog1.dismiss()
 
 <DebugLogLines@Label>:
-#	text: "Loading Log. Please wait."
+	text: "Loading Log. Please wait."
 	size_hint_x: None
 	width: self.texture_size[0]
-	#font_name: "RobotoMono"
-	#font_size: 10
-#	halign: 'left'
-#	text_size: self.size
-
-	canvas.before:
-		Color:
-			rgb: 0.5, 0.5, 1
-		Rectangle:
-			size: self.size
-			pos: self.pos
+	font_name: "RobotoMono"
+	font_size: dp(12)
 
 <DebugLog>:
 
@@ -294,16 +285,19 @@
 					scroll_type: ['bars', 'content']
 					bar_width: dp(25)
 
+					# scroll to the very bottom of the log
+					scroll_y: 0
+
 					RecycleBoxLayout:
-						default_size: None, dp(25)
+						default_size: None, dp(12)
 						default_size_hint: None, None
 						size_hint: None, None
 						height: self.minimum_height
+						orientation: 'vertical'
 
 						# TODO: fix this so that the horizontal scroll will be as wide
 						#       as the longest line
 						size: dp(3000), self.minimum_height
-						orientation: 'vertical'
 
 				BoxLayout:
 					orientation: 'horizontal'
