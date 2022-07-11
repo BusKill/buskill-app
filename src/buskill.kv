@@ -291,29 +291,18 @@
 					viewclass: 'DebugLogLines'
 					id: rv
 					size_hint: (1,15)
-					#size: dp(800), dp(800)
 					scroll_type: ['bars', 'content']
 					bar_width: dp(25)
 
 					RecycleBoxLayout:
-						# setting default_size prevents the big gap between lines, but
-						# it truncates the line's content too :(
-						spacing: dp(1)
-						padding: dp(2)
 						default_size: None, dp(25)
 						default_size_hint: None, None
 						size_hint: None, None
 						height: self.minimum_height
-						#width: self.minimum_width
-						#size_x: self.minimum_size[0]
-						#size_x: dp(900)
-						#size_y: dp(900)
-						#size: self.minimum_width, self.minimum_height
-						#size: self.minimum_width, dp(900)
 
-						# if you set this, then you get both scroll bars
-						#size: (900), dp(900)
-						size: dp(900), self.minimum_height
+						# TODO: fix this so that the horizontal scroll will be as wide
+						#       as the longest line
+						size: dp(3000), self.minimum_height
 						orientation: 'vertical'
 
 				BoxLayout:
