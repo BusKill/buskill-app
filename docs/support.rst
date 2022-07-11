@@ -3,4 +3,39 @@
 Support
 =======
 
-If you have a question that is not answered by this documentation, please `create an issue <https://github.com/BusKill/buskill-app/issues/new/choose>`_ on our github.
+As an open-source project, we try to keep all of our support requests on GitHub. If you
+
+#. have a question that is not answered by this documentation
+#. discover a bug in the software
+#. would like to request a feature in the software
+
+then please `create an issue <https://github.com/BusKill/buskill-app/issues/new/choose>`_ on our github.
+
+If your bug is security-related and you'd like to contact us confidentially, please see :ref:`Reporting Security Bugs <securityreports>`
+
+If you don't want to register for an account on GitHub or you'd like to remain anonymous, then you can `email us <https://www.buskill.in/contact/>`_. We'll put the issue on GitHub for you.
+
+Bug Reports
+===========
+In order for us to fix your bug, we need you to tell us:
+
+#. What you expected to happen
+#. What actually happened
+#. Steps to Reproduce the bug
+#. Your Debug Log
+#. A Screenshot of the bug
+
+For privacy reasons, our software doesn't have any built-in `telemetry <https://en.wikipedia.org/wiki/Telemetry#Software>`_ to report crashes or bugs. As such, we'll need you to tell us a bit about your system and what you did to cause the bug (so we can reproduce it).
+
+Debug Log
+---------
+
+The best way for us to understand the issue is for you to add your ``Debug Log`` to your Bug Report. This can be obtained in the app.
+
+First, reproduce the bug before you attempt to fetch the ``Debug Log``. The ``Debug Log`` may not have the information we need if you don't copy it *after* encountering the bug.
+
+After the app malfunctions, open the app menu and click ``Debug Log``. Click ``Copy Log``
+
+Now you can paste the contents of your clipboard into the Bug Report on GitHub or send it in your email to us. Before publishing it on the Internet, you may want to obfuscate/redact your system's username if you wish to remain anonymous.
+
+If you'd like to help troubleshoot the bug yourself, you may find the `sourcecode <https://github.com/BusKill/buskill-app/tree/master/src>`_ and :ref:`sourcecode documentation <autodoc>` to be helpful

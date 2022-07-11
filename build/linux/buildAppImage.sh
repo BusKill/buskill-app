@@ -43,7 +43,7 @@ if [ $INODE_NUM -gt 3 ]; then
 	SUDO=''
 fi
 
-APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg'
+APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg file'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -68,6 +68,7 @@ print_debugging_info () {
 	dpkg --list --no-pager || dpkg --list # fucking Ubuntu
 	whoami
 	env
+	du -sh dist/
 }
 
 ################################################################################
