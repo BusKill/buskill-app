@@ -155,6 +155,8 @@ class MainWindow(Screen):
 		return self.webbrowser_open_url( bk.url_website )
 
 	def webbrowser_open_url(self, url ):
+		msg = "DEBUG: Opening URL in webbrowser = " +str(url)
+		print( msg ); logger.debug( msg )
 		webbrowser.open( url )
 
 	def about(self):
@@ -441,11 +443,17 @@ class DebugLog(Screen):
 
 	def on_pre_enter(self, *args):
 
+		msg = "DEBUG: User switched to 'DebugLog' screen"
+		print( msg ); logger.debug( msg )
+
 		# register the function for clicking the "help" icon at the top
 		self.debug_header.bind( on_ref_press=self.ref_press )
 
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
+
+		# close the navigation drawer on the main screen
+		self.main_screen.nav_drawer.toggle_state()
 
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
@@ -474,7 +482,22 @@ class DebugLog(Screen):
 		self.rv.data = lines
 
 	def copy_debug_log( self ):
+
+		msg = "DEBUG: User copied contents of 'DebugLog' to clipboard"
+		print( msg ); logger.debug( msg )
+
 		Clipboard.copy( self.debug_log_contents )
+
+		msg = "The full Debug Log has been copied to your clipboard.\n\n"
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=31]\ue88f[/size][/font] Debug Log',
+		 body = msg,
+		 button = "",
+		 continue_function=None
+		)
+		self.dialog.b_cancel.text = "OK"
+		self.dialog.l_body.bind( on_ref_press=self.ref_press )
+		self.dialog.open()
 
 	def go_back(self):
 		self.manager.switch_to('main')
