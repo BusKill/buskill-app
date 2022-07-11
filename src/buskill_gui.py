@@ -146,24 +146,6 @@ class MainWindow(Screen):
 			self.dialog.auto_dismiss = False
 			self.dialog.open()
 
-	def debug_log1(self):
-
-		# first close the navigation drawer
-		self.nav_drawer.toggle_state()
-
-		# attempt to get debug log contents
-		# https://stackoverflow.com/questions/72910245/how-to-get-log-file-path-from-logging-after-getlogger
-		# https://stackoverflow.com/questions/72910372/how-to-get-all-previous-logs-written-during-current-run-python-logging/
-		if logger.root.hasHandlers():
-			logfile_path = logger.root.handlers[0].baseFilename
-
-			with open(logfile_path) as log_file:
-				debug_log = log_file.read()
-
-		#self.debug_log.text = debug_log
-
-		# TODO: actually display the contents of msg in a textarea
-
 	def about_ref_press(self, ref):
 		if ref == 'gui_help':
 			return self.webbrowser_open_url( bk.url_documentation_gui )
@@ -470,9 +452,9 @@ class DebugLog(Screen):
 		self.dialog = self.main_screen.dialog
 
 		if logger.root.hasHandlers():
-			logfile_path = logger.root.handlers[0].baseFilename
+			self.logfile_path = logger.root.handlers[0].baseFilename
 
-			with open(logfile_path) as log_file:
+			with open(self.logfile_path) as log_file:
 				self.debug_log_contents = log_file.read()
 
 			# we use treading.Thread() instead of multiprocessing.Process
@@ -505,6 +487,7 @@ class DebugLog(Screen):
 
 			msg = "The Debug Log shows detailed information about the app's activity since it was started. This can be helpful to diagnose bugs if the app is not functioning as expected.\n\n"
 			msg+= "For more info on how to submit a bug report, see [ref=bug_report][u]our documentation[/u][/ref]\n\n"
+			msg+= "Your full Debug Log is stored in " +self.logfile_path+ "\n\n"
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue88f[/size][/font] Debug Log',
 			 body = msg,
