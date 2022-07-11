@@ -166,27 +166,14 @@ class MainWindow(Screen):
 
 	def about_ref_press(self, ref):
 		if ref == 'gui_help':
-			return self.webbrowser_open_docs_gui()
+			return self.webbrowser_open_url( bk.url_documentation_gui )
 		elif ref == 'contribute':
-			return self.webbrowser_open_docs_contribute()
+			return self.webbrowser_open_url( bk.url_documentation_contribute )
 
-		return self.webbrowser_open_website()
+		return self.webbrowser_open_url( bk.url_website )
 
-	def webbrowser_open_website(self):
-		webbrowser.open( 'https://buskill.in/' )
-
-	def webbrowser_open_docs(self):
-		webbrowser.open( 'https://docs.buskill.in/' )
-
-	def webbrowser_open_docs_bugs(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
-
-	def webbrowser_open_docs_gui(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/' +str(BUSKILL_VERSION['VERSION'])+ '/software_usr/gui.html' )
-
-	def webbrowser_open_docs_contribute(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/contributing.html' )
-
+	def webbrowser_open_url(self, url ):
+		webbrowser.open( url )
 
 	def about(self):
 
@@ -206,30 +193,6 @@ class MainWindow(Screen):
 		self.dialog.b_cancel.text = "OK"
 		self.dialog.l_body.on_ref_press = self.about_ref_press
 		self.dialog.open()
-
-	def about_ref_press(self, ref):
-		if ref == 'gui_help':
-			return self.webbrowser_open_docs_gui()
-		elif ref == 'contribute':
-			return self.webbrowser_open_docs_contribute()
-
-		return self.webbrowser_open_website()
-
-	def webbrowser_open_website(self):
-		webbrowser.open( 'https://buskill.in/' )
-
-	def webbrowser_open_docs(self):
-		webbrowser.open( 'https://docs.buskill.in/' )
-
-	def webbrowser_open_docs_bugs(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
-
-	def webbrowser_open_docs_gui(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/' +str(BUSKILL_VERSION['VERSION'])+ '/software_usr/gui.html' )
-
-	def webbrowser_open_docs_contribute(self):
-		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/contributing.html' )
-
 
 	def upgrade1(self):
 
@@ -499,9 +462,12 @@ class DebugLog(Screen):
 		# register the function for clicking the "help" icon at the top
 		self.debug_header.bind( on_ref_press=self.ref_press )
 
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
-		self.dialog = self.manager.get_screen('main').dialog
+		self.dialog = self.main_screen.dialog
 
 		if logger.root.hasHandlers():
 			logfile_path = logger.root.handlers[0].baseFilename
@@ -532,14 +498,13 @@ class DebugLog(Screen):
 		self.manager.switch_to('main')
 
 	def ref_press(self, widget, ref):
-		print( 'caught press!' )
-		print( self )
-		print( widget )
-		print( ref )
+
+		# what did the user click?
 		if ref == 'help_debug_log':
-			print( self.manager )
+			# the user clicked the "help" icon; show them the help modal
+
 			msg = "The Debug Log shows detailed information about the app's activity since it was started. This can be helpful to diagnose bugs if the app is not functioning as expected.\n\n"
-			msg+= "For more info on how to submit a bug report, see [ref='bug_report'][u]our documentation[/u][/ref]\n\n"
+			msg+= "For more info on how to submit a bug report, see [ref=bug_report][u]our documentation[/u][/ref]\n\n"
 			self.dialog = DialogConfirmation(
 			 title = '[font=mdicons][size=30]\ue88f[/size][/font] Debug Log',
 			 body = msg,
@@ -550,11 +515,14 @@ class DebugLog(Screen):
 			self.dialog.l_body.bind( on_ref_press=self.ref_press )
 			self.dialog.open()
 
-#			return self.webbrowser_open_docs_gui()
-#		elif ref == 'contribute':
-#			return self.webbrowser_open_docs_contribute()
-#
-#		return self.webbrowser_open_website()
+		elif ref == 'bug_report':
+			self.report_bug()
+
+	def report_bug( self ):
+
+		# for privacy reasons, we don't do in-app bug reporting; just point the
+		# user to our documentation
+		self.main_screen.webbrowser_open_url( bk.url_documentation_bug_report )
 
 class BusKillApp(App):
 

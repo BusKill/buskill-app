@@ -200,7 +200,10 @@ class BusKill:
 
 	def __init__(self):
 
-		# instantiate instance fields
+		###############################
+		# instantiate instance fields #
+		###############################
+
 		self.CURRENT_PLATFORM = None
 		self.KERNEL_VERSION = None
 		self.IS_PLATFORM_SUPPORTED = False
@@ -224,6 +227,19 @@ class BusKill:
 		self.usb_handler = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
+
+		# documentation links
+		if BUSKILL_VERSION['VERSION'] == '':
+			ver = 'stable'
+		else:
+			ver = BUSKILL_VERSION['VERSION']
+		print( 'ver:|' +ver+ '|' )
+		self.url_website = "https://buskill.in"
+		self.url_documentation = "https://docs.buskill.in"
+		self.url_documentation_contribute = "https://docs.buskill.in/buskill-app/en/stable/contributing.html"
+		self.url_documentation_bug_report = 'https://docs.buskill.in/buskill-app/en/' +str(ver)+ '/support.html'
+		self.url_documentation_gui = 'https://docs.buskill.in/buskill-app/en/' +str(ver)+ '/software_usr/gui.html'
+		print( self.url_documentation_gui )
 
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
