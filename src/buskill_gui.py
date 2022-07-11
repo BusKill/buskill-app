@@ -483,6 +483,7 @@ class CriticalError(BoxLayout):
 class DebugLog(Screen):
 
 	debug_log = ObjectProperty(None)
+	debug_header = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
 
@@ -494,6 +495,14 @@ class DebugLog(Screen):
 		super(DebugLog, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
+
+		# register the function for clicking the "help" icon at the top
+		self.debug_header.bind( on_ref_press=self.ref_press )
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.manager.get_screen('main').dialog
+
 		if logger.root.hasHandlers():
 			logfile_path = logger.root.handlers[0].baseFilename
 
@@ -521,6 +530,31 @@ class DebugLog(Screen):
 
 	def go_back(self):
 		self.manager.switch_to('main')
+
+	def ref_press(self, widget, ref):
+		print( 'caught press!' )
+		print( self )
+		print( widget )
+		print( ref )
+		if ref == 'help_debug_log':
+			print( self.manager )
+			msg = "The Debug Log shows detailed information about the app's activity since it was started. This can be helpful to diagnose bugs if the app is not functioning as expected.\n\n"
+			msg+= "For more info on how to submit a bug report, see [ref='bug_report'][u]our documentation[/u][/ref]\n\n"
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue88f[/size][/font] Debug Log',
+			 body = msg,
+			 button = "",
+			 continue_function=None
+			)
+			self.dialog.b_cancel.text = "OK"
+			self.dialog.l_body.bind( on_ref_press=self.ref_press )
+			self.dialog.open()
+
+#			return self.webbrowser_open_docs_gui()
+#		elif ref == 'contribute':
+#			return self.webbrowser_open_docs_contribute()
+#
+#		return self.webbrowser_open_website()
 
 class BusKillApp(App):
 

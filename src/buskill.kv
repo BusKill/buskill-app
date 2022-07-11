@@ -238,6 +238,7 @@
 <DebugLog>:
 
 	rv: rv
+	debug_header: debug_header
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -270,6 +271,7 @@
 				spacing: 10
 
 				Label:
+					id: debug_header
 					markup: True
 					text: 'Debug Log Below [font=mdicons][size=18][ref=help_debug_log]\ue8fd[/ref][/size][/font]'
 					size_hint: (1,1)
@@ -278,6 +280,7 @@
 					valign: 'middle'
 					font_name: "Roboto"
 					font_size: 16
+					#on_ref_press: root.ref_press
 
 				RecycleView:
 					viewclass: 'DebugLogLines'
