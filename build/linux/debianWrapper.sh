@@ -10,7 +10,7 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-03
-# Updated: 2022-07-06
+# Updated: 2022-07-11
 # Version: 0.3
 ################################################################################
 
@@ -18,7 +18,7 @@ set -x
 # SETTINGS #
 ############
 
-DOCKER_IMAGE_NAME='debian:bullseye-slim'
+DOCKER_IMAGE_NAME='debian:buster-slim'
 
 #################
 # SANITY CHECKS #
@@ -46,7 +46,7 @@ fi
 #       currently this has only been tested on Debian 10
 
 apt-get clean
-apt-get -y install docker.io
+yes | sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install docker.io
 
 ##################
 # DOWNLOAD IMAGE #

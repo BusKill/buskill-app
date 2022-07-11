@@ -6,8 +6,8 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2021-09-26
-  Version: 0.3
+  Updated: 2022-07-11
+  Version: 0.4
 
 This is the heart of the buskill app, shared by both the cli and gui
 
@@ -233,13 +233,11 @@ class BusKill:
 			ver = 'stable'
 		else:
 			ver = BUSKILL_VERSION['VERSION']
-		print( 'ver:|' +ver+ '|' )
 		self.url_website = "https://buskill.in"
 		self.url_documentation = "https://docs.buskill.in"
 		self.url_documentation_contribute = "https://docs.buskill.in/buskill-app/en/stable/contributing.html"
 		self.url_documentation_bug_report = 'https://docs.buskill.in/buskill-app/en/' +str(ver)+ '/support.html'
 		self.url_documentation_gui = 'https://docs.buskill.in/buskill-app/en/' +str(ver)+ '/software_usr/gui.html'
-		print( self.url_documentation_gui )
 
 		self.CURRENT_PLATFORM = platform.system().upper()
 		self.ERR_PLATFORM_NOT_SUPPORTED = 'ERROR: Your platform (' +str(platform.system())+ ') is not supported. If you believe this is an error, please file a bug report:\n\nhttps://github.com/BusKill/buskill-app/issues'
