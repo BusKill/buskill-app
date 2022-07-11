@@ -229,17 +229,14 @@
 				on_release: upgrade_dialog1.dismiss()
 
 <DebugLogLines@Label>:
-	debug_log: debug_log
-	id: debug_log
 	text: "Loading Log. Please wait."
 	font_name: "RobotoMono"
 	font_size: 10
 	halign: 'left'
-	valign: 'middle'
+	text_size: self.size
 
 <DebugLog>:
 
-	#debug_log: debug_log
 	rv: rv
 
 	BoxLayout:
@@ -286,10 +283,10 @@
 					id: rv
 					size_hint: (1,15)
 					scroll_type: ['bars', 'content']
-					bar_width: 25
+					bar_width: dp(25)
 
 					RecycleBoxLayout:
-						default_size: None, dp(25)
+						#default_size: None, dp(25)
 						default_size_hint: 1, None
 						size_hint_y: None
 						height: self.minimum_height
