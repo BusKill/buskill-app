@@ -229,11 +229,20 @@
 				on_release: upgrade_dialog1.dismiss()
 
 <DebugLogLines@Label>:
-	text: "Loading Log. Please wait."
-	font_name: "RobotoMono"
-	font_size: 10
-	halign: 'left'
-	text_size: self.size
+#	text: "Loading Log. Please wait."
+	size_hint_x: None
+	width: self.texture_size[0]
+	#font_name: "RobotoMono"
+	#font_size: 10
+#	halign: 'left'
+#	text_size: self.size
+
+	canvas.before:
+		Color:
+			rgb: 0.5, 0.5, 1
+		Rectangle:
+			size: self.size
+			pos: self.pos
 
 <DebugLog>:
 
@@ -282,14 +291,20 @@
 					viewclass: 'DebugLogLines'
 					id: rv
 					size_hint: (1,15)
+					size: dp(800), dp(800)
 					scroll_type: ['bars', 'content']
 					bar_width: dp(25)
 
 					RecycleBoxLayout:
-						#default_size: None, dp(25)
-						default_size_hint: 1, None
-						size_hint_y: None
-						height: self.minimum_height
+						# setting default_size prevents the big gap between lines, but
+						# it truncates the line's content too :(
+						spacing: dp(1)
+						padding: dp(2)
+						default_size: None, dp(25)
+						default_size_hint: None, None
+						size_hint: None, None
+						#height: self.minimum_height
+						size: self.minimum_size
 						orientation: 'vertical'
 
 				BoxLayout:
