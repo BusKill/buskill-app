@@ -114,3 +114,7 @@ BusKill can be disarmed by closing the window or clicking the ``Disarm`` button.
 		:align: center
 		:target: ../_images/buskill_app_mac_armed1.jpg
 
+Updating
+--------
+
+TODO

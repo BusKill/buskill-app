@@ -10,4 +10,5 @@ This section will describe [a] what the BusKill project is and [b] why a BusKill
 
    what
    quickstart
-   faq
+
+* :ref:`faq`

@@ -280,7 +280,7 @@ Finally, upload the files to the tag's release using the github.com WUI
  * `https://github.com/BusKill/buskill-app/releases/tag/v3.2.0 <https://github.com/BusKill/buskill-app/releases/tag/v3.2.0>`_
 
 Update updates repo metadata
-------
+----------------------------
 
 At this point, users will be able to download v3.2.0 of the BusKill app from github.com, but existing users will not be able to click the update button in the app to upgrade their existing install to the latest version.
 
