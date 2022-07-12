@@ -1,4 +1,4 @@
-.. _gui:
+﻿.. _gui:
 
 BusKill App: Graphical User Interface
 =====================================
@@ -114,7 +114,46 @@ BusKill can be disarmed by closing the window or clicking the ``Disarm`` button.
 		:align: center
 		:target: ../_images/buskill_app_mac_armed1.jpg
 
+.. _gui_update:
+
 Updating
 --------
 
-TODO
+You can upgrade the BusKill app to the latest version within the app itself.
+
+.. note::
+
+  The update process is secure and censorship-resistant. First, it downloads a ``meta.json`` file (enumerating available releases) from a random mirror. If a new update is available, it downloads it to the same directory as your existing application. If the download was successful, it exits and launches the new version. If the new version launches successfully, it deletes the old version.
+
+  All downloaded files (both the ``meta.json`` file and the portable application itself) are cryptographically signed with a 4096-bit RSA key. The PGP signature is checked immediately after download. If the signature is invalid, then the downloaded files are immediately wiped and the user is warned.
+
+To update the app, open the app menu and click ``Update``.
+
+.. list-table::
+
+	* - .. figure:: /images/buskill_open_menu.png
+		:alt: screenshot shows the app running with the hamburger menu in the top-left highlighted
+		:align: center
+		:target: ../_images/buskill_open_menu.png
+
+	  - .. figure:: /images/buskill_update_1.png
+		:alt: screenshot shows the app running with the navigration drawer open, and the "Update" option selected
+		:align: center
+		:target: ../_images/buskill_usb_update_1.png
+
+.. warning::
+
+  For privacy reasons, our software doesn't have any built-in `telemetry <https://en.wikipedia.org/wiki/Telemetry#Software>`_. If you select an action that will cause the software to query the Internet, we will inform you and ask for confirmation before proceeding.
+
+  Though all file downloads are encrypted over https, your DNS lookups may not be encrypted. This means that someone eavesdropping on your internet connection may be able to see that you're using BusKill if you do an in-app update.
+
+  Please consider using `encrypted DNS <https://en.wikipedia.org/wiki/DNS_over_HTTPS>`_, or a `VPN software <https://www.privacyguides.org/vpn/>`_ that tunnels your DNS requests.
+
+The app will warn you that it is about to access the Internet, which could alert `Eve <https://en.wikipedia.org/wiki/Alice_and_Bob>`_ that you're using BusKill software (see above). If you accept these risks, click ``Check Update`` to proceed with checking for a new version of the app.
+
+.. figure:: /images/buskill_update_2.png
+  :alt: screenshot showing the app running with a modal titled "Check for Updates?" and the "Check Updates" button is highlighted
+  :align: center
+  :target: ../_images/buskill_update_2.png
+
+Depending on your internet connection, the update could take several minutes to download.
