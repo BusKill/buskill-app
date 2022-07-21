@@ -66,12 +66,6 @@ def BusKillCLI():
 	)
 
 	parser.add_argument(
-	 "-l", "--list-triggers",
-	 help="List triggers and exit",
-	 action="store_true"
-	)
-
-	parser.add_argument(
 	 "-U", "--upgrade",
 	 help="Download & upgrade latest version of BusKill",
 	 action="store_true"
@@ -100,12 +94,6 @@ def BusKillCLI():
 		msg = bk.ERR_PLATFORM_NOT_SUPPORTED
 		print( msg ); logger.error( msg )
 		sys.exit(1)
-
-	# did the user ask us to enumerate all the triggers available?
-	if args.list_triggers:
-
-		print( 'oh hai' )
-		sys.exit(0)
 
 	# did the user ask us to do a software upgrade?
 	if args.upgrade:

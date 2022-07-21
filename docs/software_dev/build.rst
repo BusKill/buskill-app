@@ -46,7 +46,6 @@ After you've successfully built the app once, you can iterate more quickly by us
   	--version            print version and exit.
   	-v, --verbose        increase output verbosity
   	-a, --arm            Arms BusKill
-  	-l, --list-triggers  List triggers and exit
   	-U, --upgrade        Download & upgrade latest version of BusKill
 	user@buskill:~/sandbox/buskill-app$ 
 
