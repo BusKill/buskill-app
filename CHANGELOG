@@ -1,5 +1,8 @@
 buskill-app changelog
 
+[0.5.0] - 2020-10-16
+* added "Debug Log" screen in GUI
+
 [0.4.0] - 2020-10-16
 * added "About" button to navigation drawer
 
