@@ -206,7 +206,7 @@ After verifying the reproducibility of the Linux build, download the Windows and
 
 ::
 
-	root@disp2781:~# wget --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/buskill-win-v3.2.0-x86_64.zip
+	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/buskill-win-v3.2.0-x86_64.zip
 	...
 	root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/<epoch_seconds>_windows/SHA256SUMS
 	...
