@@ -408,6 +408,8 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 	   caaf2e8..daa5241  v3.2.0 -> v3.2.0
 	user@host:~/buskill-app$ 
 
-Now you should test that in-app upgrades from the previous version are functioning properly.
+Now test that in-app upgrades from the previous version are functioning properly.
+
+Finally, make sure to propogate the ``meta.json`` and ``meta.json.asc`` files to all mirrors.
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3
