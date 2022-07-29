@@ -1,11 +1,46 @@
 {
 	"latest":{
 		"buskill-app":{
-			"stable":"v0.4.0"
+			"stable":"v0.5.0"
 		}
 	},
 	"updates":{
 		"buskill-app":{
+			"v0.5.0":{
+				"lin":{
+					"x86_64":{
+						"archive":{
+							"url":[
+								"https://github.com/BusKill/buskill-app/releases/download/v0.5.0/buskill-lin-v0.5.0-x86_64.tbz"
+							]
+						}
+					}
+				},
+				"mac":{
+					"x86_64":{
+						"archive":{
+							"url":[
+								"https://github.com/BusKill/buskill-app/releases/download/v0.5.0/buskill-mac-v0.5.0-x86_64.dmg"
+							]
+						}
+					}
+				},
+				"win":{
+					"x86_64":{
+						"archive":{
+							"url":[
+								"https://github.com/BusKill/buskill-app/releases/download/v0.5.0/buskill-win-v0.5.0-x86_64.zip"
+							]
+						}
+					}
+				},
+				"SHA256SUMS":[
+					"https://github.com/BusKill/buskill-app/releases/download/v0.5.0/SHA256SUMS"
+				],
+				"SHA256SUMS.asc":[
+					"https://github.com/BusKill/buskill-app/releases/download/v0.5.0/SHA256SUMS.asc"
+				]
+			},
 			"v0.4.0":{
 				"lin":{
 					"x86_64":{
