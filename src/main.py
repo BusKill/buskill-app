@@ -73,6 +73,11 @@ if __name__ == '__main__':
 
 	# platform info
 	logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
+	logging.debug( 'platform.platform()|' +str(platform.platform())+ '|' )
+	logging.debug( 'platform.system()|' +str(platform.system())+ '|' )
+	logging.debug( 'platform.release()|' +str(platform.release())+ '|' )
+	logging.debug( 'platform.version()|' +str(platform.version())+ '|' )
+	logging.debug( 'platform.machine()|' +str(platform.machine())+ '|' )
 
 	# what platform are they running?
 	CURRENT_PLATFORM = platform.system().upper()
@@ -84,13 +89,20 @@ if __name__ == '__main__':
 		except Exception:
 			pass
 
-	# TODO: get windows version info
-	#if CURRENT_PLATFORM.startswith( 'WIN' ):
+	if CURRENT_PLATFORM.startswith( 'WIN' ):
 		# they're running windows; what version of windows?
+		try:
+			logging.debug( 'sys.getwindowsversion()|' +str(sys.getwindowsversion())+ '|' )
+		except Exception:
+			pass
 	
-	# TODO: get MacOS version info
-	#if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-		# they're running macos; what version of macos?
+	if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		# they're running mac; what version of macos?
+		try:
+			logging.debug( 'platform.uname()|' +str(platform.uname())+ '|' )
+			logging.debug( 'platform.mac_ver()|' +str(platform.mac_ver())+ '|' )
+		except Exception:
+			pass
 
 	###########
 	# PREREQS #
