@@ -66,17 +66,35 @@ if __name__ == '__main__':
 	logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
 	logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )
 	logging.debug( 'sys.path|' +str(sys.path)+ '|' )
-	logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
 	logging.debug( 'sys.prefix|' +str(sys.prefix)+ '|' )
 	logging.debug( 'sys.version|' +str(sys.version)+ '|' )
 	logging.debug( 'sys.api_version|' +str(sys.api_version)+ '|' )
 	logging.debug( 'sys.version_info|' +str(sys.version_info)+ '|' )
 
+	# platform info
+	logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
+
+	# what platform are they running?
+	CURRENT_PLATFORM = platform.system().upper()
+	if CURRENT_PLATFORM.startswith( 'LINUX' ):
+		# they're running linux; what distro and version of linux?
+		try:
+			with open( "/etc/os-release" ) as f:
+				logging.debug( str(f.read()) )
+		except Exception:
+			pass
+
+	# TODO: get windows version info
+	#if CURRENT_PLATFORM.startswith( 'WIN' ):
+		# they're running windows; what version of windows?
+	
+	# TODO: get MacOS version info
+	#if CURRENT_PLATFORM.startswith( 'DARWIN' ):
+		# they're running macos; what version of macos?
+
 	###########
 	# PREREQS #
 	###########
-
-	CURRENT_PLATFORM = platform.system().upper()
 
 	# fix windows "error: unrecognized arguments: --multiprocessing-fork"
 	# * kttps://stackoverflow.com/questions/46335842/python-multiprocessing-throws-error-with-argparse-and-pyinstaller
