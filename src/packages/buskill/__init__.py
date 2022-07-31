@@ -32,6 +32,8 @@ logger = logging.getLogger( __name__ )
 CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'LINUX' ):
 	import usb1
+	msg = "usb1.__version__:|" +str(usb1.__version__)+ "|"
+	print( msg ); logger.debug( msg )
 
 if CURRENT_PLATFORM.startswith( 'WIN' ):
 	import win32api, win32con, win32gui
@@ -39,6 +41,8 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 	
 if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 	import usb1
+	msg = "usb1.__version__:|" +str(usb1.__version__)+ "|"
+	print( msg ); logger.debug( msg )
 
 ################################################################################
 #                                  SETTINGS                                    #
