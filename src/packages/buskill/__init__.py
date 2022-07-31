@@ -609,6 +609,9 @@ class BusKill:
 		if event == usb1.HOTPLUG_EVENT_DEVICE_LEFT:
 			# this is a usb removal event
 
+			msg = "INFO: Detected USB removal event"
+			print( msg ); logger.info( msg )
+
 			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
@@ -663,16 +666,54 @@ class BusKill:
 		print( msg ); logger.debug( msg )
 
 		try:
-			subprocess.run( ['xdg-screensaver', 'lock'] )
-			subprocess.run( ['xscreensaver', '-lock'] )
-		except FileNotFoundError as e:
-			pass
+			# first try to lock the screen with xdg-screensaver command
+			msg = "INFO: Attempting to execute `xdg-screensaver lock`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['xdg-screensaver', 'lock'], capture_output=True, text=True )
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+		except Exception as e:
+			# that didn't work; log it and try fallback
+			msg = "WARNING: Failed to execute `xdg-scrensaver lock`!" +str(e)
+			print( msg ); logger.warning( msg )
+
+			try:
+				# try to lock the screen with xscreensaver command
+				msg = "INFO: Attempting to execute `xscreensaver -lock`"
+				print( msg ); logger.debug( msg )
+				result = subprocess.run( ['xscreensaver', '-lock'], capture_output=True, text=True )
+
+				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+				print( msg ); logger.debug( msg )
+
+			except Exception as e:
+				# that didn't work; log it give up :(
+				msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+				print( msg ); logger.error(msg)
 
 	def triggerWin(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.debug( msg )
 
-		windll.user32.LockWorkStation()
+		try:
+			windll.user32.LockWorkStation()
+		except Exception as e:
+			msg = "ERROR: Failed to execute trigger!" +str(e)
+			print( msg ); logger.error( msg )
 
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
@@ -680,16 +721,44 @@ class BusKill:
 
 		try:
 			# this should work for most MacOS versions
-			subprocess.run( ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'] ) 
+			msg = "INFO: Attempting to execute `CGSession -suspend`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run(
+			 ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'],
+			 capture_output=True, text=True
+			) 
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
 
 		except Exception as e:
+			msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
+			print( msg ); logger.warning(msg)
 
 			try:
-				# fall-back on `pmset`
-				subprocess.run( ['pmset', 'displaysleepnow'] )
+				# that didn't work; log it and try fallback
+				msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+				print( msg ); logger.debug( msg )
+				subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+
+				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+				print( msg ); logger.debug( msg )
 
 			except Exception as e:
-				msg = "ERROR: Mac Kernel" + self.KERNEL_VERSION + "Unsupported"
+				# that didn't work; log it give up :(
+				msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
 				print( msg ); logger.error(msg)
 
 	#####################
