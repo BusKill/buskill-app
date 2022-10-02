@@ -232,6 +232,9 @@ class BusKill:
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
 
+		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
+		self.trigger = 'lock-screen'
+
 		# documentation links
 		if BUSKILL_VERSION['VERSION'] == '':
 			ver = 'stable'
@@ -437,6 +440,21 @@ class BusKill:
 			return True
 		else:
 			return False
+
+	def set_trigger(self, trigger):
+
+		if trigger not in self.SUPPORTED_TRIGGERS:
+			msg = "WARNING: Attempting to set trigger to invalid value (" +str(trigger)+ ")"
+			print( msg ); logger.debug( msg )
+			return False
+
+		self.trigger = trigger
+		msg = "DEBUG: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
+		print( msg ); logger.debug( msg )
+
+	def get_trigger(self):
+
+		return self.trigger
 
 	def handle_upgrades(self):
 
@@ -665,7 +683,22 @@ class BusKill:
 
 	# TODO: add other triggers besides lockscreens
 
+	# LINUX
+
 	def triggerLin(self):
+
+		if self.trigger == 'soft-shutdown':
+			print( "soft shutdown not yet implmetned. Skipping" )
+		else:
+			self.lock_linux()
+
+	# this function will lock the screen on linux machines
+	def lock_linux(self):
+		# first we try to lock with xdg-screensaver
+		self.lock_linux_xdg()
+
+	def lock_linux_xdg(self):
+
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.debug( msg )
 
@@ -684,30 +717,48 @@ class BusKill:
 			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
 			print( msg ); logger.debug( msg )
 
+			if result.returncode != 0:
+				# that didn't work; log it and try fallback
+				msg = "WARNING: Failed to execute `xdg-scrensaver lock`!"
+				print( msg ); logger.warning( msg )
+
+				self.lock_linux_xscreensaver()
+
 		except Exception as e:
 			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `xdg-scrensaver lock`!" +str(e)
 			print( msg ); logger.warning( msg )
 
-			try:
-				# try to lock the screen with xscreensaver command
-				msg = "INFO: Attempting to execute `xscreensaver -lock`"
-				print( msg ); logger.debug( msg )
-				result = subprocess.run( ['xscreensaver', '-lock'], capture_output=True, text=True )
+			self.lock_linux_xscreensaver()
 
-				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
-				print( msg ); logger.debug( msg )
+	def lock_linux_xscreensaver(self):
 
-				msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
-				print( msg ); logger.debug( msg )
+		try:
+			# try to lock the screen with xscreensaver command
+			msg = "INFO: Attempting to execute `xscreensaver -lock`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['xscreensaver', '-lock'], capture_output=True, text=True )
 
-				msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
-				print( msg ); logger.debug( msg )
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
 
-			except Exception as e:
-				# that didn't work; log it give up :(
-				msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it and try fallback
+				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
 				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it give up :(
+			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	# WINDOWS
 
 	def triggerWin(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
@@ -718,6 +769,8 @@ class BusKill:
 		except Exception as e:
 			msg = "ERROR: Failed to execute trigger!" +str(e)
 			print( msg ); logger.error( msg )
+
+	# MAC
 
 	def triggerMac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"

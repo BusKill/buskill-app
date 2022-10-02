@@ -70,7 +70,7 @@ def BusKillCLI():
 	 help="Choose trigger to execute. Allowed values are 'lock-screen' or 'soft-shutdown'",
 	 metavar='',
 	 choices=['l','lock-screen','s','soft-shutdown'],
-	 default='lockscreen'
+	 default='lock-screen'
 	)
 
 	parser.add_argument(
@@ -127,6 +127,9 @@ def BusKillCLI():
 		print( "Upgrade complete. New executable is '" +str(new_version_exe)+ "'" )
 
 		sys.exit(0)
+
+	# set the trigger
+	bk.set_trigger( args.trigger )
 
 	if args.arm:
 		bk.toggle()
