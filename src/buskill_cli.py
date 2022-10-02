@@ -128,8 +128,13 @@ def BusKillCLI():
 
 		sys.exit(0)
 
-	# set the trigger
-	bk.set_trigger( args.trigger )
+	# attempt to set the trigger
+	try:
+		bk.set_trigger( args.trigger )
+	except RuntimeWarning as e:
+		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
+		print( msg ); logger.error( msg )
+		sys.exit(1)
 
 	if args.arm:
 		bk.toggle()

@@ -234,6 +234,9 @@ class BusKill:
 
 		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
 		self.trigger = 'lock-screen'
+		self.trigger_softshutdown_linux_shutdown = None
+		self.trigger_softshutdown_linux_poweroff = None
+		self.trigger_softshutdown_linux_systemctl = None
 
 		# documentation links
 		if BUSKILL_VERSION['VERSION'] == '':
@@ -441,16 +444,76 @@ class BusKill:
 		else:
 			return False
 
+	# function to set the trigger (and to check sanity)
 	def set_trigger(self, trigger):
+
+		msg = "DEBUG: Attempting to set 'trigger' set to '" +str(trigger)+ "'"
+		print( msg ); logger.debug( msg )
 
 		if trigger not in self.SUPPORTED_TRIGGERS:
 			msg = "WARNING: Attempting to set trigger to invalid value (" +str(trigger)+ ")"
 			print( msg ); logger.debug( msg )
-			return False
+			raise Exception( msg )
+
+		# check sanity of the soft shutdown trigger
+		if trigger == 'soft-shutdown':
+
+			if self.OS_NAME_SHORT == 'lin':
+
+				# list of paths where binaries like 'shutdown' could be
+				bin_paths = [
+				 os.sep+'sbin',
+				 os.sep+'usr'+os.sep+'sbin',
+				 os.sep+'bin',
+				 os.sep+'usr'+os.sep+'bin'
+				]
+
+				for path in bin_paths:
+
+					# shutdown
+					shutdown_path = path + os.sep + 'shutdown'
+					if os.path.exists( shutdown_path ):
+						self.trigger_softshutdown_linux_shutdown = shutdown_path
+
+					# poweroff
+					poweroff_path = path + os.sep + 'poweroff'
+					if os.path.exists( poweroff_path ):
+						self.trigger_softshutdown_linux_poweroff = poweroff_path
+
+					# systemctl
+					systemctl_path = path + os.sep + 'systemctl'
+					if os.path.exists( systemctl_path ):
+						self.trigger_softshutdown_linux_systemctl = systemctl_path
+
+				# were we able to find at least one of their paths?
+				if self.trigger_softshutdown_linux_shutdown == None and \
+				 self.trigger_softshutdown_linux_poweroff == None and \
+				 self.trigger_softshutdown_linux_systemctl == None:
+					# we couldn't figure any of the paths; don't continue with this trigger
+					msg = "ERROR: Unable to find paths to soft shutdown binaries"
+					print( msg ); logger.error( msg )
+					raise Exception( msg )
+
+				msg = "DEBUG: shutdown binary path:|" \
+				 +str(self.trigger_softshutdown_linux_shutdown)+ "|"
+				print( msg ); logger.error( msg )
+
+				msg = "DEBUG: poweroff binary path:|" \
+				 +str(self.trigger_softshutdown_linux_poweroff)+ "|"
+				print( msg ); logger.error( msg )
+
+				msg = "DEBUG: systemctl binary path:|" \
+				 +str(self.trigger_softshutdown_linux_systemctl)+ "|"
+				print( msg ); logger.error( msg )
+
+			#elif self.OS_NAME_SHORT == 'win':
+				# TODO
+			#elif self.OS_NAME_SHORT == 'mac':
+				# TODO
 
 		self.trigger = trigger
-		msg = "DEBUG: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
-		print( msg ); logger.debug( msg )
+		msg = "INFO: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
+		print( msg ); logger.info( msg )
 
 	def get_trigger(self):
 
@@ -689,15 +752,16 @@ class BusKill:
 
 		if self.trigger == 'soft-shutdown':
 			print( "soft shutdown not yet implmetned. Skipping" )
+			self.trigger_softshutdown_linux()
 		else:
-			self.lock_linux()
+			self.trigger_lockscreen_linux()
 
 	# this function will lock the screen on linux machines
-	def lock_linux(self):
+	def trigger_lockscreen_linux(self):
 		# first we try to lock with xdg-screensaver
-		self.lock_linux_xdg()
+		self.trigger_lockscreen_linux_xdg()
 
-	def lock_linux_xdg(self):
+	def trigger_lockscreen_linux_xdg(self):
 
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.debug( msg )
@@ -731,7 +795,7 @@ class BusKill:
 
 			self.lock_linux_xscreensaver()
 
-	def lock_linux_xscreensaver(self):
+	def trigger_lockscreen_linux_xscreensaver(self):
 
 		try:
 			# try to lock the screen with xscreensaver command
@@ -749,12 +813,39 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			if result.returncode != 0:
-				# that didn't work; log it and try fallback
+				# that didn't work; log it and give up :(
 				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
 				print( msg ); logger.error(msg)
 
 		except Exception as e:
-			# that didn't work; log it give up :(
+			# that didn't work; log it and give up :(
+			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_softshutdown_linux(self):
+
+		try:
+			# try to shutdown with the `shutdown` command
+			msg = "INFO: Attempting to execute `shudown -h now`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['shutdown', '-h', 'now'], capture_output=True, text=True )
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it and give up :(
+				msg = "ERROR: Failed to execute `shutdown -h now`! "
+				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it and give up :(
 			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
 			print( msg ); logger.error(msg)
 
