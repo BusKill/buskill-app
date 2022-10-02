@@ -66,6 +66,14 @@ def BusKillCLI():
 	)
 
 	parser.add_argument(
+	 "-t", "--trigger",
+	 help="Choose trigger to execute. Allowed values are 'lock-screen' or 'soft-shutdown'",
+	 metavar='',
+	 choices=['l','lock-screen','s','soft-shutdown'],
+	 default='lockscreen'
+	)
+
+	parser.add_argument(
 	 "-U", "--upgrade",
 	 help="Download & upgrade latest version of BusKill",
 	 action="store_true"
@@ -73,6 +81,10 @@ def BusKillCLI():
 
 	# process command-line arguments
 	args = parser.parse_args()
+
+	# standardize trigger name
+	if args.trigger == 'l': args.trigger = 'lock-screen'
+	if args.trigger == 's': args.trigger = 'soft-shutdown'
 
 	#############
 	# MAIN BODY #
