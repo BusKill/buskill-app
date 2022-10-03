@@ -57,6 +57,10 @@ Our build script is executed on GitHub's shared runners. For more information on
 #. The `list of Windows versions in GitHub's documentation <https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources>`_
 #. Our `build logs <https://github.com/BusKill/buskill-app/actions?query=workflow%3Abuild>`_
 
+.. note::
+
+	When first setting up your build environment, it may be helpful to reference our `GitHub build workflow for Windows <https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L68-L73>`_.
+
 ::
 
 	git clone https://github.com/BusKill/buskill-app.git
@@ -65,7 +69,14 @@ Our build script is executed on GitHub's shared runners. For more information on
 
 .. note::
 
-	When first setting up your build environment, it may be helpful to reference our `GitHub build workflow for Windows <https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L68-L73>`_.
+	Run the ``build\windows\buildExe.ps1`` script from inside a powershell.
+
+   If you get Permission Denied issues, open a new PowerShell as root (Open as Administrator), and enter the following commands
+
+     Set-ExecutionPolicy Unrestricted
+     Set-ExecutionPolicy -Scope CurrentUser Unrestricted
+
+	And in general, we recommend using cygwin when building on Windows.
 
 MacOS
 -----

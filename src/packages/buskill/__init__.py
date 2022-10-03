@@ -934,6 +934,14 @@ class BusKill:
 	# WINDOWS
 
 	def triggerWin(self):
+
+		if self.trigger == 'soft-shutdown':
+			self.trigger_softshutdown_win()
+		else:
+			self.trigger_lockscreen_win()
+
+	def trigger_lockscreen_win(self):
+
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.debug( msg )
 
@@ -942,6 +950,9 @@ class BusKill:
 		except Exception as e:
 			msg = "ERROR: Failed to execute trigger!" +str(e)
 			print( msg ); logger.error( msg )
+
+	def trigger_softshutdown_win()
+		TODO: first try ctypes then fallback to os.system
 
 	# MAC
 
