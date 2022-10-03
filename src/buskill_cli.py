@@ -54,23 +54,29 @@ def BusKillCLI():
 	)
 
 	parser.add_argument(
+	 "--list-triggers",
+	 help="List all available triggers.",
+	 action="store_true"
+	)
+
+	parser.add_argument(
 	 "-v", "--verbose",
 	 help="increase output verbosity",
 	 action="store_true"
 	)
 
 	parser.add_argument(
-	 "-a", "--arm",
-	 help="Arms BusKill",
-	 action="store_true"
-	)
-
-	parser.add_argument(
 	 "-t", "--trigger",
-	 help="Choose trigger to execute. Allowed values are 'lock-screen' or 'soft-shutdown'",
+	 help="Choose trigger to execute. See --list-triggers for all possible values.",
 	 metavar='',
 	 choices=['l','lock-screen','s','soft-shutdown'],
 	 default='lock-screen'
+	)
+
+	parser.add_argument(
+	 "-a", "--arm",
+	 help="Arms BusKill",
+	 action="store_true"
 	)
 
 	parser.add_argument(
@@ -105,6 +111,14 @@ def BusKillCLI():
 
 		msg = bk.ERR_PLATFORM_NOT_SUPPORTED
 		print( msg ); logger.error( msg )
+		sys.exit(1)
+
+	# did the user ask us to just list all available triggers?
+	if args.list_triggers:
+		print( "" )
+		print( "Supported triggers include:" )
+		for trigger in bk.SUPPORTED_TRIGGERS:
+			print( "\t" +str(trigger))
 		sys.exit(1)
 
 	# did the user ask us to do a software upgrade?
