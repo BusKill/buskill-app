@@ -724,13 +724,10 @@ class BusKill:
 		print( msg ); logger.info( msg )
 
 		try:
-			# this should work for most MacOS versions
-			msg = "INFO: Attempting to execute `CGSession -suspend`"
+			# first try pmset
+			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
 			print( msg ); logger.debug( msg )
-			result = subprocess.run(
-			 ['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'],
-			 capture_output=True, text=True
-			) 
+			subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
 
 			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
 			print( msg ); logger.debug( msg )
@@ -741,15 +738,19 @@ class BusKill:
 			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
 			print( msg ); logger.debug( msg )
 
+
 		except Exception as e:
-			msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
+			msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
 			print( msg ); logger.warning(msg)
 
 			try:
 				# that didn't work; log it and try fallback
-				msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+				msg = "INFO: Attempting to execute `CGSession -suspend`"
 				print( msg ); logger.debug( msg )
-				subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+				result = subprocess.run(
+			 	['/System/Library/CoreServices/Menu Extras/user.menu/Contents/Resources/CGSession', '-suspend'],
+			 	capture_output=True, text=True
+				) 
 
 				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
 				print( msg ); logger.debug( msg )
@@ -762,7 +763,7 @@ class BusKill:
 
 			except Exception as e:
 				# that didn't work; log it give up :(
-				msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
+				msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
 				print( msg ); logger.error(msg)
 
 	#####################
