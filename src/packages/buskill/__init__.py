@@ -723,6 +723,11 @@ class BusKill:
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
 
+		self.trigger_lockscreen_mac_cgsession()
+		self.trigger_lockscreen_mac_pmset()
+
+	def trigger_lockscreen_mac_cgsession(self):
+
 		try:
 			# this should work for most MacOS versions
 			msg = "INFO: Attempting to execute `CGSession -suspend`"
@@ -745,25 +750,27 @@ class BusKill:
 			msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
 			print( msg ); logger.warning(msg)
 
-			try:
-				# that didn't work; log it and try fallback
-				msg = "INFO: Attempting to execute `pmset displaysleepnow`"
-				print( msg ); logger.debug( msg )
-				subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+	def trigger_lockscreen_mac_pmset(self):
 
-				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
-				print( msg ); logger.debug( msg )
+		try:
+			# that didn't work; log it and try fallback
+			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+			print( msg ); logger.debug( msg )
+			subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
 
-				msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
-				print( msg ); logger.debug( msg )
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
 
-				msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
-				print( msg ); logger.debug( msg )
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
 
-			except Exception as e:
-				# that didn't work; log it give up :(
-				msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
-				print( msg ); logger.error(msg)
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+		except Exception as e:
+			# that didn't work; log it give up :(
+			msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
+			print( msg ); logger.error(msg)
 
 	#####################
 	# UPGRADE FUNCTIONS #
