@@ -727,7 +727,10 @@ class BusKill:
 			# first try pmset
 			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
 			print( msg ); logger.debug( msg )
-			subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+			result = subprocess.run(
+			 ['pmset', 'displaysleepnow'],
+			 capture_output=True, text=True
+			)
 
 			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
 			print( msg ); logger.debug( msg )
