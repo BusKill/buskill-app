@@ -216,16 +216,21 @@ class BusKill:
 		self.ARM_FUNCTION = None
 		self.DISARM_FUNCTION = None
 		self.TRIGGER_FUNCTION = None
+
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
 		self.APP_DIR = None
 		self.APPS_DIR = None
+		self.SRC_DIR = None
 		self.DATA_DIR = None
 		self.CACHE_DIR = None
 		self.GNUPGHOME = None
 		self.UPGRADED_FROM = None
 		self.UPGRADED_TO = None
+
+		# stores the process object for a child process running as root, if needed
+		self.root_child = None
 
 		self.is_armed = None
 		self.usb_handler = None
@@ -271,6 +276,11 @@ class BusKill:
 		#                     MacOS
 		# 4. APPS_DIR = the directory where the app dirs live (one dir above
 		#               APP_DIR)
+		# 5. SRC_DIR =  the absolute path to the directory where the 'src' directory
+		#               lives. This is where files like 'KEYS' and directories like
+		#               'packages' are stored. On some platforms like Linux, this is
+		#               distinct from the APP_DIR because the contents of the AppImage
+		#               is extracted to a temp dir at runtime
 
 		# get the absolute path to the file that the user executes to start buskill
 		self.EXE_PATH = sys.executable
@@ -294,6 +304,10 @@ class BusKill:
 			# on Linux, the buskill AppImage is directly inside the APP_DIR
 			self.APP_DIR = self.EXE_DIR
 
+			# on Linux, the AppImage is extracted to a root-owned temporary directory
+			# at runtime
+			self.SRC_DIR = sys.path[0]
+
 		if CURRENT_PLATFORM.startswith( 'WIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
 			self.OS_NAME_SHORT = 'win'
@@ -303,6 +317,9 @@ class BusKill:
 			# on Windows, the buskill binary is 1 dir below the APP_DIR
 			self.APP_DIR = self.EXE_PATH.split( os.sep )[0:-2]
 			self.APP_DIR = os.sep.join( self.APP_DIR )
+
+			# on Windows, the exe lives in the same dir with all our other src files
+			self.SRC_DIR = self.EXE_DIR
 
 		if CURRENT_PLATFORM.startswith( 'DARWIN' ):
 			self.IS_PLATFORM_SUPPORTED = True
@@ -315,6 +332,9 @@ class BusKill:
 			# on MacOS, the binary is 2 dirs below the .app dir
 			self.APP_DIR = self.EXE_PATH.split( os.sep )[0:-3]
 			self.APP_DIR = os.sep.join( self.APP_DIR )
+
+			# on MacOS, the exe lives in the same dir with all our other src files
+			self.SRC_DIR = self.EXE_DIR
 
 		# but if we're executing the code directly, then the APP_DIR is actually
 		# one dir higher
@@ -359,6 +379,7 @@ class BusKill:
 		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
 		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
 		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
+		msg+= "DEBUG: SRC_DIR:|" +str(self.SRC_DIR)+  "|\n"
 		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
 		print( msg ); logger.debug( msg )
 
@@ -511,9 +532,21 @@ class BusKill:
 				print( msg ); logger.error( msg )
 
 			#elif self.OS_NAME_SHORT == 'win':
-				# TODO
-			#elif self.OS_NAME_SHORT == 'mac':
-				# TODO
+				# n/a currently there's no checks needed for the soft-shutdown on windows
+
+			elif self.OS_NAME_SHORT == 'mac':
+				# the soft shutdown trigger on mac requires root permissions
+
+				# is the root child process already started?
+				if self.root_child == None:
+					# the root child process hasn't been started; start it
+
+					# TODO wrap this in a function to execute as root and check sanity
+					# * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
+					self.root_child = subprocess.Popen(
+					 [ 'sudo', sys.executable, self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_mac.py' ],
+					 stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True
+					)
 
 		self.trigger = trigger
 		msg = "INFO: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
