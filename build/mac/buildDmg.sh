@@ -40,6 +40,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 export HOMEBREW_NO_AUTO_UPDATE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
+
 ################################################################################
 #                                  FUNCTIONS                                   #
 ################################################################################
@@ -344,6 +345,17 @@ ${PYTHON_PATH} -m PyInstaller -y --clean --windowed "${APP_NAME}.spec"
 
 pushd dist
 ls -lah
+
+######################
+# HARDEN PERMISSIONS #
+######################
+
+# the root child scripts must be owned by root:root and 0400 for security reasons
+# * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
+
+root_child_path="${APP_DIR_NAME}/Contents/MacOS/packages/buskill/root_child_mac.py"
+chown 0:0 "${root_child_path}"
+chmod 0400 "${root_child_path}"
 
 ########################
 # ADD ADDITIONAL FILES #

@@ -40,7 +40,8 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 	from ctypes import *
 	
 if CURRENT_PLATFORM.startswith( 'DARWIN' ):
-	import usb1
+	import usb1, ctypes, ctypes.util
+	from ctypes import byref
 	msg = "usb1.__version__:|" +str(usb1.__version__)+ "|"
 	print( msg ); logger.debug( msg )
 
@@ -537,16 +538,7 @@ class BusKill:
 			elif self.OS_NAME_SHORT == 'mac':
 				# the soft shutdown trigger on mac requires root permissions
 
-				# is the root child process already started?
-				if self.root_child == None:
-					# the root child process hasn't been started; start it
-
-					# TODO wrap this in a function to execute as root and check sanity
-					# * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
-					self.root_child = subprocess.Popen(
-					 [ 'sudo', sys.executable, self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_mac.py' ],
-					 stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True
-					)
+				spawn_root_child()
 
 		self.trigger = trigger
 		msg = "INFO: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
@@ -555,6 +547,113 @@ class BusKill:
 	def get_trigger(self):
 
 		return self.trigger
+
+	# launches a root child process
+	def spawn_root_child(self)
+		msg = "DEBUG: Called spawn_root_child()"
+		print( msg ); logger.debug( msg )
+
+		# SECURITY NOTE:
+		# 
+		#  Whenever you execute something as root, it's very important that you know
+		#  _what_ you're executing. For example, never execute a script as root that is
+		#  world-writeable. In general, assuming the script is named 'root_child.py':
+		#
+		#  1. Make sure root_child.py has permissions root:root 0400 (and therefore only
+		#     writeable by root)
+      #  2. Make sure I specify the absolute path to root_child.py, and that path
+		#     cannot be maliciously manipulated
+      #  3. Make sure that root_child.py isn't actually a (sym)link
+		#
+		# See also:
+		#  * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
+
+			if self.OS_NAME_SHORT == 'lin':
+				msg = "ERROR: root_child_lin.py not yet implemented"
+				print( msg ); logger.error( msg )
+
+			elif self.OS_NAME_SHORT == 'win':
+				msg = "ERROR: root_child_win.py not yet implemented"
+				print( msg ); logger.error( msg )
+
+			elif self.OS_NAME_SHORT == 'mac':
+
+				# is the root child process already started?
+				if self.root_child == None:
+					# the root child process hasn't been started; start it
+					msg = "DEBUG: No root_child detected. Attempting to spawn one."
+					print( msg ); logger.debug( msg )
+
+					# To spawn a child process as root in MacOS, we use
+					# AuthorizationExecuteWithPrivileges(), which triggers the OS to
+					# display an auth challenge in the GUI for the user. See also
+					#  * https://stackoverflow.com/a/74001980/1174102
+					#  * https://stackoverflow.com/a/74083291/1174102
+					#  * https://github.com/BusKill/buskill-app/issues/14
+
+					root_child_path = self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_mac.py'
+
+					msg = "DEBUG: root_child_path:|" +str(root_child_path)+ "|"
+					print( msg ); logger.debug( msg )
+
+					# SANITY CHECKS
+
+					mode = oct(os.stat(root_child_path).st_mode)[-4:]
+					owner = os.stat(root_child_path).st_uid
+					group = os.stat(root_child_path).st_gud
+
+					# verify the mode of the file is exactly 0400 (octal)
+					if mode != '0400'
+						msg = 'ERROR: Permissions on root_child are not 0400. Refusing to spawn script as root!'
+						print( msg ); logger.error( msg )
+						return
+
+					# verify the file is owned by user = root
+					if owner != 0
+						msg = 'ERROR: root_child is not owned by root. Refusing to spawn script as root!'
+						print( msg ); logger.error( msg )
+						return
+
+					# verify the file is owned by group = root
+					if group != 0
+						msg = 'ERROR: root_child is not owned by gid=0. Refusing to spawn script as root!'
+						print( msg ); logger.error( msg )
+						return
+
+					# verify the "file" isn't actually a symlink
+					if os.path.islink( root_child_path )
+						msg = 'ERROR: root_child is a link. Refusing to spawn script as root!'
+						print( msg ); logger.error( msg )
+						return
+
+					# import some C libraries for interacting via ctypes with the MacOS API
+					libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+
+					# https://developer.apple.com/documentation/security
+					sec = ctypes.cdll.LoadLibrary(ctypes.util.find_library("Security"))
+
+					kAuthorizationFlagDefaults = 0
+					
+					auth = ctypes.c_void_p()
+					r_auth = byref(auth)
+					sec.AuthorizationCreate(None,None,kAuthorizationFlagDefaults,r_auth)
+
+					exe = [sys.executable,"root_child.py"]
+					args = (ctypes.c_char_p * len(exe))()
+					for i,arg in enumerate(exe[1:]):
+    					args[i] = arg.encode('utf8')
+
+					self.root_child['io'] = ctypes.c_void_p()
+
+					print( "running root_child.py")
+					err = sec.AuthorizationExecuteWithPrivileges(
+					 auth,
+					 exe[0].encode('utf8'),
+					 0,
+					 args,byref(self.root_child)
+					)
+					print( "err:|" +str(err)+ "|" )
+					print( "root_child.py executed!")
 
 	def handle_upgrades(self):
 
