@@ -59,9 +59,9 @@ if __name__ == '__main__':
 	 level = logging.DEBUG
 	)
 	msg = "==============================================================================="
-	print( msg ); logger.info( msg )
+	print( msg ); logging.info( msg )
 	msg = "INFO: Writing to log file '" +str(log_file_path)+ "'"
-	print( msg ); logger.info( msg )
+	print( msg ); logging.info( msg )
 
 	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
