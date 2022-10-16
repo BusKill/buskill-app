@@ -29,6 +29,8 @@ For more info, see: https://buskill.in/
 #                                  MAIN BODY                                   #
 ################################################################################
 
+# TODO: overwrite this script's owner and groupt to 0:0
+
 import os
 log = open("/Users/maltfield/.buskill/root_child.log", "a")
 log.write( "==============================================\n" )

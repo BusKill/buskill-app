@@ -606,7 +606,7 @@ class BusKill:
 				if mode != '0400':
 					msg = 'ERROR: Permissions on root_child are not 0400. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
-					return
+					return False
 
 				# unfortunaetly we can't package a .dmg with a file owned by root, so on
 				# first run, we expect that the root child script will be owned by the
@@ -617,19 +617,19 @@ class BusKill:
 				if owner != 0 and owner != os.getuid():
 					msg = 'ERROR: root_child is not owned by root nor your user. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
-					return
+					return False
 
 				# verify the file is owned by group = root (or current group)
 				if group != 0 and group != os.getgid():
 					msg = 'ERROR: root_child is not owned by gid=0 nor your group. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
-					return
+					return False
 
 				# verify the "file" isn't actually a symlink
 				if os.path.islink( root_child_path ):
 					msg = 'ERROR: root_child is a link. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
-					return
+					return False
 
 				# import some C libraries for interacting via ctypes with the MacOS API
 				libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
@@ -661,7 +661,22 @@ class BusKill:
 				 byref(self.root_child['io'])
 				)
 				print( "err:|" +str(err)+ "|" )
-				print( "root_child.py executed!")
+
+				# did the attempt to spawn the child process return an error?
+				if err == -60007:
+					# https://developer.apple.com/documentation/security/1540004-authorization_services_result_co/errauthorizationinteractionnotallowed
+					msg = 'ERROR: root_child spwan attempt returned errAuthorizationInteractionNotAllowed = -60007. Did you execute BusKill from a headless CLI? The credential challenge requires a GUI when launching a child process as root.'
+					print( msg ); logger.error( msg )
+					return False
+
+				elif err != 0:
+					# catch all other errors
+					msg = 'ERROR: root_child spawn attempt returned ' +str(err)+ '. Please see reference documentation for Apple Authorization Services Result Codes @ https://developer.apple.com/documentation/security/1540004-authorization_services_result_co'
+					print( msg ); logger.error( msg )
+					return False
+
+				print( "root_child.py executed successfully!")
+				return True
 
 	def handle_upgrades(self):
 
