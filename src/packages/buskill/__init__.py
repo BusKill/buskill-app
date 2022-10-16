@@ -652,7 +652,7 @@ class BusKill:
 					self.root_child = dict()
 				self.root_child['io'] = ctypes.c_void_p()
 
-				print( "running root_child (" +str(root_child_path)+ ")" )
+				print( "running root_child (" +str(exe)+ ")" )
 				err = sec.AuthorizationExecuteWithPrivileges(
 				 auth,
 				 exe[0].encode('utf8'),

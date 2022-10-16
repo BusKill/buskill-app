@@ -58,8 +58,11 @@ if __name__ == '__main__':
 	 datefmt = '%H:%M:%S',
 	 level = logging.DEBUG
 	)
-	logging.debug("===============================================================================")
-	logging.info( "INFO: Writing to log file '" +str(log_file_path)+ "'" )
+	msg = "==============================================================================="
+	print( msg ); logger.info( msg )
+	msg = "INFO: Writing to log file '" +str(log_file_path)+ "'"
+	print( msg ); logger.info( msg )
+
 	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
 	logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
