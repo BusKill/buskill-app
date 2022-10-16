@@ -608,13 +608,18 @@ class BusKill:
 					print( msg ); logger.error( msg )
 					return
 
-				# verify the file is owned by user = root
+				# unfortunaetly we can't package a .dmg with a file owned by root, so on
+				# first run, we expect that the root child script will be owned by the
+				# user that executed the BusKill app
+				# https://github.com/BusKill/buskill-app/issues/14#issuecomment-1279975783
+
+				# verify the file is owned by user = root (or current user)
 				if owner != 0 and owner != os.getuid():
 					msg = 'ERROR: root_child is not owned by root nor your user. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
 					return
 
-				# verify the file is owned by group = root
+				# verify the file is owned by group = root (or current group)
 				if group != 0 and group != os.getgid():
 					msg = 'ERROR: root_child is not owned by gid=0 nor your group. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
@@ -652,7 +657,8 @@ class BusKill:
 				 auth,
 				 exe[0].encode('utf8'),
 				 0,
-				 args,byref(self.root_child)
+				 args,
+				 byref(self.root_child['io'])
 				)
 				print( "err:|" +str(err)+ "|" )
 				print( "root_child.py executed!")
