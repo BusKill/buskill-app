@@ -538,7 +538,7 @@ class BusKill:
 			elif self.OS_NAME_SHORT == 'mac':
 				# the soft shutdown trigger on mac requires root permissions
 
-				spawn_root_child()
+				self.spawn_root_child()
 
 		self.trigger = trigger
 		msg = "INFO: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
