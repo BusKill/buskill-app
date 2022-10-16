@@ -1260,7 +1260,7 @@ class BusKill:
 			msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
 			print( msg ); logger.error(msg)
 
-	def trigger_softshutdown_mac_shutdown():
+	def trigger_softshutdown_mac_shutdown(self):
 
 		try:
 			# try to send the 'soft-shutdown' command to the root child process
