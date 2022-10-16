@@ -240,9 +240,9 @@ class BusKill:
 
 		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
 		self.trigger = 'lock-screen'
-		self.trigger_softshutdown_linux_shutdown_path = None
-		self.trigger_softshutdown_linux_poweroff_path = None
-		self.trigger_softshutdown_linux_systemctl_path = None
+		self.trigger_softshutdown_lin_shutdown_path = None
+		self.trigger_softshutdown_lin_poweroff_path = None
+		self.trigger_softshutdown_lin_systemctl_path = None
 
 		# documentation links
 		if BUSKILL_VERSION['VERSION'] == '':
@@ -497,22 +497,22 @@ class BusKill:
 					# shutdown
 					shutdown_path = path + os.sep + 'shutdown'
 					if os.path.exists( shutdown_path ):
-						self.trigger_softshutdown_linux_shutdown_path = shutdown_path
+						self.trigger_softshutdown_lin_shutdown_path = shutdown_path
 
 					# poweroff
 					poweroff_path = path + os.sep + 'poweroff'
 					if os.path.exists( poweroff_path ):
-						self.trigger_softshutdown_linux_poweroff_path = poweroff_path
+						self.trigger_softshutdown_lin_poweroff_path = poweroff_path
 
 					# systemctl
 					systemctl_path = path + os.sep + 'systemctl'
 					if os.path.exists( systemctl_path ):
-						self.trigger_softshutdown_linux_systemctl_path = systemctl_path
+						self.trigger_softshutdown_lin_systemctl_path = systemctl_path
 
 				# were we able to find at least one of their paths?
-				if self.trigger_softshutdown_linux_shutdown_path == None and \
-				 self.trigger_softshutdown_linux_poweroff_path == None and \
-				 self.trigger_softshutdown_linux_systemctl_path == None:
+				if self.trigger_softshutdown_lin_shutdown_path == None and \
+				 self.trigger_softshutdown_lin_poweroff_path == None and \
+				 self.trigger_softshutdown_lin_systemctl_path == None:
 					# we couldn't figure any of the paths; don't continue with this trigger
 					msg = "ERROR: Unable to find paths to soft shutdown binaries"
 					print( msg ); logger.error( msg )
@@ -523,15 +523,15 @@ class BusKill:
 				#  * https://stackoverflow.com/questions/73923097/best-practice-way-to-run-a-python-program-that-needs-root-privliges-for-subset-o
 
 				msg = "DEBUG: shutdown binary path:|" \
-				 +str(self.trigger_softshutdown_linux_shutdown_path)+ "|"
+				 +str(self.trigger_softshutdown_lin_shutdown_path)+ "|"
 				print( msg ); logger.error( msg )
 
 				msg = "DEBUG: poweroff binary path:|" \
-				 +str(self.trigger_softshutdown_linux_poweroff_path)+ "|"
+				 +str(self.trigger_softshutdown_lin_poweroff_path)+ "|"
 				print( msg ); logger.error( msg )
 
 				msg = "DEBUG: systemctl binary path:|" \
-				 +str(self.trigger_softshutdown_linux_systemctl_path)+ "|"
+				 +str(self.trigger_softshutdown_lin_systemctl_path)+ "|"
 				print( msg ); logger.error( msg )
 
 			#elif self.OS_NAME_SHORT == 'win':
@@ -685,6 +685,30 @@ class BusKill:
 				print( msg ); logger.debug( msg )
 
 				return True
+
+	# this basically just re-implmenets python's readline().strip() but in C
+	def read_from_root_child_mac(io):
+
+		# get the output from the child process character-by-character until we hit a new line
+		buf = ctypes.create_string_buffer(1)
+		result = ''
+		for x in range(1,100):
+
+			# read one byte from the child process' communication PIPE and store it to the buffer
+			libc.fread(byref(buf),1,1,io)
+    
+			# decode the byte stored to the buffer as ascii
+			char = buf.raw[:1].decode('ascii')
+
+			# is the character a newline?
+			if char == "\n":
+				# the character is a newline; stop reading
+				break
+			else:
+				# the character is not a newline; append it to the string and continue reading
+				result += char
+
+		return result
 
 	def handle_upgrades(self):
 
@@ -918,24 +942,27 @@ class BusKill:
 	def triggerLin(self):
 
 		if self.trigger == 'soft-shutdown':
-			self.trigger_softshutdown_linux()
+			self.trigger_softshutdown_lin()
 		else:
-			self.trigger_lockscreen_linux()
+			self.trigger_lockscreen_lin()
 
 	# this function will lock the screen on linux machines
-	def trigger_lockscreen_linux(self):
+	def trigger_lockscreen_lin(self):
+		msg = "DEBUG: BusKill lock-screen trigger executing now"
+		print( msg ); logger.debug( msg )
+
 		# first we try to lock with xdg-screensaver
-		self.trigger_lockscreen_linux_xdg()
+		self.trigger_lockscreen_lin_xdg()
 
 	# this function will gently shutdown a Linux machine
-	def trigger_softshutdown_linux(self):
-		# first we try to shutdown with `shutdown`
-		self.trigger_softshutdown_linux_shutdown()
-
-	def trigger_lockscreen_linux_xdg(self):
-
-		msg = "DEBUG: BusKill lockscreen trigger executing now"
+	def trigger_softshutdown_lin(self):
+		msg = "DEBUG: BusKill soft-shutdown trigger executing now"
 		print( msg ); logger.debug( msg )
+
+		# first we try to shutdown with `shutdown`
+		self.trigger_softshutdown_lin_shutdown()
+
+	def trigger_lockscreen_lin_xdg(self):
 
 		try:
 			# first try to lock the screen with xdg-screensaver command
@@ -957,16 +984,16 @@ class BusKill:
 				msg = "WARNING: Failed to execute `xdg-scrensaver lock`!"
 				print( msg ); logger.warning( msg )
 
-				self.trigger_lockscreen_linux_xscreensaver()
+				self.trigger_lockscreen_lin_xscreensaver()
 
 		except Exception as e:
 			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `xdg-scrensaver lock`!" +str(e)
 			print( msg ); logger.warning( msg )
 
-			self.trigger_lockscreen_linux_xscreensaver()
+			self.trigger_lockscreen_lin_xscreensaver()
 
-	def trigger_lockscreen_linux_xscreensaver(self):
+	def trigger_lockscreen_lin_xscreensaver(self):
 
 		try:
 			# try to lock the screen with xscreensaver command
@@ -993,14 +1020,14 @@ class BusKill:
 			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
 			print( msg ); logger.error(msg)
 
-	def trigger_softshutdown_linux_shutdown(self):
+	def trigger_softshutdown_lin_shutdown(self):
 
 		try:
 			# try to shutdown with the `shutdown` command
 			msg = "INFO: Attempting to execute `shutdown -h now`"
 			print( msg ); logger.debug( msg )
 			result = subprocess.run(
-			 [self.trigger_softshutdown_linux_shutdown_path, '-h', 'now'],
+			 [self.trigger_softshutdown_lin_shutdown_path, '-h', 'now'],
 			 capture_output=True,
 			 text=True
 			)
@@ -1019,23 +1046,23 @@ class BusKill:
 				msg = "WARNING: Failed to execute `shutdown -h now`!"
 				print( msg ); logger.warning( msg )
 
-				self.trigger_softshutdown_linux_poweroff()
+				self.trigger_softshutdown_lin_poweroff()
 
 		except Exception as e:
 			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `shutdown -h now`!"
 			print( msg ); logger.warning( msg )
 
-			self.trigger_softshutdown_linux_poweroff()
+			self.trigger_softshutdown_lin_poweroff()
 
-	def trigger_softshutdown_linux_shutdown(self):
+	def trigger_softshutdown_lin_shutdown(self):
 
 		try:
 			# try to shutdown with the `poweroff` command
 			msg = "INFO: Attempting to execute `poweroff -h`"
 			print( msg ); logger.debug( msg )
 			result = subprocess.run(
-			 [self.trigger_softshutdown_linux_poweroff_path, '-h'],
+			 [self.trigger_softshutdown_lin_poweroff_path, '-h'],
 			 capture_output=True,
 			 text=True
 			)
@@ -1054,23 +1081,23 @@ class BusKill:
 				msg = "WARNING: Failed to execute `poweroff -h`!"
 				print( msg ); logger.warning( msg )
 
-				self.trigger_softshutdown_linux_systemctl()
+				self.trigger_softshutdown_lin_systemctl()
 
 		except Exception as e:
 			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `poweroff -h`!"
 			print( msg ); logger.warning( msg )
 
-			self.trigger_softshutdown_linux_systemctl()
+			self.trigger_softshutdown_lin_systemctl()
 
-	def trigger_softshutdown_linux_systemctl(self):
+	def trigger_softshutdown_lin_systemctl(self):
 
 		try:
 			# try to shutdown with the `systemctl` command
 			msg = "INFO: Attempting to execute `systemctl poweroff`"
 			print( msg ); logger.debug( msg )
 			result = subprocess.run(
-			 [self.trigger_softshutdown_linux_systemctl_path, 'poweroff'],
+			 [self.trigger_softshutdown_lin_systemctl_path, 'poweroff'],
 			 capture_output=True,
 			 text=True
 			)
@@ -1149,10 +1176,30 @@ class BusKill:
 			print( msg ); logger.error(msg)
 
 	# MAC
-
 	def triggerMac(self):
+
+		if self.trigger == 'soft-shutdown':
+			self.trigger_softshutdown_mac()
+		else:
+			self.trigger_lockscreen_mac()
+
+	# this function will lock the screen on MacOS machines
+	def trigger_lockscreen_mac(self):
 		msg = "DEBUG: BusKill lockscreen trigger executing now"
 		print( msg ); logger.info( msg )
+
+		# first we try to lock with CGSession
+		self.trigger_lockscreen_mac_cgsession()
+
+	# this function will gently shutdown a MacOS machine
+	def trigger_softshutdown_mac(self):
+		msg = "DEBUG: BusKill soft-shutdown trigger executing now"
+		print( msg ); logger.debug( msg )
+
+		# first we try to shutdown with `shutdown`
+		self.trigger_softshutdown_mac_shutdown()
+
+	def trigger_lockscreen_mac_cgsession(self):
 
 		try:
 			# this should work for most MacOS versions
@@ -1172,29 +1219,70 @@ class BusKill:
 			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
 			print( msg ); logger.debug( msg )
 
+			if result.returncode != 0:
+				# that didn't work; log it and try fallback
+				msg = "WARNING: Failed to execute `CGSession -suspend`! "
+				print( msg ); logger.warning( msg )
+
+				self.trigger_lockscreen_mac_pmset()
+
 		except Exception as e:
+			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
 			print( msg ); logger.warning(msg)
 
-			try:
-				# that didn't work; log it and try fallback
-				msg = "INFO: Attempting to execute `pmset displaysleepnow`"
-				print( msg ); logger.debug( msg )
-				subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+			self.trigger_lockscreen_mac_pmset()
 
-				msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
-				print( msg ); logger.debug( msg )
+	def trigger_lockscreen_mac_pmset(self):
 
-				msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
-				print( msg ); logger.debug( msg )
+		try:
+			# try to lock the screen with pmset command
+			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+			print( msg ); logger.debug( msg )
+			subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
 
-				msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
-				print( msg ); logger.debug( msg )
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
 
-			except Exception as e:
-				# that didn't work; log it give up :(
-				msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it and give up :(
+				msg = "ERROR: Failed to execute `pmset displaysleepnow`! "
 				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it give up :(
+			msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_softshutdown_mac_shutdown():
+
+		try:
+			# try to send the 'soft-shutdown' command to the root child process
+			msg = "DEBUG: Attempting to send 'soft-shutdown' command to root child"
+			print( msg ); logger.debug( msg )
+
+			libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+
+			# TODO: change this to pass the message via the parent
+			#  * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1280026743
+			command = "soft-shutdown\n".encode(encoding="ascii")
+			libc.fwrite( command,1,len(command),self.root_child['io'] )
+			libc.fflush( self.root_child['io'] )
+			result = str(read_from_root_child_mac( self.root_child['io'] ))
+
+			msg = "DEBUG: Response from root-child:|" +str(result)+ "|"
+			print( msg ); logger.debug( msg )
+
+		except Exception as e:
+			# that didn't work; log it give up :(
+			msg = "ERROR: Failed to send 'soft-shutdown' command to root child"
+			print( msg ); logger.error(msg)
 
 	#####################
 	# UPGRADE FUNCTIONS #
