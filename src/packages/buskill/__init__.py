@@ -600,7 +600,7 @@ class BusKill:
 
 				mode = oct(os.stat(root_child_path).st_mode)[-4:]
 				owner = os.stat(root_child_path).st_uid
-				group = os.stat(root_child_path).st_gud
+				group = os.stat(root_child_path).st_gid
 
 				# verify the mode of the file is exactly 0400 (octal)
 				if mode != '0400':
