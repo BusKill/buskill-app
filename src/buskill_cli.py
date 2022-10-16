@@ -74,6 +74,12 @@ def BusKillCLI():
 	)
 
 	parser.add_argument(
+	 "-T", "--run-trigger",
+	 help="Immediately execute the trigger on start",
+	 action="store_true"
+	)
+
+	parser.add_argument(
 	 "-a", "--arm",
 	 help="Arms BusKill",
 	 action="store_true"
@@ -149,6 +155,28 @@ def BusKillCLI():
 		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
 		print( msg ); logger.error( msg )
 		sys.exit(1)
+
+	# did the user say that we should execute the trigger immediately on startup?
+	if args.run_trigger:
+		try:
+			bk.toggle()
+			bk.set_trigger( args.trigger )
+			confirm = input("Are you sure you want to execute the '" +str(bk.get_trigger())+ "' trigger RIGHT NOW? [Y/N] ")
+			if confirm.upper() in ["Y", "YES"]:
+				bk.TRIGGER_FUNCTION()
+			else:
+				msg = "INFO: User chose not to execute trigger now. Exiting."
+				print( msg ); logger.info( msg )
+				bk.close()
+				sys.exit(0)
+		except RuntimeWarning as e:
+			msg = "ERROR: Unable execute trigger\n\t" +str(e)
+			print( msg ); logger.error( msg )
+			bk.close()
+			sys.exit(1)
+
+		bk.close()
+		sys.exit(0)
 
 	if args.arm:
 		bk.toggle()

@@ -477,6 +477,8 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 			raise Exception( msg )
 
+		self.trigger = trigger
+
 		# check sanity of the soft shutdown trigger
 		if trigger == 'soft-shutdown':
 
@@ -546,7 +548,7 @@ class BusKill:
 
 	def get_trigger(self):
 
-		return self.trigger
+		return str(self.trigger)
 
 	# launches a root child process
 	def spawn_root_child(self):
@@ -652,7 +654,9 @@ class BusKill:
 					self.root_child = dict()
 				self.root_child['io'] = ctypes.c_void_p()
 
-				print( "running root_child (" +str(exe)+ ")" )
+				msg = "DEBUG: Attempting to spawn root child (" +str(exe)+ ")"
+				print( msg ); logger.debug( msg )
+
 				err = sec.AuthorizationExecuteWithPrivileges(
 				 auth,
 				 exe[0].encode('utf8'),
@@ -660,7 +664,9 @@ class BusKill:
 				 args,
 				 byref(self.root_child['io'])
 				)
-				print( "err:|" +str(err)+ "|" )
+
+				msg = "DEBUG: AuthorizationExecuteWithPrivileges.err:| " +str(err)+ "|"
+				print( msg ); logger.debug( msg )
 
 				# did the attempt to spawn the child process return an error?
 				if err == -60007:
@@ -675,7 +681,9 @@ class BusKill:
 					print( msg ); logger.error( msg )
 					return False
 
-				print( "root_child.py executed successfully!")
+				msg = "DEBUG: Root child spawned successfully!"
+				print( msg ); logger.debug( msg )
+
 				return True
 
 	def handle_upgrades(self):
