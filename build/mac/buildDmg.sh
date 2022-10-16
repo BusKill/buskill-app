@@ -354,8 +354,12 @@ ls -lah
 # * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
 
 root_child_path="${APP_DIR_NAME}/Contents/MacOS/packages/buskill/root_child_mac.py"
-sudo chown 0:0 "${root_child_path}"
 sudo chmod 0400 "${root_child_path}"
+
+# unfortunaetly we can't package a .dmg with a file owned by root, and it doesn't
+# make sense to do so, anyway
+#  * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1279975783
+#sudo chown 0:0 "${root_child_path}"
 
 ########################
 # ADD ADDITIONAL FILES #

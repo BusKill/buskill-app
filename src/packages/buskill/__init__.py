@@ -609,14 +609,14 @@ class BusKill:
 					return
 
 				# verify the file is owned by user = root
-				if owner != 0:
-					msg = 'ERROR: root_child is not owned by root. Refusing to spawn script as root!'
+				if owner != 0 and owner != os.getuid():
+					msg = 'ERROR: root_child is not owned by root nor your user. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
 					return
 
 				# verify the file is owned by group = root
-				if group != 0:
-					msg = 'ERROR: root_child is not owned by gid=0. Refusing to spawn script as root!'
+				if group != 0 and group != os.getgid():
+					msg = 'ERROR: root_child is not owned by gid=0 nor your group. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
 					return
 
