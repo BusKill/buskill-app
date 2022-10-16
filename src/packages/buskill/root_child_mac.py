@@ -30,5 +30,15 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import os
-with open("/Users/administrator/buskill_root.out", "a") as f:
-    f.write("I am root!\n")
+log = open("/Users/maltfield/.buskill/root_child.log", "a")
+log.write( "==============================================\n" )
+log.write( "attempting to write to root-only file\n" )
+
+try:
+	with open("/Users/administrator/buskill_root.out", "a") as f:
+		f.write("I am root!\n")
+		log.write( "I am root!\n" )
+except Exception as e:
+	log.write( "I am not root :( \n\t" +str(e) )
+
+log.close()
