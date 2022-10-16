@@ -410,7 +410,7 @@ class BusKill:
 		# remove instances of multiprocessing.Process() because they're not
 		# pickleable
 		unpickleable = [
-		 'upgrade_process', 'usb_handler'
+		 'upgrade_process', 'usb_handler', 'root_child'
 		]
 		for instance_field in unpickleable:
 			if instance_field in state:
