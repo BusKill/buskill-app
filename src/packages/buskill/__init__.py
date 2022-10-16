@@ -643,7 +643,7 @@ class BusKill:
 				r_auth = byref(auth)
 				sec.AuthorizationCreate(None,None,kAuthorizationFlagDefaults,r_auth)
 
-				exe = [sys.executable,"root_child.py"]
+				exe = [sys.executable,root_child_path]
 				args = (ctypes.c_char_p * len(exe))()
 				for i,arg in enumerate(exe[1:]):
 					args[i] = arg.encode('utf8')
@@ -652,7 +652,7 @@ class BusKill:
 					self.root_child = dict()
 				self.root_child['io'] = ctypes.c_void_p()
 
-				print( "running root_child.py")
+				print( "running root_child (" +str(root_child_path)+ ")" )
 				err = sec.AuthorizationExecuteWithPrivileges(
 				 auth,
 				 exe[0].encode('utf8'),
