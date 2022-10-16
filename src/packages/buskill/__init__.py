@@ -643,6 +643,8 @@ class BusKill:
 				for i,arg in enumerate(exe[1:]):
 					args[i] = arg.encode('utf8')
 
+				if self.root_child == None:
+					self.root_child = dict()
 				self.root_child['io'] = ctypes.c_void_p()
 
 				print( "running root_child.py")
