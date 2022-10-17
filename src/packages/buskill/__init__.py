@@ -689,6 +689,8 @@ class BusKill:
 	# this basically just re-implmenets python's readline().strip() but in C
 	def read_from_root_child_mac(self):
 
+		libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+
 		# get the output from the child process character-by-character until we hit a new line
 		buf = ctypes.create_string_buffer(1)
 		result = ''
