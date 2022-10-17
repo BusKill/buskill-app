@@ -314,6 +314,22 @@ a = Analysis(['../src/main.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+
+root_child_mac = Analysis(['../src/packages/buskill/root_child_mac.py'],
+             pathex=['./'],
+             binaries=[],
+             datas=[],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=['pydoc'],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+
+MERGE( (a, 'a', 'a'), (root_child_mac, 'root_child_mac', 'root_child_mac') )
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
@@ -326,10 +342,28 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False )
+
+root_child_mac_pyz = PYZ( root_child_mac.pure, root_child_mac.zipped_data,
+             cipher=block_cipher)
+root_child_mac_exe = EXE(root_child_mac_pyz,
+          root_child_mac.scripts,
+          [],
+          exclude_binaries=True,
+          name='root_child_mac',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          console=False )
+
 coll = COLLECT(exe, Tree('../src/'),
                a.binaries,
                a.zipfiles,
                a.datas,
+               root_child_mac_exe,
+               root_child_mac.binaries,
+               root_child_mac.zipfiles,
+               root_child_mac.datas,
                strip=False,
                upx=True,
                upx_exclude=[],
@@ -353,7 +387,7 @@ ls -lah
 # the root child scripts must be owned by root:root and 0400 for security reasons
 # * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
 
-root_child_path="${APP_DIR_NAME}/Contents/MacOS/packages/buskill/root_child_mac.py"
+root_child_path="${APP_DIR_NAME}/Contents/MacOS/root_child_mac"
 chmod 0400 "${root_child_path}"
 
 # unfortunaetly we can't package a .dmg with a file owned by root, and it doesn't
