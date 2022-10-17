@@ -698,6 +698,12 @@ class BusKill:
 					print( msg ); logger.error( msg )
 					return False
 
+				elif err == -60031:
+					# https://developer.apple.com/documentation/security/1540004-authorization_services_result_co/errauthorizationtoolexecutefailure
+					msg = 'ERROR: root_child spwan attempt returned errAuthorizationToolExecuteFailure = -60031. Is the root child binary executable? Check permissions.'
+					print( msg ); logger.error( msg )
+					return False
+
 				elif err != 0:
 					# catch all other errors
 					msg = 'ERROR: root_child spawn attempt returned ' +str(err)+ '. Please see reference documentation for Apple Authorization Services Result Codes @ https://developer.apple.com/documentation/security/1540004-authorization_services_result_co'
