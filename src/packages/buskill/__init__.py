@@ -687,7 +687,7 @@ class BusKill:
 				return True
 
 	# this basically just re-implmenets python's readline().strip() but in C
-	def read_from_root_child_mac(io):
+	def read_from_root_child_mac(self):
 
 		# get the output from the child process character-by-character until we hit a new line
 		buf = ctypes.create_string_buffer(1)
@@ -695,7 +695,7 @@ class BusKill:
 		for x in range(1,100):
 
 			# read one byte from the child process' communication PIPE and store it to the buffer
-			libc.fread(byref(buf),1,1,io)
+			libc.fread( byref(buf), 1, 1, self.root_child['io'] )
     
 			# decode the byte stored to the buffer as ascii
 			char = buf.raw[:1].decode('ascii')
@@ -1274,7 +1274,7 @@ class BusKill:
 			command = "soft-shutdown\n".encode(encoding="ascii")
 			libc.fwrite( command,1,len(command),self.root_child['io'] )
 			libc.fflush( self.root_child['io'] )
-			result = str(read_from_root_child_mac( self.root_child['io'] ))
+			result = str( self.read_from_root_child_mac() )
 
 			msg = "DEBUG: Response from root-child:|" +str(result)+ "|"
 			print( msg ); logger.debug( msg )
