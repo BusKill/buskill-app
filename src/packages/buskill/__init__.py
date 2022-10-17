@@ -387,7 +387,7 @@ class BusKill:
 		sys.path.append( self.EXE_DIR )
 
 		msg = "DEBUG: EXECUTED_AS_SCRIPT:|" +str(self.EXECUTED_AS_SCRIPT)+  "|\n"
-		msg = "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
+		msg+= "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
 		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
 		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
 		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
