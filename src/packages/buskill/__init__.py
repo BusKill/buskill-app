@@ -569,8 +569,8 @@ class BusKill:
 		#  _what_ you're executing. For example, never execute a script as root that is
 		#  world-writeable. In general, assuming the script is named 'root_child.py':
 		#
-		#  1. Make sure root_child.py has permissions root:root 0400 (and therefore only
-		#     writeable by root)
+		#  1. Make sure root_child.py has permissions root:root 0500 (and therefore only
+		#     writeable and executable by root)
       #  2. Make sure I specify the absolute path to root_child.py, and that path
 		#     cannot be maliciously manipulated
       #  3. Make sure that root_child.py isn't actually a (sym)link
@@ -628,9 +628,9 @@ class BusKill:
 				owner = os.stat(root_child_path).st_uid
 				group = os.stat(root_child_path).st_gid
 
-				# verify the mode of the file is exactly 0400 (octal)
-				if mode != '0400':
-					msg = 'ERROR: Permissions on root_child are not 0400. Refusing to spawn script as root!'
+				# verify the mode of the file is exactly 0500 (octal)
+				if mode != '0500':
+					msg = 'ERROR: Permissions on root_child are not 0500. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
 					return False
 

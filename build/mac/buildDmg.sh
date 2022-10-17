@@ -384,11 +384,11 @@ ls -lah
 # HARDEN PERMISSIONS #
 ######################
 
-# the root child scripts must be owned by root:root and 0400 for security reasons
+# the root child scripts must be owned by root:root and 0500 for security reasons
 # * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1272449172
 
 root_child_path="${APP_DIR_NAME}/Contents/MacOS/root_child_mac"
-chmod 0400 "${root_child_path}"
+chmod 0500 "${root_child_path}"
 
 # unfortunaetly we can't package a .dmg with a file owned by root, and it doesn't
 # make sense to do so, anyway
