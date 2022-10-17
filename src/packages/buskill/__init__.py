@@ -386,6 +386,7 @@ class BusKill:
 		# for upgraded_from.py)
 		sys.path.append( self.EXE_DIR )
 
+		msg = "DEBUG: EXECUTED_AS_SCRIPT:|" +str(self.EXECUTED_AS_SCRIPT)+  "|\n"
 		msg = "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
 		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
 		msg+= "DEBUG: EXE_FILE:|" +str(self.EXE_FILE)+  "|\n"
