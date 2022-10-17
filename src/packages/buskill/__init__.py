@@ -593,7 +593,7 @@ class BusKill:
 				#  * https://stackoverflow.com/a/74083291/1174102
 				#  * https://github.com/BusKill/buskill-app/issues/14
 
-				root_child_path = self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_mac.py'
+				root_child_path = self.SRC_DIR +os.sep+ 'root_child_mac'
 
 				msg = "DEBUG: root_child_path:|" +str(root_child_path)+ "|"
 				print( msg ); logger.debug( msg )
