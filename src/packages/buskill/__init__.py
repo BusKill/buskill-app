@@ -688,7 +688,7 @@ class BusKill:
 				 byref(self.root_child['io'])
 				)
 
-				msg = "DEBUG: AuthorizationExecuteWithPrivileges.err:| " +str(err)+ "|"
+				msg = "DEBUG: AuthorizationExecuteWithPrivileges.err:|" +str(err)+ "|"
 				print( msg ); logger.debug( msg )
 
 				# did the attempt to spawn the child process return an error?

@@ -25,22 +25,65 @@ For more info, see: https://buskill.in/
 #                                  FUNCTIONS                                   #
 ################################################################################
 
+# shutdown the computer with the `shutdown` command
+# TODO: fall-back to poweroff
+def soft_shutdown():
+        try:
+                proc = subprocess.Popen(
+						# TODO: switch this back to shutdown (from reboot)
+                 #[ 'sudo', 'shutdown', '-h', 'now' ],
+                 [ 'reboot' ],
+                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True
+                )
+        except Exception as e:
+                print( "I am not root :'(" )
+
+
 ################################################################################
 #                                  MAIN BODY                                   #
 ################################################################################
 
-# TODO: overwrite this script's owner and groupt to 0:0
+if __name__ == "__main__":
 
-import os
-log = open("/Users/maltfield/.buskill/root_child.log", "a")
-log.write( "==============================================\n" )
-log.write( "attempting to write to root-only file\n" )
+	# TODO: change manual logging to 'loggger' to the debug file (if possible)
+	log = open("/Users/maltfield/.buskill/root_child.log", "a")
+	log.write( "==============================================\n" )
+	log.write( "attempting to write to root-only file\n" )
 
-try:
-	with open("/Users/administrator/buskill_root.out", "a") as f:
-		f.write("I am root!\n")
-		log.write( "I am root!\n" )
-except Exception as e:
-	log.write( "I am not root :( \n\t" +str(e) )
+	# loop and listen for commands from the parent process
+while True:
 
+	# block until we recieve a command (ending with a newline) from stdin
+	command = sys.stdin.buffer.readline().strip().decode('ascii')
+
+	# check sanity of recieved command. Be very suspicious
+	if not re.match( "^[A-Za-z_-]+$", command ):
+		msg = "ERROR: Bad Command Ignored\n"
+
+		log.write(); log.flush()
+		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
+		sys.stdout.flush()
+		continue
+
+	# what was the command they sent us?
+	if command == "soft-shutdown":
+		# they want us to shutdown the machine; do it!
+
+		try:
+			soft_shutdown()
+			msg = "SUCCESS: I am root!\n"
+
+		except Exception as e:
+			msg = "ERROR: I am not root :'(\n"
+
+	else:   
+		# I have no idea what they want; tell them we ignored the request
+		msg = "WARNING: Unknown Command Ignored\n"
+
+	log.write(); log.flush()
+	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
+	sys.stdout.flush()
+
+# TODO: See if it's possible to put this in a function that's registered as
+#       a callback when the process is closing
 log.close()
