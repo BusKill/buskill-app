@@ -1281,7 +1281,7 @@ class BusKill:
 
 		except Exception as e:
 			# that didn't work; log it give up :(
-			msg = "ERROR: Failed to send 'soft-shutdown' command to root child"
+			msg = "ERROR: Failed to send 'soft-shutdown' command to root child \n\t" +str(e)
 			print( msg ); logger.error(msg)
 
 	#####################
