@@ -341,14 +341,10 @@ class BusKill:
 		# normally the BusKill app is built into a platform-specific executable with
 		# PyInstaller. But if we're executing it directly as a script, then some of
 		# the logic will change throught the app
-		if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
-			self.APP_DIR = os.path.abspath(
-			 os.path.join( self.APP_DIR, os.pardir)
-			)
-		# but if we're executing the code directly, then the APP_DIR is actually
-		# one dir higher
-		if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
+		#if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
+		if self.EXE_FILE == 'main.py':
 			self.EXECUTED_AS_SCRIPT = True
+
 			self.APP_DIR = os.path.abspath(
 			 os.path.join( self.APP_DIR, os.pardir)
 			)
