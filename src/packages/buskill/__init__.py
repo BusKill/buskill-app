@@ -218,6 +218,7 @@ class BusKill:
 		self.DISARM_FUNCTION = None
 		self.TRIGGER_FUNCTION = None
 
+		self.EXECUTED_AS_SCRIPT = None
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
@@ -337,12 +338,22 @@ class BusKill:
 			# on MacOS, the exe lives in the same dir with all our other src files
 			self.SRC_DIR = self.EXE_DIR
 
-		# but if we're executing the code directly, then the APP_DIR is actually
-		# one dir higher
+		# normally the BusKill app is built into a platform-specific executable with
+		# PyInstaller. But if we're executing it directly as a script, then some of
+		# the logic will change throught the app
 		if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
 			self.APP_DIR = os.path.abspath(
 			 os.path.join( self.APP_DIR, os.pardir)
 			)
+		# but if we're executing the code directly, then the APP_DIR is actually
+		# one dir higher
+		if self.EXE_FILE == 'main.py' and os.path.split(self.APP_DIR)[1] == 'src':
+			self.EXECUTED_AS_SCRIPT = True
+			self.APP_DIR = os.path.abspath(
+			 os.path.join( self.APP_DIR, os.pardir)
+			)
+		else:
+			self.EXECUTED_AS_SCRIPT = False
 
 		# We package our .zip inside a single root dir to prevent zip-bombing.
 		# When extracted on most platforms, this root dir is dropped into the
@@ -593,7 +604,23 @@ class BusKill:
 				#  * https://stackoverflow.com/a/74083291/1174102
 				#  * https://github.com/BusKill/buskill-app/issues/14
 
-				root_child_path = self.SRC_DIR +os.sep+ 'root_child_mac'
+				# was BusKill called as a binary or a script?
+				if self.EXECUTED_AS_SCRIPT == False:
+					# this execution was a binary
+
+					# let's call the root child binary
+					root_child_path = self.SRC_DIR +os.sep+ 'root_child_mac'
+
+					# and we'll be calling the binary directly
+					exe = [root_child_path]
+
+				else:
+					# this execution was a script; let's call the root child script
+					root_child_path = self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_mac.py'
+
+					# and we'll pass the script as an argument to the python
+					# interpreter
+					exe = [sys.executable,root_child_path]
 
 				msg = "DEBUG: root_child_path:|" +str(root_child_path)+ "|"
 				print( msg ); logger.debug( msg )
@@ -645,7 +672,6 @@ class BusKill:
 				r_auth = byref(auth)
 				sec.AuthorizationCreate(None,None,kAuthorizationFlagDefaults,r_auth)
 
-				exe = [sys.executable,root_child_path]
 				args = (ctypes.c_char_p * len(exe))()
 				for i,arg in enumerate(exe[1:]):
 					args[i] = arg.encode('utf8')
