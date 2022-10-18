@@ -17,7 +17,7 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import os, time, re, sys, subprocess
+import os, re, sys, subprocess
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -27,19 +27,104 @@ import os, time, re, sys, subprocess
 #                                  FUNCTIONS                                   #
 ################################################################################
 
-# shutdown the computer with the `shutdown` command
-# TODO: fall-back to poweroff
-def soft_shutdown():
-        try:
-                proc = subprocess.Popen(
-						# TODO: switch this back to shutdown (from reboot)
-                 #[ 'sudo', 'shutdown', '-h', 'now' ],
-                 [ 'reboot' ],
-                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True
-                )
-        except Exception as e:
-                print( "I am not root :'(" )
+# this function will gently shutdown a MacOS machine
+def trigger_softshutdown_mac(self):
+	msg = "DEBUG: BusKill soft-shutdown trigger executing now"
+	#print( msg ); logger.debug( msg )
+	log.write(msg); log.flush()
 
+	# first we try to shutdown with `shutdown`
+	trigger_softshutdown_mac_shutdown()
+
+# shutdown the computer with the `shutdown` command
+def trigger_softshutdown_mac_shutdown():
+
+	try:
+		# first try to shutdown with the `shutdown` command
+		msg = "INFO: Attempting to execute `shutdown -h now"
+		#print( msg ); logger.debug( msg )
+		log.write(msg); log.flush()
+
+		os.setuid(0)
+		with open("/Users/administrator/buskill_root.out", "a") as f:
+			f.write("I am root!\n")
+			log.write( "I am root!\n" )
+
+		# TODO: uncomment this to actually make it reboot
+#		result = subprocess.run(
+		# TODO: swap 'reboot' for actual 'shutdown' command
+#		 #[ 'shutdown', '-h', 'now' ],
+#		result = subprocess.run(
+#		 [ 'reboot' ],
+#		 capture_output=True,
+#		 text=True
+#		)
+#
+#		msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		if result.returncode != 0:
+#			# that didn't work; log it and try fallback
+#			msg = "WARNING: Failed to execute `shutdown -h now`!"
+#			print( msg ); logger.warning( msg )
+#
+#		trigger_softshutdown_mac_halt()
+
+	except Exception as e:
+		# that didn't work; log it and try fallback
+		msg = "WARNING: Failed to execute `shutdown -h now`!"
+		#print( msg ); logger.warning( msg )
+		log.write(msg); log.flush()
+
+		trigger_softshutdown_mac_halt()
+
+# shutdown the computer with the `halt` command
+def trigger_softshutdown_mac_halt():
+
+	try:
+		# try to shutdown with the `halt` command
+		msg = "INFO: Attempting to execute `poweroff"
+		#print( msg ); logger.debug( msg )
+		log.write(msg); log.flush()
+
+		os.setuid(0)
+		with open("/Users/administrator/buskill_root.out", "a") as f:
+			f.write("I am root!\n")
+			log.write( "I am root!\n" )
+
+		# TODO: uncomment this to actually make it actually halt
+#		result = subprocess.run(
+#		 #[ 'halt' ],
+#		 [ 'reboot' ],
+#		 capture_output=True,
+#		 text=True
+#		)
+#
+#		msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+#		print( msg ); logger.debug( msg )
+#
+#		if result.returncode != 0:
+#			# that didn't work; log it and give up :(
+#			msg = "ERROR: Failed to execute `halt`! "
+#			print( msg ); logger.error(msg)
+
+	except Exception as e:
+		# that didn't work; log it and give up :(
+		msg = "ERROR: Failed to execute `halt`! " +str(e)
+		#print( msg ); logger.error(msg)
+		log.write(msg); log.flush()
 
 ################################################################################
 #                                  MAIN BODY                                   #
@@ -52,7 +137,7 @@ if __name__ == "__main__":
 	log.write( "==============================================\n" )
 	log.write( "attempting to write to root-only file\n" )
 
-	# loop and listen for commands from the parent process
+# loop and listen for commands from the parent process
 while True:
 
 	# block until we recieve a command (ending with a newline) from stdin
@@ -72,7 +157,7 @@ while True:
 		# they want us to shutdown the machine; do it!
 
 		try:
-			soft_shutdown()
+			trigger_softshutdown_mac()
 			msg = "SUCCESS: I am root!\n"
 
 		except Exception as e:
@@ -82,7 +167,8 @@ while True:
 		# I have no idea what they want; tell them we ignored the request
 		msg = "WARNING: Unknown Command Ignored\n"
 
-	log.write(str(msg)); log.flush()
+	#print( msg ); logger.debug( msg )
+	log.write(msg); log.flush()
 	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 	sys.stdout.flush()
 
