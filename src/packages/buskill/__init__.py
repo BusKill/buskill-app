@@ -594,6 +594,9 @@ class BusKill:
 				msg = "DEBUG: No root_child detected. Attempting to spawn one."
 				print( msg ); logger.debug( msg )
 
+				msg = "INFO: You have requested BusKill to do something that requires elevated privliges on your platform. If you'd like to proceed, please authorize BusKill to preform actions as Administrator. Your system may prompt you for your password to proceed."
+				print( msg ); logger.info( msg )
+
 				# To spawn a child process as root in MacOS, we use
 				# AuthorizationExecuteWithPrivileges(), which triggers the OS to
 				# display an auth challenge in the GUI for the user. See also
