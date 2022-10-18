@@ -62,7 +62,7 @@ while True:
 	if not re.match( "^[A-Za-z_-]+$", command ):
 		msg = "ERROR: Bad Command Ignored\n"
 
-		log.write(); log.flush()
+		log.write(str(msg)); log.flush()
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()
 		continue
@@ -82,7 +82,7 @@ while True:
 		# I have no idea what they want; tell them we ignored the request
 		msg = "WARNING: Unknown Command Ignored\n"
 
-	log.write(); log.flush()
+	log.write(str(msg)); log.flush()
 	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 	sys.stdout.flush()
 
