@@ -924,6 +924,40 @@ class BusKill:
 
 			self.TRIGGER_FUNCTION()
 
+	# simulates a fake hotplug removal event
+	def simulate_hotplug_removal( self ):
+
+		if self.OS_NAME_SHORT == 'lin' or self.OS_NAME_SHORT == 'mac':
+
+			self.simulate_hotplug_removal_nix()
+		
+		elif self.OS_NAME_SHORT == 'win':
+
+			self.simulate_hotplug_removal_win()
+
+
+	# simulates a fake hotplug removal event on *nix platforms
+	def simulate_hotplug_removal_nix( self ):
+
+		# call the callback for hotplug events with 'simulation' for both 'context'
+		# and 'event'. The last argument is the constant signifying that the
+		# hotplug event is specifically a *removal* event
+		self.hotplugCallbackNix( 'simulation', 'simulation', usb1.HOTPLUG_EVENT_DEVICE_LEFT )
+
+	# TODO: test this. DBT_DEVICEREMOVALCOMPLETE may not be avaialble and so this
+	# may need to move wayy up (next to the actual hotplugCallbackWin() function's definition
+	def simulate_hotplug_removal_win( self ):
+
+		# call the callback for hotplug events with 'simulation' for 'hwnd',
+		# 'message', and 'lparam'. The second-to-last argument is the constant
+		# signifying that the hotplug event is specifically a *removal* event
+		self.hotplugCallbackWin(
+		 'simulation',
+		 'simulation',
+		 DBT_DEVICEREMOVECOMPLETE,
+		 'simulation'
+		)
+
 	####################
 	# ARMING FUNCTIONS #
 	####################

@@ -163,7 +163,7 @@ def BusKillCLI():
 			bk.set_trigger( args.trigger )
 			confirm = input("Are you sure you want to execute the '" +str(bk.get_trigger())+ "' trigger RIGHT NOW? [Y/N] ")
 			if confirm.upper() in ["Y", "YES"]:
-				bk.TRIGGER_FUNCTION()
+				bk.simulate_hotplug_removal()
 			else:
 				msg = "INFO: User chose not to execute trigger now. Exiting."
 				print( msg ); logger.info( msg )
