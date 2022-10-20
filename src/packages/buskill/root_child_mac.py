@@ -135,13 +135,13 @@ if __name__ == "__main__":
 	# TODO: change manual logging to 'loggger' to the debug file (if possible)
 	log = open("/Users/maltfield/.buskill/root_child.log", "a")
 	log.write( "==============================================\n" )
-	log.write( "attempting to write to root-only file\n" )
 
 # loop and listen for commands from the parent process
 while True:
 
 	# block until we recieve a command (ending with a newline) from stdin
 	command = sys.stdin.buffer.readline().strip().decode('ascii')
+	log.write( "INFO: Command received\n" ); log.flush()
 
 	# check sanity of recieved command. Be very suspicious
 	if not re.match( "^[A-Za-z_-]+$", command ):
