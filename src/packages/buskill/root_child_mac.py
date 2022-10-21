@@ -29,9 +29,9 @@ import logging, os, re, sys, subprocess
 
 # this function will gently shutdown a MacOS machine
 def trigger_softshutdown_mac(self):
-	msg = "DEBUG: BusKill soft-shutdown trigger executing now"
-	#print( msg ); logger.debug( msg )
-	log.write(msg); log.flush()
+	msg = "BusKill soft-shutdown trigger executing now"
+	logging.debug( msg )
+	#log.write(msg); log.flush()
 
 	# first we try to shutdown with `shutdown`
 	trigger_softshutdown_mac_shutdown()
@@ -41,14 +41,17 @@ def trigger_softshutdown_mac_shutdown():
 
 	try:
 		# first try to shutdown with the `shutdown` command
-		msg = "INFO: Attempting to execute `shutdown -h now"
+		msg = "Attempting to execute `shutdown -h now"
 		#print( msg ); logger.debug( msg )
-		log.write(msg); log.flush()
+		#log.write(msg); log.flush()
+		logging.info(msg)
 
 		os.setuid(0)
 		with open("/Users/administrator/buskill_root.out", "a") as f:
-			f.write("I am root!\n")
-			log.write( "I am root!\n" )
+			msg = "I am root!\n"
+			f.write(msg)
+			#log.write(msg)
+			logging.info(msg)
 
 		# TODO: uncomment this to actually make it reboot
 #		result = subprocess.run(
@@ -78,9 +81,10 @@ def trigger_softshutdown_mac_shutdown():
 
 	except Exception as e:
 		# that didn't work; log it and try fallback
-		msg = "WARNING: Failed to execute `shutdown -h now`!"
+		msg = "Failed to execute `shutdown -h now`!"
 		#print( msg ); logger.warning( msg )
-		log.write(msg); log.flush()
+		#log.write(msg); log.flush()
+		logging.warning(msg)
 
 		trigger_softshutdown_mac_halt()
 
@@ -89,14 +93,17 @@ def trigger_softshutdown_mac_halt():
 
 	try:
 		# try to shutdown with the `halt` command
-		msg = "INFO: Attempting to execute `poweroff"
+		msg = "Attempting to execute `poweroff"
 		#print( msg ); logger.debug( msg )
-		log.write(msg); log.flush()
+		#log.write(msg); log.flush()
+		logging.info(msg)
 
 		os.setuid(0)
 		with open("/Users/administrator/buskill_root.out", "a") as f:
-			f.write("I am root!\n")
-			log.write( "I am root!\n" )
+			msg = "I am root!\n"
+			f.write(msg)
+			#log.write(msg)
+			logging.info(msg)
 
 		# TODO: uncomment this to actually make it actually halt
 #		result = subprocess.run(
@@ -122,17 +129,18 @@ def trigger_softshutdown_mac_halt():
 
 	except Exception as e:
 		# that didn't work; log it and give up :(
-		msg = "ERROR: Failed to execute `halt`! " +str(e)
+		msg = "Failed to execute `halt`! " +str(e)
 		#print( msg ); logger.error(msg)
-		log.write(msg); log.flush()
+		#log.write(msg); log.flush()
+		logging.error(msg)
 
 ################################################################################
 #                                  MAIN BODY                                   #
 ################################################################################
 
 # TODO: change manual logging to 'loggger' to the debug file (if possible)
-log = open("/Users/maltfield/.buskill/root_child.log", "a")
-log.write( "==============================================\n" )
+#log = open("/Users/maltfield/.buskill/root_child.log", "a")
+#log.write( "==============================================\n" )
 
 ####################
 # HANDLE ARGUMENTS #
@@ -153,14 +161,15 @@ if not re.match( "^[A-Za-z0-9\-\_\./\ ]+$", log_file_path ):
 logging.basicConfig(
  filename = log_file_path,
  filemode = 'a',
- format = 'root_child_mac: %(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+ format = '%(asctime)s,%(msecs)d root_child %(levelname)s %(message)s',
  datefmt = '%H:%M:%S',
  level = logging.DEBUG
 )
-logging.info
 
 msg = "==============================================================================="
-msg = "INFO: root_child_mac is writing to log file '" +str(log_file_path)+ "'"
+logging.info(msg)
+msg = "root_child_mac is writing to log file '" +str(log_file_path)+ "'"
+logging.info(msg)
 
 #############
 # MAIN LOOP #
@@ -169,17 +178,20 @@ msg = "INFO: root_child_mac is writing to log file '" +str(log_file_path)+ "'"
 # loop and listen for commands from the parent process
 while True:
 
+	msg = "Waiting for command"
+	logging.info(msg)
+
 	# block until we recieve a command (ending with a newline) from stdin
 	command = sys.stdin.buffer.readline().strip().decode('ascii')
-	msg = "INFO: Command received\n"
-	log.write( "INFO: Command received\n" ); log.flush()
+	msg = "Command received\n"
+	#log.write( "INFO: Command received\n" ); log.flush()
 	logging.info(msg)
 
 	# check sanity of recieved command. Be very suspicious
 	if not re.match( "^[A-Za-z_-]+$", command ):
-		msg = "ERROR: Bad Command Ignored\n"
+		msg = "Bad Command Ignored\n"
 
-		log.write(str(msg)); log.flush()
+		#log.write(str(msg)); log.flush()
 		logging.error(msg)
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()
@@ -191,21 +203,23 @@ while True:
 
 		try:
 			trigger_softshutdown_mac()
-			msg = "SUCCESS: I am root!\n"
+			msg = "I am root!\n"
+			logging.info(msg)
 
 		except Exception as e:
-			msg = "ERROR: I am not root :'(\n"
+			msg = "I am not root :'(\n"
+			logging.error(msg)
 
 	else:   
 		# I have no idea what they want; tell them we ignored the request
-		msg = "WARNING: Unknown Command Ignored\n"
+		msg = "Unknown Command Ignored\n"
+		logging.warning(msg)
 
 	#print( msg ); logger.debug( msg )
-	log.write(msg); log.flush()
-	logging.info(msg)
+	#log.write(msg); log.flush()
 	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 	sys.stdout.flush()
 
 # TODO: See if it's possible to put this in a function that's registered as
 #       a callback when the process is closing
-log.close()
+#log.close()
