@@ -17,7 +17,7 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import os, re, sys, subprocess
+import logging, os, re, sys, subprocess
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -139,7 +139,7 @@ log.write( "==============================================\n" )
 ####################
 
 # the first argument is the file path to where we write logs
-log_file_path = sys.argv[0]
+log_file_path = sys.argv[1]
 
 # check sanity of input. Be very suspicious
 if not re.match( "^[A-Za-z0-9\-\_\./\ ]+$", log_file_path ):
