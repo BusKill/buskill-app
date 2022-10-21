@@ -170,8 +170,7 @@ while True:
 
 	# block until we recieve a command (ending with a newline) from stdin
 	command = sys.stdin.buffer.readline().strip().decode('ascii')
-	msg = "Command received\n"
-	#log.write( "INFO: Command received\n" ); log.flush()
+	msg = "Command received"
 	logging.info(msg)
 
 	# check sanity of recieved command. Be very suspicious
@@ -195,7 +194,7 @@ while True:
 			logging.debug(msg)
 
 			trigger_softshutdown_mac()
-			msg = "Finished executing 'soft-shutdown'"
+			msg = "Finished executing 'soft-shutdown'\n"
 			logging.info(msg)
 
 		except Exception as e:
