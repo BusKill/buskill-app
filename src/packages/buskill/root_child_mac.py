@@ -130,48 +130,46 @@ def trigger_softshutdown_mac_halt():
 #                                  MAIN BODY                                   #
 ################################################################################
 
-if __name__ == "__main__":
+# TODO: change manual logging to 'loggger' to the debug file (if possible)
+log = open("/Users/maltfield/.buskill/root_child.log", "a")
+log.write( "==============================================\n" )
 
-	# TODO: change manual logging to 'loggger' to the debug file (if possible)
-	log = open("/Users/maltfield/.buskill/root_child.log", "a")
-	log.write( "==============================================\n" )
+# loop and listen for commands from the parent process
+while True:
 
-	# loop and listen for commands from the parent process
-	while True:
+	# block until we recieve a command (ending with a newline) from stdin
+	command = sys.stdin.buffer.readline().strip().decode('ascii')
+	log.write( "INFO: Command received\n" ); log.flush()
 
-		# block until we recieve a command (ending with a newline) from stdin
-		command = sys.stdin.buffer.readline().strip().decode('ascii')
-		log.write( "INFO: Command received\n" ); log.flush()
+	# check sanity of recieved command. Be very suspicious
+	if not re.match( "^[A-Za-z_-]+$", command ):
+		msg = "ERROR: Bad Command Ignored\n"
 
-		# check sanity of recieved command. Be very suspicious
-		if not re.match( "^[A-Za-z_-]+$", command ):
-			msg = "ERROR: Bad Command Ignored\n"
-
-			log.write(str(msg)); log.flush()
-			sys.stdout.buffer.write( msg.encode(encoding='ascii') )
-			sys.stdout.flush()
-			continue
-
-		# what was the command they sent us?
-		if command == "soft-shutdown":
-			# they want us to shutdown the machine; do it!
-
-			try:
-				trigger_softshutdown_mac()
-				msg = "SUCCESS: I am root!\n"
-
-			except Exception as e:
-				msg = "ERROR: I am not root :'(\n"
-
-		else:   
-			# I have no idea what they want; tell them we ignored the request
-			msg = "WARNING: Unknown Command Ignored\n"
-
-		#print( msg ); logger.debug( msg )
-		log.write(msg); log.flush()
+		log.write(str(msg)); log.flush()
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()
+		continue
 
-	# TODO: See if it's possible to put this in a function that's registered as
-	#       a callback when the process is closing
-	log.close()
+	# what was the command they sent us?
+	if command == "soft-shutdown":
+		# they want us to shutdown the machine; do it!
+
+		try:
+			trigger_softshutdown_mac()
+			msg = "SUCCESS: I am root!\n"
+
+		except Exception as e:
+			msg = "ERROR: I am not root :'(\n"
+
+	else:   
+		# I have no idea what they want; tell them we ignored the request
+		msg = "WARNING: Unknown Command Ignored\n"
+
+	#print( msg ); logger.debug( msg )
+	log.write(msg); log.flush()
+	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
+	sys.stdout.flush()
+
+# TODO: See if it's possible to put this in a function that's registered as
+#       a callback when the process is closing
+log.close()
