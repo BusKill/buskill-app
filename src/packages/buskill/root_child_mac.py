@@ -31,7 +31,6 @@ import logging, os, re, sys, subprocess
 def trigger_softshutdown_mac():
 	msg = "BusKill soft-shutdown trigger executing now"
 	logging.debug( msg )
-	#log.write(msg); log.flush()
 
 	# first we try to shutdown with `shutdown`
 	trigger_softshutdown_mac_shutdown()
@@ -42,8 +41,6 @@ def trigger_softshutdown_mac_shutdown():
 	try:
 		# first try to shutdown with the `shutdown` command
 		msg = "Attempting to execute `shutdown -h now"
-		#print( msg ); logger.debug( msg )
-		#log.write(msg); log.flush()
 		logging.info(msg)
 
 		os.setuid(0)
@@ -82,8 +79,6 @@ def trigger_softshutdown_mac_shutdown():
 	except Exception as e:
 		# that didn't work; log it and try fallback
 		msg = "Failed to execute `shutdown -h now`!"
-		#print( msg ); logger.warning( msg )
-		#log.write(msg); log.flush()
 		logging.warning(msg)
 
 		trigger_softshutdown_mac_halt()
@@ -94,8 +89,6 @@ def trigger_softshutdown_mac_halt():
 	try:
 		# try to shutdown with the `halt` command
 		msg = "Attempting to execute `poweroff"
-		#print( msg ); logger.debug( msg )
-		#log.write(msg); log.flush()
 		logging.info(msg)
 
 		os.setuid(0)
@@ -130,17 +123,11 @@ def trigger_softshutdown_mac_halt():
 	except Exception as e:
 		# that didn't work; log it and give up :(
 		msg = "Failed to execute `halt`! " +str(e)
-		#print( msg ); logger.error(msg)
-		#log.write(msg); log.flush()
 		logging.error(msg)
 
 ################################################################################
 #                                  MAIN BODY                                   #
 ################################################################################
-
-# TODO: change manual logging to 'loggger' to the debug file (if possible)
-#log = open("/Users/maltfield/.buskill/root_child.log", "a")
-#log.write( "==============================================\n" )
 
 ####################
 # HANDLE ARGUMENTS #
@@ -208,7 +195,7 @@ while True:
 			logging.debug(msg)
 
 			trigger_softshutdown_mac()
-			msg = "I am root!\n"
+			msg = "Finished executing 'soft-shutdown'"
 			logging.info(msg)
 
 		except Exception as e:
@@ -220,11 +207,5 @@ while True:
 		msg = "Unknown Command Ignored\n"
 		logging.warning(msg)
 
-	#print( msg ); logger.debug( msg )
-	#log.write(msg); log.flush()
 	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 	sys.stdout.flush()
-
-# TODO: See if it's possible to put this in a function that's registered as
-#       a callback when the process is closing
-#log.close()
