@@ -1293,22 +1293,56 @@ class BusKill:
 				msg = "WARNING: Failed to execute `CGSession -suspend`! "
 				print( msg ); logger.warning( msg )
 
-				self.trigger_lockscreen_mac_pmset()
+				self.trigger_lockscreen_mac_saclockscreen()
 
 		except Exception as e:
 			# that didn't work; log it and try fallback
 			msg = "WARNING: Failed to execute `CGSession -suspend`! " +str(e)
 			print( msg ); logger.warning(msg)
 
-			self.trigger_lockscreen_mac_pmset()
+			self.trigger_lockscreen_mac_saclockscreen()
 
-	def trigger_lockscreen_mac_pmset(self):
+	def trigger_lockscreen_mac_saclockscreen(self):
 
 		try:
-			# try to lock the screen with pmset command
-			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+			# try to lock the screen by calling `SACLockScreenImmediate()`
+			msg = "INFO: Attempting to call `SACLockScreenImmediate()`"
 			print( msg ); logger.debug( msg )
-			subprocess.run( ['pmset', 'displaysleepnow'], capture_output=True, text=True )
+
+			login = ctypes.CDLL( '/System/Library/PrivateFrameworks/login.framework/login' )
+			result = login.SACLockScreenImmediate();
+
+			msg = "DEBUG: login.SACLockScreenImmediate() returncode|" +str(result)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result != 0:
+				# that didn't work; log it and try to turn on the screensaver and put
+				# put the screen to sleep
+				msg = "WARNING: Failed to call `SACLockScreenImmediate()`!"
+				print( msg ); logger.error(msg)
+
+				self.trigger_lockscreen_mac_screensaver()
+				self.trigger_lockscreen_mac_pmset()
+
+		except Exception as e:
+			# that didn't work; log it and try to turn on the screensaver and put
+			# put the screen to sleep
+			msg = "WARNING: Failed to call `SACLockScreenImmediate()`! " +str(e)
+			print( msg ); logger.error(msg)
+
+			self.trigger_lockscreen_mac_screensaver()
+			self.trigger_lockscreen_mac_pmset()
+
+	def trigger_lockscreen_mac_screensaver(self):
+
+		try:
+			# try to lock the screen by enabling the screensaver
+			msg = "INFO: Attempting to execute `ScreenSaverEngine.app`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run(
+			 ['open', '-a', '/System/Library/CoreServices/ScreenSaverEngine.app'],
+			 capture_output=True, text=True
+			)
 
 			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
 			print( msg ); logger.debug( msg )
@@ -1320,12 +1354,42 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			if result.returncode != 0:
-				# that didn't work; log it and give up :(
-				msg = "ERROR: Failed to execute `pmset displaysleepnow`! "
+				# that didn't work; log it
+				msg = "ERROR: Failed to execute `ScrenSaverEngine.app`! "
 				print( msg ); logger.error(msg)
 
 		except Exception as e:
-			# that didn't work; log it give up :(
+			# that didn't work; log it
+			msg = "ERROR: Failed to execute `ScrenSaverEngine.app`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_lockscreen_mac_pmset(self):
+
+		try:
+			# try to lock the screen by putting the screen to sleep
+			msg = "INFO: Attempting to execute `pmset displaysleepnow`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run(
+			 ['pmset', 'displaysleepnow'],
+			 capture_output=True, text=True
+			)
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it
+				msg = "ERROR: Failed to execute `pmset displaysleepnow`!"
+				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it
 			msg = "ERROR: Failed to execute `pmset displaysleepnow`! " +str(e)
 			print( msg ); logger.error(msg)
 
