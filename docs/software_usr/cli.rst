@@ -1,4 +1,4 @@
-.. _cli:
+﻿.. _cli:
 
 BusKill App: Command-Line Interface
 =====================================
@@ -48,7 +48,7 @@ To arm BusKill, execute it with the ``-a`` or ``--arm`` argument
 Trigger Selector
 ^^^^^^^^^^^^^^^^
 
-You can use ``-t`` or ``--trigger`` to speicfy which trigger you would like the BusKill app to execute when your BusKill cable is disconnected. For example, to arm buskil such that it will shutdown your computer when the BusKill cable is removed, choose the ``soft-shutdown`` trigger
+You can use ``-t`` or ``--trigger`` to specify which trigger you would like the BusKill app to execute when your BusKill cable is disconnected. For example, to arm BusKill such that it will shutdown your computer when the BusKill cable is removed, choose the ``soft-shutdown`` trigger
 
 ::
 
