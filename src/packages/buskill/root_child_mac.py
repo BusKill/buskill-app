@@ -130,6 +130,10 @@ def trigger_softshutdown_mac_halt():
 #                                  MAIN BODY                                   #
 ################################################################################
 
+# TODO: change manual logging to 'loggger' to the debug file (if possible)
+log = open("/Users/maltfield/.buskill/root_child.log", "a")
+log.write( "==============================================\n" )
+
 ####################
 # HANDLE ARGUMENTS #
 ####################
@@ -138,7 +142,7 @@ def trigger_softshutdown_mac_halt():
 log_file_path = sys.argv[0]
 
 # check sanity of input. Be very suspicious
-if not re.match( "^[A-Za-z0-9\-\_\./\ ]+$", command ):
+if not re.match( "^[A-Za-z0-9\-\_\./\ ]+$", log_file_path ):
 	print( "First positional argument (log file path) is invalid. Exiting" )
 	sys.exit(1)
 
@@ -157,10 +161,6 @@ logging.info
 
 msg = "==============================================================================="
 msg = "INFO: root_child_mac is writing to log file '" +str(log_file_path)+ "'"
-
-# TODO: change manual logging to 'loggger' to the debug file (if possible)
-log = open("/Users/maltfield/.buskill/root_child.log", "a")
-log.write( "==============================================\n" )
 
 #############
 # MAIN LOOP #
