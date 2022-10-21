@@ -28,7 +28,7 @@ import logging, os, re, sys, subprocess
 ################################################################################
 
 # this function will gently shutdown a MacOS machine
-def trigger_softshutdown_mac(self):
+def trigger_softshutdown_mac():
 	msg = "BusKill soft-shutdown trigger executing now"
 	logging.debug( msg )
 	#log.write(msg); log.flush()
@@ -200,14 +200,19 @@ while True:
 	# what was the command they sent us?
 	if command == "soft-shutdown":
 		# they want us to shutdown the machine; do it!
+		msg = "Command is 'soft-shutdown'"
+		logging.debug(msg)
 
 		try:
+			msg = "Attempting to call trigger_softshutdown_mac()"
+			logging.debug(msg)
+
 			trigger_softshutdown_mac()
 			msg = "I am root!\n"
 			logging.info(msg)
 
 		except Exception as e:
-			msg = "I am not root :'(\n"
+			msg = "Failed to execute trigger_softshutdown_mac()\n" +str(e)
 			logging.error(msg)
 
 	else:   
