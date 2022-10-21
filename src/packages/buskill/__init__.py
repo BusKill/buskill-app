@@ -1317,8 +1317,8 @@ class BusKill:
 
 			if result != 0:
 				# that didn't work; log it and try to turn on the screensaver and put
-				# put the screen to sleep
-				msg = "WARNING: Failed to call `SACLockScreenImmediate()`!"
+				# the screen to sleep
+				msg = "ERROR: Failed to call `SACLockScreenImmediate()`!"
 				print( msg ); logger.error(msg)
 
 				self.trigger_lockscreen_mac_screensaver()
@@ -1326,8 +1326,8 @@ class BusKill:
 
 		except Exception as e:
 			# that didn't work; log it and try to turn on the screensaver and put
-			# put the screen to sleep
-			msg = "WARNING: Failed to call `SACLockScreenImmediate()`! " +str(e)
+			# the screen to sleep
+			msg = "ERROR: Failed to call `SACLockScreenImmediate()`! " +str(e)
 			print( msg ); logger.error(msg)
 
 			self.trigger_lockscreen_mac_screensaver()
