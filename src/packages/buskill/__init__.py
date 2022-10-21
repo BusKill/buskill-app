@@ -1338,8 +1338,7 @@ class BusKill:
 
 			libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
 
-			# TODO: change this to pass the message via the parent
-			#  * https://github.com/BusKill/buskill-app/issues/14#issuecomment-1280026743
+			# https://github.com/BusKill/buskill-app/issues/14#issuecomment-1280026743
 			command = "soft-shutdown\n".encode(encoding="ascii")
 			libc.fwrite( command,1,len(command),self.root_child['io'] )
 			libc.fflush( self.root_child['io'] )
@@ -1349,7 +1348,7 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 		except Exception as e:
-			# that didn't work; log it give up :(
+			# that didn't work; log it and give up :(
 			msg = "ERROR: Failed to send 'soft-shutdown' command to root child \n\t" +str(e)
 			print( msg ); logger.error(msg)
 

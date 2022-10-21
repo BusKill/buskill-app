@@ -17,7 +17,7 @@ For more info, see: https://buskill.in/
 #                                   IMPORTS                                    #
 ################################################################################
 
-import logging, os, re, sys, subprocess
+import logging, re, sys, subprocess
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -40,13 +40,13 @@ def trigger_softshutdown_mac_shutdown():
 
 	try:
 		# first try to shutdown with the `shutdown` command
-		msg = "Attempting to execute `shutdown -h now"
+		msg = "Attempting to execute `shutdown -h now`"
 		logging.info(msg)
 
 		# TODO: swap 'reboot' for actual 'shutdown' command
-		 #[ 'shutdown', '-h', 'now' ],
 		result = subprocess.run(
-		 [ 'reboot' ],
+		 #[ 'reboot' ],
+		 [ 'shutdown', '-h', 'now' ],
 		 capture_output=True,
 		 text=True
 		)
@@ -83,9 +83,8 @@ def trigger_softshutdown_mac_halt():
 		logging.info(msg)
 
 		result = subprocess.run(
-		# TODO: swap 'reboot' for actual 'halt' command
-		 #[ 'halt' ],
-		 [ 'reboot' ],
+		 #[ 'reboot' ],
+		 [ 'halt' ],
 		 capture_output=True,
 		 text=True
 		)
