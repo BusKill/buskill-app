@@ -130,22 +130,57 @@ def trigger_softshutdown_mac_halt():
 #                                  MAIN BODY                                   #
 ################################################################################
 
+####################
+# HANDLE ARGUMENTS #
+####################
+
+# the first argument is the file path to where we write logs
+log_file_path = sys.argv[0]
+
+# check sanity of input. Be very suspicious
+if not re.match( "^[A-Za-z0-9\-\_\./\ ]+$", command ):
+	print( "First positional argument (log file path) is invalid. Exiting" )
+	sys.exit(1)
+
+#################
+# SETUP LOGGING #
+#################
+
+logging.basicConfig(
+ filename = log_file_path,
+ filemode = 'a',
+ format = 'root_child_mac: %(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+ datefmt = '%H:%M:%S',
+ level = logging.DEBUG
+)
+logging.info
+
+msg = "==============================================================================="
+msg = "INFO: root_child_mac is writing to log file '" +str(log_file_path)+ "'"
+
 # TODO: change manual logging to 'loggger' to the debug file (if possible)
 log = open("/Users/maltfield/.buskill/root_child.log", "a")
 log.write( "==============================================\n" )
+
+#############
+# MAIN LOOP #
+#############
 
 # loop and listen for commands from the parent process
 while True:
 
 	# block until we recieve a command (ending with a newline) from stdin
 	command = sys.stdin.buffer.readline().strip().decode('ascii')
+	msg = "INFO: Command received\n"
 	log.write( "INFO: Command received\n" ); log.flush()
+	logging.info(msg)
 
 	# check sanity of recieved command. Be very suspicious
 	if not re.match( "^[A-Za-z_-]+$", command ):
 		msg = "ERROR: Bad Command Ignored\n"
 
 		log.write(str(msg)); log.flush()
+		logging.error(msg)
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()
 		continue
@@ -167,6 +202,7 @@ while True:
 
 	#print( msg ); logger.debug( msg )
 	log.write(msg); log.flush()
+	logging.info(msg)
 	sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 	sys.stdout.flush()
 

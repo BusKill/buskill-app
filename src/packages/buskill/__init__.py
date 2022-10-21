@@ -219,6 +219,7 @@ class BusKill:
 		self.TRIGGER_FUNCTION = None
 
 		self.EXECUTED_AS_SCRIPT = None
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
@@ -612,7 +613,7 @@ class BusKill:
 					root_child_path = self.SRC_DIR +os.sep+ 'root_child_mac'
 
 					# and we'll be calling the binary directly
-					exe = [root_child_path]
+					exe = [root_child_path, self.LOG_FILE_PATH]
 
 				else:
 					# this execution was a script; let's call the root child script
@@ -620,7 +621,7 @@ class BusKill:
 
 					# and we'll pass the script as an argument to the python
 					# interpreter
-					exe = [sys.executable,root_child_path]
+					exe = [sys.executable, root_child_path, self.LOG_FILE_PATH]
 
 				msg = "DEBUG: root_child_path:|" +str(root_child_path)+ "|"
 				print( msg ); logger.debug( msg )

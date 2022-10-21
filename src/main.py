@@ -73,6 +73,7 @@ if __name__ == '__main__':
 	logging.debug( 'sys.version|' +str(sys.version)+ '|' )
 	logging.debug( 'sys.api_version|' +str(sys.api_version)+ '|' )
 	logging.debug( 'sys.version_info|' +str(sys.version_info)+ '|' )
+	logging.debug( '__name__|' +str(__name__)+ '|' )
 
 	# platform info
 	logging.debug( 'sys.platform|' +str(sys.platform)+ '|' )
