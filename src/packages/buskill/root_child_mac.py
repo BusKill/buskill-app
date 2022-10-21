@@ -43,38 +43,29 @@ def trigger_softshutdown_mac_shutdown():
 		msg = "Attempting to execute `shutdown -h now"
 		logging.info(msg)
 
-		os.setuid(0)
-		with open("/Users/administrator/buskill_root.out", "a") as f:
-			msg = "I am root!\n"
-			f.write(msg)
-			#log.write(msg)
-			logging.info(msg)
-
-		# TODO: uncomment this to actually make it reboot
-#		result = subprocess.run(
 		# TODO: swap 'reboot' for actual 'shutdown' command
-#		 #[ 'shutdown', '-h', 'now' ],
-#		result = subprocess.run(
-#		 [ 'reboot' ],
-#		 capture_output=True,
-#		 text=True
-#		)
-#
-#		msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		if result.returncode != 0:
-#			# that didn't work; log it and try fallback
-#			msg = "WARNING: Failed to execute `shutdown -h now`!"
-#			print( msg ); logger.warning( msg )
-#
-#		trigger_softshutdown_mac_halt()
+		 #[ 'shutdown', '-h', 'now' ],
+		result = subprocess.run(
+		 [ 'reboot' ],
+		 capture_output=True,
+		 text=True
+		)
+
+		msg = "subprocess returncode|" +str(result.returncode)+ "|"
+		logging.debug(msg)
+
+		msg = "subprocess stdout|" +str(result.stdout)+ "|"
+		logging.debug(msg)
+
+		msg = "subprocess stderr|" +str(result.stderr)+ "|"
+		logging.debug(msg)
+
+		if result.returncode != 0:
+			# that didn't work; log it and try fallback
+			msg = "Failed to execute `shutdown -h now`!"
+			logging.warning(msg)
+
+		trigger_softshutdown_mac_halt()
 
 	except Exception as e:
 		# that didn't work; log it and try fallback
@@ -91,34 +82,27 @@ def trigger_softshutdown_mac_halt():
 		msg = "Attempting to execute `poweroff"
 		logging.info(msg)
 
-		os.setuid(0)
-		with open("/Users/administrator/buskill_root.out", "a") as f:
-			msg = "I am root!\n"
-			f.write(msg)
-			#log.write(msg)
-			logging.info(msg)
+		result = subprocess.run(
+		# TODO: swap 'reboot' for actual 'halt' command
+		 #[ 'halt' ],
+		 [ 'reboot' ],
+		 capture_output=True,
+		 text=True
+		)
 
-		# TODO: uncomment this to actually make it actually halt
-#		result = subprocess.run(
-#		 #[ 'halt' ],
-#		 [ 'reboot' ],
-#		 capture_output=True,
-#		 text=True
-#		)
-#
-#		msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
-#		print( msg ); logger.debug( msg )
-#
-#		if result.returncode != 0:
-#			# that didn't work; log it and give up :(
-#			msg = "ERROR: Failed to execute `halt`! "
-#			print( msg ); logger.error(msg)
+		msg = "subprocess returncode|" +str(result.returncode)+ "|"
+		logging.debug(msg)
+
+		msg = "subprocess stdout|" +str(result.stdout)+ "|"
+		logging.debug(msg)
+
+		msg = "subprocess stderr|" +str(result.stderr)+ "|"
+		logging.debug(msg)
+
+		if result.returncode != 0:
+			# that didn't work; log it and give up :(
+			msg = "Failed to execute `halt`! "
+			logging.error(msg)
 
 	except Exception as e:
 		# that didn't work; log it and give up :(
