@@ -52,3 +52,4 @@ The reader may be interested to investigate the following similar projects:
  * `s53 <https://github.com/BrassHornCommunications/s53>`_
  * `swatd <https://github.com/defuse/swatd>`_
  * `Centry <https://github.com/0xPoly/Centry>`_
+ * `xxUSBSentinel <https://github.com/thereisnotime/xxUSBSentinel>`_
