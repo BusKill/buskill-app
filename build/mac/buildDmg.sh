@@ -252,6 +252,10 @@ popd
 find /tmp | grep -i dylib
 cp /tmp/libusb-1.0.23/libusb/.libs/libusb-1.0.dylib src/
 
+# gpg depends for MacOS, from:
+# * https://github.com/BusKill/buskill-app/issues/36
+cp -R /usr/local/opt/gettext/lib/libintl* src/
+
 # output information about this build so the code can use it later in logs
 cat > src/buskill_version.py <<EOF
 BUSKILL_VERSION = {
