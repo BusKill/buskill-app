@@ -379,6 +379,11 @@ class BusKill:
 		 os.pathsep+ self.EXE_DIR + \
 		 os.pathsep+ self.APP_DIR
 
+		# also fallback on loading libraries from our self-contained app
+		# this may be needed by gpg for gettext's libintl 
+		#  * https://github.com/BusKill/buskill-app/issues/36
+		os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = self.SRC_DIR
+
 		# also update sys.python, so `import` statements will look in there (eg:
 		# for upgraded_from.py)
 		sys.path.append( self.EXE_DIR )
