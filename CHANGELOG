@@ -1,10 +1,15 @@
 buskill-app changelog
 
-[0.5.0] - 2020-10-16
-* added "Debug Log" screen in GUI
+[0.6.0] - 2022-10-24
++ added soft-shutdown trigger to cli
+* fixed in-app update bug in MacOS
+* added two fallbacks to lockscreen trigger in MacOS
+
+[0.5.0] - 2022-07-22
++ added "Debug Log" screen in GUI
 
 [0.4.0] - 2020-10-16
-* added "About" button to navigation drawer
++ added "About" button to navigation drawer
 
 [0.3.1] - 2020-10-08
 * patched various in-app update bugs
