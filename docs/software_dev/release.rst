@@ -65,7 +65,7 @@ At this point, all of your features for the new release should already be finish
 Test
 ----
 
-Before release, thoroughly test the code in your new release branch and commit directly to this branch.
+Before release, :ref:`thoroughly test the code <test_app>` in your new release branch and commit directly to this branch.
 
 When testing is finished, merge all the commits into both the ``master`` and ``dev`` branches.
 
