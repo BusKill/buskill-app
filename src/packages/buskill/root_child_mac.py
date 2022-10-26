@@ -79,7 +79,7 @@ def trigger_softshutdown_mac_halt():
 
 	try:
 		# try to shutdown with the `halt` command
-		msg = "Attempting to execute `poweroff"
+		msg = "Attempting to execute `halt"
 		logging.info(msg)
 
 		result = subprocess.run(
