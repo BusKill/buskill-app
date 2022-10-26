@@ -57,7 +57,6 @@ You can use ``-t`` or ``--trigger`` to specify which trigger you would like the 
 	INFO: BusKill 'trigger' set to 'soft-shutdown'
 	INFO: BusKill is armed. Listening for removal event.
 	INFO: To disarm the CLI, exit with ^C or close this terminal
-	user@disp2781:~/Downloads/dist$ 
 
 You can also list all available triggers with ``--list-triggers``
 
