@@ -64,20 +64,6 @@
 					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
 					on_release: root.toggle_menu()
 
-			ActionView:
-
-				# if you don't set the background image, then the background color
-				# will be dark & muddled
-				background_image: 'images/white.png'
-				background_color: root.color_primary
-
-				ActionPrevious:
-					with_previous: False
-					app_icon: 'images/menu.png'
-					markup: True
-					title: '[font=RobotoMedium][size=20]  Fake[/size][/font]'
-					on_release: root.toggle_menu()
-
 		NavigationDrawer:
 			id: nav_drawer
 			anim_type: 'slide_above_simple'
