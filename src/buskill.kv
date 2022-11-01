@@ -37,6 +37,7 @@
 	color_primary: 0.129, 0.588, 0.953, 1
 	color_red: 0.957, 0.263, 0.212, 1
 
+	actionbar: actionbar
 	actionview: actionview
 	toggle_btn: toggle_btn
 	status: status
@@ -46,6 +47,7 @@
 		orientation: 'vertical'
 
 		ActionBar:
+			id: actionbar
 
 			ActionView:
 				id: actionview
@@ -53,13 +55,27 @@
 				# if you don't set the background image, then the background color
 				# will be dark & muddled
 				background_image: 'images/white.png'
-				background_color: 0.129, 0.588, 0.953, 1
+				background_color: root.color_primary
 
 				ActionPrevious:
 					with_previous: False
 					app_icon: 'images/menu.png'
 					markup: True
 					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
+					on_release: root.toggle_menu()
+
+			ActionView:
+
+				# if you don't set the background image, then the background color
+				# will be dark & muddled
+				background_image: 'images/white.png'
+				background_color: root.color_primary
+
+				ActionPrevious:
+					with_previous: False
+					app_icon: 'images/menu.png'
+					markup: True
+					title: '[font=RobotoMedium][size=20]  Fake[/size][/font]'
 					on_release: root.toggle_menu()
 
 		NavigationDrawer:
@@ -254,15 +270,20 @@
 <Settings>:
 	color_primary: 0.129, 0.588, 0.953, 1
 
+	actionbar: actionbar
+	actionview: actionview
+
 	BoxLayout:
 		orientation: 'vertical'
 
 		ActionBar:
-			background_image: 'images/white.png'
-			background_color: root.color_primary
+			id: actionbar
 
 			ActionView:
 				id: actionview
+
+				background_image: 'images/white.png'
+				background_color: root.color_primary
 
 				ActionPrevious:
 					with_previous: False
@@ -300,6 +321,8 @@
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
 
+	actionbar: actionbar
+	actionview: actionview
 	rv: rv
 	debug_header: debug_header
 
@@ -307,11 +330,13 @@
 		orientation: 'vertical'
 
 		ActionBar:
-			background_image: 'images/white.png'
-			background_color: root.color_primary
+			id: actionbar
 
 			ActionView:
 				id: actionview
+
+				background_image: 'images/white.png'
+				background_color: root.color_primary
 
 				ActionPrevious:
 					with_previous: False

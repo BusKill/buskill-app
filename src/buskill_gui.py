@@ -48,6 +48,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.actionbar import ActionView
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -74,6 +75,7 @@ class MainWindow(Screen):
 	status = ObjectProperty(None)
 	menu = ObjectProperty(None)
 	actionview = ObjectProperty(None)
+	actionbar = ObjectProperty(None)
 
 	dialog = None
 
@@ -106,12 +108,24 @@ class MainWindow(Screen):
 			self.status.text = 'BusKill is currently armed.'
 			self.toggle_btn.md_bg_color = [1,0,0,1]
 			self.toggle_btn.background_color = self.color_red
-			self.actionview.background_color = self.color_red
+
+			# set the actionview of every actionbar of every screen to red
+			for screen in self.manager.screens:
+				for child in screen.actionbar.children:
+					if type(child) == ActionView:
+						child.background_color = self.color_red
+
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = 'BusKill is currently disarmed.'
 			self.toggle_btn.background_color = self.color_primary
-			self.actionview.background_color = self.color_primary
+
+			# set the actionview of every actionbar of every screen back to the
+			# app's primary color
+			for screen in self.manager.screens:
+				for child in screen.actionbar.children:
+					if type(child) == ActionView:
+						child.background_color = self.color_primary
 
 	def handle_upgrades( self, dt ):
 
@@ -429,7 +443,7 @@ class CriticalError(BoxLayout):
 
 class Settings(Screen):
 
-	settings = ObjectProperty(None)
+	actionview = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
 
@@ -456,8 +470,8 @@ class Settings(Screen):
 
 class DebugLog(Screen):
 
-	debug_log = ObjectProperty(None)
 	debug_header = ObjectProperty(None)
+	actionview = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
 
