@@ -49,6 +49,9 @@
 
 			ActionView:
 				id: actionview
+
+				# if you don't set the background image, then the background color
+				# will be dark & muddled
 				background_image: 'images/white.png'
 				background_color: 0.129, 0.588, 0.953, 1
 
@@ -179,9 +182,9 @@
 	auto_dismiss: True
 	size_hint: (0.9, None)
 	padding: '16dp', '40dp', '16dp', 0
+	color_primary: 0.129, 0.588, 0.953, 1
 	height: dialog_contents.minimum_height + dp(16)
 
-	color_primary: 0.129, 0.588, 0.953, 1
 	l_title: l_title
 	l_body: l_body
 	b_cancel: b_cancel
@@ -249,11 +252,14 @@
 	font_size: dp(12)
 
 <Settings>:
+	color_primary: 0.129, 0.588, 0.953, 1
 
 	BoxLayout:
 		orientation: 'vertical'
 
 		ActionBar:
+			background_image: 'images/white.png'
+			background_color: root.color_primary
 
 			ActionView:
 				id: actionview
@@ -285,6 +291,7 @@
 				font_size: 16
 
 <DebugLog>:
+	color_primary: 0.129, 0.588, 0.953, 1
 
 	rv: rv
 	debug_header: debug_header
@@ -293,6 +300,8 @@
 		orientation: 'vertical'
 
 		ActionBar:
+			background_image: 'images/white.png'
+			background_color: root.color_primary
 
 			ActionView:
 				id: actionview
