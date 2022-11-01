@@ -4,8 +4,8 @@
 #          For more info, see: https://buskill.in/
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-23
-# Updated: 2022-07-11
-# Version: 0.2
+# Updated: 2022-11-01
+# Version: 0.3
 ################################################################################
 
 
@@ -280,12 +280,25 @@
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'main'
 
+				# Save Settings
 				ActionButton:
 					markup: True
-					text: '[font=mdicons][size=18]\ue161[/size][/font]'
+					text: '[font=mdicons][size=18]\ue161[/size][/font] Save'
 					#on_release:
 					#	root.manager.transition.direction = 'right'
 					#	root.manager.current = 'main'
+
+				# Reset Settings back to defaults
+				ActionButton:
+					markup: True
+					text: '[font=mdicons][size=18]\ue8ba[/size][/font] Reset'
+					title: 'Test'
+					#on_release:
+					#	root.manager.transition.direction = 'right'
+					#	root.manager.current = 'main'
+
+				ActionOverflow:
+					overflow_image: 'images/overflow_white.png'
 
 		BoxLayout:
 
