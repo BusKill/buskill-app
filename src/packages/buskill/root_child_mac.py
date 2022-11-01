@@ -160,7 +160,6 @@ while True:
 	if not re.match( "^[A-Za-z_-]+$", command ):
 		msg = "Bad Command Ignored\n"
 
-		#log.write(str(msg)); log.flush()
 		logging.error(msg)
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()

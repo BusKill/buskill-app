@@ -16,7 +16,7 @@ If your bug is security-related and you'd like to contact us confidentially, ple
 If you don't want to register for an account on GitHub or you'd like to remain anonymous, then you can `email us <https://www.buskill.in/contact/>`_. We'll put the issue on GitHub for you.
 
 Bug Reports
-===========
+-----------
 In order for us to fix your bug, we need you to tell us:
 
 #. What you expected to happen

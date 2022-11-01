@@ -427,6 +427,33 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
+class Settings(Screen):
+
+	settings = ObjectProperty(None)
+
+	def __init__(self, **kwargs):
+
+		# set local instance fields that reference our global variables
+		global bk
+		self.bk = bk
+
+		super(Settings, self).__init__(**kwargs)
+
+	def on_pre_enter(self, *args):
+
+		msg = "DEBUG: User switched to 'Settings' screen"
+		print( msg ); logger.debug( msg )
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# close the navigation drawer on the main screen
+		self.main_screen.nav_drawer.toggle_state()
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
 class DebugLog(Screen):
 
 	debug_log = ObjectProperty(None)
@@ -583,6 +610,7 @@ class BusKillApp(App):
 
 			self.manager.add_widget( MainWindow(name='main') )
 			self.manager.add_widget( DebugLog(name='debug_log') )
+			self.manager.add_widget( Settings(name='settings') )
 			return self.manager
 
 		else:

@@ -89,6 +89,20 @@
 						on_release: root.upgrade1()
 
 					Button:
+						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue8b8[/size][/font]     [font=RobotoMedium][size=16]Settings[/size][/font]'
+						markup: True
+						halign: 'left'
+						valign: 'center'
+						text_size: self.size
+						size_hint: 1, None
+						height: 50
+						background_normal: ''
+						background_color: root.color_menu_bg
+						on_release:
+							root.manager.transition.direction = 'left'
+							root.manager.current = 'settings'
+
+					Button:
 						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue868[/size][/font]     [font=RobotoMedium][size=16]Debug Log[/size][/font]'
 						markup: True
 						halign: 'left'
@@ -233,6 +247,42 @@
 	width: self.texture_size[0]
 	font_name: "RobotoMono"
 	font_size: dp(12)
+
+<Settings>:
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		ActionBar:
+
+			ActionView:
+				id: actionview
+
+				ActionPrevious:
+					with_previous: False
+					app_icon: 'images/arrow_back_white.png'
+					markup: True
+					title: '[font=RobotoMedium][size=18]   Settings[/size][/font]'
+					on_release:
+						root.manager.transition.direction = 'right'
+						root.manager.current = 'main'
+
+		BoxLayout:
+
+			orientation: 'vertical'
+			size_hint: ( 1, 0.95 )
+			pos_hint: {'top': 1}
+
+			Label:
+				id: example_label
+				markup: True
+				text: 'blah blahb blah [font=mdicons][size=18][ref=help_debug_log]\ue8fd[/ref][/size][/font]'
+				size_hint: (1,1)
+				text_size: self.size
+				halign: 'center'
+				valign: 'middle'
+				font_name: "Roboto"
+				font_size: 16
 
 <DebugLog>:
 

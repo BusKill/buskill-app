@@ -10,6 +10,9 @@ BusKill is the world's first laptop `kill cord <https://en.wikipedia.org/wiki/Ki
 .. image:: /images/buskill_demo.gif
   :align: center
 
+..
+	TODO: Embed Explainer Video
+
 The ``trigger`` that's executed when the cable's connection is severed can either [a] lock the screen or [b] shutdown the machine.
 
 Advanced users can add ``auxiliary triggers``, such as a `self-destruct trigger that wipes the LUKS header <https://buskill.in/luks-self-destruct/>`_, making the entire disk permanently inaccessible (even to `rubber-hose cryptanalysis <https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis>`_).
