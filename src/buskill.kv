@@ -298,16 +298,31 @@
 			size_hint: ( 1, 0.95 )
 			pos_hint: {'top': 1}
 
-			Label:
-				id: example_label
-				markup: True
-				text: 'blah blahb blah [font=mdicons][size=18][ref=help_debug_log]\ue8fd[/ref][/size][/font]'
-				size_hint: (1,1)
-				text_size: self.size
-				halign: 'center'
-				valign: 'middle'
-				font_name: "Roboto"
-				font_size: 16
+			BoxLayout:
+
+				orientation: 'horizontal'
+				#size_hint: ( 1, 1 )
+				#pos_hint: {'top': 1}
+
+				Label:
+					size_hint_x: None
+					width: self.texture_size[0]*2
+					markup: True
+					text: '[font=mdicons]\uef49[/font]'
+					font_size: 40
+					halign: 'center'
+					valign: 'middle'
+					font_name: "Roboto"
+
+				Label:
+					markup: True
+					text: 'Trigger'
+					font_size: 18
+					#size_hint: (1,1)
+					text_size: self.size
+					halign: 'left'
+					valign: 'middle'
+					font_name: "Roboto"
 
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
