@@ -106,7 +106,6 @@ class MainWindow(Screen):
 		if self.bk.is_armed:
 			self.toggle_btn.text = 'Disarm'
 			self.status.text = 'BusKill is currently armed.'
-			self.toggle_btn.md_bg_color = [1,0,0,1]
 			self.toggle_btn.background_color = self.color_red
 
 			# set the actionview of every actionbar of every screen to red

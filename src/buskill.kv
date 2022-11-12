@@ -254,12 +254,23 @@
 	font_size: dp(12)
 
 <Settings>:
+
+	color_main_bg: 0.188, 0.188, 0.188, 1
 	color_primary: 0.129, 0.588, 0.953, 1
 
 	actionbar: actionbar
 	actionview: actionview
 
+	# sets the background from black to grey
+	canvas.before:
+		Color:
+			rgba: root.color_main_bg
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
 	BoxLayout:
+		size: root.width, root.height
 		orientation: 'vertical'
 
 		ActionBar:
@@ -292,15 +303,28 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		BoxLayout:
+		GridLayout:
 
-			orientation: 'vertical'
-			size_hint: ( 1, 0.95 )
+			cols: 1
+			#orientation: 'vertical'
+			#size_hint: ( 1, 0.95 )
 			pos_hint: {'top': 1}
+			height: self.minimum_height
 
-			BoxLayout:
+			GridLayout:
 
-				orientation: 'horizontal'
+				#orientation: 'horizontal'
+				#size_y: '100px'
+				cols: 2
+				height: self.minimum_height
+#				size_hint_y: None
+#				height: dp(20)
+				canvas.before:
+					Color:
+						rgba: (0,1,0,1)
+					Rectangle:
+						pos: self.pos
+						size: self.size
 				#size_hint: ( 1, 1 )
 				#pos_hint: {'top': 1}
 
@@ -313,16 +337,48 @@
 					halign: 'center'
 					valign: 'middle'
 					font_name: "Roboto"
+					size_hint_y: None
+					height: self.texture_size[1]
+					#height: dp(20)
 
-				Label:
-					markup: True
-					text: 'Trigger'
-					font_size: 18
-					#size_hint: (1,1)
-					text_size: self.size
-					halign: 'left'
-					valign: 'middle'
-					font_name: "Roboto"
+				GridLayout:
+					# sets the background from black to grey
+
+					canvas.before:
+						Color:
+							rgba: (1,0,0,1)
+						Rectangle:
+							pos: self.pos
+							size: self.size
+
+					orientation: 'vertical'
+					cols: 1
+					size_hint_y: None
+#					height: dp(20)
+
+					Label:
+						markup: True
+						text: 'Trigger'
+						font_size: 18
+						#size_hint: (1,1)
+						text_size: self.size
+						halign: 'left'
+						#valign: 'middle'
+						font_name: "Roboto"
+						size_hint_y: None
+						height: self.texture_size[1]
+
+					Label:
+						markup: True
+						text: 'Subtext Example'
+						font_size: 14
+						#size_hint: (1,1)
+						text_size: self.size
+						halign: 'left'
+						#valign: 'middle'
+						font_name: "Roboto"
+						size_hint_y: None
+						height: self.texture_size[1]
 
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
