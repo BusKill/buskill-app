@@ -228,6 +228,7 @@ class BusKill:
 		self.SRC_DIR = None
 		self.DATA_DIR = None
 		self.CACHE_DIR = None
+		self.CONF_FILE = None
 		self.GNUPGHOME = None
 		self.UPGRADED_FROM = None
 		self.UPGRADED_TO = None
@@ -388,6 +389,14 @@ class BusKill:
 		# for upgraded_from.py)
 		sys.path.append( self.EXE_DIR )
 
+		# create a data dir in some safe place where we have write access
+		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
+		# (that--or maybe just move the buskill.init() into main.py)
+		self.setupDataDir()
+
+		# path to buskill's config file
+		self.CONF_FILE = self.DATA_DIR + os.pathsep + "buskill.ini"
+
 		msg = "DEBUG: EXECUTED_AS_SCRIPT:|" +str(self.EXECUTED_AS_SCRIPT)+  "|\n"
 		msg+= "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
 		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
@@ -395,13 +404,10 @@ class BusKill:
 		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
 		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
 		msg+= "DEBUG: SRC_DIR:|" +str(self.SRC_DIR)+  "|\n"
+		msg+= "DEBUG: DATA_DIR:|" +str(self.SRC_DIR)+  "|\n"
+		msg+= "DEBUG: CONF_FILE:|" +str(self.SRC_DIR)+  "|\n"
 		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
 		print( msg ); logger.debug( msg )
-
-		# create a data dir in some safe place where we have write access
-		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
-		# (that--or maybe just move the buskill.init() into main.py)
-		self.setupDataDir()
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version

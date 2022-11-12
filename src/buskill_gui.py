@@ -54,6 +54,7 @@ from kivy.uix.actionbar import ActionView
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
 
 from kivy.config import Config
+from kivy.config import ConfigParser
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
@@ -88,6 +89,12 @@ class MainWindow(Screen):
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
+
+#		# buskill config file
+#		config = ConfigParser()
+#		config.read( bk.CONF_FILE )
+#		config.set( 'buskill', 'test', True )
+#		config.write()
 
 		super(MainWindow, self).__init__(**kwargs)
 
@@ -603,6 +610,13 @@ class BusKillApp(App):
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
 		bk.close()
+
+	def build_config(self, config):
+
+		config.setdefaults('buskill', {
+		 'test1': 'value1',
+		 'test2': '42'
+		})	
 
 	def build(self):
 
