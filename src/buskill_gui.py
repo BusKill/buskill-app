@@ -571,10 +571,29 @@ class DebugLog(Screen):
 
 class BusKillApp(App):
 
+	# copied mostly from 'site-packages/kivy/app.py'
+	def __init__(self, buskill_object, **kwargs):
+
+		global bk
+		bk = buskill_object
+		self.bk = bk
+
+		self._app_window = None
+		super(App, self).__init__(**kwargs)
+		self.built = False
+
+		# TODO: see if I need to use this now to prevent it from writing
+		# to the default KIVY_HOME
+		#: Returns an instance of the :class:`~kivy.config.ConfigParser` for
+		#: the application configuration. You can use this to query some config
+		#: tokens in the :meth:`build` method.
+		#self.config = None
+
 	# instantiate our global BusKill object instance and screen manager so they can
 	# be accessed by other objects for doing Buskill stuff & changing the kivy screen
 	global bk
-	bk = packages.buskill.BusKill()
+	#bk = packages.buskill.BusKill()
+	#os.environ['KIVY_HOME'] = bk.DATA_DIR
 	manager = ScreenManager()
 
 	# register font aiases so we don't have to specify their full file path
@@ -605,7 +624,8 @@ class BusKillApp(App):
 
 	def build_config(self, config):
 
-		Config.read( bk.CONF_FILE )
+		#global bk
+		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'test1': 'value1',
 		 'test2': '42'
@@ -617,8 +637,8 @@ class BusKillApp(App):
 	def build(self):
 
 		# set local instance fields that reference our global variables
-		global bk
-		self.bk = bk
+		#global bk
+		#self.bk = bk
 
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script

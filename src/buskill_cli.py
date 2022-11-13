@@ -35,11 +35,14 @@ logger = logging.getLogger( __name__ )
 #                                 FUNCTIONS                                    #
 ################################################################################
 
-def BusKillCLI():
+def BusKillCLI( buskill_object ):
 
 	####################
 	# HANDLE ARGUMENTS #
 	####################
+
+	global bk
+	bk = buskill_object
 
 	# we use ArgmentParser to handle the user's command-line arguents
 	parser = argparse.ArgumentParser(
@@ -109,7 +112,8 @@ def BusKillCLI():
 		print( "Commit timestamp " +str(BUSKILL_VERSION['SOURCE_DATE_EPOCH']) )
 		sys.exit(0)
 
-	bk = packages.buskill.BusKill()
+	#global bk
+	#bk = packages.buskill.BusKill()
 
 	# is the OS that we're running on supported?
 	if not bk.is_platform_supported():

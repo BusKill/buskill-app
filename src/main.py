@@ -29,6 +29,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 ################################################################################
 
 import argparse, logging, sys, multiprocessing, tempfile
+import packages.buskill
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -123,11 +124,13 @@ if __name__ == '__main__':
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
 
+	# instantiate the buskill object
+	global bk
+	bk = packages.buskill.BusKill()
+
 	#############
 	# LAUNCH UI #
 	#############
-
-	global ui
 
 	# did we get any command-line arguments?
 	if len(sys.argv) < 2:
@@ -137,13 +140,17 @@ if __name__ == '__main__':
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
 		from buskill_gui import BusKillApp
-		BusKillApp().run()
+		app = BusKillApp( bk )
+		#app = BusKillApp()
+		app.run()
+		#BusKillApp( bk ).run()
+		#BusKillApp().run()
 
 	else:
 		# the user passed-in arguments; give 'em the cli
 
 		from buskill_cli import *
-		ret = BusKillCLI()
+		ret = BusKillCLI( bk )
 
 		sys.exit( ret )
 
