@@ -139,6 +139,9 @@ if __name__ == '__main__':
 		print( "No command-line arguments detected. Launching GUI" )
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
+		# tell kivy to store its data in our buskill DATA_DIR
+		os.environ['KIVY_HOME'] = bk.DATA_DIR
+
 		from buskill_gui import BusKillApp
 		app = BusKillApp( bk )
 		#app = BusKillApp()
