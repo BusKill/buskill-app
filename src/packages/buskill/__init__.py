@@ -389,14 +389,6 @@ class BusKill:
 		# for upgraded_from.py)
 		sys.path.append( self.EXE_DIR )
 
-		# create a data dir in some safe place where we have write access
-		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
-		# (that--or maybe just move the buskill.init() into main.py)
-		self.setupDataDir()
-
-		# path to buskill's config file
-		self.CONF_FILE = self.DATA_DIR + os.pathsep + "buskill.ini"
-
 		msg = "DEBUG: EXECUTED_AS_SCRIPT:|" +str(self.EXECUTED_AS_SCRIPT)+  "|\n"
 		msg+= "DEBUG: EXE_PATH:|" +str(self.EXE_PATH)+  "|\n"
 		msg+= "DEBUG: EXE_DIR:|" +str(self.EXE_DIR)+  "|\n"
@@ -404,9 +396,19 @@ class BusKill:
 		msg+= "DEBUG: APP_DIR:|" +str(self.APP_DIR)+  "|\n"
 		msg+= "DEBUG: APPS_DIR:|" +str(self.APPS_DIR)+  "|\n"
 		msg+= "DEBUG: SRC_DIR:|" +str(self.SRC_DIR)+  "|\n"
-		msg+= "DEBUG: DATA_DIR:|" +str(self.SRC_DIR)+  "|\n"
-		msg+= "DEBUG: CONF_FILE:|" +str(self.SRC_DIR)+  "|\n"
 		msg+= "DEBUG: os.environ['PATH']:|" +str(os.environ['PATH'])+  "|\n"
+		print( msg ); logger.debug( msg )
+
+		# create a data dir in some safe place where we have write access
+		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
+		# (that--or maybe just move the buskill.init() into main.py)
+		self.setupDataDir()
+
+		# path to buskill's config file
+		self.CONF_FILE = os.path.join( self.DATA_DIR, "buskill.ini" )
+
+		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
+		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
 		print( msg ); logger.debug( msg )
 
 		# handle conditions where this version was already upgraded by a newer
@@ -823,6 +825,19 @@ class BusKill:
 		# first we choose where our data dir based on where we have write access
 		data_dirs = list()
 
+		# in linux, try to follow Cross-Desktop Group (XDG) standards
+		#  * https://www.freedesktop.org/wiki/Specifications/basedir-spec/
+		if self.OS_NAME_SHORT == 'lin':
+
+			# add every dir in the colon-delimited (:) list of the XDG_DATA_HOME
+			# environment variable
+			if 'XDG_DATA_HOME' in os.environ.keys():
+				for d in os.environ['XDG_DATA_HOME'].split(":"):
+					data_dirs.append( d )
+
+			# and fall-back on the default $HOME/.local/share
+			data_dirs.append( os.path.join( os.path.expanduser('~'), '.local', 'share' ) )
+
 		# first try to create our data dir in the same dir that holds the dir
 		# where the buskill app was installed (and where future updates will be
 		# installed). This may be the BusKill USB drive itself.
@@ -837,6 +852,11 @@ class BusKill:
 		# iterate though our list of potential data dirs and pick the first one
 		# that we can actually write to
 		for data_dir in data_dirs:
+
+			# skip any empty data_dir
+			if data_dir == '' or data_dir == None:
+				continue
+
 			try:
 				testfile = tempfile.TemporaryFile( dir=data_dir )
 				testfile.close()

@@ -55,8 +55,6 @@ Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
 
 from kivy.config import Config
 from kivy.config import ConfigParser
-Config.set('kivy', 'exit_on_escape', '0')
-Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 from kivy.core.text import LabelBase
 
@@ -89,12 +87,6 @@ class MainWindow(Screen):
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
-
-#		# buskill config file
-#		config = ConfigParser()
-#		config.read( bk.CONF_FILE )
-#		config.set( 'buskill', 'test', True )
-#		config.write()
 
 		super(MainWindow, self).__init__(**kwargs)
 
@@ -613,10 +605,14 @@ class BusKillApp(App):
 
 	def build_config(self, config):
 
-		config.setdefaults('buskill', {
+		Config.read( bk.CONF_FILE )
+		Config.setdefaults('buskill', {
 		 'test1': 'value1',
 		 'test2': '42'
 		})	
+		Config.set('kivy', 'exit_on_escape', '0')
+		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+		Config.write()
 
 	def build(self):
 
