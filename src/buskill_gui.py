@@ -49,7 +49,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
-from kivy.uix.settings import Settings
+from kivy.uix.settings import Settings, SettingsWithNoMenu
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -89,7 +89,7 @@ class MainWindow(Screen):
 
 	def on_pre_enter( self, *args ):
 
-		msg = "DEBUG: MainWindow Screen's on_pre_enter() called"
+		msg = "DEBUG: User switched to 'MainWindow' screen"
 		print( msg ); logger.debug( msg )
 
 		# set the bk object to the BusKillApp's bk object
@@ -451,12 +451,9 @@ class CriticalError(BoxLayout):
 class Settings(Screen):
 
 	actionview = ObjectProperty(None)
+	settings_content = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
-
-		#s = Settings()
-		#s.add_kivy_panel()
-		#self.open_settings()
 
 		super(Settings, self).__init__(**kwargs)
 
@@ -481,6 +478,54 @@ class Settings(Screen):
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
+
+	def on_enter(self):
+#	def test_print(self):
+
+		#s = Settings()
+		#s.add_kivy_panel()
+		#self.root_app.open_settings()
+
+		#self.root_app.settings_cls = Settings
+
+		#self.root_app.settings.add_kivy_panel()
+		#s = self.root_app.create_settings( )
+
+		self.root_app.settings_cls = SettingsWithNoMenu
+		s = self.root_app.settings_cls()
+
+		self.root_app.build_settings(s)
+		s.add_kivy_panel()
+
+		print( "s:|" +str(s)+ "|" )
+		print( "type(s):|" +str(type(s))+ "|" )
+		print( "dir(s):|" +str(dir(s))+ "|" )
+		print( "s.ids:|" +str(s.ids)+ "|" )
+		print( "s.chlidren:|" +str(s.children)+ "|" )
+		print( "s.properties:|" +str(s.properties)+ "|" )
+
+		for child in s.children:
+			print( "child:|" +str(child)+ "|" )
+
+			for c in child.children:
+				print( "\tc:|" +str(c)+ "|" )
+
+
+			if type(child) == BoxLayout:
+				print( "removing BoxLayout from child" )
+				s.remove_widget(child) 
+
+		#self.settings_content.add_widget( s )
+		self.settings_content.add_widget( s )
+		#settings_content.add_widget( Button() )
+
+#	def test_print(self):
+#		print( "====================================" )
+#		print( self.root_app )
+#		s = Settings()
+#		self.root_app.settings_cls = SettingsWithNoMenu
+#		#s = self.root_app.create_settings()
+#		self.add_widget( s )
 
 class DebugLog(Screen):
 
@@ -632,7 +677,7 @@ class BusKillApp(App):
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
-		bk.close()
+		self.bk.close()
 
 	def build_config(self, config):
 

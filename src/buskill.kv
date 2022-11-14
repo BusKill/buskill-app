@@ -260,6 +260,9 @@
 
 	actionbar: actionbar
 	actionview: actionview
+	settings_content: settings_content
+
+	#on_enter: root.test_print()
 
 	# sets the background from black to grey
 	canvas.before:
@@ -271,6 +274,7 @@
 
 	BoxLayout:
 		size: root.width, root.height
+		id: settings_content
 		orientation: 'vertical'
 
 		ActionBar:
@@ -303,90 +307,96 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		GridLayout:
+#		BoxLayout:
+#			orientation: 'vertical'
+#			#on_load: root.root_app.create_settings()
+#			#on_load: root.test_print()
 
-			cols: 1
-			#orientation: 'vertical'
-			#size_hint: ( 1, 0.95 )
-			pos_hint: {'top': 1}
-			height: self.minimum_height
+#		Button:
+#			size_hint: (1,0.8)
+#			pos_hint: {'top': 1}
+#			text: 'open settings'
+#			halign: 'center'
+#			valign: 'middle'
+#			on_release: root.test_print()
 
-			GridLayout:
-
-				#orientation: 'horizontal'
-				#size_y: '100px'
-				cols: 2
-				height: self.minimum_height
-#				size_hint_y: None
-#				height: dp(20)
-				canvas.before:
-					Color:
-						rgba: (0,1,0,1)
-					Rectangle:
-						pos: self.pos
-						size: self.size
-				#size_hint: ( 1, 1 )
-				#pos_hint: {'top': 1}
-
-				Label:
-					size_hint_x: None
-					width: self.texture_size[0]*2
-					markup: True
-					text: '[font=mdicons]\uef49[/font]'
-					font_size: 40
-					halign: 'center'
-					valign: 'middle'
-					font_name: "Roboto"
-					size_hint_y: None
-					height: self.texture_size[1]
-					#height: dp(20)
-
-				GridLayout:
-					# sets the background from black to grey
-
-					canvas.before:
-						Color:
-							rgba: (1,0,0,1)
-						Rectangle:
-							pos: self.pos
-							size: self.size
-
-					orientation: 'vertical'
-					cols: 1
-					size_hint_y: None
-#					height: dp(20)
-
-					Label:
-						markup: True
-						text: 'Trigger'
-						font_size: 18
-						#size_hint: (1,1)
-						text_size: self.size
-						halign: 'left'
-						#valign: 'middle'
-						font_name: "Roboto"
-						size_hint_y: None
-						height: self.texture_size[1]
-
-					Label:
-						markup: True
-						text: 'Subtext Example'
-						font_size: 14
-						#size_hint: (1,1)
-						text_size: self.size
-						halign: 'left'
-						#valign: 'middle'
-						font_name: "Roboto"
-						size_hint_y: None
-						height: self.texture_size[1]
-
-			Button:
-				size_hint: (1,0.8)
-				pos_hint: {'top': 1}
-				text: 'open settings'
-				halign: 'center'
-				valign: 'middle'
-				on_release: root.root_app.open_settings()
+#
+#		GridLayout:
+#
+#			cols: 1
+#			#orientation: 'vertical'
+#			#size_hint: ( 1, 0.95 )
+#			pos_hint: {'top': 1}
+#			height: self.minimum_height
+#
+#			GridLayout:
+#
+#				#orientation: 'horizontal'
+#				#size_y: '100px'
+#				cols: 2
+#				height: self.minimum_height
+##				size_hint_y: None
+##				height: dp(20)
+#				canvas.before:
+#					Color:
+#						rgba: (0,1,0,1)
+#					Rectangle:
+#						pos: self.pos
+#						size: self.size
+#				#size_hint: ( 1, 1 )
+#				#pos_hint: {'top': 1}
+#
+#				Label:
+#					size_hint_x: None
+#					width: self.texture_size[0]*2
+#					markup: True
+#					text: '[font=mdicons]\uef49[/font]'
+#					font_size: 40
+#					halign: 'center'
+#					valign: 'middle'
+#					font_name: "Roboto"
+#					size_hint_y: None
+#					height: self.texture_size[1]
+#					#height: dp(20)
+#
+#				GridLayout:
+#					# sets the background from black to grey
+#
+#					canvas.before:
+#						Color:
+#							rgba: (1,0,0,1)
+#						Rectangle:
+#							pos: self.pos
+#							size: self.size
+#
+#					orientation: 'vertical'
+#					cols: 1
+#					size_hint_y: None
+##					height: dp(20)
+#
+#					Label:
+#						markup: True
+#						text: 'Trigger'
+#						font_size: 18
+#						#size_hint: (1,1)
+#						text_size: self.size
+#						halign: 'left'
+#						#valign: 'middle'
+#						font_name: "Roboto"
+#						size_hint_y: None
+#						height: self.texture_size[1]
+#
+#					Label:
+#						markup: True
+#						text: 'Subtext Example'
+#						font_size: 14
+#						#size_hint: (1,1)
+#						text_size: self.size
+#						halign: 'left'
+#						#valign: 'middle'
+#						font_name: "Roboto"
+#						size_hint_y: None
+#						height: self.texture_size[1]
 
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
