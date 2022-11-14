@@ -80,25 +80,8 @@ class MainWindow(Screen):
 
 	def __init__(self, **kwargs):
 
-		#print( "root:|" +str()+ "|" )
-		print( "self:|" +str(dir(self))+ "|" )
-		print( "get_parent_window:|" +str(self.get_parent_window())+ "|" )
-		print( "get_root_window:|" +str(self.get_root_window())+ "|" )
-		print( "ids:|" +str(self.ids)+ "|" )
-		print( "parent:|" +str(self.parent)+ "|" )
-		print( "manager:|" +str(dir(self.manager))+ "|" )
-		print( "walk():|" +str([widget for widget in self.walk( restrict = False )])+ "|" )
-		print( "walk(dir()):|" +str(dir([widget for widget in self.walk( restrict = False )]))+ "|" )
-		screen = [widget for widget in self.walk( restrict = False )][0]
-		print( "screen:|" +str(screen)+ "|" )
-		#print( "screen.count:|" +str(screen.count)+ "|" )
-		#print( "screen.pop:|" +str(screen.pop())+ "|" )
-		print( "App:|" +str(App)+ "|" )
-		print( "App.get_running_app():|" +str(App.get_running_app())+ "|" )
-		print( "self.current:|" +str(self.id)+ "|" )
-
 		# set local instance fields that reference our global variables
-		#self.bk = bk
+		self.bk = bk
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
@@ -590,7 +573,10 @@ class BusKillApp(App):
 
 		# instantiate our global BusKill object instance so it can be accessed by
 		# other objects for doing Buskill stuff
-		#global bk
+		# TODO: remove global (to do so, you first need to figure out how to
+		#       reference this BusKillApp's self.bk instance field from within the
+		#       Screen objects above (eg MainWindow, DebugLog, etc)
+		global bk
 		bk = buskill_object
 		self.bk = bk
 
@@ -633,7 +619,6 @@ class BusKillApp(App):
 
 	def build_config(self, config):
 
-		#global bk
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'test1': 'value1',
