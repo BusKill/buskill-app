@@ -405,6 +405,18 @@ class BusKill:
 		# path to buskill's config file
 		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
 
+		# does the config file exist already?
+		if not os.path.exists( self.CONF_FILE ):
+			# the config file doesn't exist yet; create it
+
+			# we create our config.ini file now with a "[buskill]" section at the
+			# top to make UX *slightly* better for a user who wants to manually
+			# edit the config file. if we don't do this, then kivy will put it
+			# below its own settings, making the user scroll a lot to find them
+			contents = "[buskill]\n"
+			with open( self.CONF_FILE, 'w' ) as fd:
+				fd.write( contents )
+
 		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
 		print( msg ); logger.debug( msg )

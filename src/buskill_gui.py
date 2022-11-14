@@ -580,8 +580,10 @@ class BusKillApp(App):
 		bk = buskill_object
 		self.bk = bk
 
+		self._app_settings = None
 		self._app_window = None
 		super(App, self).__init__(**kwargs)
+		self.options = kwargs
 		self.built = False
 
 	# instantiate our scren manager instance so it can be accessed by other
@@ -614,9 +616,6 @@ class BusKillApp(App):
 	def close( self, *args ):
 		bk.close()
 
-	def get_application_config(self):
-		return os.path.join( self.bk.DATA_DIR, 'buskillismyname.ini' )
-
 	def build_config(self, config):
 
 		Config.read( self.bk.CONF_FILE )
@@ -641,9 +640,7 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
-			print( "=======================" )
 			self.manager.add_widget( MainWindow(name='main') )
-			print( "-------------------------" )
 			self.manager.add_widget( DebugLog(name='debug_log') )
 			self.manager.add_widget( Settings(name='settings') )
 			return self.manager
