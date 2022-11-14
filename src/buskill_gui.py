@@ -82,13 +82,18 @@ class MainWindow(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		self.bk = bk
+		#self.bk = bk
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
 
 		super(MainWindow, self).__init__(**kwargs)
+
+	def on_leave( self, *args ):
+		print( "blah" )
+		print( "screen.root_app:|" +str(self.root_app)+ "|" )
+		self.bk = self.root_app.bk
 
 	# called to close the app
 	def close( self, *args ):
@@ -621,12 +626,6 @@ class BusKillApp(App):
 	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
 	)
 
-	def on_start(self):
-		print( "called on_start() of BusKillApp" )
-		for screen in self.manager.screens:
-			print( str(screen) )
-			screen.root_app = self
-
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
 		bk.close()
@@ -658,6 +657,11 @@ class BusKillApp(App):
 			self.manager.add_widget( MainWindow(name='main') )
 			self.manager.add_widget( DebugLog(name='debug_log') )
 			self.manager.add_widget( Settings(name='settings') )
+
+			for screen in self.manager.screens:
+				print( str(screen) )
+				screen.root_app = self
+
 			return self.manager
 
 		else:
