@@ -49,6 +49,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
+from kivy.uix.settings import Settings
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -442,12 +443,16 @@ class Settings(Screen):
 
 	actionview = ObjectProperty(None)
 
-	def __init__(self, **kwargs):
-
-		# set local instance fields that reference our global variables
-		self.bk = bk
-
-		super(Settings, self).__init__(**kwargs)
+#	def __init__(self, **kwargs):
+#
+#		# set local instance fields that reference our global variables
+#		self.bk = bk
+#
+#		#s = Settings()
+#		#s.add_kivy_panel()
+#		#self.open_settings()
+#
+#		super(Settings, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 
@@ -463,6 +468,10 @@ class Settings(Screen):
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
+
+		print( "called on_start() in MainWindow" )
+		#self.bk = bk
+		print( "screen.root_app:|" +str(self.root_app)+ "|" )
 
 class DebugLog(Screen):
 
@@ -611,6 +620,12 @@ class BusKillApp(App):
 	 #os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
 	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
 	)
+
+	def on_start(self):
+		print( "called on_start() of BusKillApp" )
+		for screen in self.manager.screens:
+			print( str(screen) )
+			screen.root_app = self
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):

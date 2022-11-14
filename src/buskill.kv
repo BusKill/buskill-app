@@ -380,6 +380,14 @@
 						size_hint_y: None
 						height: self.texture_size[1]
 
+			Button:
+				size_hint: (1,0.8)
+				pos_hint: {'top': 1}
+				text: 'open settings'
+				halign: 'center'
+				valign: 'middle'
+				on_release: root.root_app.open_settings()
+
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
 
