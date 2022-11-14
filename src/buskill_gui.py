@@ -90,9 +90,7 @@ class MainWindow(Screen):
 
 		super(MainWindow, self).__init__(**kwargs)
 
-	def on_leave( self, *args ):
-		print( "blah" )
-		print( "screen.root_app:|" +str(self.root_app)+ "|" )
+	def on_pre_enter( self, *args ):
 		self.bk = self.root_app.bk
 
 	# called to close the app
@@ -132,7 +130,7 @@ class MainWindow(Screen):
 
 	def handle_upgrades( self, dt ):
 
-		if bk.UPGRADED_TO:
+		if self.bk.UPGRADED_TO:
 			# the buskill app has already been updated; let's prompt the user to
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
@@ -141,7 +139,7 @@ class MainWindow(Screen):
 		#       upgrade works and doesn't require a manual restart. See also:
 		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
 		#  * buskill_gui.py's upgrade5_restart()
-		elif bk.UPGRADED_FROM and bk.UPGRADED_FROM['DELETE_FAILED']:
+		elif self.bk.UPGRADED_FROM and self.bk.UPGRADED_FROM['DELETE_FAILED']:
 			# the buskill app was just updated, but it failed to delete the old
 			# version. when this happens, we need the user to manually restart
 
@@ -464,6 +462,8 @@ class Settings(Screen):
 		msg = "DEBUG: User switched to 'Settings' screen"
 		print( msg ); logger.debug( msg )
 
+		self.bk = self.root_app.bk
+
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
 
@@ -486,7 +486,7 @@ class DebugLog(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		self.bk = bk
+		#self.bk = bk
 		self.show_debug_log_thread = None
 
 		super(DebugLog, self).__init__(**kwargs)
@@ -495,6 +495,8 @@ class DebugLog(Screen):
 
 		msg = "DEBUG: User switched to 'DebugLog' screen"
 		print( msg ); logger.debug( msg )
+
+		self.bk = self.root_app.bk
 
 		# register the function for clicking the "help" icon at the top
 		self.debug_header.bind( on_ref_press=self.ref_press )
@@ -590,7 +592,6 @@ class BusKillApp(App):
 		# TODO: remove global (to do so, you first need to figure out how to
 		#       reference this BusKillApp's self.bk instance field from within the
 		#       Screen objects above (eg MainWindow, DebugLog, etc)
-		global bk
 		bk = buskill_object
 		self.bk = bk
 
@@ -654,13 +655,21 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
-			self.manager.add_widget( MainWindow(name='main') )
-			self.manager.add_widget( DebugLog(name='debug_log') )
-			self.manager.add_widget( Settings(name='settings') )
+			screens = [
+			 MainWindow(name='main'),
+			 DebugLog(name='debug_log'),
+			 Settings(name='settings'),
+			]
 
-			for screen in self.manager.screens:
+			for screen in screens:
+
 				print( str(screen) )
 				screen.root_app = self
+				self.manager.add_widget( screen )
+
+			#self.manager.add_widget( MainWindow(name='main') )
+			#self.manager.add_widget( DebugLog(name='debug_log') )
+			#self.manager.add_widget( Settings(name='settings') )
 
 			return self.manager
 
