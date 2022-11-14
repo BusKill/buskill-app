@@ -81,9 +81,6 @@ class MainWindow(Screen):
 
 	def __init__(self, **kwargs):
 
-		# set local instance fields that reference our global variables
-		#self.bk = bk
-
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
@@ -91,6 +88,15 @@ class MainWindow(Screen):
 		super(MainWindow, self).__init__(**kwargs)
 
 	def on_pre_enter( self, *args ):
+
+		msg = "DEBUG: MainWindow Screen's on_pre_enter() called"
+		print( msg ); logger.debug( msg )
+
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
 		self.bk = self.root_app.bk
 
 	# called to close the app
@@ -199,10 +205,10 @@ class MainWindow(Screen):
 		self.nav_drawer.toggle_state()
 
 		# check to see if an upgrade was already done
-		if bk.UPGRADED_TO and bk.UPGRADED_TO['EXE_PATH'] != '1':
+		if self.bk.UPGRADED_TO and self.bk.UPGRADED_TO['EXE_PATH'] != '1':
 			# a newer version has already been installed; skip upgrade() step and
 			# just prompt the user to restart to the newer version
-			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
+			msg = "DEBUG: Detected upgrade already installed " +str(self.bk.UPGRADED_TO)
 			print( msg ); logger.debug( msg )
 			self.upgrade4_restart_prompt()
 			return
@@ -271,7 +277,7 @@ class MainWindow(Screen):
 		print( "called upgrade3_tick()" )
 
 		# update the dialog
-		self.dialog.l_body.text = bk.get_upgrade_status()
+		self.dialog.l_body.text = self.bk.get_upgrade_status()
 
 		# did the upgrade process finish?
 		if self.bk.upgrade_is_finished():
@@ -347,8 +353,8 @@ class MainWindow(Screen):
 
 	def upgrade5_restart( self ):
 
-		if bk.UPGRADED_TO:
-			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+		if self.bk.UPGRADED_TO:
+			new_version_exe = self.bk.UPGRADED_TO['EXE_PATH']
 		else:
 			new_version_exe = self.upgrade_result
 
@@ -370,7 +376,7 @@ class MainWindow(Screen):
 			oldVersionPaths = [
 			 #os.path.split( sys.argv[0] )[0],
 			 sys.argv[0].split( os.sep )[-2],
-			 os.path.split( bk.APP_DIR )[1]
+			 os.path.split( self.bk.APP_DIR )[1]
 			]
 
 			# TODO: remove me (after fixing Windows restart fail)
@@ -388,7 +394,7 @@ class MainWindow(Screen):
 			print( msg ); logger.debug( msg )
 
 			# replace this process with the newer version
-			bk.close()
+			self.bk.close()
 			os.execv( new_version_exe, [new_version_exe] )
 
 		except Exception as e:
@@ -446,22 +452,24 @@ class Settings(Screen):
 
 	actionview = ObjectProperty(None)
 
-#	def __init__(self, **kwargs):
-#
-#		# set local instance fields that reference our global variables
-#		self.bk = bk
-#
-#		#s = Settings()
-#		#s.add_kivy_panel()
-#		#self.open_settings()
-#
-#		super(Settings, self).__init__(**kwargs)
+	def __init__(self, **kwargs):
+
+		#s = Settings()
+		#s.add_kivy_panel()
+		#self.open_settings()
+
+		super(Settings, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 
 		msg = "DEBUG: User switched to 'Settings' screen"
 		print( msg ); logger.debug( msg )
 
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
 		self.bk = self.root_app.bk
 
 		# the "main" screen
@@ -474,10 +482,6 @@ class Settings(Screen):
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
 
-		print( "called on_start() in MainWindow" )
-		#self.bk = bk
-		print( "screen.root_app:|" +str(self.root_app)+ "|" )
-
 class DebugLog(Screen):
 
 	debug_header = ObjectProperty(None)
@@ -485,8 +489,6 @@ class DebugLog(Screen):
 
 	def __init__(self, **kwargs):
 
-		# set local instance fields that reference our global variables
-		#self.bk = bk
 		self.show_debug_log_thread = None
 
 		super(DebugLog, self).__init__(**kwargs)
@@ -496,6 +498,11 @@ class DebugLog(Screen):
 		msg = "DEBUG: User switched to 'DebugLog' screen"
 		print( msg ); logger.debug( msg )
 
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
 		self.bk = self.root_app.bk
 
 		# register the function for clicking the "help" icon at the top
@@ -580,19 +587,15 @@ class DebugLog(Screen):
 
 		# for privacy reasons, we don't do in-app bug reporting; just point the
 		# user to our documentation
-		self.main_screen.webbrowser_open_url( bk.url_documentation_bug_report )
+		self.main_screen.webbrowser_open_url( self.bk.url_documentation_bug_report )
 
 class BusKillApp(App):
 
 	# copied mostly from 'site-packages/kivy/app.py'
-	def __init__(self, buskill_object, **kwargs):
+	def __init__(self, bk, **kwargs):
 
-		# instantiate our global BusKill object instance so it can be accessed by
+		# instantiate our BusKill object instance so it can be accessed by
 		# other objects for doing Buskill stuff
-		# TODO: remove global (to do so, you first need to figure out how to
-		#       reference this BusKillApp's self.bk instance field from within the
-		#       Screen objects above (eg MainWindow, DebugLog, etc)
-		bk = buskill_object
 		self.bk = bk
 
 		self._app_settings = None
@@ -655,21 +658,29 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
+			# create all the Screens we need for our app
 			screens = [
 			 MainWindow(name='main'),
 			 DebugLog(name='debug_log'),
 			 Settings(name='settings'),
 			]
 
+			# loop through each screen created above
 			for screen in screens:
 
-				print( str(screen) )
+				# assign an instance field named 'root_app' to each of our Screens
+				# that references <this> BusKillApp object so that we can access
+				# the App's instance fields (like 'bk') from within the Screen.
+				# I know no built-in way to do this, since the root/parent of each
+				# screen is None
+				# 
+				# Note: This must be done *before* adding the Screen to 'manager',
+				# or the 'root_app' instance field will be unavailable in the
+				# Screen's on_pre_load() functions
 				screen.root_app = self
-				self.manager.add_widget( screen )
 
-			#self.manager.add_widget( MainWindow(name='main') )
-			#self.manager.add_widget( DebugLog(name='debug_log') )
-			#self.manager.add_widget( Settings(name='settings') )
+				# add the screen to the Screen Manager
+				self.manager.add_widget( screen )
 
 			return self.manager
 
