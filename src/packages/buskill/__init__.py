@@ -400,12 +400,10 @@ class BusKill:
 		print( msg ); logger.debug( msg )
 
 		# create a data dir in some safe place where we have write access
-		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
-		# (that--or maybe just move the buskill.init() into main.py)
 		self.setupDataDir()
 
 		# path to buskill's config file
-		self.CONF_FILE = os.path.join( self.DATA_DIR, "buskill.ini" )
+		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
 
 		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"

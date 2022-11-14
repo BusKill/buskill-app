@@ -80,9 +80,25 @@ class MainWindow(Screen):
 
 	def __init__(self, **kwargs):
 
+		#print( "root:|" +str()+ "|" )
+		print( "self:|" +str(dir(self))+ "|" )
+		print( "get_parent_window:|" +str(self.get_parent_window())+ "|" )
+		print( "get_root_window:|" +str(self.get_root_window())+ "|" )
+		print( "ids:|" +str(self.ids)+ "|" )
+		print( "parent:|" +str(self.parent)+ "|" )
+		print( "manager:|" +str(dir(self.manager))+ "|" )
+		print( "walk():|" +str([widget for widget in self.walk( restrict = False )])+ "|" )
+		print( "walk(dir()):|" +str(dir([widget for widget in self.walk( restrict = False )]))+ "|" )
+		screen = [widget for widget in self.walk( restrict = False )][0]
+		print( "screen:|" +str(screen)+ "|" )
+		#print( "screen.count:|" +str(screen.count)+ "|" )
+		#print( "screen.pop:|" +str(screen.pop())+ "|" )
+		print( "App:|" +str(App)+ "|" )
+		print( "App.get_running_app():|" +str(App.get_running_app())+ "|" )
+		print( "self.current:|" +str(self.id)+ "|" )
+
 		# set local instance fields that reference our global variables
-		global bk
-		self.bk = bk
+		#self.bk = bk
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
@@ -446,7 +462,6 @@ class Settings(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		global bk
 		self.bk = bk
 
 		super(Settings, self).__init__(**kwargs)
@@ -474,7 +489,6 @@ class DebugLog(Screen):
 	def __init__(self, **kwargs):
 
 		# set local instance fields that reference our global variables
-		global bk
 		self.bk = bk
 		self.show_debug_log_thread = None
 
@@ -574,7 +588,9 @@ class BusKillApp(App):
 	# copied mostly from 'site-packages/kivy/app.py'
 	def __init__(self, buskill_object, **kwargs):
 
-		global bk
+		# instantiate our global BusKill object instance so it can be accessed by
+		# other objects for doing Buskill stuff
+		#global bk
 		bk = buskill_object
 		self.bk = bk
 
@@ -582,18 +598,8 @@ class BusKillApp(App):
 		super(App, self).__init__(**kwargs)
 		self.built = False
 
-		# TODO: see if I need to use this now to prevent it from writing
-		# to the default KIVY_HOME
-		#: Returns an instance of the :class:`~kivy.config.ConfigParser` for
-		#: the application configuration. You can use this to query some config
-		#: tokens in the :meth:`build` method.
-		#self.config = None
-
-	# instantiate our global BusKill object instance and screen manager so they can
-	# be accessed by other objects for doing Buskill stuff & changing the kivy screen
-	global bk
-	#bk = packages.buskill.BusKill()
-	#os.environ['KIVY_HOME'] = bk.DATA_DIR
+	# instantiate our scren manager instance so it can be accessed by other
+	# objects for changing the kivy screen
 	manager = ScreenManager()
 
 	# register font aiases so we don't have to specify their full file path
@@ -622,6 +628,9 @@ class BusKillApp(App):
 	def close( self, *args ):
 		bk.close()
 
+	def get_application_config(self):
+		return os.path.join( self.bk.DATA_DIR, 'buskillismyname.ini' )
+
 	def build_config(self, config):
 
 		#global bk
@@ -636,10 +645,6 @@ class BusKillApp(App):
 
 	def build(self):
 
-		# set local instance fields that reference our global variables
-		#global bk
-		#self.bk = bk
-
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script
 		#  * https://github.com/kivy/kivy/issues/2202
@@ -651,7 +656,9 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
+			print( "=======================" )
 			self.manager.add_widget( MainWindow(name='main') )
+			print( "-------------------------" )
 			self.manager.add_widget( DebugLog(name='debug_log') )
 			self.manager.add_widget( Settings(name='settings') )
 			return self.manager

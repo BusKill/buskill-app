@@ -143,11 +143,7 @@ if __name__ == '__main__':
 		os.environ['KIVY_HOME'] = bk.DATA_DIR
 
 		from buskill_gui import BusKillApp
-		app = BusKillApp( bk )
-		#app = BusKillApp()
-		app.run()
-		#BusKillApp( bk ).run()
-		#BusKillApp().run()
+		BusKillApp( bk ).run()
 
 	else:
 		# the user passed-in arguments; give 'em the cli
