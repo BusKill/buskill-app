@@ -479,7 +479,7 @@ class Settings(Screen):
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
 
-	def on_enter(self):
+#	def on_enter(self):
 #	def test_print(self):
 
 		#s = Settings()
@@ -490,34 +490,39 @@ class Settings(Screen):
 
 		#self.root_app.settings.add_kivy_panel()
 		#s = self.root_app.create_settings( )
+		print( "self.settings_content.children:|" +str(self.settings_content.children)+ "|" )
 
-		self.root_app.settings_cls = SettingsWithNoMenu
-		s = self.root_app.settings_cls()
+		# is the contents of 'settings_content' empty?
+		if self.settings_content.children == []:
+			# we haven't added the settings widget yet; add it now
 
-		self.root_app.build_settings(s)
-		s.add_kivy_panel()
+			self.root_app.settings_cls = SettingsWithNoMenu
+			s = self.root_app.settings_cls()
 
-		print( "s:|" +str(s)+ "|" )
-		print( "type(s):|" +str(type(s))+ "|" )
-		print( "dir(s):|" +str(dir(s))+ "|" )
-		print( "s.ids:|" +str(s.ids)+ "|" )
-		print( "s.chlidren:|" +str(s.children)+ "|" )
-		print( "s.properties:|" +str(s.properties)+ "|" )
+			self.root_app.build_settings(s)
+			s.add_kivy_panel()
 
-		for child in s.children:
-			print( "child:|" +str(child)+ "|" )
+			print( "s:|" +str(s)+ "|" )
+			print( "type(s):|" +str(type(s))+ "|" )
+			print( "dir(s):|" +str(dir(s))+ "|" )
+			print( "s.ids:|" +str(s.ids)+ "|" )
+			print( "s.chlidren:|" +str(s.children)+ "|" )
+			print( "s.properties:|" +str(s.properties)+ "|" )
 
-			for c in child.children:
-				print( "\tc:|" +str(c)+ "|" )
+			for child in s.children:
+				print( "child:|" +str(child)+ "|" )
+
+				for c in child.children:
+					print( "\tc:|" +str(c)+ "|" )
 
 
-			if type(child) == BoxLayout:
-				print( "removing BoxLayout from child" )
-				s.remove_widget(child) 
+				if type(child) == BoxLayout:
+					print( "removing BoxLayout from child" )
+					s.remove_widget(child) 
 
-		#self.settings_content.add_widget( s )
-		self.settings_content.add_widget( s )
-		#settings_content.add_widget( Button() )
+			#self.settings_content.add_widget( s )
+			self.settings_content.add_widget( s )
+			#settings_content.add_widget( Button() )
 
 #	def test_print(self):
 #		print( "====================================" )

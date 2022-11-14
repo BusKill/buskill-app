@@ -274,7 +274,6 @@
 
 	BoxLayout:
 		size: root.width, root.height
-		id: settings_content
 		orientation: 'vertical'
 
 		ActionBar:
@@ -307,7 +306,8 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-#		BoxLayout:
+		BoxLayout:
+			id: settings_content
 #			orientation: 'vertical'
 #			#on_load: root.root_app.create_settings()
 #			#on_load: root.test_print()
