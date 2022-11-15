@@ -1,0 +1,10 @@
+[
+	{
+		"type": "options",
+		"title": "Trigger",
+		"desc": "Trigger to execute when BusKill cable is disconnected",
+		"section": "buskill",
+		"key": "trigger",
+		"options": ["lock-screen", "soft-shutdown"]
+	}
+]

@@ -479,19 +479,6 @@ class Settings(Screen):
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
 
-#	def on_enter(self):
-#	def test_print(self):
-
-		#s = Settings()
-		#s.add_kivy_panel()
-		#self.root_app.open_settings()
-
-		#self.root_app.settings_cls = Settings
-
-		#self.root_app.settings.add_kivy_panel()
-		#s = self.root_app.create_settings( )
-		print( "self.settings_content.children:|" +str(self.settings_content.children)+ "|" )
-
 		# is the contents of 'settings_content' empty?
 		if self.settings_content.children == []:
 			# we haven't added the settings widget yet; add it now
@@ -500,37 +487,24 @@ class Settings(Screen):
 			s = self.root_app.settings_cls()
 
 			self.root_app.build_settings(s)
-			s.add_kivy_panel()
 
-			print( "s:|" +str(s)+ "|" )
-			print( "type(s):|" +str(type(s))+ "|" )
-			print( "dir(s):|" +str(dir(s))+ "|" )
-			print( "s.ids:|" +str(s.ids)+ "|" )
-			print( "s.chlidren:|" +str(s.children)+ "|" )
-			print( "s.properties:|" +str(s.properties)+ "|" )
+			#s.add_kivy_panel()
+			#s.add_json_panel( 'buskill', Config, os.path.join(self.bk.DATA_DIR, 'settings_kivy.json') )
 
+			#s.add_json_panel( 'buskill', Config, os.path.join(self.bk.DATA_DIR, 'config.ini') )
+			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
+			#s.add_json_panel( 'buskill', Config, 'somefile.json')
+
+			# for some reason the settings widget automatically includes our
+			# ActionBar, such that if we don't remove it before adding the settings
+			# widget, we end-up with two action bars. this loop just finds the
+			# BoxLayout inside the settings widget (which contains the redundant
+			# ActionBar) and removes it
 			for child in s.children:
-				print( "child:|" +str(child)+ "|" )
-
-				for c in child.children:
-					print( "\tc:|" +str(c)+ "|" )
-
-
 				if type(child) == BoxLayout:
-					print( "removing BoxLayout from child" )
 					s.remove_widget(child) 
 
-			#self.settings_content.add_widget( s )
 			self.settings_content.add_widget( s )
-			#settings_content.add_widget( Button() )
-
-#	def test_print(self):
-#		print( "====================================" )
-#		print( self.root_app )
-#		s = Settings()
-#		self.root_app.settings_cls = SettingsWithNoMenu
-#		#s = self.root_app.create_settings()
-#		self.add_widget( s )
 
 class DebugLog(Screen):
 
@@ -688,8 +662,7 @@ class BusKillApp(App):
 
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
-		 'test1': 'value1',
-		 'test2': '42'
+		 'trigger': 'lock-screen',
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
