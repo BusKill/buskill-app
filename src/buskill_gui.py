@@ -33,6 +33,7 @@ util.get_logger().setLevel(util.DEBUG)
 multiprocessing.log_to_stderr().setLevel( logging.DEBUG )
 #from multiprocessing import get_context
 
+import kivy
 from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
@@ -49,7 +50,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
-from kivy.uix.settings import Settings, SettingsWithNoMenu
+from kivy.uix.settings import Settings
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -84,6 +85,9 @@ class MainWindow(Screen):
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
+
+		# TODO: remove auto-switch to Settings screen
+		Clock.schedule_once( lambda dt: self.switchToScreen('settings') )
 
 		super(MainWindow, self).__init__(**kwargs)
 
@@ -133,6 +137,9 @@ class MainWindow(Screen):
 				for child in screen.actionbar.children:
 					if type(child) == ActionView:
 						child.background_color = self.color_primary
+
+	def switchToScreen( self, screen ):
+		self.manager.current = screen
 
 	def handle_upgrades( self, dt ):
 
@@ -448,14 +455,77 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-class Settings(Screen):
+
+###################
+# SETTINGS SCREEN #
+###################
+
+class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
+#	panels = DictProperty({})
+	panels = None
+#	container = ObjectProperty()
+#	current_panel = ObjectProperty(None)
+#	current_uid = NumericProperty(0)
+
+	def add_panel(self, panel, name, uid):
+		pass
+		print( "fuuuck" )
+#		self.panels[uid] = panel
+#		if not self.current_uid:
+#			self.current_uid = uid
+
+	def on_current_uid(self, *args):
+		uid = self.current_uid
+		if uid in self.panels:
+			if self.current_panel is not None:
+				self.remove_widget(self.current_panel)
+			new_panel = self.panels[uid]
+			self.add_widget(new_panel)
+			self.current_panel = new_panel
+			return True
+		return False  # New uid doesn't exist
+
+	def add_widget(self, widget):
+		if self.container is None:
+			super(ContentPanel, self).add_widget(widget)
+		else:
+			self.container.add_widget(widget)
+
+	def remove_widget(self, widget):
+		print( 'uhhh' )
+		self.container.remove_widget(widget)
+
+
+class BusKillSettingsWithNoMenu(kivy.uix.settings.SettingsWithNoMenu):
+
+	def __init__(self, *args, **kwargs):
+		self.fucker='horse'
+		#self.interface_cls = BusKillInterfaceWithNoMenu
+		kivy.uix.settings.SettingsWithNoMenu.__init__( self, *args, **kwargs )
+		self.interface_cls = BusKillInterfaceWithNoMenu
+
+class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
+	def add_widget(self, widget):
+		if self.container is not None and len(self.container.children) > 0:
+			raise Exception(
+			'ContentNoMenu cannot accept more than one settings panel')
+		super(BusKillInterfaceWithNoMenu, self).add_widget(widget)
+		kivy.uix.settings.InterfaceWithNoMenu.__init__( self, *args, **kwargs )
+
+
+class BusKillSettings(Screen):
+
+	class SettingTitle(Label):
+	
+		title = None
+		panel = None
 
 	actionview = ObjectProperty(None)
 	settings_content = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
 
-		super(Settings, self).__init__(**kwargs)
+		super(BusKillSettings, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 
@@ -483,26 +553,39 @@ class Settings(Screen):
 		if self.settings_content.children == []:
 			# we haven't added the settings widget yet; add it now
 
-			self.root_app.settings_cls = SettingsWithNoMenu
+			self.root_app.settings_cls = BusKillSettingsWithNoMenu
 			s = self.root_app.settings_cls()
-
 			self.root_app.build_settings(s)
 
-			#s.add_kivy_panel()
-			#s.add_json_panel( 'buskill', Config, os.path.join(self.bk.DATA_DIR, 'settings_kivy.json') )
-
-			#s.add_json_panel( 'buskill', Config, os.path.join(self.bk.DATA_DIR, 'config.ini') )
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
-			#s.add_json_panel( 'buskill', Config, 'somefile.json')
+			print( "s:|" +str(s)+ "|" )
+			print( "s.children:|" +str(s.children)+ "|" )
+			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
+			print( "dir(s):|" +str(dir(s))+ "|\n" )
+
+			print( "s.interface:|" +str(s.interface)+ "|" )
+			print( "s.interface.children:|" +str(s.interface.children)+ "|" )
+			print( "s.interface.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
+			print( "dir(s.interface):|" +str(dir(s.interface))+ "|\n" )
+
+			print( "s.interface_cls:|" +str(s.interface_cls)+ "|" )
+			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
+			print( "dir(s.interface_cls):|" +str(dir(s.interface_cls))+ "|\n" )
 
 			# for some reason the settings widget automatically includes our
 			# ActionBar, such that if we don't remove it before adding the settings
 			# widget, we end-up with two action bars. this loop just finds the
 			# BoxLayout inside the settings widget (which contains the redundant
 			# ActionBar) and removes it
-			for child in s.children:
-				if type(child) == BoxLayout:
-					s.remove_widget(child) 
+# TODO: remove this section if it's not needed anymore
+#			for child in s.children:
+#				if type(child) == BoxLayout:
+#					s.remove_widget(child) 
+
+			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
+			s.children[0].children[0].children[0].remove_widget( s.children[0].children[0].children[0].children[1] )
+			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
+			#s.remove_widget( s.children[0].children[1] )
 
 			self.settings_content.add_widget( s )
 
@@ -685,7 +768,7 @@ class BusKillApp(App):
 			screens = [
 			 MainWindow(name='main'),
 			 DebugLog(name='debug_log'),
-			 Settings(name='settings'),
+			 BusKillSettings(name='settings'),
 			]
 
 			# loop through each screen created above
