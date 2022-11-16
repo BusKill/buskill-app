@@ -22,7 +22,7 @@ from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 from buskill_version import BUSKILL_VERSION
 
-import os, sys, re, webbrowser
+import os, sys, re, webbrowser, json
 
 import multiprocessing, threading
 from multiprocessing import util
@@ -38,6 +38,8 @@ from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.compat import string_types, text_type
+from kivy.animation import Animation
 
 from kivy.core.text import LabelBase
 from kivy.core.clipboard import Clipboard
@@ -56,10 +58,13 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.modalview import ModalView
+from kivy.uix.popup import Popup
+from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
-from kivy.uix.settings import Settings
+from kivy.uix.settings import Settings, SettingSpacer
 from kivy.properties import ObjectProperty, StringProperty, ListProperty, BooleanProperty, NumericProperty, DictProperty
 
 ################################################################################
@@ -462,6 +467,57 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
+class BusKillSettingItem(FloatLayout):
+
+	title = StringProperty('<No title set>')
+	desc = StringProperty(None, allownone=True)
+	disabled = BooleanProperty(False)
+	section = StringProperty(None)
+	key = StringProperty(None)
+	value = ObjectProperty(None)
+	panel = ObjectProperty(None)
+	content = ObjectProperty(None)
+	selected_alpha = NumericProperty(0)
+	__events__ = ('on_release', )
+
+	def __init__(self, **kwargs):
+		super(BusKillSettingItem, self).__init__(**kwargs)
+		self.value = self.panel.get_value(self.section, self.key)
+
+	def add_widget(self, *largs):
+		if self.content is None:
+			return super(BusKillSettingItem, self).add_widget(*largs)
+		return self.content.add_widget(*largs)
+
+	def on_touch_down(self, touch):
+		if not self.collide_point(*touch.pos):
+			return
+		if self.disabled:
+			return
+		touch.grab(self)
+		self.selected_alpha = 1
+		return super(BusKillSettingItem, self).on_touch_down(touch)
+
+	def on_touch_up(self, touch):
+		if touch.grab_current is self:
+			touch.ungrab(self)
+			self.dispatch('on_release')
+			Animation(selected_alpha=0, d=.25, t='out_quad').start(self)
+			return True
+		return super(BusKillSettingItem, self).on_touch_up(touch)
+
+	def on_release(self):
+		pass
+
+	def on_value(self, instance, value):
+		if not self.section or not self.key:
+			return
+		# get current value in config
+		panel = self.panel
+		if not isinstance(value, string_types):
+			value = str(value)
+		panel.set_value(self.section, self.key, value)
+
 class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
 	panels = DictProperty({})
 	container = ObjectProperty()
@@ -505,10 +561,11 @@ class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
 		#kivy.uix.settings.InterfaceWithNoMenu.__init__( self, *args, **kwargs )
 
 # TODO: actually define a complex option here
-class BusKillSettingComplexOptions(kivy.uix.settings.SettingItem):
-	print( 'yoooo' )
-	options = ListProperty([])
+class BusKillSettingComplexOptions(BusKillSettingItem):
 
+	#icon = ObjectProperty(None, allownone=True)
+	#icon = ObjectProperty(None)
+	options = ListProperty([])
 	popup = ObjectProperty(None, allownone=True)
 
 	def on_panel(self, instance, value):
@@ -546,6 +603,17 @@ class BusKillSettingComplexOptions(kivy.uix.settings.SettingItem):
 
 		# and open the popup !
 		popup.open()
+
+class BusKillSettingsPanel(kivy.uix.settings.SettingsPanel):
+
+    #title = StringProperty('Default title')
+    config = ObjectProperty(None, allownone=True)
+    settings = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        if 'cols' not in kwargs:
+            self.cols = 1
+        super(BusKillSettingsPanel, self).__init__(**kwargs)
 	
 class BusKillSettings(kivy.uix.settings.Settings):
 
@@ -567,6 +635,43 @@ class BusKillSettings(kivy.uix.settings.Settings):
 #		self.interface = interface
 #		self.add_widget(interface)
 #		self.interface.bind(on_close=lambda j: self.dispatch('on_close'))
+
+	def create_json_panel(self, title, config, filename=None, data=None):
+
+		if filename is None and data is None:
+			raise Exception('You must specify either the filename or data')
+		if filename is not None:
+			with open(filename, 'r') as fd:
+				data = json.loads(fd.read())
+		else:
+			data = json.loads(data)
+		if type(data) != list:
+			raise ValueError('The first element must be a list')
+		panel = BusKillSettingsPanel(title=title, settings=self, config=config)
+
+		for setting in data:
+			# determine the type and the class to use
+			if 'type' not in setting:
+				raise ValueError('One setting are missing the "type" element')
+			ttype = setting['type']
+			cls = self._types.get(ttype)
+			if cls is None:
+				raise ValueError(
+					'No class registered to handle the <%s> type' %
+					setting['type'])
+
+			# create a instance of the class, without the type attribute
+			del setting['type']
+			str_settings = {}
+			for key, item in setting.items():
+				str_settings[str(key)] = item
+
+			instance = cls(panel=panel, **str_settings)
+
+			# instance created, add to the panel
+			panel.add_widget(instance)
+
+		return panel
 
 class BusKillSettingsWithNoMenu(BusKillSettings):
 

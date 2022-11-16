@@ -253,6 +253,59 @@
 	font_name: "RobotoMono"
 	font_size: dp(12)
 
+<-BusKillSettingsPanel>:
+    spacing: 5
+    padding: 5
+    size_hint_y: None
+    height: self.minimum_height
+
+#    Label:
+#        #size_hint_y: None
+#        size: 0, 0
+#        text: root.title
+#        text_size: self.width - 32, None
+#        #height: max(50, self.texture_size[1] + 20)
+#        color: (.5, .5, .5, 1)
+#        font_size: '15sp'
+#
+#        canvas.after:
+#            Color:
+#                rgb: .2, .2, .2
+#            Rectangle:
+#                pos: self.x, self.y - 2
+#                size: self.width, 1
+
+<BusKillSettingItem>:
+    size_hint: .25, None
+    height: labellayout.texture_size[1] + dp(10)
+    content: content
+    canvas:
+        Color:
+            rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+        Rectangle:
+            pos: self.x, self.y + 1
+            size: self.size
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            pos: self.x, self.y - 2
+            size: self.width, 1
+
+    BoxLayout:
+        pos: root.pos
+
+        Label:
+            size_hint_x: .66
+            id: labellayout
+            markup: True
+            text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+            font_size: '15sp'
+            text_size: self.width - 32, None
+
+        BoxLayout:
+            id: content
+            size_hint_x: .33
+
 <BusKillSettingsScreen>:
 
 	color_main_bg: 0.188, 0.188, 0.188, 1
