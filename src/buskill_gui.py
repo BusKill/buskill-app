@@ -564,9 +564,16 @@ class BusKillSettings(Screen):
 			print( "dir(s):|" +str(dir(s))+ "|\n" )
 
 			print( "s.interface:|" +str(s.interface)+ "|" )
+			print( "s.interface.panels:|" +str(s.interface.panels)+ "|" )
+			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
 			print( "s.interface.children:|" +str(s.interface.children)+ "|" )
 			print( "s.interface.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
 			print( "dir(s.interface):|" +str(dir(s.interface))+ "|\n" )
+
+			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
+			print( "s.interface.current_panel.children:|" +str(s.interface.current_panel.children)+ "|" )
+			print( "s.interface.current_panel.walk():|" +str([widget for widget in s.interface.current_panel.walk()])+ "|" )
+			print( "dir(s.interface.current_panel):|" +str(dir(s.interface.current_panel))+ "|\n" )
 
 			print( "s.interface_cls:|" +str(s.interface_cls)+ "|" )
 			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
@@ -582,10 +589,31 @@ class BusKillSettings(Screen):
 #				if type(child) == BoxLayout:
 #					s.remove_widget(child) 
 
+			#print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
+			print( str( type(s) ) )
+			print( str( s.children ) )
+			print( str( s.children[0].children ) )
+			print( str( s.children[0].children[0].children ) )
+			print( str( s.children[0].children[0].children[0].children ) )
+			print( "SettingOptions: " +str( s.children[0].children[0].children[0].children[0].children ) )
+			print( "\t" + str( s.children[0].children[0].children[0].children[0].children[0].children ) )
+			print( "\tBoxLayout: " + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children ) )
+			print( "\t\t" + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children ) )
+			print( "\tLabel: " + str( s.children[0].children[0].children[0].children[0].children[0].children[1].children ) )
+			print( "Label: " +str( s.children[0].children[0].children[0].children[1].children ) )
+			#print( str( s.children[0].children[0].children[0] ) )
+			#print( str( s.children[0].children[0].children[0].children[0] ) )
+			#print( str( s.children[0].children[0].children[0].children[1] ) )
+			#print( str( s.children[0].children[0].children[0].children[1] ) )
+			print( "\n***\n" )
+#			s.children[0].children[0].children[0].remove_widget( s.children[0].children[0].children[0].children[1] )
 			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
-			s.children[0].children[0].children[0].remove_widget( s.children[0].children[0].children[0].children[1] )
-			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
+
 			#s.remove_widget( s.children[0].children[1] )
+			#s.interface.current_panel.title = None
+			for child in s.interface.current_panel.children:
+				if type(child) == Label:
+					s.interface.current_panel.remove_widget(child)
 
 			self.settings_content.add_widget( s )
 
