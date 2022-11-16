@@ -51,6 +51,7 @@ from kivy.uix.modalview import ModalView
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
 from kivy.uix.settings import Settings
+from kivy.properties import ObjectProperty, StringProperty, ListProperty, BooleanProperty, NumericProperty, DictProperty
 
 # grey background color
 Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
@@ -461,18 +462,17 @@ class CriticalError(BoxLayout):
 ###################
 
 class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
-#	panels = DictProperty({})
-	panels = None
-#	container = ObjectProperty()
-#	current_panel = ObjectProperty(None)
-#	current_uid = NumericProperty(0)
+	panels = DictProperty({})
+	container = ObjectProperty()
+	current_panel = ObjectProperty(None)
+	current_uid = NumericProperty(0)
 
 	def add_panel(self, panel, name, uid):
 		pass
 		print( "fuuuck" )
-#		self.panels[uid] = panel
-#		if not self.current_uid:
-#			self.current_uid = uid
+		self.panels[uid] = panel
+		if not self.current_uid:
+			self.current_uid = uid
 
 	def on_current_uid(self, *args):
 		uid = self.current_uid
@@ -487,7 +487,7 @@ class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
 
 	def add_widget(self, widget):
 		if self.container is None:
-			super(ContentPanel, self).add_widget(widget)
+			super(BusKillSettingsContentPanel, self).add_widget(widget)
 		else:
 			self.container.add_widget(widget)
 
@@ -495,25 +495,62 @@ class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
 		print( 'uhhh' )
 		self.container.remove_widget(widget)
 
-
-class BusKillSettingsWithNoMenu(kivy.uix.settings.SettingsWithNoMenu):
-
-	def __init__(self, *args, **kwargs):
-		self.fucker='horse'
-		#self.interface_cls = BusKillInterfaceWithNoMenu
-		kivy.uix.settings.SettingsWithNoMenu.__init__( self, *args, **kwargs )
-		self.interface_cls = BusKillInterfaceWithNoMenu
-
 class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
 	def add_widget(self, widget):
 		if self.container is not None and len(self.container.children) > 0:
 			raise Exception(
 			'ContentNoMenu cannot accept more than one settings panel')
 		super(BusKillInterfaceWithNoMenu, self).add_widget(widget)
-		kivy.uix.settings.InterfaceWithNoMenu.__init__( self, *args, **kwargs )
+		#kivy.uix.settings.InterfaceWithNoMenu.__init__( self, *args, **kwargs )
 
+# TODO: actually define a complex option here
+class BusKillSettingComplexOptions(kivy.uix.settings.SettingItem):
+	pass
 
-class BusKillSettings(Screen):
+class BusKillSettings(kivy.uix.settings.Settings):
+
+	interface = ObjectProperty(None)
+	interface_cls = ObjectProperty(BusKillInterfaceWithNoMenu)
+	__events__ = ('on_close', 'on_config_change')
+
+	def __init__(self, *args, **kargs):
+  		self._types = {}
+  		super(BusKillSettings, self).__init__(*args, **kargs)
+  		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
+
+#	def add_interface(self):
+#		print( "called BusKillSettings.add_interface()" )
+#		cls = self.interface_cls
+#		if isinstance(cls, string_types):
+#			cls = Factory.get(cls)
+#		interface = cls()
+#		self.interface = interface
+#		self.add_widget(interface)
+#		self.interface.bind(on_close=lambda j: self.dispatch('on_close'))
+
+class BusKillSettingsWithNoMenu(BusKillSettings):
+
+	def __init__(self, *args, **kwargs):
+		self.fucker='horse'
+		self.interface_cls = BusKillInterfaceWithNoMenu
+		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
+		print( "interface:|" +str(self.interface)+ "|" )
+		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
+		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
+		print( "interface:|" +str(self.interface)+ "|" )
+#		self.interface_cls = BusKillInterfaceWithNoMenu
+#		self.interface = BusKillInterfaceWithNoMenu()
+		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
+		print( "interface:|" +str(self.interface)+ "|" )
+		#self.interface_cls = BusKillInterfaceWithNoMenu
+
+	def on_close(self, *args):
+		pass
+
+	def on_config_change(self, config, section, key, value):
+		pass
+
+class BusKillSettingsScreen(Screen):
 
 	class SettingTitle(Label):
 	
@@ -525,7 +562,7 @@ class BusKillSettings(Screen):
 
 	def __init__(self, **kwargs):
 
-		super(BusKillSettings, self).__init__(**kwargs)
+		super(BusKillSettingsScreen, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 
@@ -553,11 +590,17 @@ class BusKillSettings(Screen):
 		if self.settings_content.children == []:
 			# we haven't added the settings widget yet; add it now
 
-			self.root_app.settings_cls = BusKillSettingsWithNoMenu
-			s = self.root_app.settings_cls()
-			self.root_app.build_settings(s)
+			#self.root_app.settings_cls = BusKillSettingsWithNoMenu
+			#print( "interface_cls:|" +str(self.root_app.settings.interface_cls)+ "|" )
+			#s = self.root_app.settings_cls()
+			s = BusKillSettingsWithNoMenu()
+			print( "interface:|" +str(s.interface)+ "|" )
+			#self.root_app.build_settings(s)
 
+			print( "adding json panel" )
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
+			print( "interface:|" +str(s.interface)+ "|" )
+
 			print( "s:|" +str(s)+ "|" )
 			print( "s.children:|" +str(s.children)+ "|" )
 			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
@@ -592,28 +635,28 @@ class BusKillSettings(Screen):
 			#print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
 			print( str( type(s) ) )
 			print( str( s.children ) )
-			print( str( s.children[0].children ) )
-			print( str( s.children[0].children[0].children ) )
-			print( str( s.children[0].children[0].children[0].children ) )
-			print( "SettingOptions: " +str( s.children[0].children[0].children[0].children[0].children ) )
-			print( "\t" + str( s.children[0].children[0].children[0].children[0].children[0].children ) )
-			print( "\tBoxLayout: " + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children ) )
-			print( "\t\t" + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children ) )
-			print( "\tLabel: " + str( s.children[0].children[0].children[0].children[0].children[0].children[1].children ) )
-			print( "Label: " +str( s.children[0].children[0].children[0].children[1].children ) )
+#			print( str( s.children[0].children ) )
+#			print( str( s.children[0].children[0].children ) )
+#			print( str( s.children[0].children[0].children[0].children ) )
+#			print( "SettingOptions: " +str( s.children[0].children[0].children[0].children[0].children ) )
+#			print( "\t" + str( s.children[0].children[0].children[0].children[0].children[0].children ) )
+#			print( "\tBoxLayout: " + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children ) )
+#			print( "\t\t" + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children ) )
+#			print( "\tLabel: " + str( s.children[0].children[0].children[0].children[0].children[0].children[1].children ) )
+#			print( "Label: " +str( s.children[0].children[0].children[0].children[1].children ) )
 			#print( str( s.children[0].children[0].children[0] ) )
 			#print( str( s.children[0].children[0].children[0].children[0] ) )
 			#print( str( s.children[0].children[0].children[0].children[1] ) )
 			#print( str( s.children[0].children[0].children[0].children[1] ) )
-			print( "\n***\n" )
+#			print( "\n***\n" )
 #			s.children[0].children[0].children[0].remove_widget( s.children[0].children[0].children[0].children[1] )
-			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
+#			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
 
 			#s.remove_widget( s.children[0].children[1] )
 			#s.interface.current_panel.title = None
-			for child in s.interface.current_panel.children:
-				if type(child) == Label:
-					s.interface.current_panel.remove_widget(child)
+#			for child in s.interface.current_panel.children:
+#				if type(child) == Label:
+#					s.interface.current_panel.remove_widget(child)
 
 			self.settings_content.add_widget( s )
 
@@ -796,7 +839,7 @@ class BusKillApp(App):
 			screens = [
 			 MainWindow(name='main'),
 			 DebugLog(name='debug_log'),
-			 BusKillSettings(name='settings'),
+			 BusKillSettingsScreen(name='settings'),
 			]
 
 			# loop through each screen created above
