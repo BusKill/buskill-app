@@ -37,10 +37,19 @@ import kivy
 from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
+from kivy.metrics import dp
 
+from kivy.core.text import LabelBase
 from kivy.core.clipboard import Clipboard
 from kivy.core.window import Window
+
 Window.size = ( 300, 500 )
+
+# grey background color
+Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
+
+from kivy.config import Config
+from kivy.config import ConfigParser
 
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
@@ -52,14 +61,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
 from kivy.uix.settings import Settings
 from kivy.properties import ObjectProperty, StringProperty, ListProperty, BooleanProperty, NumericProperty, DictProperty
-
-# grey background color
-Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
-
-from kivy.config import Config
-from kivy.config import ConfigParser
-
-from kivy.core.text import LabelBase
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -505,8 +506,47 @@ class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
 
 # TODO: actually define a complex option here
 class BusKillSettingComplexOptions(kivy.uix.settings.SettingItem):
-	pass
+	print( 'yoooo' )
+	options = ListProperty([])
 
+	popup = ObjectProperty(None, allownone=True)
+
+	def on_panel(self, instance, value):
+		if value is None:
+			return
+		self.fbind('on_release', self._create_popup)
+
+	def _set_option(self, instance):
+		self.value = instance.text
+		self.popup.dismiss()
+
+	def _create_popup(self, instance):
+		# create the popup
+		content = BoxLayout(orientation='vertical', spacing='5dp')
+		popup_width = min(0.95 * Window.width, dp(500))
+		self.popup = popup = Popup(
+			content=content, title=self.title, size_hint=(None, None),
+			size=(popup_width, '400dp'))
+		popup.height = len(self.options) * dp(55) + dp(150)
+
+		# add all the options
+		content.add_widget(Widget(size_hint_y=None, height=1))
+		uid = str(self.uid)
+		for option in self.options:
+			state = 'down' if option == self.value else 'normal'
+			btn = ToggleButton(text=option, state=state, group=uid)
+			btn.bind(on_release=self._set_option)
+			content.add_widget(btn)
+	
+		# finally, add a cancel button to return on the previous panel
+		content.add_widget(SettingSpacer())
+		btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
+		btn.bind(on_release=popup.dismiss)
+		content.add_widget(btn)
+
+		# and open the popup !
+		popup.open()
+	
 class BusKillSettings(kivy.uix.settings.Settings):
 
 	interface = ObjectProperty(None)
