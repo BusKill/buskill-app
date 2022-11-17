@@ -467,211 +467,230 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
-class BusKillSettingItem(FloatLayout):
+class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
-	title = StringProperty('<No title set>')
-	desc = StringProperty(None, allownone=True)
-	disabled = BooleanProperty(False)
-	section = StringProperty(None)
-	key = StringProperty(None)
-	value = ObjectProperty(None)
-	panel = ObjectProperty(None)
-	content = ObjectProperty(None)
-	selected_alpha = NumericProperty(0)
-	__events__ = ('on_release', )
+    '''Base class for individual settings (within a panel). This class cannot
+    be used directly; it is used for implementing the other setting classes.
+    It builds a row with a title/description (left) and a setting control
+    (right).
 
-	def __init__(self, **kwargs):
-		super(BusKillSettingItem, self).__init__(**kwargs)
-		self.value = self.panel.get_value(self.section, self.key)
+    Look at :class:`SettingBoolean`, :class:`SettingNumeric` and
+    :class:`SettingOptions` for usage examples.
 
-	def add_widget(self, *largs):
-		if self.content is None:
-			return super(BusKillSettingItem, self).add_widget(*largs)
-		return self.content.add_widget(*largs)
+    :Events:
+        `on_release`
+            Fired when the item is touched and then released.
 
-	def on_touch_down(self, touch):
-		if not self.collide_point(*touch.pos):
-			return
-		if self.disabled:
-			return
-		touch.grab(self)
-		self.selected_alpha = 1
-		return super(BusKillSettingItem, self).on_touch_down(touch)
+    '''
 
-	def on_touch_up(self, touch):
-		if touch.grab_current is self:
-			touch.ungrab(self)
-			self.dispatch('on_release')
-			Animation(selected_alpha=0, d=.25, t='out_quad').start(self)
-			return True
-		return super(BusKillSettingItem, self).on_touch_up(touch)
+    title = StringProperty('<No title set>')
+    '''Title of the setting, defaults to '<No title set>'.
 
-	def on_release(self):
-		pass
+    :attr:`title` is a :class:`~kivy.properties.StringProperty` and defaults to
+    '<No title set>'.
+    '''
 
-	def on_value(self, instance, value):
-		if not self.section or not self.key:
-			return
-		# get current value in config
-		panel = self.panel
-		if not isinstance(value, string_types):
-			value = str(value)
-		panel.set_value(self.section, self.key, value)
+    desc = StringProperty(None, allownone=True)
+    '''Description of the setting, rendered on the line below the title.
 
-class BusKillSettingsContentPanel(kivy.uix.scrollview.ScrollView):
-	panels = DictProperty({})
-	container = ObjectProperty()
-	current_panel = ObjectProperty(None)
-	current_uid = NumericProperty(0)
+    :attr:`desc` is a :class:`~kivy.properties.StringProperty` and defaults to
+    None.
+    '''
 
-	def add_panel(self, panel, name, uid):
-		pass
-		print( "fuuuck" )
-		self.panels[uid] = panel
-		if not self.current_uid:
-			self.current_uid = uid
+    disabled = BooleanProperty(False)
+    '''Indicate if this setting is disabled. If True, all touches on the
+    setting item will be discarded.
 
-	def on_current_uid(self, *args):
-		uid = self.current_uid
-		if uid in self.panels:
-			if self.current_panel is not None:
-				self.remove_widget(self.current_panel)
-			new_panel = self.panels[uid]
-			self.add_widget(new_panel)
-			self.current_panel = new_panel
-			return True
-		return False  # New uid doesn't exist
+    :attr:`disabled` is a :class:`~kivy.properties.BooleanProperty` and
+    defaults to False.
+    '''
 
-	def add_widget(self, widget):
-		if self.container is None:
-			super(BusKillSettingsContentPanel, self).add_widget(widget)
-		else:
-			self.container.add_widget(widget)
+    section = StringProperty(None)
+    '''Section of the token inside the :class:`~kivy.config.ConfigParser`
+    instance.
 
-	def remove_widget(self, widget):
-		print( 'uhhh' )
-		self.container.remove_widget(widget)
+    :attr:`section` is a :class:`~kivy.properties.StringProperty` and defaults
+    to None.
+    '''
 
-class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
-	def add_widget(self, widget):
-		if self.container is not None and len(self.container.children) > 0:
-			raise Exception(
-			'ContentNoMenu cannot accept more than one settings panel')
-		super(BusKillInterfaceWithNoMenu, self).add_widget(widget)
-		#kivy.uix.settings.InterfaceWithNoMenu.__init__( self, *args, **kwargs )
+    key = StringProperty(None)
+    '''Key of the token inside the :attr:`section` in the
+    :class:`~kivy.config.ConfigParser` instance.
+
+    :attr:`key` is a :class:`~kivy.properties.StringProperty` and defaults to
+    None.
+    '''
+
+    value = ObjectProperty(None)
+    '''Value of the token according to the :class:`~kivy.config.ConfigParser`
+    instance. Any change to this value will trigger a
+    :meth:`Settings.on_config_change` event.
+
+    :attr:`value` is an :class:`~kivy.properties.ObjectProperty` and defaults
+    to None.
+    '''
+
+    panel = ObjectProperty(None)
+    '''(internal) Reference to the SettingsPanel for this setting. You don't
+    need to use it.
+
+    :attr:`panel` is an :class:`~kivy.properties.ObjectProperty` and defaults
+    to None.
+    '''
+
+    content = ObjectProperty(None)
+    '''(internal) Reference to the widget that contains the real setting.
+    As soon as the content object is set, any further call to add_widget will
+    call the content.add_widget. This is automatically set.
+
+    :attr:`content` is an :class:`~kivy.properties.ObjectProperty` and defaults
+    to None.
+    '''
+
+    selected_alpha = NumericProperty(0)
+    '''(internal) Float value from 0 to 1, used to animate the background when
+    the user touches the item.
+
+    :attr:`selected_alpha` is a :class:`~kivy.properties.NumericProperty` and
+    defaults to 0.
+    '''
+
+    __events__ = ('on_release', )
+
+    def __init__(self, **kwargs):
+        super(BusKillSettingItem, self).__init__(**kwargs)
+        self.value = self.panel.get_value(self.section, self.key)
+        print( "key:|" +str(self.key)+ "|" )
+        print( "value:|" +str(self.value)+ "|" )
+
+    def add_widget(self, *largs):
+        if self.content is None:
+            return super(BusKillSettingItem, self).add_widget(*largs)
+        return self.content.add_widget(*largs)
+
+    def on_touch_down(self, touch):
+        if not self.collide_point(*touch.pos):
+            return
+        if self.disabled:
+            return
+        touch.grab(self)
+        self.selected_alpha = 1
+        return super(BusKillSettingItem, self).on_touch_down(touch)
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            touch.ungrab(self)
+            self.dispatch('on_release')
+            Animation(selected_alpha=0, d=.25, t='out_quad').start(self)
+            return True
+        return super(BusKillSettingItem, self).on_touch_up(touch)
+
+    def on_release(self):
+        pass
+
+    def on_value(self, instance, value):
+        if not self.section or not self.key:
+            return
+        # get current value in config
+        panel = self.panel
+        if not isinstance(value, string_types):
+            value = str(value)
+        panel.set_value(self.section, self.key, value)
 
 # TODO: actually define a complex option here
 class BusKillSettingComplexOptions(BusKillSettingItem):
+    '''Implementation of an option list on top of a :class:`SettingItem`.
+    It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
+    clicked, will open a :class:`~kivy.uix.popup.Popup` with a
+    list of options from which the user can select.
+    '''
 
-	#icon = ObjectProperty(None, allownone=True)
-	#icon = ObjectProperty(None)
-	options = ListProperty([])
-	popup = ObjectProperty(None, allownone=True)
+    options = ListProperty([])
+    '''List of all availables options. This must be a list of "string" items.
+    Otherwise, it will crash. :)
 
-	def on_panel(self, instance, value):
-		if value is None:
-			return
-		self.fbind('on_release', self._create_popup)
+    :attr:`options` is a :class:`~kivy.properties.ListProperty` and defaults
+    to [].
+    '''
 
-	def _set_option(self, instance):
-		self.value = instance.text
-		self.popup.dismiss()
+    popup = ObjectProperty(None, allownone=True)
+    '''(internal) Used to store the current popup when it is shown.
 
-	def _create_popup(self, instance):
-		# create the popup
-		content = BoxLayout(orientation='vertical', spacing='5dp')
-		popup_width = min(0.95 * Window.width, dp(500))
-		self.popup = popup = Popup(
-			content=content, title=self.title, size_hint=(None, None),
-			size=(popup_width, '400dp'))
-		popup.height = len(self.options) * dp(55) + dp(150)
+    :attr:`popup` is an :class:`~kivy.properties.ObjectProperty` and defaults
+    to None.
+    '''
 
-		# add all the options
-		content.add_widget(Widget(size_hint_y=None, height=1))
-		uid = str(self.uid)
-		for option in self.options:
-			state = 'down' if option == self.value else 'normal'
-			btn = ToggleButton(text=option, state=state, group=uid)
-			btn.bind(on_release=self._set_option)
-			content.add_widget(btn)
-	
-		# finally, add a cancel button to return on the previous panel
-		content.add_widget(SettingSpacer())
-		btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
-		btn.bind(on_release=popup.dismiss)
-		content.add_widget(btn)
+    def on_panel(self, instance, value):
+        if value is None:
+            return
+        self.fbind('on_release', self._create_popup)
 
-		# and open the popup !
-		popup.open()
+    def _set_option(self, instance):
+        self.value = instance.text
+        self.popup.dismiss()
+
+    def _create_popup(self, instance):
+        print( "entered _create_popup()" )
+        print( "self.popup:|" +str(self.popup)+ "|" )
+        if self.popup:
+           return
+        # create the popup
+        content = BoxLayout(orientation='vertical', spacing='5dp')
+        popup_width = min(0.95 * Window.width, dp(500))
+        self.popup = popup = Popup(
+            content=content, title=self.title, size_hint=(None, None),
+            size=(popup_width, '400dp'))
+        popup.height = len(self.options) * dp(55) + dp(150)
+
+        # add all the options
+        content.add_widget(Widget(size_hint_y=None, height=1))
+        uid = str(self.uid)
+        for option in self.options:
+            state = 'down' if option == self.value else 'normal'
+            btn = ToggleButton(text=option, state=state, group=uid)
+            btn.bind(on_release=self._set_option)
+            content.add_widget(btn)
+
+        # finally, add a cancel button to return on the previous panel
+        content.add_widget(SettingSpacer())
+        btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
+        btn.bind(on_release=popup.dismiss)
+        content.add_widget(btn)
+
+        # and open the popup !
+        print( "popup:|" +str(popup)+ "|" )
+        print( "popup.parent:|" +str(popup.parent)+ "|" )
+        print( "popup.get_parent_window():|" +str(popup.get_parent_window())+ "|" )
+        print( "popup.get_root_window():|" +str(popup.get_root_window())+ "|" )
+        print( "popup._context:|" +str(popup._context)+ "|" )
+        print( "popup.__dict__.items():|" +str(popup.__dict__.items())+ "|" )
+        print( "popup._trigger_layout:|" +str(popup._trigger_layout)+ "|" )
+        print( "popup.canvas:|" +str(popup.canvas)+ "|" )
+        print( "popup._proxy_ref:|" +str(popup._proxy_ref)+ "|" )
+        print( "dir(popup):|" +str(dir(popup))+ "|\n" )
+
+        print( "popup.canvas:|" +str(popup.canvas)+ "|" )
+        print( "popup.canvas.children:|" +str(popup.canvas.children)+ "|" )
+        print( "popup.canvas.before:|" +str(popup.canvas.before)+ "|" )
+        print( "popup.canvas.after:|" +str(popup.canvas.after)+ "|" )
+        print( "dir(popup.canvas):|" +str(dir(popup.canvas))+ "|\n" )
+
+        popup.open()
+
+class BusKillSettingsContentPanel( kivy.uix.settings.ContentPanel ):
+	pass
+
+class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
+	pass
 
 class BusKillSettingsPanel(kivy.uix.settings.SettingsPanel):
-
-    #title = StringProperty('Default title')
-    config = ObjectProperty(None, allownone=True)
-    settings = ObjectProperty(None)
-
-    def __init__(self, **kwargs):
-        if 'cols' not in kwargs:
-            self.cols = 1
-        super(BusKillSettingsPanel, self).__init__(**kwargs)
+	pass
 	
 class BusKillSettings(kivy.uix.settings.Settings):
 
-	interface = ObjectProperty(None)
-	interface_cls = ObjectProperty(BusKillInterfaceWithNoMenu)
-	__events__ = ('on_close', 'on_config_change')
-
 	def __init__(self, *args, **kargs):
-  		self._types = {}
   		super(BusKillSettings, self).__init__(*args, **kargs)
   		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
-
-#	def add_interface(self):
-#		print( "called BusKillSettings.add_interface()" )
-#		cls = self.interface_cls
-#		if isinstance(cls, string_types):
-#			cls = Factory.get(cls)
-#		interface = cls()
-#		self.interface = interface
-#		self.add_widget(interface)
-#		self.interface.bind(on_close=lambda j: self.dispatch('on_close'))
-
-	def create_json_panel(self, title, config, filename=None, data=None):
-
-		if filename is None and data is None:
-			raise Exception('You must specify either the filename or data')
-		if filename is not None:
-			with open(filename, 'r') as fd:
-				data = json.loads(fd.read())
-		else:
-			data = json.loads(data)
-		if type(data) != list:
-			raise ValueError('The first element must be a list')
-		panel = BusKillSettingsPanel(title=title, settings=self, config=config)
-
-		for setting in data:
-			# determine the type and the class to use
-			if 'type' not in setting:
-				raise ValueError('One setting are missing the "type" element')
-			ttype = setting['type']
-			cls = self._types.get(ttype)
-			if cls is None:
-				raise ValueError(
-					'No class registered to handle the <%s> type' %
-					setting['type'])
-
-			# create a instance of the class, without the type attribute
-			del setting['type']
-			str_settings = {}
-			for key, item in setting.items():
-				str_settings[str(key)] = item
-
-			instance = cls(panel=panel, **str_settings)
-
-			# instance created, add to the panel
-			panel.add_widget(instance)
-
-		return panel
 
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
@@ -689,18 +708,7 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		print( "interface:|" +str(self.interface)+ "|" )
 		#self.interface_cls = BusKillInterfaceWithNoMenu
 
-	def on_close(self, *args):
-		pass
-
-	def on_config_change(self, config, section, key, value):
-		pass
-
 class BusKillSettingsScreen(Screen):
-
-	class SettingTitle(Label):
-	
-		title = None
-		panel = None
 
 	actionview = ObjectProperty(None)
 	settings_content = ObjectProperty(None)
@@ -767,6 +775,25 @@ class BusKillSettingsScreen(Screen):
 			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
 			print( "dir(s.interface_cls):|" +str(dir(s.interface_cls))+ "|\n" )
 
+			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
+			complex_option = s.interface.current_panel.children[0]
+			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
+			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
+			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
+			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
+			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
+			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
+			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
+			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
+			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
+			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
+
+			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
+			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
+			print( "dir(complex_option.content):|" +str(dir(complex_option.content))+ "|\n" )
+			#complex_option.add_widget( Label(text='hayy') )
+			#complex_option.add_widget( Label(text='hayy2') )
+
 			# for some reason the settings widget automatically includes our
 			# ActionBar, such that if we don't remove it before adding the settings
 			# widget, we end-up with two action bars. this loop just finds the
@@ -804,6 +831,8 @@ class BusKillSettingsScreen(Screen):
 #					s.interface.current_panel.remove_widget(child)
 
 			self.settings_content.add_widget( s )
+
+			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
 
 class DebugLog(Screen):
 
