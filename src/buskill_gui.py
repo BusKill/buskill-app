@@ -633,7 +633,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
         print( "entered _create_popup()" )
         print( "self.popup:|" +str(self.popup)+ "|" )
         if self.popup:
-           return
+           self.popup.dismiss()
         # create the popup
         content = BoxLayout(orientation='vertical', spacing='5dp')
         popup_width = min(0.95 * Window.width, dp(500))
