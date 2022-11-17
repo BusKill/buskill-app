@@ -692,6 +692,43 @@ class BusKillSettings(kivy.uix.settings.Settings):
   		super(BusKillSettings, self).__init__(*args, **kargs)
   		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
 
+	def create_json_panel(self, title, config, filename=None, data=None):
+
+		if filename is None and data is None:
+			raise Exception('You must specify either the filename or data')
+		if filename is not None:
+			with open(filename, 'r') as fd:
+				data = json.loads(fd.read())
+		else:
+			data = json.loads(data)
+		if type(data) != list:
+			raise ValueError('The first element must be a list')
+		panel = BusKillSettingsPanel(title=title, settings=self, config=config)
+
+		for setting in data:
+			# determine the type and the class to use
+			if 'type' not in setting:
+				raise ValueError('One setting are missing the "type" element')
+			ttype = setting['type']
+			cls = self._types.get(ttype)
+			if cls is None:
+				raise ValueError(
+					'No class registered to handle the <%s> type' %
+					setting['type'])
+
+			# create a instance of the class, without the type attribute
+			del setting['type']
+			str_settings = {}
+			for key, item in setting.items():
+				str_settings[str(key)] = item
+
+			instance = cls(panel=panel, **str_settings)
+
+			# instance created, add to the panel
+			panel.add_widget(instance)
+
+		return panel
+
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
 	def __init__(self, *args, **kwargs):
@@ -777,20 +814,20 @@ class BusKillSettingsScreen(Screen):
 
 			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
 			complex_option = s.interface.current_panel.children[0]
-			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
-			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
-			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
-			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
-			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
-			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
-			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
-			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
+#			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
+#			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
+#			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
+#			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
+#			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
+#			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
+#			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
+#			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
 			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
-			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
+#			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
 
-			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
-			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
-			print( "dir(complex_option.content):|" +str(dir(complex_option.content))+ "|\n" )
+#			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
+#			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
+#			print( "dir(complex_option.content):|" +str(dir(complex_option.content))+ "|\n" )
 			#complex_option.add_widget( Label(text='hayy') )
 			#complex_option.add_widget( Label(text='hayy2') )
 
