@@ -599,6 +599,7 @@ class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
 # TODO: actually define a complex option here
 class BusKillSettingComplexOptions(BusKillSettingItem):
+    icon = ListProperty([])
     '''Implementation of an option list on top of a :class:`SettingItem`.
     It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
     clicked, will open a :class:`~kivy.uix.popup.Popup` with a
@@ -774,7 +775,10 @@ class BusKillSettingsScreen(Screen):
 
 			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
 			complex_option = s.interface.current_panel.children[0]
-#			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
+			print( "complex_option:|" +str(complex_option)+ "|" )
+			print( "complex_option.icon:|" +str(complex_option.icon)+ "|" )
+			print( "complex_option.children:|" +str(complex_option.children)+ "|" )
+			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
 #			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
 #			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
 #			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
@@ -782,8 +786,19 @@ class BusKillSettingsScreen(Screen):
 #			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
 #			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
 #			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
+			print( "complex_option.walk():|" +str([widget for widget in complex_option.walk()])+ "|" )
 			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
 #			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
+
+			complex_option_key_label = complex_option.children[0].children[1]
+			complex_option_value_label = complex_option.children[0].children[0]
+
+			print( "complex_option_key_label.text:|" +str(complex_option_key_label.text)+ "|" )
+			print( "complex_option_key_label.size:|" +str(complex_option_key_label.size)+ "|" )
+			print( "complex_option_key_label.texture_size:|" +str(complex_option_key_label.texture_size)+ "|" )
+			print( "complex_option_key_label.__dict__.items():|" +str(complex_option_key_label.__dict__.items())+ "|" )
+
+			print( "complex_option_value_label.text:|" +str(complex_option_value_label.text)+ "|" )
 
 #			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
 #			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )

@@ -261,11 +261,15 @@
 
 <-BusKillSettingItem>:
 	size_hint: .25, None
-	height: labellayout.texture_size[1] + dp(10)
+#	height: labellayout.texture_size[1] + dp(10)
 #	content: content
+	padding: 6
+	spacing: 10
+
 	canvas:
 		Color:
-			rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+			rgba: 0, 1, 0, 1
 		Rectangle:
 			pos: self.x, self.y + 1
 			size: self.size
@@ -275,23 +279,70 @@
 			pos: self.x, self.y - 2
 			size: self.width, 1
 
-	BoxLayout:
+	StackLayout:
 		pos: root.pos
-		spacing: 0
+		orientation: 'lr-tb'
+		#spacing: 30
+		padding: root.padding
+		spacing: root.spacing
+
+		canvas:
+			Color:
+				rgba: 1, 0, 0, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
 
 		Label:
 			id: icon
 			markup: True
-			text_size: self.width - 32, None
+			#text_size: self.width, None
+			#text_size: self.width - 32, None
+			#text_size: dp(5), dp(5)
+			#size: dp(5), dp(5)
+			#size: 5, 5
+			#width: 5
 			text: '[font=mdicons][size=18]\ue8ba[/size][/font]'
+			#text: 'YONG'
+			size: self.texture_size
+			#size: [ self.texture_size[0] + dp(10), self.texture_size[1] + dp(10) ]
+			#size_x: self.texture_size[0]
+			#size_y: self.texture_size[1]
+			size_hint: None, None
+
+			canvas.before:
+				Color:
+					rgba: 0, 0, 1, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
 		Label:
-			size_hint_x: .66
+			#size_hint_x: .66
 			id: labellayout
 			markup: True
-			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			#text: "world"
+			text: "tthere is a big rock candy mountain there is a big rock candy mountain there is a big rock candy mountain here is a big rock candy mountain "
+			#width: 5
+			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
 			font_size: '15sp'
-			text_size: self.width - 32, None
+			#text_size: self.size
+			#text_size: self.width, None
+			#size_hint_y: None
+			#size_hint: 1, None
+			#size: dp(5), dp(5)
+			#size: 5, 5
+			text_size: root.width - icon.width - (2*root.padding) - (2*root.spacing), None
+			size: self.texture_size
+			#size: [ self.texture_size[0] + dp(20), self.texture_size[1] + dp(20) ]
+			size_hint: None, None
+
+			canvas.before:
+				Color:
+					rgba: 1, 0, 0, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
 #		BoxLayout:
 #			id: content
