@@ -683,51 +683,11 @@ class BusKillSettingsContentPanel( kivy.uix.settings.ContentPanel ):
 class BusKillInterfaceWithNoMenu(BusKillSettingsContentPanel):
 	pass
 
-class BusKillSettingsPanel(kivy.uix.settings.SettingsPanel):
-	pass
-	
 class BusKillSettings(kivy.uix.settings.Settings):
 
 	def __init__(self, *args, **kargs):
   		super(BusKillSettings, self).__init__(*args, **kargs)
   		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
-
-	def create_json_panel(self, title, config, filename=None, data=None):
-
-		if filename is None and data is None:
-			raise Exception('You must specify either the filename or data')
-		if filename is not None:
-			with open(filename, 'r') as fd:
-				data = json.loads(fd.read())
-		else:
-			data = json.loads(data)
-		if type(data) != list:
-			raise ValueError('The first element must be a list')
-		panel = BusKillSettingsPanel(title=title, settings=self, config=config)
-
-		for setting in data:
-			# determine the type and the class to use
-			if 'type' not in setting:
-				raise ValueError('One setting are missing the "type" element')
-			ttype = setting['type']
-			cls = self._types.get(ttype)
-			if cls is None:
-				raise ValueError(
-					'No class registered to handle the <%s> type' %
-					setting['type'])
-
-			# create a instance of the class, without the type attribute
-			del setting['type']
-			str_settings = {}
-			for key, item in setting.items():
-				str_settings[str(key)] = item
-
-			instance = cls(panel=panel, **str_settings)
-
-			# instance created, add to the panel
-			panel.add_widget(instance)
-
-		return panel
 
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
