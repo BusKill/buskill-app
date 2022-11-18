@@ -371,6 +371,7 @@
 	actionbar: actionbar
 	actionview: actionview
 	settings_content: settings_content
+	#actionbar_title: actionbar_title
 
 	#on_enter: root.test_print()
 
@@ -399,7 +400,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18]   Settings[/size][/font]'
+					title: '[font=RobotoMedium][size=18]   {0}[/size][/font]'.format( root.actionbar_title or '' )
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'settings'

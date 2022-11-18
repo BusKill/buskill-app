@@ -672,15 +672,24 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 	def _choose_settings_screen(self, instance):
 		print( "he done clicked it" )
-		newScreen = BusKillSettingsComplexOptionsScreen(name='newScreen')
-		print( "newScreen:|" +str(newScreen)+ "|" )
+
+		screen_name = 'setting_' +self.key
+		setting_screen = BusKillSettingsComplexOptionsScreen(
+		 name = screen_name
+		)
+		setting_screen.set_actionbar_title( self.title )
+		print( "setting_screen:|" +str(setting_screen)+ "|" )
+
 		manager = get_screen_manager(self)
 		print( "manager:|" +str(manager)+ "|" )
 		print( "manager.current:|" +str(manager.current)+ "|" )
 		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
 		print( App.get_running_app() )
 		print( str(App.get_application_name(self)) )
-		print( str((self)) )
+
+		print( "self:|" +str(self)+ "|" )
+		print( "self.key:|" +str(self.key)+ "|" )
+		print( "self.value:|" +str(self.value)+ "|" )
 		print( "self.parent:|" +str(self.parent)+ "|" )
 		print( "self.parent.parent:|" +str(self.parent.parent)+ "|" )
 		print( "self.parent.parent.parent:|" +str(self.parent.parent.parent)+ "|" )
@@ -688,10 +697,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		print( "self.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent)+ "|" )
 		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
 		#print( str(self.parent()) )
-		manager.add_widget( newScreen )
+		manager.add_widget( setting_screen )
 		#manager.switch_to( newScreen )
 		manager.transition.direction = 'left'
-		manager.current = 'newScreen'
+		manager.current = screen_name
 
 	def _create_popup(self, instance):
 		print( "entered _create_popup()" )
@@ -774,10 +783,10 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 
 	actionview = ObjectProperty(None)
 	settings_content = ObjectProperty(None)
+	actionbar_title = ObjectProperty(None)
 
-	def __init__(self, **kwargs):
-
-		super(BusKillSettingsComplexOptionsScreen, self).__init__(**kwargs)
+	def set_actionbar_title(self, new_title):
+		self.actionbar_title = new_title
 
 	def on_pre_enter(self, *args):
 
