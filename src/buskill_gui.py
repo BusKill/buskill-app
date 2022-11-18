@@ -77,6 +77,19 @@ from kivy.properties import ObjectProperty, StringProperty, ListProperty, Boolea
 #                                   CLASSES                                    #
 ################################################################################
 
+# recursive function that checks a given object's parent up the tree until it
+# finds the screen manager, which it returns
+def get_screen_manager(obj):
+	print( "obj:|" +str(obj)+ "|" )
+
+	if hasattr(obj, 'manager') and obj.manager != None:
+		return obj.manager
+
+	if hasattr(obj, 'parent') and obj.parent != None:
+		return get_screen_manager(obj.parent)
+
+	return None
+
 class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
@@ -630,12 +643,20 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
 		self.value = self.panel.get_value(self.section, self.key)
 		print( "options_long:|" +str(self.options_long)+ "|" )
+		print( "self:|" +str(self)+ "|" )
+		print( "self.parent:|" +str(self.parent)+ "|" )
+		#print( "self.get_parent:|" +str(self.get_parent())+ "|" )
+		print( "self.get_root_window():|" +str(self.get_root_window())+ "|" )
+		#print( "self.context:|" +str(self.context)+ "|" )
+		print( "self.children:|" +str(self.children)+ "|" )
+		print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
+		print( "dir(self):|" +str(dir(self))+ "|\n" )
 
 	def on_panel(self, instance, value):
 		print( "entered on_panel()" )
 		if value is None:
 			return
-		self.fbind('on_release', self._create_popup)
+		self.fbind('on_release', self._choose_settings_screen)
 
 #		if self.icon is None:
 #			self.icon = '\ue256'
@@ -648,6 +669,25 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	def _set_option(self, instance):
 		self.value = instance.text
 		self.popup.dismiss()
+
+	def _choose_settings_screen(self, instance):
+		print( "he done clicked it" )
+		newScreen = BusKillSettingsComplexOptionsScreen(name='newScreen')
+		print( "newScreen:|" +str(newScreen)+ "|" )
+		manager = get_screen_manager(self)
+		print( "manager:|" +str(manager)+ "|" )
+		print( App.get_running_app() )
+		print( str(App.get_application_name(self)) )
+		print( str((self)) )
+		print( "self.parent:|" +str(self.parent)+ "|" )
+		print( "self.parent.parent:|" +str(self.parent.parent)+ "|" )
+		print( "self.parent.parent.parent:|" +str(self.parent.parent.parent)+ "|" )
+		print( "self.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent)+ "|" )
+		print( "self.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent)+ "|" )
+		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
+		#print( str(self.parent()) )
+		manager.add_widget( newScreen )
+		manager.switch_to( newScreen )
 
 	def _create_popup(self, instance):
 		print( "entered _create_popup()" )
@@ -726,6 +766,37 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		print( "interface:|" +str(self.interface)+ "|" )
 		#self.interface_cls = BusKillInterfaceWithNoMenu
 
+class BusKillSettingsComplexOptionsScreen(Screen):
+
+	actionview = ObjectProperty(None)
+	settings_content = ObjectProperty(None)
+
+	def __init__(self, **kwargs):
+
+		super(BusKillSettingsComplexOptionsScreen, self).__init__(**kwargs)
+
+	def on_pre_enter(self, *args):
+
+		msg = "DEBUG: User switched to 'BusKillSettingsComplexOptionsScreen' screen"
+		print( msg ); logger.debug( msg )
+
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
+		#self.bk = self.root_app.bk
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# close the navigation drawer on the main screen
+		#self.main_screen.nav_drawer.toggle_state()
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
 class BusKillSettingsScreen(Screen):
 
 	actionview = ObjectProperty(None)
@@ -733,12 +804,16 @@ class BusKillSettingsScreen(Screen):
 
 	def __init__(self, **kwargs):
 
+		print( "called BusKillSettingsScreen.__init__()" )
 		super(BusKillSettingsScreen, self).__init__(**kwargs)
+		print( "manager:|" +str(self.manager)+ "|" )
 
 	def on_pre_enter(self, *args):
 
 		msg = "DEBUG: User switched to 'Settings' screen"
 		print( msg ); logger.debug( msg )
+
+		print( "manager:|" +str(self.manager)+ "|" )
 
 		# set the bk object to the BusKillApp's bk object
 		# note we can't set this in __init__() because that's too early. the
@@ -768,11 +843,19 @@ class BusKillSettingsScreen(Screen):
 			print( "interface:|" +str(s.interface)+ "|" )
 			#self.root_app.build_settings(s)
 
+			s.root_app = self.root_app
+
 			print( "adding json panel" )
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
 			print( "interface:|" +str(s.interface)+ "|" )
 
 			print( "s:|" +str(s)+ "|" )
+			print( "s.parent:|" +str(s.parent)+ "|" )
+			print( "s.root_app:|" +str(s.root_app)+ "|" )
+			print( "s.root_app.manager:|" +str(s.root_app.manager)+ "|" )
+			print( "s.get_root_window():|" +str(s.get_root_window())+ "|" )
+			print( "s.get_parent_window():|" +str(s.get_parent_window())+ "|" )
+			print( "s.get_window_matrix():|" +str(s.get_window_matrix())+ "|" )
 			print( "s.children:|" +str(s.children)+ "|" )
 			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
 			print( "dir(s):|" +str(dir(s))+ "|\n" )
