@@ -1,14 +1,14 @@
 [
 	{
-		"icon": "\ue8ba",
+		"icon": "\uf0eb",
 		"type": "complex-options",
 		"title": "Trigger",
 		"desc": "Choose what happens when BusKill's cable is disconnected",
 		"section": "buskill",
 		"key": "trigger",
-		"options": ["lock-screen", "soft-shutdown"],
-		"options_long": ["BusKill will lock your screen", "BusKill will immediately shutdown your computer"],
-		"options_icons": ["\ue8b8","\ue8b8"]
+		"options": ["lock-screen", "soft-shutdown", "hard-shutdown"],
+		"options_long": ["BusKill will lock your screen", "BusKill will immediately initiate a soft shutdown sequence, May cause data loss!","BusKill will immediately shutdown your computer as fast as possible. May cause data corruption!"],
+		"options_icons": ["\ue1bf","\ue627","\ue629"]
 	},
 	{
 		"type": "complex-options",
