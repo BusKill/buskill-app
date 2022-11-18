@@ -6,7 +6,8 @@
 		"desc": "Choose what happens when BusKill's cable is disconnected",
 		"section": "buskill",
 		"key": "trigger",
-		"options": ["lock-screen", "soft-shutdown"]
+		"options": ["lock-screen", "soft-shutdown"],
+		"options_long": ["BusKill will lock your screen", "BusKill will immediately shutdown your computer"]
 	},
 	{
 		"type": "complex-options",
@@ -14,6 +15,7 @@
 		"desc": "Some description like choosing which driv eyou want",
 		"section": "buskill",
 		"key": "drive",
-		"options": ["v1","v2"]
+		"options": ["v1","v2"],
+		"options_long": ["v1 long description", "v2 long description" ]
 	}
 ]

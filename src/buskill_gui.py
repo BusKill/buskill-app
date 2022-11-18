@@ -607,6 +607,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	'''
 
 	options = ListProperty([])
+	options_long = ListProperty([])
 	'''List of all availables options. This must be a list of "string" items.
 	Otherwise, it will crash. :)
 
@@ -620,6 +621,15 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	:attr:`popup` is an :class:`~kivy.properties.ObjectProperty` and defaults
 	to None.
 	'''
+
+	def __init__(self, **kwargs):
+		print( "called BusKillSettingComplexOptions.__init__()" )
+		print( "dir(kwargs):|" +str(dir(kwargs))+ "|" )
+		print( "panel:|" +str(self.panel)+ "|" )
+		print( "options_long:|" +str(self.options_long)+ "|" )
+		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
+		self.value = self.panel.get_value(self.section, self.key)
+		print( "options_long:|" +str(self.options_long)+ "|" )
 
 	def on_panel(self, instance, value):
 		print( "entered on_panel()" )
@@ -655,9 +665,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		# add all the options
 		content.add_widget(Widget(size_hint_y=None, height=1))
 		uid = str(self.uid)
-		for option in self.options:
-			state = 'down' if option == self.value else 'normal'
-			btn = ToggleButton(text=option, state=state, group=uid)
+		#for option in self.options:
+		for option_long in self.options_long:
+			state = 'down' if option_long == self.value else 'normal'
+			btn = ToggleButton(text=option_long, state=state, group=uid)
 			btn.bind(on_release=self._set_option)
 			content.add_widget(btn)
 
