@@ -354,9 +354,67 @@
 					pos: self.pos
 					size: self.size
 
-#		BoxLayout:
-#			id: content
-#			size_hint_x: .33
+<BusKillOptionItem>:
+	size_hint: .25, None
+	height: labellayout.texture_size[1] + dp(10)
+#	content: content
+	padding: 6
+	spacing: 20
+
+	icon_label: icon_label
+
+	canvas:
+		Color:
+			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+			rgba: 0, 1, 0, 1
+		Rectangle:
+			pos: self.x, self.y + 1
+			size: self.size
+		Color:
+			rgb: .2, .2, .2
+		Rectangle:
+			pos: self.x, self.y - 2
+			size: self.width, 1
+
+	StackLayout:
+		pos: root.pos
+		orientation: 'lr-tb'
+		#spacing: 30
+		padding: root.padding
+		spacing: root.spacing
+
+		Label:
+			id: icon_label
+			markup: True
+			#text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
+			text: '[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]'
+			size: self.texture_size
+			size_hint: None, None
+			height: labellayout.height
+
+			canvas.before:
+				Color:
+					rgba: 0, 0, 1, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+		Label:
+			id: labellayout
+			markup: True
+			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			text: u'Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]'
+			font_size: '15sp'
+			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
+			size: self.texture_size
+			size_hint: None, None
+
+			canvas.before:
+				Color:
+					rgba: 1, 0, 0, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
 #<-BusKillSettingComplexOptions>:
 #
@@ -370,8 +428,7 @@
 
 	actionbar: actionbar
 	actionview: actionview
-	settings_content: settings_content
-	#actionbar_title: actionbar_title
+	content: content
 
 	#on_enter: root.test_print()
 
@@ -408,8 +465,15 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		BoxLayout:
-			id: settings_content
+		ScrollView:
+			do_scroll_x: False
+    		container: content
+
+			GridLayout:
+				id: content
+				cols: 1
+				size_hint_y: None
+				height: self.minimum_height
 
 <BusKillSettingsScreen>:
 

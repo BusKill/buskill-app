@@ -480,6 +480,14 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
+class BusKillOptionItem(FloatLayout):
+    #name = StringProperty(None, allownone=True)
+    #desc = StringProperty(None, allownone=True)
+    #current_value = StringProperty(None, allownone=True)
+
+	def __init__(self, **kwargs):
+		super(BusKillOptionItem, self).__init__(**kwargs)
+
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
     '''Base class for individual settings (within a panel). This class cannot
@@ -679,6 +687,20 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		)
 		setting_screen.set_actionbar_title( self.title )
 		print( "setting_screen:|" +str(setting_screen)+ "|" )
+
+#		grid_layout = GridLayout( cols=1 )	
+#		float_layout = FloatLayout()	
+#		grid_layout.add_widget( float_layout )
+#
+#		label = Label( text="Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]" )
+#		label.markup = True
+#		float_layout.add_widget( label )
+#		float_layout.height = label.texture_size[1] + dp(10)
+#
+#		setting_screen.content.add_widget( grid_layout )
+
+		option_item = BusKillOptionItem()
+		setting_screen.content.add_widget( option_item )
 
 		manager = get_screen_manager(self)
 		print( "manager:|" +str(manager)+ "|" )
