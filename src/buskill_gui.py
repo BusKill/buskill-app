@@ -599,7 +599,7 @@ class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
 # TODO: actually define a complex option here
 class BusKillSettingComplexOptions(BusKillSettingItem):
-    icon = ListProperty([])
+    icon = ObjectProperty(None)
     '''Implementation of an option list on top of a :class:`SettingItem`.
     It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
     clicked, will open a :class:`~kivy.uix.popup.Popup` with a

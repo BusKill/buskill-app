@@ -1,5 +1,6 @@
 [
 	{
+		"icon": "\ue8ba",
 		"type": "complex-options",
 		"title": "Trigger",
 		"desc": "Choose what happens when BusKill's cable is disconnected",

@@ -302,7 +302,8 @@
 			#size: dp(5), dp(5)
 			#size: 5, 5
 			#width: 5
-			text: '[font=mdicons][size=18]\ue8ba[/size][/font]'
+			text: '[font=mdicons][size=18]{0}[/size][/font]'.format(root.icon or '')
+			#text: '[size=18]{0}[/size]'.format(root.icon or '')
 			#text: 'YONG'
 			size: self.texture_size
 			#size: [ self.texture_size[0] + dp(10), self.texture_size[1] + dp(10) ]
