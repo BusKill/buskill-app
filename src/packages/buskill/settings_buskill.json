@@ -6,5 +6,13 @@
 		"section": "buskill",
 		"key": "trigger",
 		"options": ["lock-screen", "soft-shutdown"]
+	},
+	{
+		"type": "complex-options",
+		"title": "Option2",
+		"desc": "Some description like choosing which driv eyou want",
+		"section": "buskill",
+		"key": "drive",
+		"options": ["v1","v2"]
 	}
 ]

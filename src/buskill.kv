@@ -261,15 +261,15 @@
 
 <-BusKillSettingItem>:
 	size_hint: .25, None
-#	height: labellayout.texture_size[1] + dp(10)
+	height: labellayout.texture_size[1] + dp(10)
 #	content: content
 	padding: 6
-	spacing: 10
+	spacing: 20
 
 	canvas:
 		Color:
-			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: 0, 1, 0, 1
+			rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+			#rgba: 0, 1, 0, 1
 		Rectangle:
 			pos: self.x, self.y + 1
 			size: self.size
@@ -286,12 +286,12 @@
 		padding: root.padding
 		spacing: root.spacing
 
-		canvas:
-			Color:
-				rgba: 1, 0, 0, 1
-			Rectangle:
-				pos: self.pos
-				size: self.size
+#		canvas:
+#			Color:
+#				rgba: 1, 0, 0, 1
+#			Rectangle:
+#				pos: self.pos
+#				size: self.size
 
 		Label:
 			id: icon
@@ -322,9 +322,9 @@
 			id: labellayout
 			markup: True
 			#text: "world"
-			text: "tthere is a big rock candy mountain there is a big rock candy mountain there is a big rock candy mountain here is a big rock candy mountain "
+			#text: "tthere is a big rock candy mountain there is a big rock candy mountain there is a big rock candy mountain here is a big rock candy mountain "
 			#width: 5
-			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
 			font_size: '15sp'
 			#text_size: self.size
 			#text_size: self.width, None
