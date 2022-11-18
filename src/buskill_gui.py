@@ -599,84 +599,93 @@ class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
 # TODO: actually define a complex option here
 class BusKillSettingComplexOptions(BusKillSettingItem):
-    icon = ObjectProperty(None)
-    '''Implementation of an option list on top of a :class:`SettingItem`.
-    It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
-    clicked, will open a :class:`~kivy.uix.popup.Popup` with a
-    list of options from which the user can select.
-    '''
+	icon = ObjectProperty(None)
+	'''Implementation of an option list on top of a :class:`SettingItem`.
+	It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
+	clicked, will open a :class:`~kivy.uix.popup.Popup` with a
+	list of options from which the user can select.
+	'''
 
-    options = ListProperty([])
-    '''List of all availables options. This must be a list of "string" items.
-    Otherwise, it will crash. :)
+	options = ListProperty([])
+	'''List of all availables options. This must be a list of "string" items.
+	Otherwise, it will crash. :)
 
-    :attr:`options` is a :class:`~kivy.properties.ListProperty` and defaults
-    to [].
-    '''
+	:attr:`options` is a :class:`~kivy.properties.ListProperty` and defaults
+	to [].
+	'''
 
-    popup = ObjectProperty(None, allownone=True)
-    '''(internal) Used to store the current popup when it is shown.
+	popup = ObjectProperty(None, allownone=True)
+	'''(internal) Used to store the current popup when it is shown.
 
-    :attr:`popup` is an :class:`~kivy.properties.ObjectProperty` and defaults
-    to None.
-    '''
+	:attr:`popup` is an :class:`~kivy.properties.ObjectProperty` and defaults
+	to None.
+	'''
 
-    def on_panel(self, instance, value):
-        if value is None:
-            return
-        self.fbind('on_release', self._create_popup)
+	def on_panel(self, instance, value):
+		print( "entered on_panel()" )
+		if value is None:
+			return
+		self.fbind('on_release', self._create_popup)
 
-    def _set_option(self, instance):
-        self.value = instance.text
-        self.popup.dismiss()
+#		if self.icon is None:
+#			self.icon = '\ue256'
+#			print( "self:|" +str(self)+ "|" )
+#			print( "self.parent:|" +str(self.parent)+ "|" )
+#			print( "self.children:|" +str(self.children)+ "|" )
+#			print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
+#			print( "dir(self):|" +str(dir(self))+ "|\n" )
 
-    def _create_popup(self, instance):
-        print( "entered _create_popup()" )
-        print( "self.popup:|" +str(self.popup)+ "|" )
-        if self.popup:
-           self.popup.dismiss()
-        # create the popup
-        content = BoxLayout(orientation='vertical', spacing='5dp')
-        popup_width = min(0.95 * Window.width, dp(500))
-        self.popup = popup = Popup(
-            content=content, title=self.title, size_hint=(None, None),
-            size=(popup_width, '400dp'))
-        popup.height = len(self.options) * dp(55) + dp(150)
+	def _set_option(self, instance):
+		self.value = instance.text
+		self.popup.dismiss()
 
-        # add all the options
-        content.add_widget(Widget(size_hint_y=None, height=1))
-        uid = str(self.uid)
-        for option in self.options:
-            state = 'down' if option == self.value else 'normal'
-            btn = ToggleButton(text=option, state=state, group=uid)
-            btn.bind(on_release=self._set_option)
-            content.add_widget(btn)
+	def _create_popup(self, instance):
+		print( "entered _create_popup()" )
+		print( "self.popup:|" +str(self.popup)+ "|" )
+		if self.popup:
+		   self.popup.dismiss()
+		# create the popup
+		content = BoxLayout(orientation='vertical', spacing='5dp')
+		popup_width = min(0.95 * Window.width, dp(500))
+		self.popup = popup = Popup(
+			content=content, title=self.title, size_hint=(None, None),
+			size=(popup_width, '400dp'))
+		popup.height = len(self.options) * dp(55) + dp(150)
 
-        # finally, add a cancel button to return on the previous panel
-        content.add_widget(SettingSpacer())
-        btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
-        btn.bind(on_release=popup.dismiss)
-        content.add_widget(btn)
+		# add all the options
+		content.add_widget(Widget(size_hint_y=None, height=1))
+		uid = str(self.uid)
+		for option in self.options:
+			state = 'down' if option == self.value else 'normal'
+			btn = ToggleButton(text=option, state=state, group=uid)
+			btn.bind(on_release=self._set_option)
+			content.add_widget(btn)
 
-        # and open the popup !
-        print( "popup:|" +str(popup)+ "|" )
-        print( "popup.parent:|" +str(popup.parent)+ "|" )
-        print( "popup.get_parent_window():|" +str(popup.get_parent_window())+ "|" )
-        print( "popup.get_root_window():|" +str(popup.get_root_window())+ "|" )
-        print( "popup._context:|" +str(popup._context)+ "|" )
-        print( "popup.__dict__.items():|" +str(popup.__dict__.items())+ "|" )
-        print( "popup._trigger_layout:|" +str(popup._trigger_layout)+ "|" )
-        print( "popup.canvas:|" +str(popup.canvas)+ "|" )
-        print( "popup._proxy_ref:|" +str(popup._proxy_ref)+ "|" )
-        print( "dir(popup):|" +str(dir(popup))+ "|\n" )
+		# finally, add a cancel button to return on the previous panel
+		content.add_widget(SettingSpacer())
+		btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
+		btn.bind(on_release=popup.dismiss)
+		content.add_widget(btn)
 
-        print( "popup.canvas:|" +str(popup.canvas)+ "|" )
-        print( "popup.canvas.children:|" +str(popup.canvas.children)+ "|" )
-        print( "popup.canvas.before:|" +str(popup.canvas.before)+ "|" )
-        print( "popup.canvas.after:|" +str(popup.canvas.after)+ "|" )
-        print( "dir(popup.canvas):|" +str(dir(popup.canvas))+ "|\n" )
+		# and open the popup !
+		print( "popup:|" +str(popup)+ "|" )
+		print( "popup.parent:|" +str(popup.parent)+ "|" )
+		print( "popup.get_parent_window():|" +str(popup.get_parent_window())+ "|" )
+		print( "popup.get_root_window():|" +str(popup.get_root_window())+ "|" )
+		print( "popup._context:|" +str(popup._context)+ "|" )
+		print( "popup.__dict__.items():|" +str(popup.__dict__.items())+ "|" )
+		print( "popup._trigger_layout:|" +str(popup._trigger_layout)+ "|" )
+		print( "popup.canvas:|" +str(popup.canvas)+ "|" )
+		print( "popup._proxy_ref:|" +str(popup._proxy_ref)+ "|" )
+		print( "dir(popup):|" +str(dir(popup))+ "|\n" )
 
-        popup.open()
+		print( "popup.canvas:|" +str(popup.canvas)+ "|" )
+		print( "popup.canvas.children:|" +str(popup.canvas.children)+ "|" )
+		print( "popup.canvas.before:|" +str(popup.canvas.before)+ "|" )
+		print( "popup.canvas.after:|" +str(popup.canvas.after)+ "|" )
+		print( "dir(popup.canvas):|" +str(dir(popup.canvas))+ "|\n" )
+
+		popup.open()
 
 class BusKillSettingsContentPanel( kivy.uix.settings.ContentPanel ):
 	pass

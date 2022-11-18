@@ -266,6 +266,8 @@
 	padding: 6
 	spacing: 20
 
+	icon_label: icon_label
+
 	canvas:
 		Color:
 			rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
@@ -294,7 +296,7 @@
 #				size: self.size
 
 		Label:
-			id: icon
+			id: icon_label
 			markup: True
 			#text_size: self.width, None
 			#text_size: self.width - 32, None
@@ -302,7 +304,13 @@
 			#size: dp(5), dp(5)
 			#size: 5, 5
 			#width: 5
-			text: '[font=mdicons][size=18]{0}[/size][/font]'.format(root.icon or '')
+			#text: '[font=mdicons][size=18]{0}[/size][/font]'.format(root.icon or '')
+			#text: '{0}'.format('[font=mdicons][size=18]' +root.icon+ '[/size][/font]' or '[font=mdicons][size=18]\ue256[/size][/font]')
+
+			# mdicons doesn't have a "nbsp" icon, so we hardcode the icon to
+			# something unimportant and then set the alpha to 00 if no icon is
+			# defined for this SettingItem
+			text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
 			#text: '[size=18]{0}[/size]'.format(root.icon or '')
 			#text: 'YONG'
 			size: self.texture_size
@@ -334,7 +342,7 @@
 			#size_hint: 1, None
 			#size: dp(5), dp(5)
 			#size: 5, 5
-			text_size: root.width - icon.width - (2*root.padding) - (2*root.spacing), None
+			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			#size: [ self.texture_size[0] + dp(20), self.texture_size[1] + dp(20) ]
 			size_hint: None, None
