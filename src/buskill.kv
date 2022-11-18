@@ -366,6 +366,7 @@
 	spacing: 20
 
 	icon_label: icon_label
+	radio_button_label: radio_button_label
 
 	canvas:
 		Color:
@@ -386,6 +387,23 @@
 		#spacing: 30
 		padding: root.padding
 		spacing: root.spacing
+
+		Label:
+			id: radio_button_label
+			markup: True
+			#text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
+			text: '[font=mdicons][size=18]\ue836[/size][/font]'
+			#text: '[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]'
+			size: self.texture_size
+			size_hint: None, None
+			height: labellayout.height
+
+			canvas.before:
+				Color:
+					rgba: 1, 0, 0, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
 		Label:
 			id: icon_label
@@ -409,7 +427,7 @@
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
 			#text: u'Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]'
 			font_size: '15sp'
-			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
+			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			size_hint: None, None
 
