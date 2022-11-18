@@ -7,7 +7,8 @@
 		"section": "buskill",
 		"key": "trigger",
 		"options": ["lock-screen", "soft-shutdown"],
-		"options_long": ["BusKill will lock your screen", "BusKill will immediately shutdown your computer"]
+		"options_long": ["BusKill will lock your screen", "BusKill will immediately shutdown your computer"],
+		"options_icons": ["\ue8b8","\ue8b8"]
 	},
 	{
 		"type": "complex-options",
@@ -16,6 +17,7 @@
 		"section": "buskill",
 		"key": "drive",
 		"options": ["v1","v2"],
-		"options_long": ["v1 long description", "v2 long description" ]
+		"options_long": ["v1 long description", "v2 long description" ],
+		"options_icons": ["\ue8b8","\ue8b8"]
 	}
 ]

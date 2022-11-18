@@ -485,7 +485,10 @@ class BusKillOptionItem(FloatLayout):
     #desc = StringProperty(None, allownone=True)
     #current_value = StringProperty(None, allownone=True)
 
-	def __init__(self, **kwargs):
+	def __init__(self, title, desc, icon, **kwargs):
+		self.title = title
+		self.desc = desc
+		self.icon = icon
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
@@ -629,6 +632,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 	options = ListProperty([])
 	options_long = ListProperty([])
+	options_icons = ListProperty([])
 	'''List of all availables options. This must be a list of "string" items.
 	Otherwise, it will crash. :)
 
@@ -699,8 +703,12 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 #
 #		setting_screen.content.add_widget( grid_layout )
 
-		option_item = BusKillOptionItem()
-		setting_screen.content.add_widget( option_item )
+		for title, desc, icon in zip(self.options, self.options_long, self.options_icons):
+			print( "option_title:|" +str(title)+ "|" )
+			print( "option_desc:|" +str(desc)+ "|" )
+			print( "option_icon:|" +str(icon)+ "|" )
+			option_item = BusKillOptionItem( title, desc, icon )
+			setting_screen.content.add_widget( option_item )
 
 		manager = get_screen_manager(self)
 		print( "manager:|" +str(manager)+ "|" )
