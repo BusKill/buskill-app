@@ -261,7 +261,7 @@
 
 <-BusKillSettingItem>:
 	size_hint: .25, None
-	height: labellayout.texture_size[1] + dp(10)
+	height: labellayout.height + dp(10)
 #	content: content
 	padding: 6
 	spacing: 20
@@ -346,6 +346,7 @@
 			size: self.texture_size
 			#size: [ self.texture_size[0] + dp(20), self.texture_size[1] + dp(20) ]
 			size_hint: None, None
+			height: max(self.height, dp(80))
 
 			canvas.before:
 				Color:
@@ -356,7 +357,7 @@
 
 <BusKillOptionItem>:
 	size_hint: .25, None
-	height: labellayout.texture_size[1] + dp(10)
+	height: labellayout.height + dp(10)
 #	content: content
 	padding: 6
 	spacing: 20
@@ -408,6 +409,7 @@
 			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			size_hint: None, None
+			height: max(self.height, dp(80))
 
 			canvas.before:
 				Color:
