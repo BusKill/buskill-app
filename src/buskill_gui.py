@@ -676,6 +676,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		print( "newScreen:|" +str(newScreen)+ "|" )
 		manager = get_screen_manager(self)
 		print( "manager:|" +str(manager)+ "|" )
+		print( "manager.current:|" +str(manager.current)+ "|" )
+		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
 		print( App.get_running_app() )
 		print( str(App.get_application_name(self)) )
 		print( str((self)) )
@@ -687,7 +689,9 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
 		#print( str(self.parent()) )
 		manager.add_widget( newScreen )
-		manager.switch_to( newScreen )
+		#manager.switch_to( newScreen )
+		manager.transition.direction = 'left'
+		manager.current = 'newScreen'
 
 	def _create_popup(self, instance):
 		print( "entered _create_popup()" )
@@ -1133,6 +1137,7 @@ class BusKillApp(App):
 
 			# loop through each screen created above
 			for screen in screens:
+				print( "adding screen:|" +str(screen)+ "|" )
 
 				# assign an instance field named 'root_app' to each of our Screens
 				# that references <this> BusKillApp object so that we can access
