@@ -685,10 +685,26 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	def _choose_settings_screen(self, instance):
 		print( "he done clicked it" )
 
+		manager = get_screen_manager(self)
+		print( "manager:|" +str(manager)+ "|" )
+		print( "manager.current:|" +str(manager.current)+ "|" )
+		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
+		print( App.get_running_app() )
+		print( str(App.get_application_name(self)) )
+
+		# create a new screen just for choosing the value of this setting, and name
+		# this new screen "setting_<key>" 
 		screen_name = 'setting_' +self.key
 		setting_screen = BusKillSettingsComplexOptionsScreen(
 		 name = screen_name
 		)
+
+		# set the color of the actionbar in this screen equal to whatever our
+		# setting's screen actionbar is set to (eg blue or red)
+		setting_screen.actionview.background_color = manager.current_screen.actionview.background_color
+
+		# make the text in the actionbar match the 'title' for the setting as it's
+		# defined in the settings json file
 		setting_screen.set_actionbar_title( self.title )
 		print( "setting_screen:|" +str(setting_screen)+ "|" )
 
@@ -710,12 +726,20 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			option_item = BusKillOptionItem( title, desc, icon )
 			setting_screen.content.add_widget( option_item )
 
-		manager = get_screen_manager(self)
-		print( "manager:|" +str(manager)+ "|" )
-		print( "manager.current:|" +str(manager.current)+ "|" )
-		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
-		print( App.get_running_app() )
-		print( str(App.get_application_name(self)) )
+		main_screen = manager.get_screen('main')
+		print( "main_screen:|" +str(main_screen)+ "|" )
+		print( "main_screen.properties:|" +str(main_screen.properties)+ "|" )
+		print( "main_screen.ids:|" +str(main_screen.ids)+ "|" )
+		print( "main_screen.actionbar:|" +str(main_screen.actionbar)+ "|" )
+		print( "main_screen.actionview:|" +str(main_screen.actionview)+ "|" )
+		print( "main_screen.actionview.background_color:|" +str(main_screen.actionview.background_color)+ "|" )
+		print( "dir(main_screen):|" +str(dir(main_screen))+ "|" )
+
+#			# set the actionview of every actionbar of every screen to red
+#			for screen in self.manager.screens:
+#				for child in screen.actionbar.children:
+#					if type(child) == ActionView:
+#						child.background_color = self.color_red
 
 		print( "self:|" +str(self)+ "|" )
 		print( "self.key:|" +str(self.key)+ "|" )

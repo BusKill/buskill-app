@@ -346,6 +346,9 @@
 			size: self.texture_size
 			#size: [ self.texture_size[0] + dp(20), self.texture_size[1] + dp(20) ]
 			size_hint: None, None
+
+			# set the minimum height of this item so that fat fingers don't have
+			# issues on small touchscreen displays (for better UX)
 			height: max(self.height, dp(80))
 
 			canvas.before:
@@ -409,6 +412,9 @@
 			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			size_hint: None, None
+
+			# set the minimum height of this item so that fat fingers don't have
+			# issues on small touchscreen displays (for better UX)
 			height: max(self.height, dp(80))
 
 			canvas.before:
