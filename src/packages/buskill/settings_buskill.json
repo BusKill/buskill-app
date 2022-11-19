@@ -8,7 +8,7 @@
 		"key": "trigger",
 		"options": ["lock-screen", "soft-shutdown", "hard-shutdown"],
 		"options_long": ["BusKill will lock your screen", "BusKill will immediately initiate a soft shutdown sequence, May cause data loss!","BusKill will immediately shutdown your computer as fast as possible. May cause data corruption!"],
-		"options_icons": ["\ue1bf","\ue627","\ue629"]
+		"options_icons": ["\ue1bf","\ue62a","\ue201"]
 	},
 	{
 		"type": "complex-options",
