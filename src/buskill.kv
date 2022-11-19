@@ -392,8 +392,8 @@
 			id: radio_button_label
 			markup: True
 			#text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
-			text: '[font=mdicons][size=18]\ue836[/size][/font]'
-			#text: '[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]'
+			#text: '[font=mdicons][size=18]\ue836[/size][/font]'
+			text: ('[font=mdicons][size=18]\ue837[/size][/font]' if root.value == root.title else '[font=mdicons][size=18]\ue836[/size][/font]')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height

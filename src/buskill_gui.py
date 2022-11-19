@@ -484,11 +484,13 @@ class BusKillOptionItem(FloatLayout):
     #name = StringProperty(None, allownone=True)
     #desc = StringProperty(None, allownone=True)
     #current_value = StringProperty(None, allownone=True)
+	value = StringProperty(None, allownone=True)
 
-	def __init__(self, title, desc, icon, **kwargs):
+	def __init__(self, title, desc, icon, current_value, **kwargs):
 		self.title = title
 		self.desc = desc
 		self.icon = icon
+		self.value = current_value
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
@@ -723,7 +725,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			print( "option_title:|" +str(title)+ "|" )
 			print( "option_desc:|" +str(desc)+ "|" )
 			print( "option_icon:|" +str(icon)+ "|" )
-			option_item = BusKillOptionItem( title, desc, icon )
+			option_item = BusKillOptionItem( title, desc, icon, self.value )
 			setting_screen.content.add_widget( option_item )
 
 		main_screen = manager.get_screen('main')
