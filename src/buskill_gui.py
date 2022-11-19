@@ -481,10 +481,6 @@ class CriticalError(BoxLayout):
 ###################
 
 class BusKillOptionItem(FloatLayout):
-    #name = StringProperty(None, allownone=True)
-    #desc = StringProperty(None, allownone=True)
-    #current_value = StringProperty(None, allownone=True)
-	value = StringProperty(None, allownone=True)
 
 	def __init__(self, title, desc, icon, current_value, **kwargs):
 		self.title = title

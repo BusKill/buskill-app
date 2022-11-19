@@ -334,7 +334,8 @@
 			#text: "world"
 			#text: "tthere is a big rock candy mountain there is a big rock candy mountain there is a big rock candy mountain here is a big rock candy mountain "
 			#width: 5
-			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.value or '')
 			font_size: '15sp'
 			#text_size: self.size
 			#text_size: self.width, None
