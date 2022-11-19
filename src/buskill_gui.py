@@ -489,6 +489,38 @@ class BusKillOptionItem(FloatLayout):
 		self.value = current_value
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
+	def on_touch_up( self, touch ):
+
+		# skip this touch event if it wasn't *this* widget that was touched
+		# * https://kivy.org/doc/stable/guide/inputs.html#touch-event-basics
+		if not self.collide_point(*touch.pos):
+			return
+
+		print( "called BusKillOptionItem.on_touch_up()" )
+		print( "self:|" +str(self)+ "|" )
+		print( "self.value:|" +str(self.value)+ "|" )
+		print( "self.title:|" +str(self.title)+ "|" )
+		print( "self.desc:|" +str(self.desc)+ "|" )
+		print( "dir(self):|" +str(dir(self))+ "|\n" )
+
+		print( "self.parent:|" +str(self.parent)+ "|" )
+		print( "self.parent.children:|" +str(self.parent.children)+ "|" )
+
+		self.value = self.title
+		parent = self.parent
+		for option in self.parent.children:
+			#print( "option:|" +str(option)+ "|" )
+			#print( "option.title:|" +str(option.title)+ "|" )
+			#print( "removing " +str(option.title)+ " from " +str(self.parent) )
+			#parent.remove_widget(option)
+			#parent.add_widget(option)
+			if option.title == self.value:
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
+			else:
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
+
+		#print( "touch:|" +str(touch)+ "|" )
+
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
     '''Base class for individual settings (within a panel). This class cannot
