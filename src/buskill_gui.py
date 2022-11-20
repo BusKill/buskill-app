@@ -475,18 +475,28 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
-
 ###################
 # SETTINGS SCREEN #
 ###################
 
 class BusKillOptionItem(FloatLayout):
 
-	def __init__(self, title, desc, icon, current_value, **kwargs):
+	def __init__(self, title, desc, confirmation, icon, current_value, manager, **kwargs):
 		self.title = title
 		self.desc = desc
+		self.confirmation = confirmation
 		self.icon = icon
 		self.value = current_value
+		self.manager = manager
+		print( "self.manager:|" +str(self.manager)+ "|" )
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
 	def on_touch_up( self, touch ):
@@ -501,10 +511,44 @@ class BusKillOptionItem(FloatLayout):
 		print( "self.value:|" +str(self.value)+ "|" )
 		print( "self.title:|" +str(self.title)+ "|" )
 		print( "self.desc:|" +str(self.desc)+ "|" )
+		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
 		print( "dir(self):|" +str(dir(self))+ "|\n" )
 
 		print( "self.parent:|" +str(self.parent)+ "|" )
 		print( "self.parent.children:|" +str(self.parent.children)+ "|" )
+
+		# TODO: if there's a confirmation, don't continue until they confirm
+		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
+
+		# skip this touch event if they touched on an option that's already the
+		# enabled option
+		if self.value == self.title:
+			return
+
+		# does this option have a warning to prompt the user to confirm their
+		# selection before proceeding?
+		if self.confirmation == "":
+			# this option is safe; no confirmation is necessary
+			self.enable_option()
+
+		else:
+			# this option can be dangerous; confirm with user before continuing
+
+			self.dialog = DialogConfirmation(
+			 #title = '[font=mdicons][size=31]\ue002\ue000\ue645\ue160\ue99a\ue82a\uf22f[/size][/font] Debug Log',
+			 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
+			 body = self.confirmation,
+			 button='Continue',
+			 continue_function=self.enable_option
+			)
+			self.dialog.b_cancel.text = "Cancel"
+			#self.dialog.l_body.bind( on_ref_press=self.ref_press )
+			self.dialog.open()
+		
+	def enable_option( self ):
+
+		if self.dialog != None:
+			self.dialog.dismiss()
 
 		self.value = self.title
 		parent = self.parent
@@ -663,6 +707,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	options = ListProperty([])
 	options_long = ListProperty([])
 	options_icons = ListProperty([])
+	confirmation = ListProperty([])
 	'''List of all availables options. This must be a list of "string" items.
 	Otherwise, it will crash. :)
 
@@ -685,6 +730,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
 		self.value = self.panel.get_value(self.section, self.key)
 		print( "options_long:|" +str(self.options_long)+ "|" )
+		print( "confirmation:|" +str(self.confirmation)+ "|" )
 		print( "self:|" +str(self)+ "|" )
 		print( "self.parent:|" +str(self.parent)+ "|" )
 		#print( "self.get_parent:|" +str(self.get_parent())+ "|" )
@@ -749,11 +795,12 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 #
 #		setting_screen.content.add_widget( grid_layout )
 
-		for title, desc, icon in zip(self.options, self.options_long, self.options_icons):
+		for title, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
 			print( "option_title:|" +str(title)+ "|" )
 			print( "option_desc:|" +str(desc)+ "|" )
+			print( "option_confirmation:|" +str(confirmation)+ "|" )
 			print( "option_icon:|" +str(icon)+ "|" )
-			option_item = BusKillOptionItem( title, desc, icon, self.value )
+			option_item = BusKillOptionItem( title, desc, confirmation, icon, self.value, manager )
 			setting_screen.content.add_widget( option_item )
 
 		main_screen = manager.get_screen('main')

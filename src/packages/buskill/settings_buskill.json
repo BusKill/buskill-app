@@ -8,6 +8,7 @@
 		"key": "trigger",
 		"options": ["lock-screen", "soft-shutdown", "hard-shutdown"],
 		"options_long": ["BusKill will lock your screen", "BusKill will immediately initiate a soft shutdown sequence, May cause data loss!","BusKill will immediately shutdown your computer as fast as possible. May cause data corruption!"],
+		"confirmation": ["", "This selection may cause data loss! Are you sure you want to continue?\n\nThe 'soft-shutdown' trigger will immediately cause your computer to shutdown. This could cause you to lose work if, for example, you're writing an email or typing a text document.\n\nAre you sure you want to select the 'soft-shutdown' trigger, despite the risk of data loss?", "This selection may cause data corruption!\n\nThe 'hard-shutdown' trigger will immediately shutdown your computer as-fast-as-possible, byapssing your operating system's normal shutdown procedure. Doing this may cause permanent corruption of files on your computer. Depending on your filesystem and the files that become corrupt, this could cause signifcant harm to your system, including the inability to boot your computer and therefore the loss of all your data.\n\nAre you sure you want to select the 'hard-shutdown' trigger, despite the risk of data corruption?"],
 		"options_icons": ["\ue1bf","\ue62a","\ue201"]
 	},
 	{
@@ -18,6 +19,7 @@
 		"key": "drive",
 		"options": ["v1","v2"],
 		"options_long": ["v1 long description", "v2 long description" ],
-		"options_icons": ["\ue8b8","\ue8b8"]
+		"options_icons": ["\ue8b8","\ue8b8"],
+		"confirmation": ["", "", ""]
 	}
 ]
