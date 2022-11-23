@@ -4,17 +4,21 @@
 
 This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](https://www.buskill.in). It works in Linux, Windows, and MacOS.
 
+# What is BusKill?
+
+| <a href="https://www.buskill.in/#demo"><img src="docs/images/buskill_explainer_video_20211210.gif?raw=true" alt="What is BusKill? (Explainer Video)"></a> |
+|:--:| 
+| *Watch the <a href="https://www.buskill.in/#demo">BusKill Explainer Video</a> for more info <a href="https://www.youtube.com/v/qPwyoD_cQR4">youtube.com/v/qPwyoD_cQR4</a>* |
+
 BusKill is a laptop kill cord that can trigger your computer to lock or shutdown when it's physically separated from you.
 
-<p align="center">
-  <img src="docs/images/buskill_demo.gif?raw=true" alt="BusKill Demo Video"/>
-</p>
+| <p align="center"><a href="https://www.buskill.in/demo-2"><img src="docs/images/buskill_demo.gif?raw=true" alt="BusKill Demo Video" /></a></p> |
+|:--:| 
+| *Watch the <a href="https://www.buskill.in/demo-2">BusKill Demo Video</a> to see the cable being used on Linux, Windows, and MacOS <a href="https://www.buskill.in/demo-2">buskill.in/demo-2</a>* |
 
 For more information on how to [buy](https://www.buskill.in/buy) or build your own BusKill cable, see the [BusKill Website](https://www.buskill.in):
 
  * [https://www.buskill.in](https://www.buskill.in)
-
-![](docs/images/buskill_featuredImage.jpg)
 
 # Documentation
 
