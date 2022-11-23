@@ -20,8 +20,6 @@ For more information on how to [buy](https://www.buskill.in/buy) or build your o
 
  * [https://www.buskill.in](https://www.buskill.in)
 
-![](docs/images/buskill_featuredImage.jpg)
-
 # Documentation
 
 To read our comprehensive documentation, see:
