@@ -39,6 +39,7 @@ Similar Projects
 The reader may be interested to investigate the following similar projects:
 
  * `USB Kill <https://github.com/hephaest0s/usbkill>`_
+ * `USB Death <https://github.com/trpt/usbdeath>`_
  * `Silk Guardian <https://github.com/NateBrune/silk-guardian>`_
  * `Day Tripper <https://github.com/maltfield/daytripper>`_
  * `USBGuard <https://usbguard.github.io/>`_
