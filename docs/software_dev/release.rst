@@ -250,6 +250,14 @@ After verifying the reproducibility of the Linux build, download the Windows and
 
 Once you've verified the integrity of all three compressed archives, move them to your dragon-protected basement-safe laptop, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
 
+After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.
+
+.. note::
+
+	We also make a redundant detached signature of the Linux tarball, specifically because its needed downstream for the debian package mantainer's authenticity checks.
+
+	See also https://github.com/BusKill/buskill-app/issues/31#issuecomment-1328142741
+
 ::
 
 	user@vault:~$ ls
@@ -264,10 +272,14 @@ Once you've verified the integrity of all three compressed archives, move them t
 	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
 	user@vault:~$
 
+	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b buskill-lin*
+	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
+	user@vault:~$
+
 	user@vault:~$ ls
-	buskill-lin-v3.2.0-x86_64.tar.bz2  SHA256SUMS
-	buskill-mac-v3.2.0-x86_64.tar.bz2  SHA256SUMS.asc
-	buskill-win-v3.2.0-x86_64.zip
+	buskill-lin-v3.2.0-x86_64.tbz      buskill-win-v3.2.0-x86_64.zip
+	buskill-lin-v3.2.0-x86_64.tbz.asc  SHA256SUMS
+	buskill-mac-v3.2.0-x86_64.dmg      SHA256SUMS.asc
 	user@vault:~$ 
 
 Upload
