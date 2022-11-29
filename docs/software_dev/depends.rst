@@ -1,7 +1,7 @@
 .. _depends:
 
-buskill-app Dependencies
-========================
+Dependencies
+============
 
 This section documents the various software dependencies of the BusKill App
 
