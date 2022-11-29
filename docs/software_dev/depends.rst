@@ -1,9 +1,16 @@
-.. _depends:
+﻿.. _depends:
 
 Dependencies
 ============
 
-This section documents the various software dependencies of the BusKill App
+This section documents the various software dependencies of the BusKill App.
+
+Note that our releases are self-contained executables that already include these dependencies, so you do not need to install them on your machine to run the BusKill software. This documentation is for informational purposes only.
+
+All Platforms
+-------------
+
+The following software is a dependency for the BusKill app on all our releases for all platforms.
 
 #. `python <https://www.python.org>`_ (`PSF <https://docs.python.org/3/license.html>`_)
 #. `GnuPG <https://www.gnupg.org/>`_ (`GPL-3+ <https://www.gnupg.org/faq/HACKING.html>`_)
@@ -40,16 +47,8 @@ We also use the following python modules, which are built-into python
 #. tarfile
 #. zipfile
 
-All Platforms
--------------
-
-The following software is a dependency for the BusKill app on all platforms.
-
-#. Click inside "Type here to search"
-#. Type "Disk Management"
-
-Linux-specific
---------------
+Linux
+-----
 
 The following software is a dependency for the BusKill app only in the Linux builds.
 
@@ -68,7 +67,11 @@ The following software is a dependency for the BusKill app only in the Windows b
 ..
 	#. TODO
 
-We also depend on the following python modules
+	We also depend on the following python modules
+
+	#. TODO
+
+And we also use the following python modules, which are built-into python
 
 #. ctypes
 #. win32api
@@ -84,5 +87,8 @@ The following software is a dependency for the BusKill app only in the MacOS bui
 
 We also depend on the following python modules
 
-#. libusb1
+#. `libusb1 <https://github.com/vpelletier/python-libusb1>`_ (`LGPLv2+ <https://github.com/vpelletier/python-libusb1/blob/master/COPYING.LESSER>`_)
+
+And we also use the following python modules, which are built-into python
+
 #. ctypes
