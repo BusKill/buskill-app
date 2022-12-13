@@ -41,7 +41,7 @@ DESCRIPTION
 
 buskill is a cross-platform CLI and GUI app that can lock or shutdown your computer when a USB hotplug removal event occurs.
 
-It's designed to work with the BusKill laptop kill cord, which is a hardware dead man switch that teathers a user to their computer via a USB cable with an integrated magnetic breakaway. If the cable is disconnected (eg by a snatch-and-run theif stealing the user's machine), then this software can trigger the computer to lock or shutdown -- thus protecting encrypted files (eg bitcoin private keys) or current login sessions (eg online banking) from theft.
+It's designed to work with the BusKill laptop kill cord, which is a hardware dead man switch that tethers a user to their computer via a USB cable with an integrated magnetic breakaway. If the cable is disconnected (eg by a snatch-and-run thief stealing the user's machine), then this software can trigger the computer to lock or shutdown -- thus protecting encrypted files (eg bitcoin private keys) or current login sessions (eg online banking) from theft.
 
 OPTIONS
 =======
@@ -75,4 +75,4 @@ SEE ALSO
 This manpage is limited in scope. The BusKill project's main documentation (complete with images and videos) is available at `docs.buskill.in <https://docs.buskill.in>`__
 
 * `Full Documentation <https://docs.buskill.in>`__
-* `Offical BusKill Project Website <https://buskill.in>`__
+* `Official BusKill Project Website <https://buskill.in>`__
