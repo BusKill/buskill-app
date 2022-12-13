@@ -46,16 +46,26 @@ It's designed to work with the BusKill laptop kill cord, which is a hardware dea
 OPTIONS
 =======
 
-::
+**-h**, **--help**
+: Show this help message and exit.
 
-	-h, --help         show this help message and exit
-	--version          print version and exit.
-	--list-triggers    List all available triggers.
-	-v, --verbose      increase output verbosity
-	-t , --trigger     Choose trigger to execute. See --list-triggers for all
-	                   possible values.
-	-T, --run-trigger  Immediately execute the trigger on start
-	-a, --arm          Arms BusKill
+**--version**
+: Print version and exit.
+
+**--list-triggers**
+: List all available triggers.
+
+**-v**, **--verbose**
+: Increase output verbosity.
+
+**-t** , **--trigger**
+: Choose trigger to execute. See --list-triggers for all possible values.
+
+**-T**, **--run-trigger**
+: Immediately execute the trigger on start.
+
+**-a**, **--arm**
+: Arms BusKill.
 
 EXAMPLES
 ========
