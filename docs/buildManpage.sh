@@ -15,7 +15,14 @@ set -x
 #                                  SETTINGS                                    #
 ################################################################################
 
-# n/a
+SUDO=$(which sudo)
+
+pwd
+env
+ls -lah
+export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+DATE=$(date "+%b %Y" --date="@${SOURCE_DATE_EPOCH}")
+HEADER="Laptop Kill Cord"
 
 ################################################################################
 #                                 MAIN BODY                                    #
@@ -35,24 +42,10 @@ fi
 # INSTALL DEPENDS #
 ###################
 
-apt-get update
-apt-get -y install pandoc
+${SUDO} apt-get update
+${SUDO} apt-get -y install pandoc
 
-#####################
-# DECLARE VARIABLES #
-#####################
-
-PANDOC=`which pandoc`
-
-pwd
-env
-ls -lah
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
-DATE=$(date "+%b %Y" --date="@${SOURCE_DATE_EPOCH}")
-HEADER="Laptop Kill Cord"
-
-# make a new temp dir which will be our GitHub Pages docroot
-docroot=`mktemp -d`
+PANDOC=$(which pandoc)
 
 #################
 # BUILD MANPAGE #
