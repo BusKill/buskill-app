@@ -1,7 +1,7 @@
 ﻿.. _manpage:
 
 ============
- buskill(1)
+ BUSKILL(1)
 ============
 
 :Author:
