@@ -1,45 +1,61 @@
 ﻿.. _manpage:
 
-=========
- buskill
-=========
+============
+ buskill(1)
+============
 
--------------------------------------------------------------------------
-Lock or shutdown if your device is stolen (for use with laptop kill cord)
--------------------------------------------------------------------------
+:Author:
+	Michael Altfield (michael@michaelaltfield.net) and
+	The BusKill Team (https://buskill.in/contact)
 
-:Author: BusKill Team (https://buskill.in/contact/)
-:Date:   2022-12-09
-:Copyright: BusKill Team
-:Version: 0.7.0
-:Manual section: 1
-:Manual group: text processing
+..
+	=====================================
+ 	buskill 1 "2022" "Laptop Kill Cord"
+	=====================================
+	
+	:Author: BusKill Team (https://buskill.in/contact/)
+	:Date:   2022-12-09
+	:Copyright: BusKill Team
+	:Version: 0.7.0
+	:Manual section: 1
+	:Manual group: text processing
+	
+	.. TODO: authors and author with name <email>
 
-.. TODO: authors and author with name <email>
+	-------------------------------------------------------------------------
+	Lock or shutdown if your device is stolen (for use with laptop kill cord)
+	-------------------------------------------------------------------------
+
+NAME
+====
+
+buskill - Lock or shutdown if your device is stolen (for use with laptop kill cord)
 
 SYNOPSIS
 ========
 
-  buskill --trigger soft-shutdown --arm
+buskill [options]
 
 DESCRIPTION
 ===========
 
 buskill is a cross-platform CLI and GUI app that can lock or shutdown your computer when a USB hotplug removal event occurs.
 
-It's designed to work with the BusKill laptop kill cord, which is a hardware dead man switch that teathers a user to their computer via a USB cable with an integrated magnetic breakaway. If the cable is disconnected (eg by a snatch-and-run theif stealing the user's machine), then this software can trigger the computer to lock or shutdown -- thus protecting encrypted files from theft.
+It's designed to work with the BusKill laptop kill cord, which is a hardware dead man switch that teathers a user to their computer via a USB cable with an integrated magnetic breakaway. If the cable is disconnected (eg by a snatch-and-run theif stealing the user's machine), then this software can trigger the computer to lock or shutdown -- thus protecting encrypted files (eg bitcoin private keys) or current login sessions (eg online banking) from theft.
 
 OPTIONS
 =======
 
-  -h, --help         show this help message and exit
-  --version          print version and exit.
-  --list-triggers    List all available triggers.
-  -v, --verbose      increase output verbosity
-  -t , --trigger     Choose trigger to execute. See --list-triggers for all
-                     possible values.
-  -T, --run-trigger  Immediately execute the trigger on start
-  -a, --arm          Arms BusKill
+::
+
+	-h, --help         show this help message and exit
+	--version          print version and exit.
+	--list-triggers    List all available triggers.
+	-v, --verbose      increase output verbosity
+	-t , --trigger     Choose trigger to execute. See --list-triggers for all
+	                   possible values.
+	-T, --run-trigger  Immediately execute the trigger on start
+	-a, --arm          Arms BusKill
 
 EXAMPLES
 ========
@@ -58,10 +74,5 @@ SEE ALSO
 
 This manpage is limited in scope. The BusKill project's main documentation (complete with images and videos) is available at `docs.buskill.in <https://docs.buskill.in>`__
 
-* `https://docs.buskill.in <https://docs.buskill.in>`__
+* `Full Documentation <https://docs.buskill.in>`__
 * `Offical BusKill Project Website <https://buskill.in>`__
-
-BUGS
-====
-
-TDOO
