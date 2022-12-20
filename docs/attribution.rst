@@ -54,3 +54,4 @@ The reader may be interested to investigate the following similar projects:
  * `swatd <https://github.com/defuse/swatd>`_
  * `Centry <https://github.com/0xPoly/Centry>`_
  * `xxUSBSentinel <https://github.com/thereisnotime/xxUSBSentinel>`_
+ * `Ripple <https://guardianproject.info/apps/info.guardianproject.ripple/>`_
