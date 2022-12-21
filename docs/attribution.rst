@@ -41,7 +41,7 @@ The reader may be interested to investigate the following similar projects:
  * `USB Kill <https://github.com/hephaest0s/usbkill>`_
  * `USB Death <https://github.com/trpt/usbdeath>`_
  * `Silk Guardian <https://github.com/NateBrune/silk-guardian>`_
- * `Day Tripper <https://github.com/maltfield/daytripper>`_
+ * `Day Tripper <https://github.com/dekuNukem/daytripper>`_
  * `USBGuard <https://usbguard.github.io/>`_
  * `suicideCrypt <https://github.com/MonolithInd/suicideCrypt>`_
  * `panic_bcast <https://github.com/qnrq/panic_bcast>`_
