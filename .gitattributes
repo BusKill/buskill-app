@@ -1,3 +1,10 @@
+# remove some files from `git archive` to strip the "Source code" archives
+# created by GitHub on the "Release" page from including binary blobs and/or
+# other unnecessary files for building BusKill from source. See also:
+# 
+# * https://github.com/BusKill/buskill-app/issues/31#issuecomment-1365570844
+# * https://github.com/BusKill/buskill-app/issues/53#issuecomment-1366041678
+
 .gitattributes export-ignore
 .github export-ignore
 .gitignore export-ignore
