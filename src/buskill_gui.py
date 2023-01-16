@@ -481,12 +481,15 @@ class CriticalError(BoxLayout):
 
 class BusKillOptionItem(FloatLayout):
 
-	def __init__(self, title, desc, confirmation, icon, current_value, manager, **kwargs):
+	def __init__(self, title, desc, confirmation, icon, parent_option, manager, **kwargs):
+
 		self.title = title
 		self.desc = desc
 		self.confirmation = confirmation
 		self.icon = icon
-		self.value = current_value
+		#self.value = current_value
+		self.value = 'replaceme'
+		self.parent_option = parent_option
 		self.manager = manager
 		print( "self.manager:|" +str(self.manager)+ "|" )
 
@@ -506,9 +509,17 @@ class BusKillOptionItem(FloatLayout):
 		if not self.collide_point(*touch.pos):
 			return
 
+		print()
 		print( "called BusKillOptionItem.on_touch_up()" )
 		print( "self:|" +str(self)+ "|" )
-		print( "self.value:|" +str(self.value)+ "|" )
+		print( "self.parent:|" +str(self.parent)+ "|" )
+		print( "dir(self.parent):|" +str(dir(self.parent))+ "|\n" )
+		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
+		print( "dir(self.parent_option):|" +str(dir(self.parent_option))+ "|\n" )
+		print()
+
+		#print( "self.value:|" +str(self.value)+ "|" )
+		print( "value:|" +str(self.parent_option.value)+ "|" )
 		print( "self.title:|" +str(self.title)+ "|" )
 		print( "self.desc:|" +str(self.desc)+ "|" )
 		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
@@ -549,6 +560,12 @@ class BusKillOptionItem(FloatLayout):
 
 		if self.dialog != None:
 			self.dialog.dismiss()
+
+		# TODO: actually commit to config file.
+		#       see set_value() in kivy/uix/settings.py
+		print( "Config:|" +str(Config)+ "|" )
+		Config.set('buskill', self.parent_option.key, self.title)
+		Config.write()
 
 		self.value = self.title
 		parent = self.parent
@@ -800,7 +817,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			print( "option_desc:|" +str(desc)+ "|" )
 			print( "option_confirmation:|" +str(confirmation)+ "|" )
 			print( "option_icon:|" +str(icon)+ "|" )
-			option_item = BusKillOptionItem( title, desc, confirmation, icon, self.value, manager )
+			option_item = BusKillOptionItem( title, desc, confirmation, icon, self, manager )
 			setting_screen.content.add_widget( option_item )
 
 		main_screen = manager.get_screen('main')
