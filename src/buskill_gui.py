@@ -533,7 +533,8 @@ class BusKillOptionItem(FloatLayout):
 
 		# skip this touch event if they touched on an option that's already the
 		# enabled option
-		if self.value == self.title:
+		if self.parent_option.value == self.title:
+			print( "self.parent_option.value equals self.title. Returning now" )
 			return
 
 		# does this option have a warning to prompt the user to confirm their
@@ -567,7 +568,7 @@ class BusKillOptionItem(FloatLayout):
 		Config.set('buskill', self.parent_option.key, self.title)
 		Config.write()
 
-		self.value = self.title
+		self.parent_option.value = self.title
 		parent = self.parent
 		for option in self.parent.children:
 			#print( "option:|" +str(option)+ "|" )
@@ -575,7 +576,7 @@ class BusKillOptionItem(FloatLayout):
 			#print( "removing " +str(option.title)+ " from " +str(self.parent) )
 			#parent.remove_widget(option)
 			#parent.add_widget(option)
-			if option.title == self.value:
+			if option.title == self.parent_option.value:
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
 			else:
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
