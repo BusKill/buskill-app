@@ -792,6 +792,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		setting_screen = BusKillSettingsComplexOptionsScreen(
 		 name = screen_name
 		)
+		
+		setting_screen.set_help_msg( self.desc )
 
 		# set the color of the actionbar in this screen equal to whatever our
 		# setting's screen actionbar is set to (eg blue or red)
@@ -933,6 +935,10 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 	actionview = ObjectProperty(None)
 	settings_content = ObjectProperty(None)
 	actionbar_title = ObjectProperty(None)
+	help_msg = ObjectProperty(None)
+
+	def set_help_msg(self, new_help_msg ):
+		self.help_msg = new_help_msg
 
 	def set_actionbar_title(self, new_title):
 		self.actionbar_title = new_title
@@ -958,6 +964,18 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
+
+	def show_help( self ):
+
+		self.dialog = DialogConfirmation(
+		 #title = '[font=mdicons][size=31]\ue002\ue000\ue645\ue160\ue99a\ue82a\uf22f[/size][/font] Debug Log',
+		 title = '[font=mdicons][size=30]\ue88f[/size][/font] ' + str(self.actionbar_title),
+		 body = str(self.help_msg),
+		 button = "",
+		 continue_function=None
+		)
+		self.dialog.b_cancel.text = "OK"
+		self.dialog.open()
 
 class BusKillSettingsScreen(Screen):
 
