@@ -13,8 +13,8 @@
 	},
 	{
 		"type": "complex-options",
-		"title": "Option2",
-		"desc": "Some description like choosing which driv eyou want",
+		"title": "BusKill USB Drive",
+		"desc": "Choose which drive should cause BusKill to trigger when BusKill is armed.",
 		"section": "buskill",
 		"key": "drive",
 		"options": ["v1","v2"],

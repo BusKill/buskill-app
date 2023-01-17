@@ -137,7 +137,8 @@ class MainWindow(Screen):
 
 		if self.bk.is_armed:
 			self.toggle_btn.text = 'Disarm'
-			self.status.text = 'BusKill is currently armed.'
+			self.status.text = "BusKill is currently armed\n"
+			self.status.text += "with '" +str(self.bk.trigger)+ "' trigger."
 			self.toggle_btn.background_color = self.color_red
 
 			# set the actionview of every actionbar of every screen to red
@@ -148,7 +149,7 @@ class MainWindow(Screen):
 
 		else:
 			self.toggle_btn.text = 'Arm'
-			self.status.text = 'BusKill is currently disarmed.'
+			self.status.text = "BusKill is currently disarmed.\n"
 			self.toggle_btn.background_color = self.color_primary
 
 			# set the actionview of every actionbar of every screen back to the
@@ -562,10 +563,13 @@ class BusKillOptionItem(FloatLayout):
 		if self.dialog != None:
 			self.dialog.dismiss()
 
-		# TODO: actually commit to config file.
-		#       see set_value() in kivy/uix/settings.py
-		print( "Config:|" +str(Config)+ "|" )
-		Config.set('buskill', self.parent_option.key, self.title)
+		# write change to disk in our persistant buskill .ini Config file
+		key = str(self.parent_option.key)
+		value = str(self.title)
+		msg = "DEBUG: User changed config of '" +str(key) +"' to '" +str(value)+ "'"
+		print( msg ); logger.debug( msg )
+
+		Config.set('buskill', key, value)
 		Config.write()
 
 		self.parent_option.value = self.title
