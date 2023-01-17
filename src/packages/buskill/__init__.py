@@ -920,7 +920,7 @@ class BusKill:
 			print( msg ); logger.info( msg )
 
 		else:
-			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "()"
+			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "() with the '" +str(self.trigger)+ "' trigger"
 			print( msg ); logger.debug( msg )
 
 			# launch an asynchronous child process that'll loop and listen for

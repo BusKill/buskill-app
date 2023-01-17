@@ -107,7 +107,7 @@ class MainWindow(Screen):
 		Clock.schedule_once(self.handle_upgrades, 1)
 
 		# TODO: remove auto-switch to Settings screen
-		Clock.schedule_once( lambda dt: self.switchToScreen('settings') )
+		#Clock.schedule_once( lambda dt: self.switchToScreen('settings') )
 
 		super(MainWindow, self).__init__(**kwargs)
 
@@ -1132,6 +1132,50 @@ class BusKillSettingsScreen(Screen):
 			self.settings_content.add_widget( s )
 
 			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
+
+	def on_pre_leave(self):
+		# update runtime 'bk' instance with any settings changes, as needed
+		print( "LEAVING THE SETTINGS SCREEN" )
+
+		# this changes to true if we have to disarm & arm BusKill again i norder to
+		# apply the settings that the user changed
+		rearm_required = False
+
+		# trigger
+		new_trigger = Config.get('buskill', 'trigger')
+		print( 'self.bk.trigger:|' +str(self.bk.trigger) + '|' )
+		print( 'new_trigger:|' +str(new_trigger) + '|' )
+
+		# was the trigger just changed by the user?
+		if self.bk.trigger != new_trigger:
+			# the trigger was changed; update the runtime bk instance
+			self.bk.trigger = new_trigger
+
+			# is BusKill currently armed?
+			if self.bk.is_armed == True:
+				# buskill is currently armed; rearming is required to apply the change
+				rearm_required = True
+
+		# is it necessary to disarm and arm BusKill in order to apply the user's
+		# changes to BusKill's settings?
+		if rearm_required:
+
+			msg = "You've made changes to your settings that require disarming & arming again to apply."
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Apply Changes?',
+			 body = msg,
+			 button='Disarm & Arm Now',
+			 continue_function = self.rearm
+			)
+			self.dialog.open()
+
+	def rearm(self):
+
+		self.dialog.dismiss()
+
+		# turn it off and on again
+		self.main_screen.toggle_buskill()
+		self.main_screen.toggle_buskill()
 
 class DebugLog(Screen):
 
