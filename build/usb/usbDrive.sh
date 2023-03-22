@@ -94,10 +94,14 @@ P7Z="`which 7z`"
 #RAR=`which rar`"
 TAR="`which tar`"
 
-
 ###################################
 # DOWNLOAD LATEST STABLE RELEASES #
 ###################################
+
+# prevent "detected dubious ownership in repository" error
+pwd
+git config --global --add safe.directory .
+git config --global --add safe.directory /root/buskill-app
 
 # get the latest version tag
 latest_version=`git tag | grep -iE '^v[0-9]*\.[0-9]*' | tail -n1`

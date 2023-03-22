@@ -918,6 +918,9 @@ class BusKill:
 		msg = "event:|" +str(event)+ "|"
 		print( msg ); logger.debug( msg )
 
+		msg = "usb1.HOTPLUG_EVENT_DEVICE_ARRIVED:|" +str(usb1.HOTPLUG_EVENT_DEVICE_ARRIVED)+ "|"
+		print( msg ); logger.debug( msg )
+
 		msg = "usb1.HOTPLUG_EVENT_DEVICE_LEFT:|" +str(usb1.HOTPLUG_EVENT_DEVICE_LEFT)+ "|"
 		print( msg ); logger.debug( msg )
 
