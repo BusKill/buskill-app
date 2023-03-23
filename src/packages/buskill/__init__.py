@@ -1088,13 +1088,44 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			if result.returncode != 0:
+				# that didn't work; log it and try fallback
+				msg = "WARNING: Failed to execute `xscreensaver -lock`! "
+				print( msg ); logger.error(msg)
+
+				self.trigger_lockscreen_lin_cinnamon()
+
+		except Exception as e:
+			# that didn't work; log it and try fallback
+			msg = "WARNING: Failed to execute `xscreensaver -lock`! " +str(e)
+			print( msg ); logger.error(msg)
+
+			self.trigger_lockscreen_lin_cinnamon()
+
+	def trigger_lockscreen_lin_cinnamon(self):
+
+		try:
+			# try to lock the screen with cinnamon-screensaver command
+			msg = "INFO: Attempting to execute `cinnamon-screensaver-command --lock`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['cinnamon-screensaver-command', '--lock'], capture_output=True, text=True )
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
 				# that didn't work; log it and give up :(
-				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
+				msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! "
 				print( msg ); logger.error(msg)
 
 		except Exception as e:
 			# that didn't work; log it and give up :(
-			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! " +str(e)
 			print( msg ); logger.error(msg)
 
 	def trigger_softshutdown_lin_shutdown(self):
