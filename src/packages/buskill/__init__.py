@@ -1031,6 +1031,12 @@ class BusKill:
 		# first we try to lock with xdg-screensaver
 		self.trigger_lockscreen_lin_xdg()
 
+		# in Cinnamon (Linux Mint) `xdg-screensaver` exists, exits zero, doesn't
+		# throw any errors, and doesn't lock the screen.
+		# * https://en.wikipedia.org/wiki/Cinnamon_(desktop_environment)
+		# * https://github.com/BusKill/buskill-app/issues/64
+		self.trigger_lockscreen_lin_cinnamon()
+
 	# this function will gently shutdown a Linux machine
 	def trigger_softshutdown_lin(self):
 		msg = "DEBUG: BusKill soft-shutdown trigger executing now"
@@ -1089,17 +1095,13 @@ class BusKill:
 
 			if result.returncode != 0:
 				# that didn't work; log it and try fallback
-				msg = "WARNING: Failed to execute `xscreensaver -lock`! "
+				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
 				print( msg ); logger.error(msg)
-
-				self.trigger_lockscreen_lin_cinnamon()
 
 		except Exception as e:
 			# that didn't work; log it and try fallback
-			msg = "WARNING: Failed to execute `xscreensaver -lock`! " +str(e)
+			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
 			print( msg ); logger.error(msg)
-
-			self.trigger_lockscreen_lin_cinnamon()
 
 	def trigger_lockscreen_lin_cinnamon(self):
 
