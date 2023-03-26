@@ -47,6 +47,9 @@ docroot=`mktemp -d`
 # BUILD DOCS #
 ##############
 
+# prevent git "detected dubious ownership" errors
+git config --global --add safe.directory "*"
+
 # first, cleanup any old builds' static assets
 make -C docs clean
 
