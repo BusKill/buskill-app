@@ -64,9 +64,9 @@ Contributions of any amount and kind are greatly appreciated <3
 Thank you to the countless [individuals and other open-source projects](https://docs.buskill.in/buskill-app/en/stable/attribution.html) that have contributed to to the BusKill project!
 
 <div>
-<a href="https://macstadium.com/"><img src="docs/images/MacStadium-developerlogo.png" width="150" >  &nbsp; 
-<a href="https://www.browserstack.com/"><img src="docs/images/browser-stack_1900.png" width="150">  &nbsp;
-<a href="https://www.lambdatest.com/" target="_blank"><img src="docs/images/lambdatest.png" width="150">  &nbsp;
+<a href="https://macstadium.com/"><img src="docs/images/MacStadium-developerlogo.png" width="150" ></a>  &nbsp; 
+<a href="https://www.browserstack.com/"><img src="docs/images/browser-stack_1900.png" width="150"></a>  &nbsp;
+<a href="https://www.lambdatest.com/" target="_blank"><img src="docs/images/lambdatest.png" width="150"></a>  &nbsp;
 </div>
 
 # Press
