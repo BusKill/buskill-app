@@ -101,7 +101,7 @@ jobs:
         ls -lah
         RELEASE_FILE="`ls -1 | grep buskill-win*.zip | head -n1`"
         echo ${RELEASE_FILE}
-        curl --verbose --location --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
+        curl --verbose --location --http1.1 --header "authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/zlib" --data-binary "@${RELEASE_FILE}" "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets?name=${RELEASE_FILE}"
       shell: bash
 
     - name: Trigger cryptographic signature workflow
