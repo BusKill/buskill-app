@@ -189,7 +189,10 @@ ${PIP_PATH} download python-gnupg
 ${PYTHON_PATH} -m pip download python-gnupg
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-wget "${signature_url}"
+#wget "${signature_url}"
+# switching from wget to curl to avoid "dyld Library not loaded" brew issues
+#  * https://github.com/BusKill/buskill-app/issues/70
+curl --remote-name "${signature_url}"
 
 mkdir gnupg
 chmod 0700 gnupg
@@ -215,7 +218,10 @@ pushd "${tmpDir}"
 ${PIP_PATH} download libusb1
 filename="`ls -1 | head -n1`"
 signature_url=`curl -s https://pypi.org/simple/libusb1/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-wget "${signature_url}"
+#wget "${signature_url}"
+# switching from wget to curl to avoid "dyld Library not loaded" brew issues
+#  * https://github.com/BusKill/buskill-app/issues/70
+curl --remote-name "${signature_url}"
 
 mkdir gnupg
 chmod 0700 gnupg
