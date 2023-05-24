@@ -314,7 +314,8 @@ a = Analysis(['../src/main.py'],
               ('../src/images/buskill-icon-150.png', '.'),
               # needed for the icon of the .app when viewed in Finder
               ('buskill-icon.icns', '.'),
-              ('/usr/local/bin/gpg', '.')
+              ('/usr/local/bin/gpg', '.'),
+              ('/usr/local/lib/libgcrypt.20.dylib', '.')
              ],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
