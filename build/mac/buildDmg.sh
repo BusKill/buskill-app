@@ -310,13 +310,18 @@ a = Analysis(['../src/main.py'],
              binaries=[],
              datas=[
               ( '../KEYS', '.' ),
+
               # needed for the taskbar icon when the app is running (kivy)
               ('../src/images/buskill-icon-150.png', '.'),
+
               # needed for the icon of the .app when viewed in Finder
               ('buskill-icon.icns', '.'),
+
+              # needed for gpg https://github.com/BusKill/buskill-app/issues/71
               ('/usr/local/bin/gpg', '.'),
               ('/usr/local/lib/libgcrypt.20.dylib', '.'),
-              ('/usr/local/lib/libassuan.0.dylib', '.')
+              ('/usr/local/lib/libassuan.0.dylib', '.'),
+              ('/usr/local/lib/libnpth.0.dylib', '.')
              ],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
