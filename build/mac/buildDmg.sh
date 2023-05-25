@@ -321,7 +321,8 @@ a = Analysis(['../src/main.py'],
               ('/usr/local/bin/gpg', '.'),
               ('/usr/local/lib/libgcrypt.20.dylib', '.'),
               ('/usr/local/lib/libassuan.0.dylib', '.'),
-              ('/usr/local/lib/libnpth.0.dylib', '.')
+              ('/usr/local/lib/libnpth.0.dylib', '.'),
+              ('/usr/local/lib/libgpg-error.0.dylib', '.')
              ],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
