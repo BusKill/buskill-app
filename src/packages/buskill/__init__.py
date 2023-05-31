@@ -1106,6 +1106,12 @@ class BusKill:
 	def trigger_lockscreen_lin_cinnamon(self):
 
 		try:
+			# unset PYTHONHOME to fix AppImage fs encoding error
+			#    ModuleNotFoundError: No module named 'encodings'
+			# * https://github.com/BusKill/buskill-app/issues/64#issuecomment-1537221491
+			if 'PYTHONHOME' in os.environ:
+				del os.environ['PYTHONHOME']
+
 			# try to lock the screen with cinnamon-screensaver command
 			msg = "INFO: Attempting to execute `cinnamon-screensaver-command --lock`"
 			print( msg ); logger.debug( msg )
