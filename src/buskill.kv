@@ -557,9 +557,7 @@
 					markup: True
 					text: '[font=mdicons][size=18]\ue8ba[/size][/font] Reset'
 					title: 'Test'
-					#on_release:
-					#	root.manager.transition.direction = 'right'
-					#	root.manager.current = 'main'
+					on_release: root.reset_defaults()
 
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'

@@ -548,7 +548,6 @@ class BusKillOptionItem(FloatLayout):
 			# this option can be dangerous; confirm with user before continuing
 
 			self.dialog = DialogConfirmation(
-			 #title = '[font=mdicons][size=31]\ue002\ue000\ue645\ue160\ue99a\ue82a\uf22f[/size][/font] Debug Log',
 			 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
 			 body = self.confirmation,
 			 button='Continue',
@@ -1168,6 +1167,22 @@ class BusKillSettingsScreen(Screen):
 			 continue_function = self.rearm
 			)
 			self.dialog.open()
+
+	def reset_defaults(self):
+
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
+		 body = self.confirmation,
+		 button='Continue',
+		 continue_function=self.reset_defaults2
+		)
+		self.dialog.b_cancel.text = "Cancel"
+		#self.dialog.l_body.bind( on_ref_press=self.ref_press )
+		self.dialog.open()
+
+	def reset_defaults2(self):
+
+		pass
 
 	def rearm(self):
 
