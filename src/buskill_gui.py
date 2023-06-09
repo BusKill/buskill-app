@@ -794,68 +794,41 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		# create a new screen just for choosing the value of this setting, and name
 		# this new screen "setting_<key>" 
 		screen_name = 'setting_' +self.key
-		setting_screen = BusKillSettingsComplexOptionsScreen(
-		 name = screen_name
-		)
+
+		# did we already create this sub-screen?
+		if not manager.has_screen( screen_name ):
+			# there is no sub-screen for this Complex Option yet; create it
+
+			# create new screen for picking the value for this ComplexOption
+			setting_screen = BusKillSettingsComplexOptionsScreen(
+			 name = screen_name
+			)
 		
-		setting_screen.set_help_msg( self.desc )
+			# define the help message that should appear when the user clicks the
+			# help ActionButton on the top-right of the screen
+			setting_screen.set_help_msg( self.desc )
 
-		# set the color of the actionbar in this screen equal to whatever our
-		# setting's screen actionbar is set to (eg blue or red)
-		setting_screen.actionview.background_color = manager.current_screen.actionview.background_color
+			# set the color of the actionbar in this screen equal to whatever our
+			# setting's screen actionbar is set to (eg blue or red)
+			setting_screen.actionview.background_color = manager.current_screen.actionview.background_color
 
-		# make the text in the actionbar match the 'title' for the setting as it's
-		# defined in the settings json file
-		setting_screen.set_actionbar_title( self.title )
-		print( "setting_screen:|" +str(setting_screen)+ "|" )
+			# make the text in the actionbar match the 'title' for the setting as
+			# it's defined in the settings json file
+			setting_screen.set_actionbar_title( self.title )
 
-#		grid_layout = GridLayout( cols=1 )	
-#		float_layout = FloatLayout()	
-#		grid_layout.add_widget( float_layout )
-#
-#		label = Label( text="Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]" )
-#		label.markup = True
-#		float_layout.add_widget( label )
-#		float_layout.height = label.texture_size[1] + dp(10)
-#
-#		setting_screen.content.add_widget( grid_layout )
+			# loop through all possible values for this ComplexOption, zipping out
+			# data from parrallel arrays in the json file
+			for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
 
-		for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
-			print( "option_title:|" +str(self.key)+ "|" )
-			print( "option_value:|" +str(value)+ "|" )
-#			print( "option_desc:|" +str(desc)+ "|" )
-#			print( "option_confirmation:|" +str(confirmation)+ "|" )
-#			print( "option_icon:|" +str(icon)+ "|" )
-			option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
-			setting_screen.content.add_widget( option_item )
+				# create an OptionItem for each of the possible values for this
+				# setting option, and add them to the new ComplexOption sub-screen
+				option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
+				setting_screen.content.add_widget( option_item )
 
-		main_screen = manager.get_screen('main')
-#		print( "main_screen:|" +str(main_screen)+ "|" )
-#		print( "main_screen.properties:|" +str(main_screen.properties)+ "|" )
-#		print( "main_screen.ids:|" +str(main_screen.ids)+ "|" )
-#		print( "main_screen.actionbar:|" +str(main_screen.actionbar)+ "|" )
-#		print( "main_screen.actionview:|" +str(main_screen.actionview)+ "|" )
-#		print( "main_screen.actionview.background_color:|" +str(main_screen.actionview.background_color)+ "|" )
-#		print( "dir(main_screen):|" +str(dir(main_screen))+ "|" )
+			# add the new ComplexOption sub-screen to the Screen Manager
+			manager.add_widget( setting_screen )
 
-#			# set the actionview of every actionbar of every screen to red
-#			for screen in self.manager.screens:
-#				for child in screen.actionbar.children:
-#					if type(child) == ActionView:
-#						child.background_color = self.color_red
-
-#		print( "self:|" +str(self)+ "|" )
-#		print( "self.key:|" +str(self.key)+ "|" )
-#		print( "self.value:|" +str(self.value)+ "|" )
-#		print( "self.parent:|" +str(self.parent)+ "|" )
-#		print( "self.parent.parent:|" +str(self.parent.parent)+ "|" )
-#		print( "self.parent.parent.parent:|" +str(self.parent.parent.parent)+ "|" )
-#		print( "self.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent)+ "|" )
-#		print( "self.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent)+ "|" )
-#		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
-#		#print( str(self.parent()) )
-		manager.add_widget( setting_screen )
-		#manager.switch_to( newScreen )
+		# change into the sub-screen now
 		manager.transition.direction = 'left'
 		manager.current = screen_name
 
