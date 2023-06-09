@@ -1153,38 +1153,25 @@ class BusKillSettingsScreen(Screen):
 		self.dialog.open()
 
 	def reset_defaults2(self):
+		msg = "DEBUG: User initiated settings reset"
+		print( msg ); logger.debug( msg )
 
 		# close the dialog if it's already opened
 		if self.dialog != None:
 			self.dialog.dismiss()
-
-		print( "Erase settings!" )
-		for key, value in Config.defaults():
-			print(key, value)
-		print( Config.sections() )
 
 		# delete all the options saved to the config file
 		for key in Config['buskill']:
 			Config.remove_option( 'buskill', key )
 		Config.write()
 
-#		print( dir(self) )
-#		print( dir(self.root_app) )
+		# setup the defaults again to avoid configparser.NoOptionError
 		self.root_app.build_config(Config)
 
+		# do a "refresh" of the contents of the Settings screen
 		self.settings_content = ObjectProperty(None)
 		self.__init__()
-		print( "self.dialog1:|" +str(self.dialog)+ "|" )
-
-		# TODO: fix the extra dialog
-		new_trigger = Config.get('buskill', 'trigger')
-		print( 'self.bk.trigger:|' +str(self.bk.trigger) + '|' )
-		print( 'new_trigger:|' +str(new_trigger) + '|' )
-		#self.on_pre_leave()
-		print( "self.dialog2:|" +str(self.dialog)+ "|" )
-
 		self.on_pre_enter()
-		print( "self.dialog3:|" +str(self.dialog)+ "|" )
 
 		# TODO: also need to "reset" the sub-screens
 
