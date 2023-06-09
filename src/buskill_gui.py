@@ -492,7 +492,7 @@ class BusKillOptionItem(FloatLayout):
 		self.value = 'replaceme'
 		self.parent_option = parent_option
 		self.manager = manager
-		print( "self.manager:|" +str(self.manager)+ "|" )
+#		print( "self.manager:|" +str(self.manager)+ "|" )
 
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
@@ -512,25 +512,25 @@ class BusKillOptionItem(FloatLayout):
 
 		print()
 		print( "called BusKillOptionItem.on_touch_up()" )
-		print( "self:|" +str(self)+ "|" )
-		print( "self.parent:|" +str(self.parent)+ "|" )
-		print( "dir(self.parent):|" +str(dir(self.parent))+ "|\n" )
-		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
-		print( "dir(self.parent_option):|" +str(dir(self.parent_option))+ "|\n" )
-		print()
+#		print( "self:|" +str(self)+ "|" )
+#		print( "self.parent:|" +str(self.parent)+ "|" )
+#		print( "dir(self.parent):|" +str(dir(self.parent))+ "|\n" )
+#		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
+#		print( "dir(self.parent_option):|" +str(dir(self.parent_option))+ "|\n" )
+#		print()
 
-		#print( "self.value:|" +str(self.value)+ "|" )
-		print( "value:|" +str(self.parent_option.value)+ "|" )
-		print( "self.title:|" +str(self.title)+ "|" )
-		print( "self.desc:|" +str(self.desc)+ "|" )
-		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
-		print( "dir(self):|" +str(dir(self))+ "|\n" )
-
-		print( "self.parent:|" +str(self.parent)+ "|" )
-		print( "self.parent.children:|" +str(self.parent.children)+ "|" )
-
-		# TODO: if there's a confirmation, don't continue until they confirm
-		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
+#		#print( "self.value:|" +str(self.value)+ "|" )
+#		print( "value:|" +str(self.parent_option.value)+ "|" )
+#		print( "self.title:|" +str(self.title)+ "|" )
+#		print( "self.desc:|" +str(self.desc)+ "|" )
+#		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
+#		print( "dir(self):|" +str(dir(self))+ "|\n" )
+#
+#		print( "self.parent:|" +str(self.parent)+ "|" )
+#		print( "self.parent.children:|" +str(self.parent.children)+ "|" )
+#
+#		# TODO: if there's a confirmation, don't continue until they confirm
+#		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
 
 		# skip this touch event if they touched on an option that's already the
 		# enabled option
@@ -783,9 +783,9 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		print( "he done clicked it" )
 
 		manager = get_screen_manager(self)
-		print( "manager:|" +str(manager)+ "|" )
-		print( "manager.current:|" +str(manager.current)+ "|" )
-		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
+#		print( "manager:|" +str(manager)+ "|" )
+#		print( "manager.current:|" +str(manager.current)+ "|" )
+#		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
 		print( App.get_running_app() )
 		print( str(App.get_application_name(self)) )
 
@@ -819,21 +819,21 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 #		setting_screen.content.add_widget( grid_layout )
 
 		for title, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
-			print( "option_title:|" +str(title)+ "|" )
-			print( "option_desc:|" +str(desc)+ "|" )
-			print( "option_confirmation:|" +str(confirmation)+ "|" )
-			print( "option_icon:|" +str(icon)+ "|" )
+#			print( "option_title:|" +str(title)+ "|" )
+#			print( "option_desc:|" +str(desc)+ "|" )
+#			print( "option_confirmation:|" +str(confirmation)+ "|" )
+#			print( "option_icon:|" +str(icon)+ "|" )
 			option_item = BusKillOptionItem( title, desc, confirmation, icon, self, manager )
 			setting_screen.content.add_widget( option_item )
 
 		main_screen = manager.get_screen('main')
-		print( "main_screen:|" +str(main_screen)+ "|" )
-		print( "main_screen.properties:|" +str(main_screen.properties)+ "|" )
-		print( "main_screen.ids:|" +str(main_screen.ids)+ "|" )
-		print( "main_screen.actionbar:|" +str(main_screen.actionbar)+ "|" )
-		print( "main_screen.actionview:|" +str(main_screen.actionview)+ "|" )
-		print( "main_screen.actionview.background_color:|" +str(main_screen.actionview.background_color)+ "|" )
-		print( "dir(main_screen):|" +str(dir(main_screen))+ "|" )
+#		print( "main_screen:|" +str(main_screen)+ "|" )
+#		print( "main_screen.properties:|" +str(main_screen.properties)+ "|" )
+#		print( "main_screen.ids:|" +str(main_screen.ids)+ "|" )
+#		print( "main_screen.actionbar:|" +str(main_screen.actionbar)+ "|" )
+#		print( "main_screen.actionview:|" +str(main_screen.actionview)+ "|" )
+#		print( "main_screen.actionview.background_color:|" +str(main_screen.actionview.background_color)+ "|" )
+#		print( "dir(main_screen):|" +str(dir(main_screen))+ "|" )
 
 #			# set the actionview of every actionbar of every screen to red
 #			for screen in self.manager.screens:
@@ -841,16 +841,16 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 #					if type(child) == ActionView:
 #						child.background_color = self.color_red
 
-		print( "self:|" +str(self)+ "|" )
-		print( "self.key:|" +str(self.key)+ "|" )
-		print( "self.value:|" +str(self.value)+ "|" )
-		print( "self.parent:|" +str(self.parent)+ "|" )
-		print( "self.parent.parent:|" +str(self.parent.parent)+ "|" )
-		print( "self.parent.parent.parent:|" +str(self.parent.parent.parent)+ "|" )
-		print( "self.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent)+ "|" )
-		print( "self.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent)+ "|" )
-		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
-		#print( str(self.parent()) )
+#		print( "self:|" +str(self)+ "|" )
+#		print( "self.key:|" +str(self.key)+ "|" )
+#		print( "self.value:|" +str(self.value)+ "|" )
+#		print( "self.parent:|" +str(self.parent)+ "|" )
+#		print( "self.parent.parent:|" +str(self.parent.parent)+ "|" )
+#		print( "self.parent.parent.parent:|" +str(self.parent.parent.parent)+ "|" )
+#		print( "self.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent)+ "|" )
+#		print( "self.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent)+ "|" )
+#		print( "self.parent.parent.parent.parent.parent.parent:|" +str(self.parent.parent.parent.parent.parent.parent)+ "|" )
+#		#print( str(self.parent()) )
 		manager.add_widget( setting_screen )
 		#manager.switch_to( newScreen )
 		manager.transition.direction = 'left'
@@ -989,14 +989,14 @@ class BusKillSettingsScreen(Screen):
 
 		print( "called BusKillSettingsScreen.__init__()" )
 		super(BusKillSettingsScreen, self).__init__(**kwargs)
-		print( "manager:|" +str(self.manager)+ "|" )
+#		print( "manager:|" +str(self.manager)+ "|" )
 
 	def on_pre_enter(self, *args):
 
 		msg = "DEBUG: User switched to 'Settings' screen"
 		print( msg ); logger.debug( msg )
 
-		print( "manager:|" +str(self.manager)+ "|" )
+#		print( "manager:|" +str(self.manager)+ "|" )
 
 		# set the bk object to the BusKillApp's bk object
 		# note we can't set this in __init__() because that's too early. the
