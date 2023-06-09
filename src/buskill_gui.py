@@ -938,7 +938,7 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 		self.main_screen = self.manager.get_screen('main')
 
 		# close the navigation drawer on the main screen
-		#self.main_screen.nav_drawer.toggle_state()
+		self.main_screen.nav_drawer.toggle_state()
 
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
