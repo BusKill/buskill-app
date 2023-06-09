@@ -1173,12 +1173,14 @@ class BusKillSettingsScreen(Screen):
 		self.__init__()
 		self.on_pre_enter()
 
-		# TODO: also need to "reset" the sub-screens
-
-		#main_screen = self.manager.get_screen('main')
-		#self.manager.switch_to(main_screen)
-		#settings_screen = self.manager.get_screen('settings')
-		#self.manager.switch_to(settings_screen)
+		# loop through all of our sub-screens in the Settings screen (that are
+		# used to change the values of ComplexOptions)
+		for screen in self.manager.screens:
+			# is this screen one of our ComplexOptions screens?
+			if screen.name[:8] == "setting_":
+				# this is a setting screen that's now stale; delete it (it will
+				# refresh on its own when the user clicks it again)
+				self.manager.remove_widget( screen )
 
 	def rearm_if_required(self):
 
