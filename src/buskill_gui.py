@@ -1215,14 +1215,17 @@ class BusKillSettingsScreen(Screen):
 		# loop through all of our sub-screens in the Settings screen (that are
 		# used to change the values of ComplexOptions)
 		for screen in self.manager.screens:
-			# is this screen one of our ComplexOptions screens?
-			if screen.name[:8] == "setting_":
 
-				parent_layout = screen.children[0]
-				for widget in screen.walk():
+			# get the parent layout inside the screen and walk through all of its
+			# child widgets
+			parent_layout = screen.children[0]
+			for widget in screen.walk():
 
-					if isinstance( widget, BusKillOptionItem ):
-						print( str(widget) )
+				# is this widget a BusKillOptionItem?
+				if isinstance( widget, BusKillOptionItem ):
+					# yes, this is an option; make sure it's correct
+
+					print( str(widget) )
 
 
 		print( "post-screens:|" +str(self.manager.screens)+ "|" )
