@@ -482,15 +482,15 @@ class CriticalError(BoxLayout):
 
 class BusKillOptionItem(FloatLayout):
 
-	def __init__(self, title, desc, confirmation, icon, parent_option, manager, **kwargs):
+	def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
 
 		self.title = title
 		self.desc = desc
 		self.confirmation = confirmation
 		self.icon = icon
-		#self.value = current_value
-		self.value = 'replaceme'
+		self.value = value
 		self.parent_option = parent_option
+		#self.value = self.parent_option.value
 		self.manager = manager
 #		print( "self.manager:|" +str(self.manager)+ "|" )
 
@@ -519,8 +519,8 @@ class BusKillOptionItem(FloatLayout):
 #		print( "dir(self.parent_option):|" +str(dir(self.parent_option))+ "|\n" )
 #		print()
 
-#		#print( "self.value:|" +str(self.value)+ "|" )
-#		print( "value:|" +str(self.parent_option.value)+ "|" )
+		print( "self.value:|" +str(self.value)+ "|" )
+		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
 #		print( "self.title:|" +str(self.title)+ "|" )
 #		print( "self.desc:|" +str(self.desc)+ "|" )
 #		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
@@ -534,8 +534,8 @@ class BusKillOptionItem(FloatLayout):
 
 		# skip this touch event if they touched on an option that's already the
 		# enabled option
-		if self.parent_option.value == self.title:
-			print( "self.parent_option.value equals self.title. Returning now" )
+		if self.parent_option.value == self.value:
+			print( "self.parent_option.value equals self.value. Returning now" )
 			return
 
 		# does this option have a warning to prompt the user to confirm their
@@ -564,7 +564,7 @@ class BusKillOptionItem(FloatLayout):
 
 		# write change to disk in our persistant buskill .ini Config file
 		key = str(self.parent_option.key)
-		value = str(self.title)
+		value = str(self.value)
 		msg = "DEBUG: User changed config of '" +str(key) +"' to '" +str(value)+ "'"
 		print( msg ); logger.debug( msg )
 
@@ -572,14 +572,14 @@ class BusKillOptionItem(FloatLayout):
 		Config.write()
 
 		# change the text of the option's value on the main Settings Screen
-		self.parent_option.value = self.title
+		self.parent_option.value = self.value
 
 		# loop through every available option in the ComplexOption sub-Screen and
 		# change the icon of the radio button (selected vs unselected) as needed
 		for option in self.parent.children:
 
 			# is this the now-currently-set option?
-			if option.title == self.parent_option.value:
+			if option.value == self.parent_option.value:
 				# this is the currenty-set option
 				# set the radio button icon to "selected"
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
@@ -820,12 +820,13 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 #
 #		setting_screen.content.add_widget( grid_layout )
 
-		for title, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
-#			print( "option_title:|" +str(title)+ "|" )
+		for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
+			print( "option_title:|" +str(self.key)+ "|" )
+			print( "option_value:|" +str(value)+ "|" )
 #			print( "option_desc:|" +str(desc)+ "|" )
 #			print( "option_confirmation:|" +str(confirmation)+ "|" )
 #			print( "option_icon:|" +str(icon)+ "|" )
-			option_item = BusKillOptionItem( title, desc, confirmation, icon, self, manager )
+			option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
 			setting_screen.content.add_widget( option_item )
 
 		main_screen = manager.get_screen('main')

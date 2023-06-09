@@ -394,7 +394,7 @@
 			markup: True
 			#text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
 			#text: '[font=mdicons][size=18]\ue836[/size][/font]'
-			text: ('[font=mdicons][size=18]\ue837[/size][/font]' if root.parent_option.value == root.title else '[font=mdicons][size=18]\ue836[/size][/font]')
+			text: ('[font=mdicons][size=18]\ue837[/size][/font]' if root.parent_option.value == root.value else '[font=mdicons][size=18]\ue836[/size][/font]')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
@@ -427,7 +427,7 @@
 		Label:
 			id: labellayout
 			markup: True
-			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
+			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.value or '', root.desc or '')
 			#text: u'Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]'
 			font_size: '15sp'
 			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
