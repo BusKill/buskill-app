@@ -1225,7 +1225,19 @@ class BusKillSettingsScreen(Screen):
 				if isinstance( widget, BusKillOptionItem ):
 					# yes, this is an option; make sure it's correct
 
+					print( widget.parent )
+					print( widget.parent.parent )
+					print( widget.parent.parent.parent )
+					print( widget.parent.parent.parent.parent )
+					print( screen )
+					print( widget.parent_option )
+
+					print( "*********************" )
 					print( str(widget) )
+					print( str(dir(widget)) )
+					print( "\ttitle:|" +str(widget.title)+ "|" )
+					print( "\tvalue:|" +str(widget.value)+ "|" )
+					print( "\ttext:|" +str(widget.radio_button_label.text)+ "|" )
 
 
 		print( "post-screens:|" +str(self.manager.screens)+ "|" )
