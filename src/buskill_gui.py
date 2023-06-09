@@ -1241,21 +1241,6 @@ class BusKillSettingsScreen(Screen):
 					# config
 					widget.parent_option.value = set_value
 
-					print( widget.parent )
-					print( widget.parent.parent )
-					print( widget.parent.parent.parent )
-					print( widget.parent.parent.parent.parent )
-					print( screen )
-					print( widget.parent_option )
-
-					print( "*********************" )
-					print( str(widget) )
-					print( str(dir(widget)) )
-					print( "\ttitle:|" +str(widget.title)+ "|" )
-					print( "\tvalue:|" +str(widget.value)+ "|" )
-					print( "\ttext:|" +str(widget.radio_button_label.text)+ "|" )
-
-					print( "\tactual_value:|" +Config.get('buskill', widget.title)+ "|" )
 					# is this the now-currently-set option?
 					if value == set_value:
 						# this is the currenty-set option
@@ -1269,9 +1254,29 @@ class BusKillSettingsScreen(Screen):
 
 		print( "post-screens:|" +str(self.manager.screens)+ "|" )
 
+		# loop through all the widgets on the Settings Screen
+		for widget in self.settings_content.walk():
+			print( "widget" +str(widget) )
+
+			# is this widget a BusKillSettingComplexOptions object?
+			if isinstance( widget, BusKillSettingComplexOptions ):
+
+				# get the key for this SettingItem
+				key = widget.key
+
+				# get the value that the user has actually set this option to
+				set_value = Config.get('buskill', key)
+
+				print( "dir(widget)" +str(dir(widget)) )
+				print( "widget.title:|" +str(widget.title)+ "|" )
+				print( "widget.value:|" +str(widget.value)+ "|" )
+				print( "widget.key:|" +str(widget.key)+ "|" )
+				print( "widget.section:|" +str(widget.section)+ "|" )
+				widget.value = set_value
+
 		# clear away all the widgets on the Settings Screen and rebuild them
-		self.settings_content.clear_widgets()
-		self.on_pre_enter()
+		#self.settings_content.clear_widgets()
+		#self.on_pre_enter()
 
 	def rearm_if_required(self):
 
