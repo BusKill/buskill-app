@@ -1218,20 +1218,11 @@ class BusKillSettingsScreen(Screen):
 			# is this screen one of our ComplexOptions screens?
 			if screen.name[:8] == "setting_":
 
-				print( "screen.children" +str(screen.children)+ "|" )
-				print( "dir(screen.children)" +str(dir(screen.children))+ "|" )
-
-				# get the parent layout inside the screen
 				parent_layout = screen.children[0]
+				for widget in screen.walk():
 
-				# get the ScrollView inside the parent layout
-				view = parent_layout.children[0]
-
-				# get the child layout inside the ScrollView
-				child_layout = view.children[0]
-
-				for widget in child_layout.children:
-					print( str(widget) )
+					if isinstance( widget, BusKillOptionItem ):
+						print( str(widget) )
 
 
 		print( "post-screens:|" +str(self.manager.screens)+ "|" )
