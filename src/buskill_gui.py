@@ -1224,7 +1224,22 @@ class BusKillSettingsScreen(Screen):
 
 				# is this widget a BusKillOptionItem?
 				if isinstance( widget, BusKillOptionItem ):
-					# yes, this is an option; make sure it's correct
+					# yes, this is a radio button for an option; make sure it's set
+					# correctly, depending on if it's selected or not in the config
+
+					# get the title for this option (eg "trigger")
+					title = widget.title
+
+					# get the value that this particular radio button is for
+					# (eg 'soft-shutdown')
+					value = widget.value
+
+					# get the value that the user has actually set this option to
+					set_value = Config.get('buskill', title)
+
+					# first, make sure that the parent of this option matches our
+					# config
+					widget.parent_option.value = set_value
 
 					print( widget.parent )
 					print( widget.parent.parent )
@@ -1239,6 +1254,17 @@ class BusKillSettingsScreen(Screen):
 					print( "\ttitle:|" +str(widget.title)+ "|" )
 					print( "\tvalue:|" +str(widget.value)+ "|" )
 					print( "\ttext:|" +str(widget.radio_button_label.text)+ "|" )
+
+					print( "\tactual_value:|" +Config.get('buskill', widget.title)+ "|" )
+					# is this the now-currently-set option?
+					if value == set_value:
+						# this is the currenty-set option
+						# set the radio button icon to "selected"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
+					else:
+						# this is not the currenty-set option
+						# set the radio button icon to "unselected"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
 
 
 		print( "post-screens:|" +str(self.manager.screens)+ "|" )
