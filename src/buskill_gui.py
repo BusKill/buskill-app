@@ -745,21 +745,21 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 	def __init__(self, **kwargs):
 		print( "called BusKillSettingComplexOptions.__init__()" )
-		print( "dir(kwargs):|" +str(dir(kwargs))+ "|" )
-		print( "panel:|" +str(self.panel)+ "|" )
-		print( "options_long:|" +str(self.options_long)+ "|" )
+#		print( "dir(kwargs):|" +str(dir(kwargs))+ "|" )
+#		print( "panel:|" +str(self.panel)+ "|" )
+#		print( "options_long:|" +str(self.options_long)+ "|" )
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
 		self.value = self.panel.get_value(self.section, self.key)
-		print( "options_long:|" +str(self.options_long)+ "|" )
-		print( "confirmation:|" +str(self.confirmation)+ "|" )
-		print( "self:|" +str(self)+ "|" )
-		print( "self.parent:|" +str(self.parent)+ "|" )
+#		print( "options_long:|" +str(self.options_long)+ "|" )
+#		print( "confirmation:|" +str(self.confirmation)+ "|" )
+#		print( "self:|" +str(self)+ "|" )
+#		print( "self.parent:|" +str(self.parent)+ "|" )
 		#print( "self.get_parent:|" +str(self.get_parent())+ "|" )
-		print( "self.get_root_window():|" +str(self.get_root_window())+ "|" )
+#		print( "self.get_root_window():|" +str(self.get_root_window())+ "|" )
 		#print( "self.context:|" +str(self.context)+ "|" )
-		print( "self.children:|" +str(self.children)+ "|" )
-		print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
-		print( "dir(self):|" +str(dir(self))+ "|\n" )
+#		print( "self.children:|" +str(self.children)+ "|" )
+#		print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
+#		print( "dir(self):|" +str(dir(self))+ "|\n" )
 
 	def on_panel(self, instance, value):
 		print( "entered on_panel()" )
@@ -1028,66 +1028,66 @@ class BusKillSettingsScreen(Screen):
 
 			s.root_app = self.root_app
 
-			print( "adding json panel" )
+#			print( "adding json panel" )
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
-			print( "interface:|" +str(s.interface)+ "|" )
+#			print( "interface:|" +str(s.interface)+ "|" )
 
-			print( "s:|" +str(s)+ "|" )
-			print( "s.parent:|" +str(s.parent)+ "|" )
-			print( "s.root_app:|" +str(s.root_app)+ "|" )
-			print( "s.root_app.manager:|" +str(s.root_app.manager)+ "|" )
-			print( "s.get_root_window():|" +str(s.get_root_window())+ "|" )
-			print( "s.get_parent_window():|" +str(s.get_parent_window())+ "|" )
-			print( "s.get_window_matrix():|" +str(s.get_window_matrix())+ "|" )
-			print( "s.children:|" +str(s.children)+ "|" )
-			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
-			print( "dir(s):|" +str(dir(s))+ "|\n" )
-
-			print( "s.interface:|" +str(s.interface)+ "|" )
-			print( "s.interface.panels:|" +str(s.interface.panels)+ "|" )
-			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
-			print( "s.interface.children:|" +str(s.interface.children)+ "|" )
-			print( "s.interface.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
-			print( "dir(s.interface):|" +str(dir(s.interface))+ "|\n" )
-
-			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
-			print( "s.interface.current_panel.children:|" +str(s.interface.current_panel.children)+ "|" )
-			print( "s.interface.current_panel.walk():|" +str([widget for widget in s.interface.current_panel.walk()])+ "|" )
-			print( "dir(s.interface.current_panel):|" +str(dir(s.interface.current_panel))+ "|\n" )
-
-			print( "s.interface_cls:|" +str(s.interface_cls)+ "|" )
-			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
-			print( "dir(s.interface_cls):|" +str(dir(s.interface_cls))+ "|\n" )
-
-			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
+#			print( "s:|" +str(s)+ "|" )
+#			print( "s.parent:|" +str(s.parent)+ "|" )
+#			print( "s.root_app:|" +str(s.root_app)+ "|" )
+#			print( "s.root_app.manager:|" +str(s.root_app.manager)+ "|" )
+#			print( "s.get_root_window():|" +str(s.get_root_window())+ "|" )
+#			print( "s.get_parent_window():|" +str(s.get_parent_window())+ "|" )
+#			print( "s.get_window_matrix():|" +str(s.get_window_matrix())+ "|" )
+#			print( "s.children:|" +str(s.children)+ "|" )
+#			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
+#			print( "dir(s):|" +str(dir(s))+ "|\n" )
+#
+#			print( "s.interface:|" +str(s.interface)+ "|" )
+#			print( "s.interface.panels:|" +str(s.interface.panels)+ "|" )
+#			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
+#			print( "s.interface.children:|" +str(s.interface.children)+ "|" )
+#			print( "s.interface.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
+#			print( "dir(s.interface):|" +str(dir(s.interface))+ "|\n" )
+#
+#			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
+#			print( "s.interface.current_panel.children:|" +str(s.interface.current_panel.children)+ "|" )
+#			print( "s.interface.current_panel.walk():|" +str([widget for widget in s.interface.current_panel.walk()])+ "|" )
+#			print( "dir(s.interface.current_panel):|" +str(dir(s.interface.current_panel))+ "|\n" )
+#
+#			print( "s.interface_cls:|" +str(s.interface_cls)+ "|" )
+#			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
+#			print( "dir(s.interface_cls):|" +str(dir(s.interface_cls))+ "|\n" )
+#
+#			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
 			complex_option = s.interface.current_panel.children[0]
-			print( "complex_option:|" +str(complex_option)+ "|" )
-			print( "complex_option.icon:|" +str(complex_option.icon)+ "|" )
-			print( "complex_option.children:|" +str(complex_option.children)+ "|" )
-			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
-#			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
-#			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
-#			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
-#			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
-#			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
-#			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
-#			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
-			print( "complex_option.walk():|" +str([widget for widget in complex_option.walk()])+ "|" )
-			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
-#			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
+#			print( "complex_option:|" +str(complex_option)+ "|" )
+#			print( "complex_option.icon:|" +str(complex_option.icon)+ "|" )
+#			print( "complex_option.children:|" +str(complex_option.children)+ "|" )
+#			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
+##			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
+##			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
+##			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
+##			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
+##			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
+##			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
+##			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
+#			print( "complex_option.walk():|" +str([widget for widget in complex_option.walk()])+ "|" )
+#			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
+##			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
 
 			complex_option_key_label = complex_option.children[0].children[1]
 			complex_option_value_label = complex_option.children[0].children[0]
 
-			print( "complex_option_key_label.text:|" +str(complex_option_key_label.text)+ "|" )
-			print( "complex_option_key_label.size:|" +str(complex_option_key_label.size)+ "|" )
-			print( "complex_option_key_label.texture_size:|" +str(complex_option_key_label.texture_size)+ "|" )
-			print( "complex_option_key_label.__dict__.items():|" +str(complex_option_key_label.__dict__.items())+ "|" )
-
-			print( "complex_option_value_label.text:|" +str(complex_option_value_label.text)+ "|" )
-
-#			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
-#			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
+#			print( "complex_option_key_label.text:|" +str(complex_option_key_label.text)+ "|" )
+#			print( "complex_option_key_label.size:|" +str(complex_option_key_label.size)+ "|" )
+#			print( "complex_option_key_label.texture_size:|" +str(complex_option_key_label.texture_size)+ "|" )
+#			print( "complex_option_key_label.__dict__.items():|" +str(complex_option_key_label.__dict__.items())+ "|" )
+#
+#			print( "complex_option_value_label.text:|" +str(complex_option_value_label.text)+ "|" )
+#
+##			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
+##			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
 #			print( "dir(complex_option.content):|" +str(dir(complex_option.content))+ "|\n" )
 			#complex_option.add_widget( Label(text='hayy') )
 			#complex_option.add_widget( Label(text='hayy2') )
@@ -1103,8 +1103,8 @@ class BusKillSettingsScreen(Screen):
 #					s.remove_widget(child) 
 
 			#print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
-			print( str( type(s) ) )
-			print( str( s.children ) )
+#			print( str( type(s) ) )
+#			print( str( s.children ) )
 #			print( str( s.children[0].children ) )
 #			print( str( s.children[0].children[0].children ) )
 #			print( str( s.children[0].children[0].children[0].children ) )
@@ -1135,6 +1135,65 @@ class BusKillSettingsScreen(Screen):
 	def on_pre_leave(self):
 		# update runtime 'bk' instance with any settings changes, as needed
 		print( "LEAVING THE SETTINGS SCREEN" )
+
+		self.rearm_if_required()
+
+	def reset_defaults(self):
+
+		msg = "Are you sure you want to reset all your settings back to defaults?"
+
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
+		 body = msg,
+		 button='Erase Settings',
+		 continue_function=self.reset_defaults2
+		)
+		self.dialog.b_cancel.text = "Cancel"
+		#self.dialog.l_body.bind( on_ref_press=self.ref_press )
+		self.dialog.open()
+
+	def reset_defaults2(self):
+
+		# close the dialog if it's already opened
+		if self.dialog != None:
+			self.dialog.dismiss()
+
+		print( "Erase settings!" )
+		for key, value in Config.defaults():
+			print(key, value)
+		print( Config.sections() )
+
+		# delete all the options saved to the config file
+		for key in Config['buskill']:
+			Config.remove_option( 'buskill', key )
+		Config.write()
+
+#		print( dir(self) )
+#		print( dir(self.root_app) )
+		self.root_app.build_config(Config)
+
+		self.settings_content = ObjectProperty(None)
+		self.__init__()
+		print( "self.dialog1:|" +str(self.dialog)+ "|" )
+
+		# TODO: fix the extra dialog
+		new_trigger = Config.get('buskill', 'trigger')
+		print( 'self.bk.trigger:|' +str(self.bk.trigger) + '|' )
+		print( 'new_trigger:|' +str(new_trigger) + '|' )
+		#self.on_pre_leave()
+		print( "self.dialog2:|" +str(self.dialog)+ "|" )
+
+		self.on_pre_enter()
+		print( "self.dialog3:|" +str(self.dialog)+ "|" )
+
+		# TODO: also need to "reset" the sub-screens
+
+		#main_screen = self.manager.get_screen('main')
+		#self.manager.switch_to(main_screen)
+		#settings_screen = self.manager.get_screen('settings')
+		#self.manager.switch_to(settings_screen)
+
+	def rearm_if_required(self):
 
 		# this changes to true if we have to disarm & arm BusKill again i norder to
 		# apply the settings that the user changed
@@ -1168,25 +1227,13 @@ class BusKillSettingsScreen(Screen):
 			)
 			self.dialog.open()
 
-	def reset_defaults(self):
-
-		self.dialog = DialogConfirmation(
-		 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
-		 body = self.confirmation,
-		 button='Continue',
-		 continue_function=self.reset_defaults2
-		)
-		self.dialog.b_cancel.text = "Cancel"
-		#self.dialog.l_body.bind( on_ref_press=self.ref_press )
-		self.dialog.open()
-
-	def reset_defaults2(self):
-
-		pass
-
 	def rearm(self):
 
-		self.dialog.dismiss()
+		print( "self.dialog4:|" +str(self.dialog)+ "|" )
+
+		# close the dialog if it's already opened
+		if self.dialog != None:
+			self.dialog.dismiss()
 
 		# turn it off and on again
 		self.main_screen.toggle_buskill()
@@ -1349,6 +1396,7 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'trigger': 'lock-screen',
+		 'drive': 'all',
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
