@@ -1182,36 +1182,30 @@ class BusKillSettingsScreen(Screen):
 		# refresh all the values on the Settings Screen (and sub-screens)
 		self.refresh_values()
 
-#		# do a "refresh" of the contents of the Settings screen
-#		self.settings_content = ObjectProperty(None)
-#		self.__init__()
-#		self.on_pre_enter()
-#
-#		# loop through all of our sub-screens in the Settings screen (that are
-#		# used to change the values of ComplexOptions)
-#		for screen in self.manager.screens:
-#			# is this screen one of our ComplexOptions screens?
-#			if screen.name[:8] == "setting_":
-#
-#				print( "screen_name:|" +str(screen.name)+ "|" )
-#				print( "\tdir(screen):|" +str(dir(screen))+ "|" )
-#				print( "\dir(tscreen.children):|" +str(dir(screen.children))+ "|" )
-#
-#				# this is a setting screen that's now stale; delete it (it will
-#				# refresh on its own when the user clicks it again)
-#				#self.manager.remove_widget( screen )
-#				screen.clear_widgets()
-
 	# updates the values of all the options on the Settings Screen and all
 	# ComplexOptions sub-screens
 	def refresh_values(self):
-		print( "entered refresh_values()" )
-		print( "mainScreen.children" +str(self.children)+ "|" )
-		print( "dir(mainScreen.children)" +str(dir(self.children))+ "|" )
 
-		print( "dir(self.settings_content)" +str(dir(self.settings_content))+ "|" )
+		# UPDATE SETTINGS SCREEN
 
-		print( "pre-screens:|" +str(self.manager.screens)+ "|" )
+		# loop through all the widgets on the Settings Screen
+		for widget in self.settings_content.walk():
+			print( "widget" +str(widget) )
+
+			# is this widget a BusKillSettingComplexOptions object?
+			if isinstance( widget, BusKillSettingComplexOptions ):
+
+				# get the key for this SettingItem
+				key = widget.key
+
+				# get the value that the user has actually set this option to
+				set_value = Config.get('buskill', key)
+
+				# update the value for this SettingItem, which will update the text
+				# in the Label on the Settings Screen
+				widget.value = set_value
+
+		# UPDATE SUB-SETTINGS SCREENS (for ComplexOptions)
 
 		# loop through all of our sub-screens in the Settings screen (that are
 		# used to change the values of ComplexOptions)
@@ -1251,33 +1245,6 @@ class BusKillSettingsScreen(Screen):
 						# set the radio button icon to "unselected"
 						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
 
-
-		print( "post-screens:|" +str(self.manager.screens)+ "|" )
-
-		# loop through all the widgets on the Settings Screen
-		for widget in self.settings_content.walk():
-			print( "widget" +str(widget) )
-
-			# is this widget a BusKillSettingComplexOptions object?
-			if isinstance( widget, BusKillSettingComplexOptions ):
-
-				# get the key for this SettingItem
-				key = widget.key
-
-				# get the value that the user has actually set this option to
-				set_value = Config.get('buskill', key)
-
-				print( "dir(widget)" +str(dir(widget)) )
-				print( "widget.title:|" +str(widget.title)+ "|" )
-				print( "widget.value:|" +str(widget.value)+ "|" )
-				print( "widget.key:|" +str(widget.key)+ "|" )
-				print( "widget.section:|" +str(widget.section)+ "|" )
-				widget.value = set_value
-
-		# clear away all the widgets on the Settings Screen and rebuild them
-		#self.settings_content.clear_widgets()
-		#self.on_pre_enter()
-
 	def rearm_if_required(self):
 
 		# this changes to true if we have to disarm & arm BusKill again i norder to
@@ -1313,8 +1280,6 @@ class BusKillSettingsScreen(Screen):
 			self.dialog.open()
 
 	def rearm(self):
-
-		print( "self.dialog4:|" +str(self.dialog)+ "|" )
 
 		# close the dialog if it's already opened
 		if self.dialog != None:
