@@ -1136,7 +1136,12 @@ class BusKillSettingsScreen(Screen):
 		# update runtime 'bk' instance with any settings changes, as needed
 		print( "LEAVING THE SETTINGS SCREEN" )
 
-		self.rearm_if_required()
+		# is the user going back to the main screen or some sub-Settings screen?
+		if self.manager.current == "main":
+			# the user is leaving the Settings screen to go back to the main Screen
+
+			# attempt to re-arm BusKill if the trigger changed
+			self.rearm_if_required()
 
 	def reset_defaults(self):
 
