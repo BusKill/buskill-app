@@ -571,20 +571,22 @@ class BusKillOptionItem(FloatLayout):
 		Config.set('buskill', key, value)
 		Config.write()
 
+		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.title
-		parent = self.parent
+
+		# loop through every available option in the ComplexOption sub-Screen and
+		# change the icon of the radio button (selected vs unselected) as needed
 		for option in self.parent.children:
-			#print( "option:|" +str(option)+ "|" )
-			#print( "option.title:|" +str(option.title)+ "|" )
-			#print( "removing " +str(option.title)+ " from " +str(self.parent) )
-			#parent.remove_widget(option)
-			#parent.add_widget(option)
+
+			# is this the now-currently-set option?
 			if option.title == self.parent_option.value:
+				# this is the currenty-set option
+				# set the radio button icon to "selected"
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
 			else:
+				# this is not the currenty-set option
+				# set the radio button icon to "unselected"
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
-
-		#print( "touch:|" +str(touch)+ "|" )
 
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
 
@@ -1029,6 +1031,9 @@ class BusKillSettingsScreen(Screen):
 			s.root_app = self.root_app
 
 #			print( "adding json panel" )
+			# create a new Kivy SettingsPanel using Config (our buskill.ini config
+			# file) and a set of options to be drawn in the GUI as defined-by
+			# the 'settings_buskill.json' file
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
 #			print( "interface:|" +str(s.interface)+ "|" )
 
@@ -1173,19 +1178,60 @@ class BusKillSettingsScreen(Screen):
 		# setup the defaults again to avoid configparser.NoOptionError
 		self.root_app.build_config(Config)
 
-		# do a "refresh" of the contents of the Settings screen
-		self.settings_content = ObjectProperty(None)
-		self.__init__()
-		self.on_pre_enter()
+		# refresh all the values on the Settings Screen (and sub-screens)
+		self.refresh_values()
+
+#		# do a "refresh" of the contents of the Settings screen
+#		self.settings_content = ObjectProperty(None)
+#		self.__init__()
+#		self.on_pre_enter()
+#
+#		# loop through all of our sub-screens in the Settings screen (that are
+#		# used to change the values of ComplexOptions)
+#		for screen in self.manager.screens:
+#			# is this screen one of our ComplexOptions screens?
+#			if screen.name[:8] == "setting_":
+#
+#				print( "screen_name:|" +str(screen.name)+ "|" )
+#				print( "\tdir(screen):|" +str(dir(screen))+ "|" )
+#				print( "\dir(tscreen.children):|" +str(dir(screen.children))+ "|" )
+#
+#				# this is a setting screen that's now stale; delete it (it will
+#				# refresh on its own when the user clicks it again)
+#				#self.manager.remove_widget( screen )
+#				screen.clear_widgets()
+
+	# updates the values of all the options on the Settings Screen and all
+	# ComplexOptions sub-screens
+	def refresh_values(self):
+		print( "entered refresh_values()" )
+		print( "mainScreen.children" +str(self.children)+ "|" )
+		print( "dir(mainScreen.children)" +str(dir(self.children))+ "|" )
+
+		print( "dir(self.settings_content)" +str(dir(self.settings_content))+ "|" )
+
+		print( "pre-screens:|" +str(self.manager.screens)+ "|" )
 
 		# loop through all of our sub-screens in the Settings screen (that are
 		# used to change the values of ComplexOptions)
 		for screen in self.manager.screens:
 			# is this screen one of our ComplexOptions screens?
 			if screen.name[:8] == "setting_":
-				# this is a setting screen that's now stale; delete it (it will
-				# refresh on its own when the user clicks it again)
+
+				screen.clear_widgets()
 				self.manager.remove_widget( screen )
+		for screen in self.manager.screens:
+			# is this screen one of our ComplexOptions screens?
+			if screen.name[:8] == "setting_":
+
+				screen.clear_widgets()
+				self.manager.remove_widget( screen )
+
+		print( "post-screens:|" +str(self.manager.screens)+ "|" )
+
+		# clear away all the widgets on the Settings Screen and rebuild them
+		self.settings_content.clear_widgets()
+		self.on_pre_enter()
 
 	def rearm_if_required(self):
 
