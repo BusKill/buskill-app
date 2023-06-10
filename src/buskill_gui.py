@@ -927,13 +927,6 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 		msg = "DEBUG: User switched to 'BusKillSettingsComplexOptionsScreen' screen"
 		print( msg ); logger.debug( msg )
 
-		# set the bk object to the BusKillApp's bk object
-		# note we can't set this in __init__() because that's too early. the
-		# 'root_app' instance field is manually set by the BusKillApp object
-		# after this Screen instances is created but before it's added with
-		# add_widget()
-		#self.bk = self.root_app.bk
-
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
 
