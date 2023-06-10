@@ -927,9 +927,7 @@ class BusKillSettingsScreen(Screen):
 
 	def __init__(self, **kwargs):
 
-		print( "called BusKillSettingsScreen.__init__()" )
 		super(BusKillSettingsScreen, self).__init__(**kwargs)
-#		print( "manager:|" +str(self.manager)+ "|" )
 
 	def on_pre_enter(self, *args):
 
@@ -1311,7 +1309,8 @@ class BusKillApp(App):
 
 			# loop through each screen created above
 			for screen in screens:
-				print( "adding screen:|" +str(screen)+ "|" )
+				msg = "DEBUG: adding screen:|" +str(screen)+ "|"
+				print( msg ); logger.debug( msg )
 
 				# assign an instance field named 'root_app' to each of our Screens
 				# that references <this> BusKillApp object so that we can access
