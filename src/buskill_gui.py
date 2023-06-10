@@ -509,32 +509,11 @@ class BusKillOptionItem(FloatLayout):
 		if not self.collide_point(*touch.pos):
 			return
 
-		print()
-		print( "called BusKillOptionItem.on_touch_up()" )
-#		print( "self:|" +str(self)+ "|" )
-#		print( "self.parent:|" +str(self.parent)+ "|" )
-#		print( "dir(self.parent):|" +str(dir(self.parent))+ "|\n" )
-#		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
-#		print( "dir(self.parent_option):|" +str(dir(self.parent_option))+ "|\n" )
-#		print()
-
-		print( "self.value:|" +str(self.value)+ "|" )
-		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
-#		print( "self.title:|" +str(self.title)+ "|" )
-#		print( "self.desc:|" +str(self.desc)+ "|" )
-#		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
-#		print( "dir(self):|" +str(dir(self))+ "|\n" )
-#
-#		print( "self.parent:|" +str(self.parent)+ "|" )
-#		print( "self.parent.children:|" +str(self.parent.children)+ "|" )
-#
-#		# TODO: if there's a confirmation, don't continue until they confirm
-#		print( "self.confirmation:|" +str(self.confirmation)+ "|" )
-
 		# skip this touch event if they touched on an option that's already the
 		# enabled option
 		if self.parent_option.value == self.value:
-			print( "self.parent_option.value equals self.value. Returning now" )
+			msg = "DEBUG: Option already equals '" +str(self.value)+ "'. Returning."
+			print( msg ); logger.debug( msg )
 			return
 
 		# does this option have a warning to prompt the user to confirm their
