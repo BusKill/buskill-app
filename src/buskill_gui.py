@@ -659,8 +659,6 @@ class BusKillSettingItem(kivy.uix.settings.SettingItem):
     def __init__(self, **kwargs):
         super(BusKillSettingItem, self).__init__(**kwargs)
         self.value = self.panel.get_value(self.section, self.key)
-        print( "key:|" +str(self.key)+ "|" )
-        print( "value:|" +str(self.value)+ "|" )
 
     def add_widget(self, *largs):
         if self.content is None:
@@ -724,36 +722,13 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	'''
 
 	def __init__(self, **kwargs):
-		print( "called BusKillSettingComplexOptions.__init__()" )
-#		print( "dir(kwargs):|" +str(dir(kwargs))+ "|" )
-#		print( "panel:|" +str(self.panel)+ "|" )
-#		print( "options_long:|" +str(self.options_long)+ "|" )
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
 		self.value = self.panel.get_value(self.section, self.key)
-#		print( "options_long:|" +str(self.options_long)+ "|" )
-#		print( "confirmation:|" +str(self.confirmation)+ "|" )
-#		print( "self:|" +str(self)+ "|" )
-#		print( "self.parent:|" +str(self.parent)+ "|" )
-		#print( "self.get_parent:|" +str(self.get_parent())+ "|" )
-#		print( "self.get_root_window():|" +str(self.get_root_window())+ "|" )
-		#print( "self.context:|" +str(self.context)+ "|" )
-#		print( "self.children:|" +str(self.children)+ "|" )
-#		print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
-#		print( "dir(self):|" +str(dir(self))+ "|\n" )
 
 	def on_panel(self, instance, value):
-		print( "entered on_panel()" )
 		if value is None:
 			return
 		self.fbind('on_release', self._choose_settings_screen)
-
-#		if self.icon is None:
-#			self.icon = '\ue256'
-#			print( "self:|" +str(self)+ "|" )
-#			print( "self.parent:|" +str(self.parent)+ "|" )
-#			print( "self.children:|" +str(self.children)+ "|" )
-#			print( "self.walk():|" +str([widget for widget in self.walk()])+ "|" )
-#			print( "dir(self):|" +str(dir(self))+ "|\n" )
 
 	def _set_option(self, instance):
 		self.value = instance.text
