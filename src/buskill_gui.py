@@ -843,18 +843,8 @@ class BusKillSettings(kivy.uix.settings.Settings):
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
 	def __init__(self, *args, **kwargs):
-		self.fucker='horse'
 		self.interface_cls = BusKillInterfaceWithNoMenu
-		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
-		print( "interface:|" +str(self.interface)+ "|" )
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
-		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
-		print( "interface:|" +str(self.interface)+ "|" )
-#		self.interface_cls = BusKillInterfaceWithNoMenu
-#		self.interface = BusKillInterfaceWithNoMenu()
-		print( "interface_cls:|" +str(self.interface_cls)+ "|" )
-		print( "interface:|" +str(self.interface)+ "|" )
-		#self.interface_cls = BusKillInterfaceWithNoMenu
 
 class BusKillSettingsComplexOptionsScreen(Screen):
 
