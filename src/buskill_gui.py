@@ -940,7 +940,6 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 	def show_help( self ):
 
 		self.dialog = DialogConfirmation(
-		 #title = '[font=mdicons][size=31]\ue002\ue000\ue645\ue160\ue99a\ue82a\uf22f[/size][/font] Debug Log',
 		 title = '[font=mdicons][size=30]\ue88f[/size][/font] ' + str(self.actionbar_title),
 		 body = str(self.help_msg),
 		 button = "",
@@ -965,8 +964,6 @@ class BusKillSettingsScreen(Screen):
 		msg = "DEBUG: User switched to 'Settings' screen"
 		print( msg ); logger.debug( msg )
 
-#		print( "manager:|" +str(self.manager)+ "|" )
-
 		# set the bk object to the BusKillApp's bk object
 		# note we can't set this in __init__() because that's too early. the
 		# 'root_app' instance field is manually set by the BusKillApp object
@@ -988,121 +985,24 @@ class BusKillSettingsScreen(Screen):
 		if self.settings_content.children == []:
 			# we haven't added the settings widget yet; add it now
 
-			#self.root_app.settings_cls = BusKillSettingsWithNoMenu
-			#print( "interface_cls:|" +str(self.root_app.settings.interface_cls)+ "|" )
-			#s = self.root_app.settings_cls()
+			# kivy's Settings module is designed to use many different kinds of
+			# "menus" (sidebars) for navigating different sections of the settings.
+			# while this is powerful, it conflicts with the Material Design spec,
+			# so we don't use it. Instead we use BusKillSettingsWithNoMenu, which
+			# inherets kivy's SettingsWithNoMenu and we add sub-screens for
+			# "ComplexOptions"; 
 			s = BusKillSettingsWithNoMenu()
-			print( "interface:|" +str(s.interface)+ "|" )
-			#self.root_app.build_settings(s)
-
 			s.root_app = self.root_app
 
-#			print( "adding json panel" )
 			# create a new Kivy SettingsPanel using Config (our buskill.ini config
 			# file) and a set of options to be drawn in the GUI as defined-by
 			# the 'settings_buskill.json' file
 			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
-#			print( "interface:|" +str(s.interface)+ "|" )
 
-#			print( "s:|" +str(s)+ "|" )
-#			print( "s.parent:|" +str(s.parent)+ "|" )
-#			print( "s.root_app:|" +str(s.root_app)+ "|" )
-#			print( "s.root_app.manager:|" +str(s.root_app.manager)+ "|" )
-#			print( "s.get_root_window():|" +str(s.get_root_window())+ "|" )
-#			print( "s.get_parent_window():|" +str(s.get_parent_window())+ "|" )
-#			print( "s.get_window_matrix():|" +str(s.get_window_matrix())+ "|" )
-#			print( "s.children:|" +str(s.children)+ "|" )
-#			print( "s.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
-#			print( "dir(s):|" +str(dir(s))+ "|\n" )
-#
-#			print( "s.interface:|" +str(s.interface)+ "|" )
-#			print( "s.interface.panels:|" +str(s.interface.panels)+ "|" )
-#			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
-#			print( "s.interface.children:|" +str(s.interface.children)+ "|" )
-#			print( "s.interface.walk():|" +str([widget for widget in s.interface.walk()])+ "|" )
-#			print( "dir(s.interface):|" +str(dir(s.interface))+ "|\n" )
-#
-#			print( "s.interface.current_panel:|" +str(s.interface.current_panel)+ "|" )
-#			print( "s.interface.current_panel.children:|" +str(s.interface.current_panel.children)+ "|" )
-#			print( "s.interface.current_panel.walk():|" +str([widget for widget in s.interface.current_panel.walk()])+ "|" )
-#			print( "dir(s.interface.current_panel):|" +str(dir(s.interface.current_panel))+ "|\n" )
-#
-#			print( "s.interface_cls:|" +str(s.interface_cls)+ "|" )
-#			print( "s.interface_cls.children:|" +str(s.interface_cls.children)+ "|" )
-#			print( "dir(s.interface_cls):|" +str(dir(s.interface_cls))+ "|\n" )
-#
-#			print( "s.interface.current_panel.someChild:|" +str(s.interface.current_panel.children[0])+ "|" )
-			complex_option = s.interface.current_panel.children[0]
-#			print( "complex_option:|" +str(complex_option)+ "|" )
-#			print( "complex_option.icon:|" +str(complex_option.icon)+ "|" )
-#			print( "complex_option.children:|" +str(complex_option.children)+ "|" )
-#			print( "complex_option.ids:|" +str(complex_option.ids)+ "|" )
-##			print( "complex_option.on_panel:|" +str(complex_option.on_panel)+ "|" )
-##			print( "complex_option.key:|" +str(complex_option.key)+ "|" )
-##			print( "complex_option.value:|" +str(complex_option.value)+ "|" )
-##			print( "complex_option.options:|" +str(complex_option.options)+ "|" )
-##			print( "complex_option.popup:|" +str(complex_option.popup)+ "|" )
-##			print( "complex_option.section:|" +str(complex_option.section)+ "|" )
-##			print( "complex_option.title:|" +str(complex_option.title)+ "|" )
-#			print( "complex_option.walk():|" +str([widget for widget in complex_option.walk()])+ "|" )
-#			print( "dir(complex_option):|" +str(dir(complex_option))+ "|\n" )
-##			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
-
-			complex_option_key_label = complex_option.children[0].children[1]
-			complex_option_value_label = complex_option.children[0].children[0]
-
-#			print( "complex_option_key_label.text:|" +str(complex_option_key_label.text)+ "|" )
-#			print( "complex_option_key_label.size:|" +str(complex_option_key_label.size)+ "|" )
-#			print( "complex_option_key_label.texture_size:|" +str(complex_option_key_label.texture_size)+ "|" )
-#			print( "complex_option_key_label.__dict__.items():|" +str(complex_option_key_label.__dict__.items())+ "|" )
-#
-#			print( "complex_option_value_label.text:|" +str(complex_option_value_label.text)+ "|" )
-#
-##			print( "complex_option.content:|" +str(complex_option.content)+ "|" )
-##			print( "complex_option.content.children:|" +str(complex_option.content.children)+ "|" )
-#			print( "dir(complex_option.content):|" +str(dir(complex_option.content))+ "|\n" )
-			#complex_option.add_widget( Label(text='hayy') )
-			#complex_option.add_widget( Label(text='hayy2') )
-
-			# for some reason the settings widget automatically includes our
-			# ActionBar, such that if we don't remove it before adding the settings
-			# widget, we end-up with two action bars. this loop just finds the
-			# BoxLayout inside the settings widget (which contains the redundant
-			# ActionBar) and removes it
-# TODO: remove this section if it's not needed anymore
-#			for child in s.children:
-#				if type(child) == BoxLayout:
-#					s.remove_widget(child) 
-
-			#print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
-#			print( str( type(s) ) )
-#			print( str( s.children ) )
-#			print( str( s.children[0].children ) )
-#			print( str( s.children[0].children[0].children ) )
-#			print( str( s.children[0].children[0].children[0].children ) )
-#			print( "SettingOptions: " +str( s.children[0].children[0].children[0].children[0].children ) )
-#			print( "\t" + str( s.children[0].children[0].children[0].children[0].children[0].children ) )
-#			print( "\tBoxLayout: " + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children ) )
-#			print( "\t\t" + str( s.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children ) )
-#			print( "\tLabel: " + str( s.children[0].children[0].children[0].children[0].children[0].children[1].children ) )
-#			print( "Label: " +str( s.children[0].children[0].children[0].children[1].children ) )
-			#print( str( s.children[0].children[0].children[0] ) )
-			#print( str( s.children[0].children[0].children[0].children[0] ) )
-			#print( str( s.children[0].children[0].children[0].children[1] ) )
-			#print( str( s.children[0].children[0].children[0].children[1] ) )
-#			print( "\n***\n" )
-#			s.children[0].children[0].children[0].remove_widget( s.children[0].children[0].children[0].children[1] )
-#			print( "s.child:|" +str(s.children[0].children[0].children[0].children[0].children)+ "|" )
-
-			#s.remove_widget( s.children[0].children[1] )
-			#s.interface.current_panel.title = None
-#			for child in s.interface.current_panel.children:
-#				if type(child) == Label:
-#					s.interface.current_panel.remove_widget(child)
-
+			# our BusKillSettingsWithNoMenu object's first child is an "interface"
+			# the add_json_panel() call above auto-pouplated that interface with
+			# a bunch of "ComplexOptions". Let's add those to the screen's contents
 			self.settings_content.add_widget( s )
-
-			s.interface.current_panel.set_value( complex_option.section, complex_option.key, complex_option.value )
 
 	def on_pre_leave(self):
 		# update runtime 'bk' instance with any settings changes, as needed
