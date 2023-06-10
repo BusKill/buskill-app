@@ -990,7 +990,6 @@ class BusKillSettingsScreen(Screen):
 
 		# loop through all the widgets on the Settings Screen
 		for widget in self.settings_content.walk():
-			print( "widget" +str(widget) )
 
 			# is this widget a BusKillSettingComplexOptions object?
 			if isinstance( widget, BusKillSettingComplexOptions ):
@@ -1052,12 +1051,11 @@ class BusKillSettingsScreen(Screen):
 		rearm_required = False
 
 		# trigger
+		old_trigger = self.bk.trigger
 		new_trigger = Config.get('buskill', 'trigger')
-		print( 'self.bk.trigger:|' +str(self.bk.trigger) + '|' )
-		print( 'new_trigger:|' +str(new_trigger) + '|' )
 
 		# was the trigger just changed by the user?
-		if self.bk.trigger != new_trigger:
+		if old_trigger != new_trigger:
 			# the trigger was changed; update the runtime bk instance
 			self.bk.trigger = new_trigger
 
@@ -1069,6 +1067,9 @@ class BusKillSettingsScreen(Screen):
 		# is it necessary to disarm and arm BusKill in order to apply the user's
 		# changes to BusKill's settings?
 		if rearm_required:
+			msg = "DEBUG: Re-arm from '" +str(old_trigger)+ "' to '" +str(new_trigger)+ "' trigger?"
+			print( msg ); logger.debug( msg )
+
 
 			msg = "You've made changes to your settings that require disarming & arming again to apply."
 			self.dialog = DialogConfirmation(
