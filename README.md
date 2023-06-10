@@ -6,6 +6,8 @@ This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](http
 
 # What is BusKill?
 
+The quickest way to understand what BusKill is to watch our 2-minute [BusKill Explainer Video](https://buskill.in/#demo).
+
 | <a href="https://www.buskill.in/#demo"><img src="docs/images/buskill_explainer_video_20211210.gif?raw=true" alt="What is BusKill? (Explainer Video)"></a> |
 |:--:| 
 | *Watch the <a href="https://www.buskill.in/#demo">BusKill Explainer Video</a> for more info <a href="https://www.youtube.com/v/qPwyoD_cQR4">youtube.com/v/qPwyoD_cQR4</a>* |
