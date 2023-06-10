@@ -21,5 +21,41 @@
 		"options_long": ["v1 long description", "v2 long description" ],
 		"options_icons": ["\ue8b8","\ue8b8"],
 		"confirmation": ["", "", ""]
+	},
+	{
+		"type": "bool",
+		"title": "On or Off?",
+		"desc": "Test of boolean types",
+		"section": "buskill",
+		"key": "flag"
+	},
+	{
+		"type": "numeric",
+		"title": "How many?",
+		"desc": "Test of numeric type",
+		"section": "buskill",
+		"key": "count"
+	},
+	{
+		"type": "options",
+		"title": "Which one?",
+		"desc": "Test of built-in kivy 'options' type",
+		"section": "buskill",
+		"key": "which",
+		"options": ["short","medium","tall"]
+	},
+	{
+		"type": "string",
+		"title": "What's your name?",
+		"desc": "Test of string type",
+		"section": "buskill",
+		"key": "name"
+	},
+	{
+		"type": "path",
+		"title": "Where is it?",
+		"desc": "Test of path type",
+		"section": "buskill",
+		"key": "file"
 	}
 ]
