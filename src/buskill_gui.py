@@ -80,7 +80,6 @@ from kivy.properties import ObjectProperty, StringProperty, ListProperty, Boolea
 # recursive function that checks a given object's parent up the tree until it
 # finds the screen manager, which it returns
 def get_screen_manager(obj):
-	print( "obj:|" +str(obj)+ "|" )
 
 	if hasattr(obj, 'manager') and obj.manager != None:
 		return obj.manager
@@ -782,17 +781,11 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		self.popup.dismiss()
 
 	def _choose_settings_screen(self, instance):
-		print( "he done clicked it" )
 
 		manager = get_screen_manager(self)
-#		print( "manager:|" +str(manager)+ "|" )
-#		print( "manager.current:|" +str(manager.current)+ "|" )
-#		print( "dir(manager):|" +str(dir(manager))+ "|\n" )
-		print( App.get_running_app() )
-		print( str(App.get_application_name(self)) )
 
-		# create a new screen just for choosing the value of this setting, and name
-		# this new screen "setting_<key>" 
+		# create a new screen just for choosing the value of this setting, and
+		# name this new screen "setting_<key>" 
 		screen_name = 'setting_' +self.key
 
 		# did we already create this sub-screen?
@@ -924,7 +917,7 @@ class BusKillSettingsComplexOptionsScreen(Screen):
 
 	def on_pre_enter(self, *args):
 
-		msg = "DEBUG: User switched to 'BusKillSettingsComplexOptionsScreen' screen"
+		msg = "DEBUG: User switched to '" +str(self.manager.current_screen.name)+ "' screen"
 		print( msg ); logger.debug( msg )
 
 		# the "main" screen
@@ -1006,7 +999,6 @@ class BusKillSettingsScreen(Screen):
 
 	def on_pre_leave(self):
 		# update runtime 'bk' instance with any settings changes, as needed
-		print( "LEAVING THE SETTINGS SCREEN" )
 
 		# is the user going back to the main screen or some sub-Settings screen?
 		if self.manager.current == "main":
