@@ -489,9 +489,7 @@ class BusKillOptionItem(FloatLayout):
 		self.icon = icon
 		self.value = value
 		self.parent_option = parent_option
-		#self.value = self.parent_option.value
 		self.manager = manager
-#		print( "self.manager:|" +str(self.manager)+ "|" )
 
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
