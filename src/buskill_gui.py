@@ -652,18 +652,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	# confirmation is presented to the user when they select this option
 	confirmation = ListProperty([])
 
-	def __init__(self, **kwargs):
-		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
-		self.value = self.panel.get_value(self.section, self.key)
-
 	def on_panel(self, instance, value):
 		if value is None:
 			return
 		self.fbind('on_release', self._choose_settings_screen)
-
-	def _set_option(self, instance):
-		self.value = instance.text
-		self.popup.dismiss()
 
 	def _choose_settings_screen(self, instance):
 
