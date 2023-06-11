@@ -479,6 +479,25 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
+# We heavily use (and expand on) the built-in Kivy Settings modules in BusKill
+# * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html
+#
+# Kivy's Settings module does the heavy lifting of populating the GUI Screen
+# with Settings and Options that are defined in a json file, and then -- when
+# the user changes the options for a setting -- writing those changes to a Kivy
+# Config object, which writes them to disk in a .ini file.
+#
+# Note that a "Setting" is a key and an "Option" is a possible value for the
+# Setting.
+# 
+# The json file tells the GUI what Settings and Options to display, but does not
+# store state. The user's chosen configuration of those settings is stored to
+# the Config .ini file.
+#
+# See also https://github.com/BusKill/buskill-app/issues/16
+
+# We define our own BusKillOptionItem, which is an OptionItem that will be used
+# by the BusKillSettingComplexOptions class below
 class BusKillOptionItem(FloatLayout):
 
 	def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
@@ -500,6 +519,8 @@ class BusKillOptionItem(FloatLayout):
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
+	# this is called when the user clicks on this OptionItem (eg choosing the
+	# 'soft-shutdown' trigger)
 	def on_touch_up( self, touch ):
 
 		# skip this touch event if it wasn't *this* widget that was touched
@@ -530,9 +551,9 @@ class BusKillOptionItem(FloatLayout):
 			 continue_function=self.enable_option
 			)
 			self.dialog.b_cancel.text = "Cancel"
-			#self.dialog.l_body.bind( on_ref_press=self.ref_press )
 			self.dialog.open()
 		
+	# called when the user has chosen to change the setting to this option
 	def enable_option( self ):
 
 		if self.dialog != None:
