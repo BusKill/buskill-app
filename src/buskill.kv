@@ -262,7 +262,6 @@
 <-BusKillSettingItem>:
 	size_hint: .25, None
 	height: labellayout.height + dp(10)
-#	content: content
 	padding: 6
 	spacing: 20
 
@@ -284,7 +283,6 @@
 	StackLayout:
 		pos: root.pos
 		orientation: 'lr-tb'
-		#spacing: 30
 		padding: root.padding
 		spacing: root.spacing
 
@@ -298,25 +296,12 @@
 		Label:
 			id: icon_label
 			markup: True
-			#text_size: self.width, None
-			#text_size: self.width - 32, None
-			#text_size: dp(5), dp(5)
-			#size: dp(5), dp(5)
-			#size: 5, 5
-			#width: 5
-			#text: '[font=mdicons][size=18]{0}[/size][/font]'.format(root.icon or '')
-			#text: '{0}'.format('[font=mdicons][size=18]' +root.icon+ '[/size][/font]' or '[font=mdicons][size=18]\ue256[/size][/font]')
 
 			# mdicons doesn't have a "nbsp" icon, so we hardcode the icon to
 			# something unimportant and then set the alpha to 00 if no icon is
 			# defined for this SettingItem
 			text: ('[font=mdicons][size=18][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=18]' +root.icon+ '[/size][/font]')
-			#text: '[size=18]{0}[/size]'.format(root.icon or '')
-			#text: 'YONG'
 			size: self.texture_size
-			#size: [ self.texture_size[0] + dp(10), self.texture_size[1] + dp(10) ]
-			#size_x: self.texture_size[0]
-			#size_y: self.texture_size[1]
 			size_hint: None, None
 			height: labellayout.height
 
@@ -328,24 +313,13 @@
 					size: self.size
 
 		Label:
-			#size_hint_x: .66
 			id: labellayout
 			markup: True
-			#text: "world"
-			#text: "tthere is a big rock candy mountain there is a big rock candy mountain there is a big rock candy mountain here is a big rock candy mountain "
-			#width: 5
 			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.value or '')
 			font_size: '15sp'
-			#text_size: self.size
-			#text_size: self.width, None
-			#size_hint_y: None
-			#size_hint: 1, None
-			#size: dp(5), dp(5)
-			#size: 5, 5
 			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
-			#size: [ self.texture_size[0] + dp(20), self.texture_size[1] + dp(20) ]
 			size_hint: None, None
 
 			# set the minimum height of this item so that fat fingers don't have
@@ -362,7 +336,6 @@
 <BusKillOptionItem>:
 	size_hint: .25, None
 	height: labellayout.height + dp(10)
-#	content: content
 	padding: 6
 	spacing: 20
 
@@ -398,8 +371,6 @@
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
-
-			#on_touch_up: root.clicked()
 
 			canvas.before:
 				Color:
@@ -445,11 +416,6 @@
 					pos: self.pos
 					size: self.size
 
-#<-BusKillSettingComplexOptions>:
-#
-#	Label:
-#		text: "BusKillComplexOptions Label"
-
 <ComplexOptionsScreen>:
 
 	color_main_bg: 0.188, 0.188, 0.188, 1
@@ -458,8 +424,6 @@
 	actionbar: actionbar
 	actionview: actionview
 	content: content
-
-	#on_enter: root.test_print()
 
 	# sets the background from black to grey
 	canvas.before:
@@ -520,8 +484,6 @@
 	actionview: actionview
 	settings_content: settings_content
 
-	#on_enter: root.test_print()
-
 	# sets the background from black to grey
 	canvas.before:
 		Color:
@@ -564,95 +526,6 @@
 
 		BoxLayout:
 			id: settings_content
-#			orientation: 'vertical'
-#			#on_load: root.root_app.create_settings()
-#			#on_load: root.test_print()
-
-#		Button:
-#			size_hint: (1,0.8)
-#			pos_hint: {'top': 1}
-#			text: 'open settings'
-#			halign: 'center'
-#			valign: 'middle'
-#			on_release: root.test_print()
-
-#
-#		GridLayout:
-#
-#			cols: 1
-#			#orientation: 'vertical'
-#			#size_hint: ( 1, 0.95 )
-#			pos_hint: {'top': 1}
-#			height: self.minimum_height
-#
-#			GridLayout:
-#
-#				#orientation: 'horizontal'
-#				#size_y: '100px'
-#				cols: 2
-#				height: self.minimum_height
-##				size_hint_y: None
-##				height: dp(20)
-#				canvas.before:
-#					Color:
-#						rgba: (0,1,0,1)
-#					Rectangle:
-#						pos: self.pos
-#						size: self.size
-#				#size_hint: ( 1, 1 )
-#				#pos_hint: {'top': 1}
-#
-#				Label:
-#					size_hint_x: None
-#					width: self.texture_size[0]*2
-#					markup: True
-#					text: '[font=mdicons]\uef49[/font]'
-#					font_size: 40
-#					halign: 'center'
-#					valign: 'middle'
-#					font_name: "Roboto"
-#					size_hint_y: None
-#					height: self.texture_size[1]
-#					#height: dp(20)
-#
-#				GridLayout:
-#					# sets the background from black to grey
-#
-#					canvas.before:
-#						Color:
-#							rgba: (1,0,0,1)
-#						Rectangle:
-#							pos: self.pos
-#							size: self.size
-#
-#					orientation: 'vertical'
-#					cols: 1
-#					size_hint_y: None
-##					height: dp(20)
-#
-#					Label:
-#						markup: True
-#						text: 'Trigger'
-#						font_size: 18
-#						#size_hint: (1,1)
-#						text_size: self.size
-#						halign: 'left'
-#						#valign: 'middle'
-#						font_name: "Roboto"
-#						size_hint_y: None
-#						height: self.texture_size[1]
-#
-#					Label:
-#						markup: True
-#						text: 'Subtext Example'
-#						font_size: 14
-#						#size_hint: (1,1)
-#						text_size: self.size
-#						halign: 'left'
-#						#valign: 'middle'
-#						font_name: "Roboto"
-#						size_hint_y: None
-#						height: self.texture_size[1]
 
 <DebugLog>:
 	color_primary: 0.129, 0.588, 0.953, 1
