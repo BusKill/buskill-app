@@ -1127,13 +1127,6 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'trigger': 'lock-screen',
-		 # TODO: remove these (just for testing future options & types)
-		 'drive': 'all',
-		 'flag': True,
-		 'count': 42,
-		 'which': "medium",
-		 'name': "John Smith",
-		 'file': "/tmp/some_file"
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
