@@ -658,7 +658,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			# there is no sub-screen for this Complex Option yet; create it
 
 			# create new screen for picking the value for this ComplexOption
-			setting_screen = BusKillSettingsComplexOptionsScreen(
+			setting_screen = ComplexOptionsScreen(
 			 name = screen_name
 			)
 		
@@ -690,19 +690,27 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		manager.transition.direction = 'left'
 		manager.current = screen_name
 
+# We define BusKillSettings (which extends the built-in kivy Settings) so that
+# we can add a new type of Setting = 'commplex-options'). The 'complex-options'
+# type becomes a new 'type' that can be defined in our settings json file
 class BusKillSettings(kivy.uix.settings.Settings):
 
 	def __init__(self, *args, **kargs):
   		super(BusKillSettings, self).__init__(*args, **kargs)
   		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
 
+# Kivy's SettingsWithNoMenu is their simpler settings widget that doesn't
+# include a navigation bar between differnt pages of settings. We extend that
+# type with BusKillSettingsWithNoMenu so that we can use our custom
+# BusKillSettings class (defined above) with our new 'complex-options' type
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
 	def __init__(self, *args, **kwargs):
 		self.interface_cls = kivy.uix.settings.ContentPanel
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
 
-class BusKillSettingsComplexOptionsScreen(Screen):
+# The ComplexOptionsScreen
+class ComplexOptionsScreen(Screen):
 
 	actionview = ObjectProperty(None)
 	settings_content = ObjectProperty(None)
