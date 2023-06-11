@@ -901,7 +901,13 @@ class BusKillSettingsScreen(Screen):
 		for widget in self.settings_content.walk():
 
 			# is this widget a BusKillSettingComplexOptions object?
-			if isinstance( widget, BusKillSettingComplexOptions ):
+			#if isinstance( widget, BusKillSettingComplexOptions ):
+			if isinstance( widget, BusKillSettingComplexOptions ) \
+			 or isinstance( widget, kivy.uix.settings.SettingBoolean ) \
+			 or isinstance( widget, kivy.uix.settings.SettingNumeric ) \
+			 or isinstance( widget, kivy.uix.settings.SettingOptions ) \
+			 or isinstance( widget, kivy.uix.settings.SettingString ) \
+			 or isinstance( widget, kivy.uix.settings.SettingPath ):
 
 				# get the key for this SettingItem
 				key = widget.key
