@@ -710,55 +710,6 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		manager.transition.direction = 'left'
 		manager.current = screen_name
 
-	def _create_popup(self, instance):
-		print( "entered _create_popup()" )
-		print( "self.popup:|" +str(self.popup)+ "|" )
-		if self.popup:
-		   self.popup.dismiss()
-		# create the popup
-		content = BoxLayout(orientation='vertical', spacing='5dp')
-		popup_width = min(0.95 * Window.width, dp(500))
-		self.popup = popup = Popup(
-			content=content, title=self.title, size_hint=(None, None),
-			size=(popup_width, '400dp'))
-		popup.height = len(self.options) * dp(55) + dp(150)
-
-		# add all the options
-		content.add_widget(Widget(size_hint_y=None, height=1))
-		uid = str(self.uid)
-		#for option in self.options:
-		for option_long in self.options_long:
-			state = 'down' if option_long == self.value else 'normal'
-			btn = ToggleButton(text=option_long, state=state, group=uid)
-			btn.bind(on_release=self._set_option)
-			content.add_widget(btn)
-
-		# finally, add a cancel button to return on the previous panel
-		content.add_widget(SettingSpacer())
-		btn = Button(text='Cancel', size_hint_y=None, height=dp(50))
-		btn.bind(on_release=popup.dismiss)
-		content.add_widget(btn)
-
-		# and open the popup !
-		print( "popup:|" +str(popup)+ "|" )
-		print( "popup.parent:|" +str(popup.parent)+ "|" )
-		print( "popup.get_parent_window():|" +str(popup.get_parent_window())+ "|" )
-		print( "popup.get_root_window():|" +str(popup.get_root_window())+ "|" )
-		print( "popup._context:|" +str(popup._context)+ "|" )
-		print( "popup.__dict__.items():|" +str(popup.__dict__.items())+ "|" )
-		print( "popup._trigger_layout:|" +str(popup._trigger_layout)+ "|" )
-		print( "popup.canvas:|" +str(popup.canvas)+ "|" )
-		print( "popup._proxy_ref:|" +str(popup._proxy_ref)+ "|" )
-		print( "dir(popup):|" +str(dir(popup))+ "|\n" )
-
-		print( "popup.canvas:|" +str(popup.canvas)+ "|" )
-		print( "popup.canvas.children:|" +str(popup.canvas.children)+ "|" )
-		print( "popup.canvas.before:|" +str(popup.canvas.before)+ "|" )
-		print( "popup.canvas.after:|" +str(popup.canvas.after)+ "|" )
-		print( "dir(popup.canvas):|" +str(dir(popup.canvas))+ "|\n" )
-
-		popup.open()
-
 class BusKillSettingsContentPanel( kivy.uix.settings.ContentPanel ):
 	pass
 
