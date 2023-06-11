@@ -709,7 +709,11 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		self.interface_cls = kivy.uix.settings.ContentPanel
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
 
-# The ComplexOptionsScreen
+# The ComplexOptionsScreen is a sub-screen to the Settings Screen. Kivy doesn't
+# have sub-screens for defining options, but that's what's expected in Material
+# Design. We needed more space, so we created ComplexOption-type Settings. And
+# this is the Screen where the user transitions-to to choose the options for a
+# ComplexOption
 class ComplexOptionsScreen(Screen):
 
 	actionview = ObjectProperty(None)
@@ -749,14 +753,10 @@ class ComplexOptionsScreen(Screen):
 		self.dialog.b_cancel.text = "OK"
 		self.dialog.open()
 
+# This is our main Screen when the user clicks "Settings" in the nav drawer
 class BusKillSettingsScreen(Screen):
 
 	actionview = ObjectProperty(None)
-	settings_content = ObjectProperty(None)
-
-	def __init__(self, **kwargs):
-
-		super(BusKillSettingsScreen, self).__init__(**kwargs)
 
 	def on_pre_enter(self, *args):
 
@@ -803,6 +803,7 @@ class BusKillSettingsScreen(Screen):
 			# a bunch of "ComplexOptions". Let's add those to the screen's contents
 			self.settings_content.add_widget( s )
 
+	# called when the user leaves the Settings screen
 	def on_pre_leave(self):
 		# update runtime 'bk' instance with any settings changes, as needed
 
@@ -813,6 +814,7 @@ class BusKillSettingsScreen(Screen):
 			# attempt to re-arm BusKill if the trigger changed
 			self.rearm_if_required()
 
+	# called when the user clicks the "reset" button in the actionbar
 	def reset_defaults(self):
 
 		msg = "Are you sure you want to reset all your settings back to defaults?"
@@ -824,9 +826,9 @@ class BusKillSettingsScreen(Screen):
 		 continue_function=self.reset_defaults2
 		)
 		self.dialog.b_cancel.text = "Cancel"
-		#self.dialog.l_body.bind( on_ref_press=self.ref_press )
 		self.dialog.open()
 
+	# called when the user confirms they want to reset their settings
 	def reset_defaults2(self):
 		msg = "DEBUG: User initiated settings reset"
 		print( msg ); logger.debug( msg )
@@ -914,6 +916,9 @@ class BusKillSettingsScreen(Screen):
 						# set the radio button icon to "unselected"
 						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
 
+	# determine if we need to re-arm BusKill (eg if they changed the trigger
+	# while BusKill is arm, we'd need to re-arm else it'll trigger not what the
+	# user expects it to trigger)
 	def rearm_if_required(self):
 
 		# this changes to true if we have to disarm & arm BusKill again i norder to
@@ -950,6 +955,7 @@ class BusKillSettingsScreen(Screen):
 			)
 			self.dialog.open()
 
+	# re-arms BusKill
 	def rearm(self):
 
 		# close the dialog if it's already opened
@@ -959,6 +965,10 @@ class BusKillSettingsScreen(Screen):
 		# turn it off and on again
 		self.main_screen.toggle_buskill()
 		self.main_screen.toggle_buskill()
+
+#############
+# DEBUG LOG #
+#############
 
 class DebugLog(Screen):
 
