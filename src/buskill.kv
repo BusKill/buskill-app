@@ -253,11 +253,23 @@
 	font_name: "RobotoMono"
 	font_size: dp(12)
 
+<-BusKillSettingsWithNoMenu>:
+	color_main_bg: 0.188, 0.188, 0.188, 1
+	color_primary: 0.129, 0.588, 0.953, 1
+
+	# sets the background from black to grey
+	canvas.before:
+		Color:
+			rgba: root.color_main_bg
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
 <-SettingsPanel>:
-    spacing: 5
-    padding: 5
-    size_hint_y: None
-    height: self.minimum_height
+	spacing: 5
+	padding: 5
+	size_hint_y: None
+	height: self.minimum_height
 
 <-BusKillSettingItem>:
 	size_hint: .25, None
@@ -267,31 +279,25 @@
 
 	icon_label: icon_label
 
-	canvas:
-		Color:
-			rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			#rgba: 0, 1, 0, 1
-		Rectangle:
-			pos: self.x, self.y + 1
-			size: self.size
-		Color:
-			rgb: .2, .2, .2
-		Rectangle:
-			pos: self.x, self.y - 2
-			size: self.width, 1
+# uncomment to debug boundaries
+#	canvas:
+#		Color:
+#			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+#			rgba: 0, 1, 0, 1
+#		Rectangle:
+#			pos: self.x, self.y + 1
+#			size: self.size
+#		Color:
+#			rgb: .2, .2, .2
+#		Rectangle:
+#			pos: self.x, self.y - 2
+#			size: self.width, 1
 
 	StackLayout:
 		pos: root.pos
 		orientation: 'lr-tb'
 		padding: root.padding
 		spacing: root.spacing
-
-#		canvas:
-#			Color:
-#				rgba: 1, 0, 0, 1
-#			Rectangle:
-#				pos: self.pos
-#				size: self.size
 
 		Label:
 			id: icon_label
@@ -305,17 +311,17 @@
 			size_hint: None, None
 			height: labellayout.height
 
-			canvas.before:
-				Color:
-					rgba: 0, 0, 1, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+# uncomment to debug boundaries
+#			canvas.before:
+#				Color:
+#					rgba: 0, 0, 1, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: labellayout
 			markup: True
-			#text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.desc or '')
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.title or '', root.value or '')
 			font_size: '15sp'
 			text_size: root.width - icon_label.width - (2*root.padding) - (2*root.spacing), None
@@ -324,14 +330,15 @@
 
 			# set the minimum height of this item so that fat fingers don't have
 			# issues on small touchscreen displays (for better UX)
-			height: max(self.height, dp(80))
+			height: max(self.height, dp(50))
 
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+# uncomment to debug boundaries
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 <BusKillOptionItem>:
 	size_hint: .25, None
@@ -342,18 +349,19 @@
 	icon_label: icon_label
 	radio_button_label: radio_button_label
 
-	canvas:
-		Color:
-			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: 0, 1, 0, 1
-		Rectangle:
-			pos: self.x, self.y + 1
-			size: self.size
-		Color:
-			rgb: .2, .2, .2
-		Rectangle:
-			pos: self.x, self.y - 2
-			size: self.width, 1
+# uncomment to debug boundaries
+#	canvas:
+#		Color:
+#			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+#			rgba: 0, 1, 0, 1
+#		Rectangle:
+#			pos: self.x, self.y + 1
+#			size: self.size
+#		Color:
+#			rgb: .2, .2, .2
+#		Rectangle:
+#			pos: self.x, self.y - 2
+#			size: self.width, 1
 
 	StackLayout:
 		pos: root.pos
@@ -370,12 +378,13 @@
 			size_hint: None, None
 			height: labellayout.height
 
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+# uncomment to debug boundaries
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: icon_label
@@ -385,18 +394,18 @@
 			size_hint: None, None
 			height: labellayout.height
 
-			canvas.before:
-				Color:
-					rgba: 0, 0, 1, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+# uncomment to debug boundaries
+#			canvas.before:
+#				Color:
+#					rgba: 0, 0, 1, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: labellayout
 			markup: True
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.value or '', root.desc or '')
-			#text: u'Title\n[size=13sp][color=999999]And the subtitle here[/color][/size]'
 			font_size: '15sp'
 			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
@@ -406,12 +415,13 @@
 			# issues on small touchscreen displays (for better UX)
 			height: max(self.height, dp(80))
 
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+# uncomment to debug boundaries
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 <ComplexOptionsScreen>:
 
