@@ -585,45 +585,12 @@ class BusKillOptionItem(FloatLayout):
 				# set the radio button icon to "unselected"
 				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
 
+# We define our own BusKillSettingItem, which is a SettingItem that will be used
+# by the BusKillSettingComplexOptions class below. Note that we don't have code
+# here because the difference between the SettingItem and our BusKillSettingItem
+# is what's defined in the buskill.kv file. that's to say, it's all visual
 class BusKillSettingItem(kivy.uix.settings.SettingItem):
-
-    def __init__(self, **kwargs):
-        super(BusKillSettingItem, self).__init__(**kwargs)
-        self.value = self.panel.get_value(self.section, self.key)
-
-    def add_widget(self, *largs):
-        if self.content is None:
-            return super(BusKillSettingItem, self).add_widget(*largs)
-        return self.content.add_widget(*largs)
-
-    def on_touch_down(self, touch):
-        if not self.collide_point(*touch.pos):
-            return
-        if self.disabled:
-            return
-        touch.grab(self)
-        self.selected_alpha = 1
-        return super(BusKillSettingItem, self).on_touch_down(touch)
-
-    def on_touch_up(self, touch):
-        if touch.grab_current is self:
-            touch.ungrab(self)
-            self.dispatch('on_release')
-            Animation(selected_alpha=0, d=.25, t='out_quad').start(self)
-            return True
-        return super(BusKillSettingItem, self).on_touch_up(touch)
-
-    def on_release(self):
-        pass
-
-    def on_value(self, instance, value):
-        if not self.section or not self.key:
-            return
-        # get current value in config
-        panel = self.panel
-        if not isinstance(value, string_types):
-            value = str(value)
-        panel.set_value(self.section, self.key, value)
+	pass
 
 # Our BusKill app has this concept of a SettingItem that has "ComplexOptions"
 #
