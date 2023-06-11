@@ -604,31 +604,53 @@ class BusKillSettingItem(kivy.uix.settings.SettingItem):
             value = str(value)
         panel.set_value(self.section, self.key, value)
 
+# Our BusKill app has this concept of a SettingItem that has "ComplexOptions"
+#
+# The closeset built-in Kivy SettingsItem type is a SettingOptions
+#  * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html#kivy.uix.settings.SettingOptions
+#
+# SettingOptions just opens a simple modal that allows the user to choose one of
+# many different options for the setting. But for setting a BusKill trigger,
+# we wanted a whole new screen so that we could have more space to tell the user
+# what each trigger does, and also have a help button on the screen to describe
+# what a trigger means. Also, the whole "New Screen for an Option" is more
+# in-line with Material Design.
+#  * https://m1.material.io/patterns/settings.html#settings-usage
+#
+# These are the reasons we create a special BusKillSettingComplexOptions class
 class BusKillSettingComplexOptions(BusKillSettingItem):
+
+	# each of these properties directly cooresponds to the key in the json
+	# dictionary that's loaded with add_json_panel. the json file is what defines
+	# all of our settings that will be displayed on the Settings Screen
+
+	# icon defines the icon that's displayed on the Settings Screen for this
+	# setting
 	icon = ObjectProperty(None)
-	'''Implementation of an option list on top of a :class:`SettingItem`.
-	It is visualized with a :class:`~kivy.uix.label.Label` widget that, when
-	clicked, will open a :class:`~kivy.uix.popup.Popup` with a
-	list of options from which the user can select.
-	'''
 
+	# options is a parallel array of short names for different options for this
+	# setting (eg 'lock-screen')
 	options = ListProperty([])
+
+	# options_long is a parallel array of short human-readable descriptions for
+	# different options for this setting (eg 'BusKill will lock your screen')
 	options_long = ListProperty([])
+
+	# options_icons is a parallel array of icons for different options for this
+	# setting. Note that this is distinct from the icon for the setting. the
+	# 'icon' variable defined above is for the setting (eg 'trigger') while the
+	# items in options_icons defines the icons for the options (possible values)
+	# for that setting (eg 'lock-screen' or 'soft-shutdown')
 	options_icons = ListProperty([])
+
+	# confirmation is a parallel array of "confirmation messages" for the
+	# different options for this setting. If a confirmation is set, then the user
+	# will be presented with a popup message asking if they want to proceed
+	# before the app will actually let them choose this option for this setting.
+	# this is useful, for example, before they choose a possibly-dangerous option
+	# (eg 'hard-shutdown'). If this is set to an empty string, then no
+	# confirmation is presented to the user when they select this option
 	confirmation = ListProperty([])
-	'''List of all availables options. This must be a list of "string" items.
-	Otherwise, it will crash. :)
-
-	:attr:`options` is a :class:`~kivy.properties.ListProperty` and defaults
-	to [].
-	'''
-
-	popup = ObjectProperty(None, allownone=True)
-	'''(internal) Used to store the current popup when it is shown.
-
-	:attr:`popup` is an :class:`~kivy.properties.ObjectProperty` and defaults
-	to None.
-	'''
 
 	def __init__(self, **kwargs):
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
