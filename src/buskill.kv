@@ -344,7 +344,7 @@
 	size_hint: .25, None
 	height: labellayout.height + dp(10)
 	padding: 6
-	spacing: 20
+	spacing: 5
 
 	icon_label: icon_label
 	radio_button_label: radio_button_label
@@ -366,14 +366,13 @@
 	StackLayout:
 		pos: root.pos
 		orientation: 'lr-tb'
-		#spacing: 30
 		padding: root.padding
 		spacing: root.spacing
 
 		Label:
 			id: radio_button_label
 			markup: True
-			text: ('[font=mdicons][size=18]\ue837[/size][/font]' if root.parent_option.value == root.value else '[font=mdicons][size=18]\ue836[/size][/font]')
+			text: ('[font=mdicons][size=18]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18]\ue836[/size][/font] ')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height

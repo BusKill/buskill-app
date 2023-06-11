@@ -579,11 +579,11 @@ class BusKillOptionItem(FloatLayout):
 			if option.value == self.parent_option.value:
 				# this is the currenty-set option
 				# set the radio button icon to "selected"
-				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
 			else:
 				# this is not the currenty-set option
 				# set the radio button icon to "unselected"
-				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -910,11 +910,11 @@ class BusKillSettingsScreen(Screen):
 					if value == set_value:
 						# this is the currenty-set option
 						# set the radio button icon to "selected"
-						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font]"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
 					else:
 						# this is not the currenty-set option
 						# set the radio button icon to "unselected"
-						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font]"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
 
 	# determine if we need to re-arm BusKill (eg if they changed the trigger
 	# while BusKill is arm, we'd need to re-arm else it'll trigger not what the
