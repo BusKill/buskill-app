@@ -690,9 +690,6 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 		manager.transition.direction = 'left'
 		manager.current = screen_name
 
-class BusKillInterfaceWithNoMenu( kivy.uix.settings.ContentPanel ):
-	pass
-
 class BusKillSettings(kivy.uix.settings.Settings):
 
 	def __init__(self, *args, **kargs):
@@ -702,7 +699,7 @@ class BusKillSettings(kivy.uix.settings.Settings):
 class BusKillSettingsWithNoMenu(BusKillSettings):
 
 	def __init__(self, *args, **kwargs):
-		self.interface_cls = BusKillInterfaceWithNoMenu
+		self.interface_cls = kivy.uix.settings.ContentPanel
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
 
 class BusKillSettingsComplexOptionsScreen(Screen):
