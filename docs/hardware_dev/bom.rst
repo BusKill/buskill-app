@@ -52,7 +52,24 @@ If your device has USB type C ports and no USB type A ports, you can make a BusK
 
 Grand Total: ~$65
 
-TODO: picture
+.. figure:: /images/buskill_cable_usb_c.jpg
+  :height: 300px
+  :alt: image of the BusKill USB-C cable
+  :align: center
+
+  A custom-made USB-C BusKill cable. Source: `neilzone.co.uk <https://neilzone.co.uk/2022/01/implementing-buskill-shutting-down-a-debian-11-bullseye-machine-when-a-specific-usb-device-is-removed>`_
+
+USB-C Hybrid
+------------
+
+If your device only has USB-C ports, but you want to use the cheaper USB-A cable, you can build the USB-A cable above and just buy a `USB-C to USB-A Hub for about $10 <usbchub_>`_.
+
+.. figure:: /images/buskill_usb_c_hub.jpg
+  :height: 300px
+  :alt: image of a USB-C to USB-A hub
+  :align: center
+
+  A `$10 USB-C Hub <usbchub_>`_ can unlock the USB-A BusKill cable on a device with only USB-C ports
 
 .. note:: While the BusKill cable has an open-source design, some of the individual components used to build the BusKill cable do not have open-source designs.
 
@@ -81,3 +98,5 @@ TODO: picture
 	https://www.amazon.com/gp/product/B07MCS2WWC/ref=as_li_tl?ie=UTF8&tag=docsbuskill-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B07MCS2WWC&linkId=20164822af30ec0d4b7b33dc454e0e78 https://docs.buskill.in/buskill-app/en/stable/hardware_dev/bom.html usbcmagneticbreakaway1
 
 	https://www.amazon.com/gp/product/B07KR5PP91/ref=as_li_tl?ie=UTF8&tag=docsbuskill-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B07KR5PP91&linkId=8e9238d9f13cba94a6a5ec3073f28d2c https://docs.buskill.in/buskill-app/en/stable/hardware_dev/bom.html usbc3mextension1
+
+	https://www.amazon.com/gp/product/B09535D89X/?&_encoding=UTF8&tag=docsbuskill-20&linkCode=ur2&linkId=133b43e848d180a4a7e88720b02ee0dc&camp=1789&creative=9325 https://docs.buskill.in/buskill-app/en/stable/hardware_dev/bom.html usbchub

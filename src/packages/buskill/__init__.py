@@ -954,6 +954,9 @@ class BusKill:
 		msg = "event:|" +str(event)+ "|"
 		print( msg ); logger.debug( msg )
 
+		msg = "usb1.HOTPLUG_EVENT_DEVICE_ARRIVED:|" +str(usb1.HOTPLUG_EVENT_DEVICE_ARRIVED)+ "|"
+		print( msg ); logger.debug( msg )
+
 		msg = "usb1.HOTPLUG_EVENT_DEVICE_LEFT:|" +str(usb1.HOTPLUG_EVENT_DEVICE_LEFT)+ "|"
 		print( msg ); logger.debug( msg )
 
@@ -1064,6 +1067,12 @@ class BusKill:
 		# first we try to lock with xdg-screensaver
 		self.trigger_lockscreen_lin_xdg()
 
+		# in Cinnamon (Linux Mint) `xdg-screensaver` exists, exits zero, doesn't
+		# throw any errors, and doesn't lock the screen.
+		# * https://en.wikipedia.org/wiki/Cinnamon_(desktop_environment)
+		# * https://github.com/BusKill/buskill-app/issues/64
+		self.trigger_lockscreen_lin_cinnamon()
+
 	# this function will gently shutdown a Linux machine
 	def trigger_softshutdown_lin(self):
 		msg = "DEBUG: BusKill soft-shutdown trigger executing now"
@@ -1121,13 +1130,46 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			if result.returncode != 0:
-				# that didn't work; log it and give up :(
+				# that didn't work; log it and try fallback
 				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
 				print( msg ); logger.error(msg)
 
 		except Exception as e:
-			# that didn't work; log it and give up :(
+			# that didn't work; log it and try fallback
 			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_lockscreen_lin_cinnamon(self):
+
+		try:
+			# unset PYTHONHOME to fix AppImage fs encoding error
+			#    ModuleNotFoundError: No module named 'encodings'
+			# * https://github.com/BusKill/buskill-app/issues/64#issuecomment-1537221491
+			if 'PYTHONHOME' in os.environ:
+				del os.environ['PYTHONHOME']
+
+			# try to lock the screen with cinnamon-screensaver command
+			msg = "INFO: Attempting to execute `cinnamon-screensaver-command --lock`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['cinnamon-screensaver-command', '--lock'], capture_output=True, text=True )
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it and give up :(
+				msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! "
+				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it and give up :(
+			msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! " +str(e)
 			print( msg ); logger.error(msg)
 
 	def trigger_softshutdown_lin_shutdown(self):

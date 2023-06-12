@@ -54,5 +54,10 @@ The reader may be interested to investigate the following similar projects:
  * `s53 <https://github.com/BrassHornCommunications/s53>`_
  * `swatd <https://github.com/defuse/swatd>`_
  * `Centry <https://github.com/0xPoly/Centry>`_
+ * `PanicKit <https://guardianproject.info/code/panickit/>`_ & `Ripple <https://guardianproject.info/apps/info.guardianproject.ripple/>`_
+ * `Duress <https://github.com/x13a/Duress>`_
  * `xxUSBSentinel <https://github.com/thereisnotime/xxUSBSentinel>`_
- * `Ripple <https://guardianproject.info/apps/info.guardianproject.ripple/>`_
+ * `lockup <https://github.com/levlesec/lockup>`_
+ * `pam_duress <https://github.com/rafket/pam_duress>`_
+ * `pam_panic <https://github.com/pampanic/pam_panic>`_
+ * `pam_party <https://github.com/x13a/pam-party>`_
