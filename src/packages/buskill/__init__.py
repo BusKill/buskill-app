@@ -1211,7 +1211,7 @@ class BusKill:
 
 			self.trigger_softshutdown_lin_poweroff()
 
-	def trigger_softshutdown_lin_shutdown(self):
+	def trigger_softshutdown_lin_poweroff(self):
 
 		try:
 			# try to shutdown with the `poweroff` command
