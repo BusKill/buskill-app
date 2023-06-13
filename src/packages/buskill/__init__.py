@@ -423,7 +423,11 @@ class BusKill:
 		# set the default trigger to what's defined in the config file
 		self.config = configparser.ConfigParser()
 		self.config.read( self.CONF_FILE )
-		self.set_trigger( self.config.get('buskill', 'trigger') )
+		if self.config.has_option('buskill', 'trigger'):
+			trigger = self.config.get('buskill', 'trigger')
+		else:
+			trigger = 'lock-screen'
+		self.set_trigger( trigger )
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version
