@@ -19,7 +19,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, traceback, subprocess
-import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
+import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg, configparser
 import os.path
 from buskill_version import BUSKILL_VERSION
 from distutils.version import LooseVersion
@@ -242,7 +242,6 @@ class BusKill:
 		self.upgrade_result = None
 
 		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
-		self.trigger = 'lock-screen'
 		self.trigger_softshutdown_lin_shutdown_path = None
 		self.trigger_softshutdown_lin_poweroff_path = None
 		self.trigger_softshutdown_lin_systemctl_path = None
@@ -420,6 +419,11 @@ class BusKill:
 		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
 		print( msg ); logger.debug( msg )
+
+		# set the default trigger to what's defined in the config file
+		self.config = configparser.ConfigParser()
+		self.config.read( self.CONF_FILE )
+		self.trigger = self.config.get('buskill', 'trigger')
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version

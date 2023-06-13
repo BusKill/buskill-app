@@ -73,7 +73,6 @@ def BusKillCLI( buskill_object ):
 	 help="Choose trigger to execute. See --list-triggers for all possible values.",
 	 metavar='',
 	 choices=['l','lock-screen','s','soft-shutdown'],
-	 default='lock-screen'
 	)
 
 	parser.add_argument(
@@ -154,7 +153,8 @@ def BusKillCLI( buskill_object ):
 
 	# attempt to set the trigger
 	try:
-		bk.set_trigger( args.trigger )
+		if args.trigger != None:
+			bk.set_trigger( args.trigger )
 	except RuntimeWarning as e:
 		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
 		print( msg ); logger.error( msg )
