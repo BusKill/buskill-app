@@ -423,7 +423,7 @@ class BusKill:
 		# set the default trigger to what's defined in the config file
 		self.config = configparser.ConfigParser()
 		self.config.read( self.CONF_FILE )
-		self.trigger = self.config.get('buskill', 'trigger')
+		self.set_trigger( self.config.get('buskill', 'trigger') )
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version
@@ -560,15 +560,15 @@ class BusKill:
 
 				msg = "DEBUG: shutdown binary path:|" \
 				 +str(self.trigger_softshutdown_lin_shutdown_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 				msg = "DEBUG: poweroff binary path:|" \
 				 +str(self.trigger_softshutdown_lin_poweroff_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 				msg = "DEBUG: systemctl binary path:|" \
 				 +str(self.trigger_softshutdown_lin_systemctl_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 			#elif self.OS_NAME_SHORT == 'win':
 				# n/a currently there's no checks needed for the soft-shutdown on windows
