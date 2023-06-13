@@ -932,7 +932,7 @@ class BusKillSettingsScreen(Screen):
 		# was the trigger just changed by the user?
 		if old_trigger != new_trigger:
 			# the trigger was changed; update the runtime bk instance
-			self.bk.trigger = new_trigger
+			self.bk.set_trigger( new_trigger )
 
 			# is BusKill currently armed?
 			if self.bk.is_armed == True:
