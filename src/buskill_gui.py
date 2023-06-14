@@ -136,7 +136,7 @@ class MainWindow(Screen):
 
 		if self.bk.is_armed:
 			self.toggle_btn.text = 'Disarm'
-			self.status.text = "BusKill is currently armed\n"
+			self.status.text = "BusKill is armed\n"
 			self.status.text += "with '" +str(self.bk.trigger)+ "' trigger."
 			self.toggle_btn.background_color = self.color_red
 
@@ -148,7 +148,7 @@ class MainWindow(Screen):
 
 		else:
 			self.toggle_btn.text = 'Arm'
-			self.status.text = "BusKill is currently disarmed.\n"
+			self.status.text = "BusKill is disarmed.\n"
 			self.toggle_btn.background_color = self.color_primary
 
 			# set the actionview of every actionbar of every screen back to the
