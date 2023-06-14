@@ -5,8 +5,8 @@
   File:    buskill_cli.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2022-07-06
-  Version: 0.2
+  Updated: 2023-06-14
+  Version: 0.3
 
 This is the code to handle the BusKill app via CLI
 

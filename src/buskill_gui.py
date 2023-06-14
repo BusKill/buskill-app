@@ -5,7 +5,7 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2022-11-01
+  Updated: 2023-06-14
   Version: 0.4
 
 This is the code to launch the BusKill GUI app

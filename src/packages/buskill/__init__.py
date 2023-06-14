@@ -6,8 +6,8 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2022-07-11
-  Version: 0.4
+  Updated: 2023-06-14
+  Version: 0.5
 
 This is the heart of the buskill app, shared by both the cli and gui
 
