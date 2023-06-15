@@ -151,15 +151,6 @@ def BusKillCLI( buskill_object ):
 
 		sys.exit(0)
 
-	# attempt to set the trigger
-	try:
-		if args.trigger != None:
-			bk.set_trigger( args.trigger )
-	except RuntimeWarning as e:
-		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
-		print( msg ); logger.error( msg )
-		sys.exit(1)
-
 	# did the user say that we should execute the trigger immediately on startup?
 	if args.run_trigger:
 		try:
@@ -184,6 +175,15 @@ def BusKillCLI( buskill_object ):
 
 		bk.close()
 		sys.exit(0)
+
+	# attempt to set the trigger
+	try:
+		if args.trigger != None:
+			bk.set_trigger( args.trigger )
+	except RuntimeWarning as e:
+		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
+		print( msg ); logger.error( msg )
+		sys.exit(1)
 
 	if args.arm:
 		bk.toggle()
