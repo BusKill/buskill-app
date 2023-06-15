@@ -158,6 +158,14 @@ class MainWindow(Screen):
 					if type(child) == ActionView:
 						child.background_color = self.color_primary
 
+		# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
+		if self.bk.trigger == 'soft-shutdown':
+			Clock.schedule_interval(self.check_root_child, 1)
+
+	# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
+	def check_root_child(self, dt):
+		print( "bk.root_child:|" +str(self.bk.root_child)+ "|" )
+
 	def switchToScreen( self, screen ):
 		self.manager.current = screen
 

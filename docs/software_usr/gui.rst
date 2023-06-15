@@ -64,6 +64,45 @@ To arm BusKill, click the ``Arm`` button. BusKill can be armed whether or not th
 		:align: center
 		:target: ../_images/buskill_app_mac_disarmed1.jpg
 
+Trigger Selector
+^^^^^^^^^^^^^^^^
+
+You can change what action the BusKill app takes when the BusKill cable is disconnected by changing the ``trigger`` setting.
+
+To change the ``trigger`` setting, open the app menu and click ``Settings``. Then click ``Trigger``.
+
+::
+
+	user@disp2781:~/Downloads/dist$ ./buskill.AppImage --arm --trigger soft-shutdown
+	...
+	INFO: BusKill 'trigger' set to 'soft-shutdown'
+	INFO: BusKill is armed. Listening for removal event.
+	INFO: To disarm the CLI, exit with ^C or close this terminal
+
+You can also list all available triggers with ``--list-triggers``
+
+::
+
+	user@disp2781:~/Downloads/dist$ ./buskill.AppImage --list-triggers
+	...
+	Supported triggers include:
+		lock-screen
+		soft-shutdown
+	user@disp2781:~/Downloads/dist$ 
+
+.. note::
+
+	Due to a limitation in the Windows API, executables cannot be switched between ``CONSOLE`` and ``WINDOWS`` at runtime. This effectively means that ``buskill.exe`` *can* be executed from the CLI, but it won't be interactive. For more info, see:
+
+
+	 * https://github.com/BusKill/buskill-app/issues/21
+
+	As a simple workaround to launch the BusKill app in CLI mode, simply append ``| more`` to the command. For example, to arm the BusKill app from the CLI in the Windows Command Prompt:
+
+	::
+	
+		C:\Users\user\Desktop\buskill-Windows\buskill>buskill.exe --arm | more
+
 
 Disarming
 ---------
