@@ -241,6 +241,7 @@ class BusKill:
 		self.usb_handler = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
+		self.trigger = None
 
 		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
 		self.trigger_softshutdown_lin_shutdown_path = None
@@ -421,14 +422,6 @@ class BusKill:
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
 		print( msg ); logger.debug( msg )
 
-		# set the default trigger to what's defined in the config file
-		self.config = configparser.ConfigParser()
-		self.config.read( self.CONF_FILE )
-		if self.config.has_option('buskill', 'trigger'):
-			trigger = self.config.get('buskill', 'trigger')
-		else:
-			trigger = 'lock-screen'
-		self.set_trigger( trigger )
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version
@@ -911,6 +904,19 @@ class BusKill:
 		self.GNUPGHOME = os.path.join( self.CACHE_DIR, '.gnupg' )
 
 	def toggle(self):
+
+		# has the trigger been set yet?
+		if self.trigger == None:
+			# no trigger has been set yet; let's set it to the default
+
+			# set the default trigger to what's defined in the config file
+			self.config = configparser.ConfigParser()
+			self.config.read( self.CONF_FILE )
+			if self.config.has_option('buskill', 'trigger'):
+				trigger = self.config.get('buskill', 'trigger')
+			else:
+				trigger = 'lock-screen'
+			self.set_trigger( trigger )
 
 		if self.is_armed:
 			msg = "DEBUG: attempting to disarm BusKill"
