@@ -164,7 +164,8 @@ class MainWindow(Screen):
 
 	# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
 	def check_root_child(self, dt):
-		print( "bk.root_child:|" +str(self.bk.root_child)+ "|" )
+		msg = "DEBUG: bk.root_child:|" +str(self.bk.root_child)+ "|" )
+		print( msg ); logger.debug( msg )
 
 	def switchToScreen( self, screen ):
 		self.manager.current = screen
