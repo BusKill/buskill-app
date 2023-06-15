@@ -163,11 +163,14 @@ def BusKillCLI( buskill_object ):
 	# did the user say that we should execute the trigger immediately on startup?
 	if args.run_trigger:
 		try:
-			bk.toggle()
 			bk.set_trigger( args.trigger )
 			confirm = input("Are you sure you want to execute the '" +str(bk.get_trigger())+ "' trigger RIGHT NOW? [Y/N] ")
 			if confirm.upper() in ["Y", "YES"]:
 				bk.simulate_hotplug_removal()
+
+				# wait until the asynchronous child process (that executes our
+				# trigger) exits
+				self.usb_handler.join()
 			else:
 				msg = "INFO: User chose not to execute trigger now. Exiting."
 				print( msg ); logger.info( msg )
