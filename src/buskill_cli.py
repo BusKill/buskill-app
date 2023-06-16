@@ -36,14 +36,16 @@ logger = logging.getLogger( __name__ )
 ################################################################################
 
 # blocking function that waits for the usb_handler to return a trigger event
-def trigger_wait():
+def trigger_wait( forever ):
 
 	# listen for the trigger event from the child process
 	while True:
 
 		result = bk.check_usb_handler(None)
 		if result != None:
-			break
+
+			if not forever:
+				break
 
 		time.sleep(0.01)
 
@@ -179,7 +181,7 @@ def BusKillCLI( buskill_object ):
 			if confirm.upper() in ["Y", "YES"]:
 				bk.simulate_hotplug_removal()
 
-				trigger_wait()
+				trigger_wait( False )
 
 			else:
 				msg = "INFO: User chose not to execute trigger now. Exiting."
@@ -206,7 +208,7 @@ def BusKillCLI( buskill_object ):
 
 	if args.arm:
 		bk.toggle()
-		trigger_wait()
+		trigger_wait( True )
 
 	else:
 		msg = "Nothing to do."
