@@ -136,7 +136,15 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 		def __init__( self, buskill ):
 
+			# TODO: remove debugging lines when windows triggers are fixed
+			msg = "DEBUG: instantiating Windows Notification object"
+			print( msg ); logger.debug( msg )
+
 			self.bk = buskill
+
+			# TODO: remove debugging lines when windows triggers are fixed
+			msg = "DEBUG: \t bk.usb_hander_queue:|" +str(bk.usb_handler_queue)+ "|"
+			print( msg ); logger.debug( msg )
 
 			message_map = {
 			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
@@ -169,11 +177,19 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 		#    if it's a volume then...
 		#  lParam - what's changed more exactly
 		def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
+			msg = "DEBUG: called hotplubCallbackWin()"
+			print( msg ); logger.debug( msg )
+
+			# TODO: remove debugging lines when windows triggers are fixed
+			msg = "DEBUG: \t bk.usb_hander_queue:|" +str(bk.usb_handler_queue)+ "|"
+			print( msg ); logger.debug( msg )
 	
 			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
-	
+				msg = "DEBUG: Determined USB hotplug event to be a removal"
+				print( msg ); logger.debug( msg )
+
 				#self.bk.triggerWin()
 				self.bk.usb_handler_queue.put( 'trigger' )
 	
@@ -996,7 +1012,13 @@ class BusKill:
 
 	# checks the queue from the child usb_handler process
 	def check_usb_handler( self, dt ):
-		print( "called check_usb_handler()" )
+		# TODO: remove debugging lines when windows triggers are fixed
+		msg = "DEBUG: called check_usb_handler()"
+		print( msg ); logger.debug( msg )
+
+		# TODO: remove debugging lines when windows triggers are fixed
+		msg = "DEBUG: \t self.usb_hander_queue:|" +str(self.usb_handler_queue)+ "|"
+		print( msg ); logger.debug( msg )
 
 		# is there a message on the queue?
 		if not self.usb_handler_queue.empty():

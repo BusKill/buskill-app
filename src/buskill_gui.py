@@ -147,7 +147,9 @@ class MainWindow(Screen):
 						child.background_color = self.color_red
 
 			# check for messages from the usb_handler child process
-			Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
+			# TODO: change this back to 0.01 after we're done debugging windows
+			#Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
+			Clock.schedule_interval( self.bk.check_usb_handler, 4 )
 
 		else:
 			self.toggle_btn.text = 'Arm'
