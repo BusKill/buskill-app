@@ -146,6 +146,9 @@ class MainWindow(Screen):
 					if type(child) == ActionView:
 						child.background_color = self.color_red
 
+			# check for messages from the usb_handler child process
+			Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
+
 		else:
 			self.toggle_btn.text = 'Arm'
 			self.status.text = "BusKill is disarmed.\n"
@@ -157,6 +160,9 @@ class MainWindow(Screen):
 				for child in screen.actionbar.children:
 					if type(child) == ActionView:
 						child.background_color = self.color_primary
+
+			# stop checking for messages from the usb_handler child process
+			Clock.unschedule( self.bk.check_usb_handler )
 
 		# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
 		if self.bk.trigger == 'soft-shutdown':

@@ -174,7 +174,8 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
 	
-				self.bk.triggerWin()
+				#self.bk.triggerWin()
+				self.usb_handler_queue.put( 'trigger' )
 	
 				msg = "hwnd:|" +str(hwnd)+ "|"
 				print( msg ); logger.debug( msg )
@@ -239,6 +240,7 @@ class BusKill:
 
 		self.is_armed = None
 		self.usb_handler = None
+		self.usb_handler_queue = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
 		self.trigger = None
@@ -938,11 +940,16 @@ class BusKill:
 			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "() with the '" +str(self.trigger)+ "' trigger"
 			print( msg ); logger.debug( msg )
 
+			# create a queue so that the child can communicate up to the parent
+			if self.usb_handler_queue == None:
+				self.usb_handler_queue = multiprocessing.Queue()
+
 			# launch an asynchronous child process that'll loop and listen for
 			# usb events
 #			self.usb_handler = self.Process(
 			self.usb_handler = multiprocessing.Process(
-			 target = self.ARM_FUNCTION
+			 target = self.ARM_FUNCTION,
+			 args = (self.usb_handler_queue,)
 			)
 			self.usb_handler.start()
 
@@ -985,7 +992,29 @@ class BusKill:
 			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
-			self.TRIGGER_FUNCTION()
+			self.usb_handler_queue.put( 'trigger' )
+
+	# checks the queue from the child usb_handler process
+	def check_usb_handler( self, dt ):
+		print( "called check_usb_handler()" )
+
+		# is there a message on the queue?
+		if not self.usb_handler_queue.empty():
+			# the child sent us a message; get it
+			queue_message = self.usb_handler_queue.get()
+
+			msg = "DEBUG: Queue message from child usb_handler (" +str(queue_message)+ ")"
+			print( msg ); logger.error( msg )
+
+			# what did the message from the child say?
+			if queue_message == 'trigger':
+				# the child told us to execute the trigger; do it!
+				self.TRIGGER_FUNCTION()
+				return queue_message
+			else:
+				# no idea what the child said; log it as an error
+				msg = "ERROR: Unknown queue message from child usb_handler"
+				print( msg ); logger.error( msg )
 
 	# simulates a fake hotplug removal event
 	def simulate_hotplug_removal( self ):
@@ -1003,7 +1032,7 @@ class BusKill:
 	####################
 
 	# this works for both linux and mac
-	def armNix(self):
+	def armNix( self, queue ):
 
 		# are we just simulating this USB removal?
 		if self.SIMULATE_HOTPLUG_REMOVAL:

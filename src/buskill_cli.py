@@ -20,7 +20,7 @@ For more info, see: https://buskill.in/
 import packages.buskill
 from buskill_version import BUSKILL_VERSION
 
-import argparse, sys, platform
+import argparse, sys, platform, time
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -34,6 +34,22 @@ logger = logging.getLogger( __name__ )
 ################################################################################
 #                                 FUNCTIONS                                    #
 ################################################################################
+
+# blocking function that waits for the usb_handler to return a trigger event
+def trigger_wait():
+
+	# listen for the trigger event from the child process
+	while True:
+
+		result = bk.check_usb_handler(None)
+		if result != None:
+			break
+
+		time.sleep(0.01)
+
+	# wait until the asynchronous child process (that executes our
+	# trigger) exits
+	bk.usb_handler.join()
 
 def BusKillCLI( buskill_object ):
 
@@ -156,12 +172,15 @@ def BusKillCLI( buskill_object ):
 		try:
 			bk.set_trigger( args.trigger )
 			confirm = input("Are you sure you want to execute the '" +str(bk.get_trigger())+ "' trigger RIGHT NOW? [Y/N] ")
+
+			# newline after input for cleaner output
+			print()
+
 			if confirm.upper() in ["Y", "YES"]:
 				bk.simulate_hotplug_removal()
 
-				# wait until the asynchronous child process (that executes our
-				# trigger) exits
-				self.usb_handler.join()
+				trigger_wait()
+
 			else:
 				msg = "INFO: User chose not to execute trigger now. Exiting."
 				print( msg ); logger.info( msg )
@@ -187,6 +206,7 @@ def BusKillCLI( buskill_object ):
 
 	if args.arm:
 		bk.toggle()
+		trigger_wait()
 
 	else:
 		msg = "Nothing to do."
