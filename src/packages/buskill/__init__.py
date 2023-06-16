@@ -181,7 +181,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 			print( msg ); logger.debug( msg )
 
 			# TODO: remove debugging lines when windows triggers are fixed
-			msg = "DEBUG: \t bk.usb_hander_queue:|" +str(bk.usb_handler_queue)+ "|"
+			msg = "DEBUG: \t self.bk.usb_hander_queue:|" +str(self.bk.usb_handler_queue)+ "|"
 			print( msg ); logger.debug( msg )
 	
 			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
