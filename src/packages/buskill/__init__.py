@@ -175,7 +175,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
 	
 				#self.bk.triggerWin()
-				self.usb_handler_queue.put( 'trigger' )
+				self.bk.usb_handler_queue.put( 'trigger' )
 	
 				msg = "hwnd:|" +str(hwnd)+ "|"
 				print( msg ); logger.debug( msg )
