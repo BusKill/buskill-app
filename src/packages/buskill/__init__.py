@@ -962,8 +962,8 @@ class BusKill:
 
 			# launch an asynchronous child process that'll loop and listen for
 			# usb events
-#			self.usb_handler = self.Process(
-			self.usb_handler = multiprocessing.Process(
+			self.usb_handler = self.Process(
+#			self.usb_handler = multiprocessing.Process(
 			 target = self.ARM_FUNCTION
 			)
 			self.usb_handler.start()
