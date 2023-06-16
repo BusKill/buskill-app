@@ -964,8 +964,7 @@ class BusKill:
 			# usb events
 #			self.usb_handler = self.Process(
 			self.usb_handler = multiprocessing.Process(
-			 target = self.ARM_FUNCTION,
-			 args = (self.usb_handler_queue,)
+			 target = self.ARM_FUNCTION
 			)
 			self.usb_handler.start()
 
@@ -1054,7 +1053,7 @@ class BusKill:
 	####################
 
 	# this works for both linux and mac
-	def armNix( self, queue ):
+	def armNix( self ):
 
 		# are we just simulating this USB removal?
 		if self.SIMULATE_HOTPLUG_REMOVAL:
@@ -1091,7 +1090,10 @@ class BusKill:
 
 		return 0
 
-	def armWin(self):
+	def armWin( self ):
+		# TODO: remove debugging lines when windows triggers are fixed
+		msg = "DEBUG: called armWin()"
+		print( msg ); logger.debug( msg )
 
 		# are we just simulating this USB removal?
 		if self.SIMULATE_HOTPLUG_REMOVAL:
@@ -1113,14 +1115,21 @@ class BusKill:
 
 			return
 
+		# TODO: remove debugging lines when windows triggers are fixed
+		msg = "DEBUG: pre-instantiate Notification"
+		print( msg ); logger.debug( msg )
+
 		w = Notification( self )
+
+		# TODO: remove debugging lines when windows triggers are fixed
+		msg = "DEBUG: post-instantiate Notification"
+		print( msg ); logger.debug( msg )
+
 		win32gui.PumpMessages()
 
 	#####################
 	# TRIGGER FUNCTIONS #
 	#####################
-
-	# TODO: add other triggers besides lockscreens
 
 	# LINUX
 
