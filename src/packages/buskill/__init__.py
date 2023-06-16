@@ -6,7 +6,7 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2023-06-14
+  Updated: 2023-06-16
   Version: 0.5
 
 This is the heart of the buskill app, shared by both the cli and gui
@@ -136,15 +136,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 
 		def __init__( self, buskill ):
 
-			# TODO: remove debugging lines when windows triggers are fixed
-			msg = "DEBUG: instantiating Windows Notification object"
-			print( msg ); logger.debug( msg )
-
 			self.bk = buskill
-
-			# TODO: remove debugging lines when windows triggers are fixed
-			msg = "DEBUG: \t self.bk.usb_hander_queue:|" +str(self.bk.usb_handler_queue)+ "|"
-			print( msg ); logger.debug( msg )
 
 			message_map = {
 			 win32con.WM_DEVICECHANGE: self.hotplugCallbackWin
@@ -180,17 +172,12 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 			msg = "DEBUG: called hotplubCallbackWin()"
 			print( msg ); logger.debug( msg )
 
-			# TODO: remove debugging lines when windows triggers are fixed
-			msg = "DEBUG: \t self.bk.usb_hander_queue:|" +str(self.bk.usb_handler_queue)+ "|"
-			print( msg ); logger.debug( msg )
-	
 			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
 				msg = "DEBUG: Determined USB hotplug event to be a removal"
 				print( msg ); logger.debug( msg )
 
-				#self.bk.triggerWin()
 				self.bk.usb_handler_queue.put( 'trigger' )
 	
 				msg = "hwnd:|" +str(hwnd)+ "|"
@@ -963,7 +950,6 @@ class BusKill:
 			# launch an asynchronous child process that'll loop and listen for
 			# usb events
 			self.usb_handler = self.Process(
-#			self.usb_handler = multiprocessing.Process(
 			 target = self.ARM_FUNCTION
 			)
 			self.usb_handler.start()
@@ -1011,13 +997,6 @@ class BusKill:
 
 	# checks the queue from the child usb_handler process
 	def check_usb_handler( self, dt ):
-		# TODO: remove debugging lines when windows triggers are fixed
-		msg = "DEBUG: called check_usb_handler()"
-		print( msg ); logger.debug( msg )
-
-		# TODO: remove debugging lines when windows triggers are fixed
-		msg = "DEBUG: \t self.usb_hander_queue:|" +str(self.usb_handler_queue)+ "|"
-		print( msg ); logger.debug( msg )
 
 		# is there a message on the queue?
 		if not self.usb_handler_queue.empty():
@@ -1091,9 +1070,6 @@ class BusKill:
 		return 0
 
 	def armWin( self ):
-		# TODO: remove debugging lines when windows triggers are fixed
-		msg = "DEBUG: called armWin()"
-		print( msg ); logger.debug( msg )
 
 		# are we just simulating this USB removal?
 		if self.SIMULATE_HOTPLUG_REMOVAL:
@@ -1115,16 +1091,7 @@ class BusKill:
 
 			return
 
-		# TODO: remove debugging lines when windows triggers are fixed
-		msg = "DEBUG: pre-instantiate Notification"
-		print( msg ); logger.debug( msg )
-
 		w = Notification( self )
-
-		# TODO: remove debugging lines when windows triggers are fixed
-		msg = "DEBUG: post-instantiate Notification"
-		print( msg ); logger.debug( msg )
-
 		win32gui.PumpMessages()
 
 	#####################
@@ -1741,7 +1708,6 @@ class BusKill:
 		# memory and we can't specify a callback when it finishes.
 
 		self.upgrade_process = self.Process(
-#		self.upgrade_process = multiprocessing.Process(
 		 target = self.upgrade
 		)
 		self.upgrade_process.start()

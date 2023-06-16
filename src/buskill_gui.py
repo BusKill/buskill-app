@@ -5,7 +5,7 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2023-06-14
+  Updated: 2023-06-16
   Version: 0.4
 
 This is the code to launch the BusKill GUI app
@@ -105,9 +105,6 @@ class MainWindow(Screen):
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
 
-		# TODO: remove auto-switch to Settings screen
-		#Clock.schedule_once( lambda dt: self.switchToScreen('settings') )
-
 		super(MainWindow, self).__init__(**kwargs)
 
 	def on_pre_enter( self, *args ):
@@ -147,9 +144,7 @@ class MainWindow(Screen):
 						child.background_color = self.color_red
 
 			# check for messages from the usb_handler child process
-			# TODO: change this back to 0.01 after we're done debugging windows
-			#Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
-			Clock.schedule_interval( self.bk.check_usb_handler, 4 )
+			Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
 
 		else:
 			self.toggle_btn.text = 'Arm'
@@ -165,15 +160,6 @@ class MainWindow(Screen):
 
 			# stop checking for messages from the usb_handler child process
 			Clock.unschedule( self.bk.check_usb_handler )
-
-		# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
-		if self.bk.trigger == 'soft-shutdown':
-			Clock.schedule_interval(self.check_root_child, 10)
-
-	# TODO: remove me after fixing bug https://github.com/BusKill/buskill-app/issues/73#issuecomment-1592195471
-	def check_root_child(self, dt):
-		msg = "DEBUG: bk.root_child:|" +str(self.bk.root_child)+ "|"
-		print( msg ); logger.debug( msg )
 
 	def switchToScreen( self, screen ):
 		self.manager.current = screen
