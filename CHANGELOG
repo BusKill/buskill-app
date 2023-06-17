@@ -1,14 +1,14 @@
 buskill-app changelog
 
-[0.7.0] - 2023-??-??
-* added "Settings" screen in GUI
-* added support for 'soft-shutdown' trigger to GUI
-* merged kivy & buskill config files into one standardized location
+[0.7.0] - 2023-06-17
+* added "Settings" screen in GUI (#16)
+* added support for 'soft-shutdown' trigger to GUI (#14)
+* merged kivy & buskill config files into one standardized location (#39)
 * fix "Update Failed" on MacOS (#71)
-* fix lockscreen trigger on Linux Mint Cinnamon
-* changed python interpreter from 'python3.7' to 'python3'
-* license and gitattributes changes for inclusion in Debian repos
-* added manpage
+* fix lockscreen trigger on Linux Mint Cinnamon (#64)
+* changed python interpreter from 'python3.7' to 'python3' (#56)
+* license and gitattributes changes for inclusion in Debian repos (#31)
+* added manpage (#48)
 * better documentation of dependencies, USB-C cable, testing, releases, and emphasis on explainer video
 * special thanks to Francois Marier <https://fmarier.org/> for numerous contributions
 
