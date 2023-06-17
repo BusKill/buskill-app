@@ -69,40 +69,44 @@ Trigger Selector
 
 You can change what action the BusKill app takes when the BusKill cable is disconnected by changing the ``trigger`` setting.
 
-To change the ``trigger`` setting, open the app menu and click ``Settings``. Then click ``Trigger``.
+To change the ``trigger`` setting, open the app menu and click ``Settings``.
 
-::
+.. list-table::
 
-	user@disp2781:~/Downloads/dist$ ./buskill.AppImage --arm --trigger soft-shutdown
-	...
-	INFO: BusKill 'trigger' set to 'soft-shutdown'
-	INFO: BusKill is armed. Listening for removal event.
-	INFO: To disarm the CLI, exit with ^C or close this terminal
+	* - .. figure:: /images/buskill_open_menu.png
+		:alt: screenshot shows the app running with the hamburger menu in the top-left highlighted
+		:align: center
+		:target: ../_images/buskill_open_menu.png
 
-You can also list all available triggers with ``--list-triggers``
+	  - .. figure:: /images/buskill_settings_1.png
+		:alt: screenshot shows the app running with the navigration drawer open, and the "Settings" option selected
+		:align: center
+		:target: ../_images/buskill_settings_1.png
 
-::
+Then click ``Trigger`` and select the action that you want to happen when the BusKill cable is disconnected (for example, "soft-shutdown")
 
-	user@disp2781:~/Downloads/dist$ ./buskill.AppImage --list-triggers
-	...
-	Supported triggers include:
-		lock-screen
-		soft-shutdown
-	user@disp2781:~/Downloads/dist$ 
+.. list-table::
+
+	* - .. figure:: /images/buskill_settings_trigger_1.png
+		:alt: screenshot shows the app running on the Settings screen with a list of settings to configure
+		:align: center
+		:target: ../_images/buskill_settings_trigger_1.png
+
+	  - .. figure:: /images/buskill_settings_trigger_2.png
+		:alt: screenshot shows the app running with a list of triggers to select
+		:align: center
+		:target: ../_images/buskill_settings_trigger_2.png
 
 .. note::
 
-	Due to a limitation in the Windows API, executables cannot be switched between ``CONSOLE`` and ``WINDOWS`` at runtime. This effectively means that ``buskill.exe`` *can* be executed from the CLI, but it won't be interactive. For more info, see:
+	Some triggers can be dangerous and cause data loss or data corruption. Please make sure you read the warning and accept the risk before choosing a given trigger.
 
+	.. list-table::
 
-	 * https://github.com/BusKill/buskill-app/issues/21
-
-	As a simple workaround to launch the BusKill app in CLI mode, simply append ``| more`` to the command. For example, to arm the BusKill app from the CLI in the Windows Command Prompt:
-
-	::
-	
-		C:\Users\user\Desktop\buskill-Windows\buskill>buskill.exe --arm | more
-
+		* - .. figure:: /images/buskill_trigger_warning.png
+			:alt: screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger
+			:align: center
+			:target: ../_images/buskill_trigger_warning.png
 
 Disarming
 ---------
