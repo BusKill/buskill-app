@@ -64,6 +64,48 @@ To arm BusKill, click the ``Arm`` button. BusKill can be armed whether or not th
 		:align: center
 		:target: ../_images/buskill_app_mac_disarmed1.jpg
 
+Trigger Selector
+^^^^^^^^^^^^^^^^
+
+You can change what action the BusKill app takes when the BusKill cable is disconnected by changing the ``trigger`` setting.
+
+To change the ``trigger`` setting, open the app menu and click ``Settings``.
+
+.. list-table::
+
+	* - .. figure:: /images/buskill_open_menu.png
+		:alt: screenshot shows the app running with the hamburger menu in the top-left highlighted
+		:align: center
+		:target: ../_images/buskill_open_menu.png
+
+	  - .. figure:: /images/buskill_settings_1.png
+		:alt: screenshot shows the app running with the navigration drawer open, and the "Settings" option selected
+		:align: center
+		:target: ../_images/buskill_settings_1.png
+
+Then click ``Trigger`` and select the action that you want to happen when the BusKill cable is disconnected (for example, "soft-shutdown")
+
+.. list-table::
+
+	* - .. figure:: /images/buskill_settings_trigger_1.png
+		:alt: screenshot shows the app running on the Settings screen with a list of settings to configure
+		:align: center
+		:target: ../_images/buskill_settings_trigger_1.png
+
+	  - .. figure:: /images/buskill_settings_trigger_2.png
+		:alt: screenshot shows the app running with a list of triggers to select
+		:align: center
+		:target: ../_images/buskill_settings_trigger_2.png
+
+.. note::
+
+	Some triggers can be dangerous and cause data loss or data corruption. Please make sure you read the warning and accept the risk before choosing a given trigger.
+
+	.. figure:: /images/buskill_trigger_warning.png
+		:alt: screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger
+		:align: center
+		:target: ../_images/buskill_trigger_warning.png
+
 Disarming
 ---------
 
@@ -114,48 +156,6 @@ BusKill can be disarmed by closing the window or clicking the ``Disarm`` button.
 		:target: ../_images/buskill_app_mac_armed1.jpg
 
 .. _gui_update:
-
-Trigger Selector
-^^^^^^^^^^^^^^^^
-
-You can change what action the BusKill app takes when the BusKill cable is disconnected by changing the ``trigger`` setting.
-
-To change the ``trigger`` setting, open the app menu and click ``Settings``.
-
-.. list-table::
-
-	* - .. figure:: /images/buskill_open_menu.png
-		:alt: screenshot shows the app running with the hamburger menu in the top-left highlighted
-		:align: center
-		:target: ../_images/buskill_open_menu.png
-
-	  - .. figure:: /images/buskill_settings_1.png
-		:alt: screenshot shows the app running with the navigration drawer open, and the "Settings" option selected
-		:align: center
-		:target: ../_images/buskill_settings_1.png
-
-Then click ``Trigger`` and select the action that you want to happen when the BusKill cable is disconnected (for example, "soft-shutdown")
-
-.. list-table::
-
-	* - .. figure:: /images/buskill_settings_trigger_1.png
-		:alt: screenshot shows the app running on the Settings screen with a list of settings to configure
-		:align: center
-		:target: ../_images/buskill_settings_trigger_1.png
-
-	  - .. figure:: /images/buskill_settings_trigger_2.png
-		:alt: screenshot shows the app running with a list of triggers to select
-		:align: center
-		:target: ../_images/buskill_settings_trigger_2.png
-
-.. note::
-
-	Some triggers can be dangerous and cause data loss or data corruption. Please make sure you read the warning and accept the risk before choosing a given trigger.
-
-	.. figure:: /images/buskill_trigger_warning.png
-		:alt: screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger
-		:align: center
-		:target: ../_images/buskill_trigger_warning.png
 
 Updating
 --------
