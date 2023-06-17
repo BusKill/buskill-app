@@ -71,6 +71,12 @@ Contributions of any amount and kind are greatly appreciated <3
 
 Thank you to the countless [individuals and other open-source projects](https://docs.buskill.in/buskill-app/en/stable/attribution.html) that have contributed to to the BusKill project!
 
+<div>
+<a href="https://macstadium.com/"><img src="docs/images/MacStadium-developerlogo.png" width="150" ></a>  &nbsp; 
+<a href="https://www.browserstack.com/"><img src="docs/images/browser-stack_1900.png" width="150"></a>  &nbsp;
+<a href="https://www.lambdatest.com/" target="_blank"><img src="docs/images/lambdatest.png" width="150"></a>  &nbsp;
+</div>
+
 # Press
 
 As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves), [Tech Crunch](https://techcrunch.com/2021/12/16/buskill-kill-cord-self-destruct-laptop/), [PCWorld](https://www.pcworld.com/article/560619/this-usb-dead-mans-switch-cable-for-laptops-is-one-cat-tug-away-from-catastrophe.html), [Bleeping Computer](https://www.bleepingcomputer.com/news/security/buskill-cable-starts-a-self-destruct-routine-on-stolen-laptops/), [CoinDesk](https://www.coindesk.com/buskill-is-a-diy-tool-to-lock-down-your-laptop), [Heise](https://www.heise.de/news/BusKill-Sicherheitskabel-macht-Notebook-Datentraeger-unbrauchbar-6296117.html), [Golem](https://www.golem.de/news/buskill-magnetisches-kabel-dient-als-killswitch-fuer-notebooks-2112-161861.html), and [Korben](https://korben.info/un-cable-usb-pour-autodetruire-votre-ordinateur-sous-linux-sil-est-vole-voici-buskill.html).
