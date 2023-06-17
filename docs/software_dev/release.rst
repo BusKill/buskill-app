@@ -264,12 +264,6 @@ Once you've verified the authenticity of everything above, move the 4 files to y
 
 After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.
 
-.. note::
-
-	We also make a redundant detached signature of the Linux tarball, specifically because its needed downstream for the debian package mantainer's authenticity checks.
-
-	See also https://github.com/BusKill/buskill-app/issues/31#issuecomment-1328142741
-
 ::
 
 	user@vault:~$ ls
