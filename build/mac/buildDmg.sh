@@ -90,6 +90,10 @@ print_debugging_info
 # FIX CONSTANTS #
 #################
 
+# don't let "dubious ownership" limit us from continuing
+# * https://github.com/BusKill/buskill-app/issues/73#issuecomment-1595819955
+git config --global --add safe.directory /root/buskill-app
+
 # fill-in some constants if this script is not being run on GitHub
 if [ -z ${GITHUB_SHA} ]; then
 	GITHUB_SHA=`git show-ref | head -n1 | awk '{print $1}'`

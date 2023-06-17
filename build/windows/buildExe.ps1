@@ -29,6 +29,9 @@ Set-PSDebug -Trace 1
 ############
 # SETTINGS #
 ############
+# don't let "dubious ownership" limit us from continuing
+# * https://github.com/BusKill/buskill-app/issues/73#issuecomment-1595819955
+git config --global --add safe.directory .\ | Out-String
 
 $env:APP_NAME="buskill"
 
