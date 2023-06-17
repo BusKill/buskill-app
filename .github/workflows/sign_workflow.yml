@@ -14,13 +14,29 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - name: Prereqs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -x
+
+        apt-get update
+        apt-get install -y git
+        git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+      shell: bash
 
     - name: Execute script to sign release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BUSKILL_PRERELEASE_PGP_KEY: ${{ secrets.BUSKILL_PRERELEASE_PGP_KEY }}
         RELEASE_ID: ${{ github.event.client_payload.release_id }}
-      run: "build/signRelease.sh"
+      run: |
+        set -x
+
+        ls -lah
+        pushd "${GITHUB_REPOSITORY}"
+        ls -lah
+        build/signRelease.sh"
+
       shell: bash
 
