@@ -247,8 +247,20 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	buskill-mac-v3.2.0-x86_64.dmg: OK
 	root@disp2781:~# 
 
+Finally, download and verify the authenticity of the source tarball against your local repo. Then sign it for downstream (eg `Debian <https://github.com/BusKill/buskill-app/issues/53>`_)
 
-Once you've verified the integrity of all three compressed archives, move them to your dragon-protected basement-safe laptop, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
+::
+
+	cd $HOME/Downloads
+	wget https://github.com/BusKill/buskill-app/archive/refs/tags/v3.2.0.tar.gz
+	tar -xzf v3.2.0.tar.gz
+	cd $HOME/sandbox/buskill-app
+	git checkout refs/tags/v3.2.0
+	diff -rq . $HOME/Downloads/buskill-app-3.2.0/
+
+Make sure the only differences is the existence of some files in your local repo that are not present in the `minimized <https://github.com/BusKill/buskill-app/issues/53#issuecomment-1366041678>`_ tarball. Do *not* proceed if there's any files that exist in both that are not identical.
+
+Once you've verified the authenticity of everything above, move the 4 files to your dragon-protected basement-safe laptop, generate a new checksum file with all three platforms' releases, and sign it with the gpg release key.
 
 After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.
 
@@ -262,7 +274,7 @@ After verifying the reproducibility of the Linux build, download the Windows and
 
 	user@vault:~$ ls
 	buskill-lin-v3.2.0-x86_64.tbz  buskill-win-v3.2.0-x86_64.zip
-	buskill-mac-v3.2.0-x86_64.dmg
+	buskill-mac-v3.2.0-x86_64.dmg  v3.2.0.tar.gz
 	user@vault:~$ 
 
 	user@vault:~$ sha256sum * > SHA256SUMS
@@ -272,14 +284,15 @@ After verifying the reproducibility of the Linux build, download the Windows and
 	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
 	user@vault:~$
 
-	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b buskill-lin*
+	user@vault:~$ gpg --default-key 'E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A' --armor -b v*.tar.gz*
 	gpg: using "E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A" as default secret key for signing
 	user@vault:~$
 
 	user@vault:~$ ls
-	buskill-lin-v3.2.0-x86_64.tbz      buskill-win-v3.2.0-x86_64.zip
-	buskill-lin-v3.2.0-x86_64.tbz.asc  SHA256SUMS
-	buskill-mac-v3.2.0-x86_64.dmg      SHA256SUMS.asc
+	buskill-lin-v3.2.0-x86_64.tbz  SHA256SUMS.asc
+	buskill-mac-v3.2.0-x86_64.dmg  v3.2.0.tar.gz
+	buskill-win-v3.2.0-x86_64.zip  v3.2.0.tar.gz.asc
+	SHA256SUMS
 	user@vault:~$ 
 
 Upload
