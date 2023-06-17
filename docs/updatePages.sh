@@ -8,8 +8,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-07-13
-# Updated: 2020-08-01
-# Version: 0.3
+# Updated: 2023-03-26
+# Version: 0.4
 ################################################################################
 
 ################################################################################
@@ -34,6 +34,9 @@ python3 -m pip install --upgrade rinohtype pygments
 #####################
 # DECLARE VARIABLES #
 #####################
+
+# prevent git "detected dubious ownership" errors
+git config --global --add safe.directory "*"
 
 pwd
 env
