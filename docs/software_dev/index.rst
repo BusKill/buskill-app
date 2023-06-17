@@ -9,7 +9,9 @@ This section is intended for the developer who wants to modify the source code o
    :maxdepth: 3
 
    autodoc
+   depends
    build
+   test
    documentation
    release
    hotfix

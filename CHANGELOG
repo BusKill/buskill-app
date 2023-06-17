@@ -1,5 +1,17 @@
 buskill-app changelog
 
+[0.7.0] - 2023-??-??
+* added "Settings" screen in GUI
+* added support for 'soft-shutdown' trigger to GUI
+* merged kivy & buskill config files into one standardized location
+* fix "Update Failed" on MacOS (#71)
+* fix lockscreen trigger on Linux Mint Cinnamon
+* changed python interpreter from 'python3.7' to 'python3'
+* license and gitattributes changes for inclusion in Debian repos
+* added manpage
+* better documentation of dependencies, USB-C cable, testing, releases, and emphasis on explainer video
+* special thanks to Francois Marier <https://fmarier.org/> for numerous contributions
+
 [0.6.0] - 2022-10-24
 + added soft-shutdown trigger to cli
 * fixed in-app update bug in MacOS
@@ -15,18 +27,18 @@ buskill-app changelog
 * patched various in-app update bugs
 
 [0.3.0] - 2020-10-05
-+ Added buskill icon
++ added buskill icon
 
 [0.2.1] - 2020-10-06
 * patched various in-app update bugs
 
 [0.2.0] - 2020-09-26
-+ Added in-app update functionality
-+ Special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
++ added in-app update functionality
+* special thanks to Melanie Allen <https://github.com/goldfishlaser> for their pull requests
 
 [0.1.0] - 2020-07-31
-+ Initial version with self-contained releases for Linux, Windows, and MacOS
-+ Functionality is limited to arming and disarming from the CLI or GUI
-+ The only trigger supported is lockscreen
-+ The trigger is executed when *any* USB device is removed
-+ Thank you to Michael Altfield, cyberkryption, Steven Johnson, and Jacob Neplokh
++ initial version with self-contained releases for Linux, Windows, and MacOS
++ functionality is limited to arming and disarming from the CLI or GUI
++ the only trigger supported is lockscreen
++ the trigger is executed when *any* USB device is removed
++ thank you to Michael Altfield, cyberkryption, Steven Johnson, and Jacob Neplokh

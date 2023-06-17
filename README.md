@@ -4,17 +4,23 @@
 
 This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](https://www.buskill.in). It works in Linux, Windows, and MacOS.
 
+# What is BusKill?
+
+The quickest way to understand what BusKill is to watch our 2-minute [BusKill Explainer Video](https://buskill.in/#demo).
+
+| <a href="https://www.buskill.in/#demo"><img src="docs/images/buskill_explainer_video_20211210.gif?raw=true" alt="What is BusKill? (Explainer Video)"></a> |
+|:--:| 
+| *Watch the <a href="https://www.buskill.in/#demo">BusKill Explainer Video</a> for more info <a href="https://www.youtube.com/v/qPwyoD_cQR4">youtube.com/v/qPwyoD_cQR4</a>* |
+
 BusKill is a laptop kill cord that can trigger your computer to lock or shutdown when it's physically separated from you.
 
-<p align="center">
-  <img src="docs/images/buskill_demo.gif?raw=true" alt="BusKill Demo Video"/>
-</p>
+| <p align="center"><a href="https://www.buskill.in/demo-2"><img src="docs/images/buskill_demo.gif?raw=true" alt="BusKill Demo Video" /></a></p> |
+|:--:| 
+| *Watch the <a href="https://www.buskill.in/demo-2">BusKill Demo Video</a> to see the cable being used on Linux, Windows, and MacOS <a href="https://www.buskill.in/demo-2">buskill.in/demo-2</a>* |
 
 For more information on how to [buy](https://www.buskill.in/buy) or build your own BusKill cable, see the [BusKill Website](https://www.buskill.in):
 
  * [https://www.buskill.in](https://www.buskill.in)
-
-![](docs/images/buskill_featuredImage.jpg)
 
 # Documentation
 
@@ -81,7 +87,24 @@ To contact us via email, please visit:
 
 # License
 
-The contents of this repo are dual-licensed. All code is GPLv3 and all other content is CC-BY-SA.
+Copyright (C) 2020-2022 Michael Altfield and the BusKill Team
+
+The contents of this repo are under the GPL version 3 or later.
+In addition, any content other than code can also be used, at your
+choice, under CC-BY-SA version 4.0.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For more Information
 

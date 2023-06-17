@@ -5,12 +5,27 @@
 What is BusKill?
 ================
 
+.. raw:: html
+
+	<figure class="wp-block-video aligncenter" id="video">
+	<video preload="metadata" playsinline="" controls="true" width="640" height="360">
+	  <source type="video/webm" src="https://www.buskill.in/wp-content/uploads/sites/8/2021/12/altshift_graphize_buskill_20211210_withCoverAndSubs_1024.webm?_=1">
+	  <source type="video/mp4" src="https://www.buskill.in/wp-content/uploads/sites/8/2021/12/altshift_graphize_buskill_20211210_withCoverAndSubs.mp4?_=1">
+	  <a href="https://www.buskill.in/wp-content/uploads/sites/8/2021/12/altshift_graphize_buskill_20211210_withCoverAndSubs_1024.webm"><img loading="lazy" src="https://www.buskill.in/wp-content/uploads/sites/8/2021/12/640x360xaltshift_graphize_buskill_20211210_thumbnailWithPlayButton.png.pagespeed.ic.60MRvQQdUt.png" alt="" width="640" height="360"><br>https://www.buskill.in/wp-content/uploads/sites/8/2021/12/altshift_graphize_buskill_20211210_withCoverAndSubs_1024.webm</a>
+	  <object type="application/x-shockwave-flash" data="http://www.youtube.com/v/S3LtLyuaBvI" width="640" height="360">
+		 <param name="movie" value="http://www.youtube.com/v/qPwyoD_cQR4">
+	  </object>
+
+	</video>
+	</figure>
+   <br style="clear:both;" />
+
 BusKill is the world's first laptop `kill cord <https://en.wikipedia.org/wiki/Kill_cord>`_--it's a hardware `Dead Man's Switch <https://en.wikipedia.org/wiki/Dead_man%27s_switch>`_ that executes some user-configurable ``trigger`` when your machine is physically separated from you.
+
+The ``trigger`` that's executed when the cable's connection is severed can either [a] lock the screen or [b] shutdown the machine.
 
 .. image:: /images/buskill_demo.gif
   :align: center
-
-The ``trigger`` that's executed when the cable's connection is severed can either [a] lock the screen or [b] shutdown the machine.
 
 Advanced users can add ``auxiliary triggers``, such as a `self-destruct trigger that wipes the LUKS header <https://buskill.in/luks-self-destruct/>`_, making the entire disk permanently inaccessible (even to `rubber-hose cryptanalysis <https://en.wikipedia.org/wiki/Rubber-hose_cryptanalysis>`_).
 

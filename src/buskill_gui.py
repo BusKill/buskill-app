@@ -1,12 +1,12 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 """
 ::
 
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2022-07-11
-  Version: 0.3
+  Updated: 2023-06-16
+  Version: 0.4
 
 This is the code to launch the BusKill GUI app
 
@@ -22,7 +22,7 @@ from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 from buskill_version import BUSKILL_VERSION
 
-import os, sys, re, webbrowser
+import os, sys, re, webbrowser, json
 
 import multiprocessing, threading
 from multiprocessing import util
@@ -33,30 +33,39 @@ util.get_logger().setLevel(util.DEBUG)
 multiprocessing.log_to_stderr().setLevel( logging.DEBUG )
 #from multiprocessing import get_context
 
+import kivy
 from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
+from kivy.metrics import dp
+from kivy.compat import string_types, text_type
+from kivy.animation import Animation
 
+from kivy.core.text import LabelBase
 from kivy.core.clipboard import Clipboard
 from kivy.core.window import Window
+
 Window.size = ( 300, 500 )
+
+# grey background color
+Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
+
+from kivy.config import Config
+from kivy.config import ConfigParser
 
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.modalview import ModalView
+from kivy.uix.popup import Popup
+from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import ScreenManager, Screen
-
-# grey background color
-Window.clearcolor = [ 0.188, 0.188, 0.188, 1 ]
-
-from kivy.config import Config
-Config.set('kivy', 'exit_on_escape', '0')
-Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
-
-from kivy.core.text import LabelBase
+from kivy.uix.actionbar import ActionView
+from kivy.uix.settings import Settings, SettingSpacer
+from kivy.properties import ObjectProperty, StringProperty, ListProperty, BooleanProperty, NumericProperty, DictProperty
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -68,26 +77,47 @@ from kivy.core.text import LabelBase
 #                                   CLASSES                                    #
 ################################################################################
 
+# recursive function that checks a given object's parent up the tree until it
+# finds the screen manager, which it returns
+def get_screen_manager(obj):
+
+	if hasattr(obj, 'manager') and obj.manager != None:
+		return obj.manager
+
+	if hasattr(obj, 'parent') and obj.parent != None:
+		return get_screen_manager(obj.parent)
+
+	return None
+
 class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
 	status = ObjectProperty(None)
 	menu = ObjectProperty(None)
 	actionview = ObjectProperty(None)
+	actionbar = ObjectProperty(None)
 
 	dialog = None
 
 	def __init__(self, **kwargs):
-
-		# set local instance fields that reference our global variables
-		global bk
-		self.bk = bk
 
 		# check to see if this is an old version that was already upgraded
 		# as soon as we've loaded
 		Clock.schedule_once(self.handle_upgrades, 1)
 
 		super(MainWindow, self).__init__(**kwargs)
+
+	def on_pre_enter( self, *args ):
+
+		msg = "DEBUG: User switched to 'MainWindow' screen"
+		print( msg ); logger.debug( msg )
+
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
+		self.bk = self.root_app.bk
 
 	# called to close the app
 	def close( self, *args ):
@@ -103,19 +133,40 @@ class MainWindow(Screen):
 
 		if self.bk.is_armed:
 			self.toggle_btn.text = 'Disarm'
-			self.status.text = 'BusKill is currently armed.'
-			self.toggle_btn.md_bg_color = [1,0,0,1]
+			self.status.text = "BusKill is armed\n"
+			self.status.text += "with '" +str(self.bk.trigger)+ "' trigger."
 			self.toggle_btn.background_color = self.color_red
-			self.actionview.background_color = self.color_red
+
+			# set the actionview of every actionbar of every screen to red
+			for screen in self.manager.screens:
+				for child in screen.actionbar.children:
+					if type(child) == ActionView:
+						child.background_color = self.color_red
+
+			# check for messages from the usb_handler child process
+			Clock.schedule_interval( self.bk.check_usb_handler, 0.01 )
+
 		else:
 			self.toggle_btn.text = 'Arm'
-			self.status.text = 'BusKill is currently disarmed.'
+			self.status.text = "BusKill is disarmed.\n"
 			self.toggle_btn.background_color = self.color_primary
-			self.actionview.background_color = self.color_primary
+
+			# set the actionview of every actionbar of every screen back to the
+			# app's primary color
+			for screen in self.manager.screens:
+				for child in screen.actionbar.children:
+					if type(child) == ActionView:
+						child.background_color = self.color_primary
+
+			# stop checking for messages from the usb_handler child process
+			Clock.unschedule( self.bk.check_usb_handler )
+
+	def switchToScreen( self, screen ):
+		self.manager.current = screen
 
 	def handle_upgrades( self, dt ):
 
-		if bk.UPGRADED_TO:
+		if self.bk.UPGRADED_TO:
 			# the buskill app has already been updated; let's prompt the user to
 			# restart to *that* version instead of this outdated version
 			self.upgrade4_restart_prompt()
@@ -124,7 +175,7 @@ class MainWindow(Screen):
 		#       upgrade works and doesn't require a manual restart. See also:
 		#  * packages/buskill/__init__()'s UPGRADED_FROM['DELETE_FAILED']
 		#  * buskill_gui.py's upgrade5_restart()
-		elif bk.UPGRADED_FROM and bk.UPGRADED_FROM['DELETE_FAILED']:
+		elif self.bk.UPGRADED_FROM and self.bk.UPGRADED_FROM['DELETE_FAILED']:
 			# the buskill app was just updated, but it failed to delete the old
 			# version. when this happens, we need the user to manually restart
 
@@ -184,10 +235,10 @@ class MainWindow(Screen):
 		self.nav_drawer.toggle_state()
 
 		# check to see if an upgrade was already done
-		if bk.UPGRADED_TO and bk.UPGRADED_TO['EXE_PATH'] != '1':
+		if self.bk.UPGRADED_TO and self.bk.UPGRADED_TO['EXE_PATH'] != '1':
 			# a newer version has already been installed; skip upgrade() step and
 			# just prompt the user to restart to the newer version
-			msg = "DEBUG: Detected upgrade already installed " +str(bk.UPGRADED_TO)
+			msg = "DEBUG: Detected upgrade already installed " +str(self.bk.UPGRADED_TO)
 			print( msg ); logger.debug( msg )
 			self.upgrade4_restart_prompt()
 			return
@@ -256,7 +307,7 @@ class MainWindow(Screen):
 		print( "called upgrade3_tick()" )
 
 		# update the dialog
-		self.dialog.l_body.text = bk.get_upgrade_status()
+		self.dialog.l_body.text = self.bk.get_upgrade_status()
 
 		# did the upgrade process finish?
 		if self.bk.upgrade_is_finished():
@@ -332,8 +383,8 @@ class MainWindow(Screen):
 
 	def upgrade5_restart( self ):
 
-		if bk.UPGRADED_TO:
-			new_version_exe = bk.UPGRADED_TO['EXE_PATH']
+		if self.bk.UPGRADED_TO:
+			new_version_exe = self.bk.UPGRADED_TO['EXE_PATH']
 		else:
 			new_version_exe = self.upgrade_result
 
@@ -355,7 +406,7 @@ class MainWindow(Screen):
 			oldVersionPaths = [
 			 #os.path.split( sys.argv[0] )[0],
 			 sys.argv[0].split( os.sep )[-2],
-			 os.path.split( bk.APP_DIR )[1]
+			 os.path.split( self.bk.APP_DIR )[1]
 			]
 
 			# TODO: remove me (after fixing Windows restart fail)
@@ -373,7 +424,7 @@ class MainWindow(Screen):
 			print( msg ); logger.debug( msg )
 
 			# replace this process with the newer version
-			bk.close()
+			self.bk.close()
 			os.execv( new_version_exe, [new_version_exe] )
 
 		except Exception as e:
@@ -427,16 +478,508 @@ class CriticalError(BoxLayout):
 		#       to github.com
 		webbrowser.open( 'https://docs.buskill.in/buskill-app/en/stable/support.html' )
 
+###################
+# SETTINGS SCREEN #
+###################
+
+# We heavily use (and expand on) the built-in Kivy Settings modules in BusKill
+# * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html
+#
+# Kivy's Settings module does the heavy lifting of populating the GUI Screen
+# with Settings and Options that are defined in a json file, and then -- when
+# the user changes the options for a setting -- writing those changes to a Kivy
+# Config object, which writes them to disk in a .ini file.
+#
+# Note that a "Setting" is a key and an "Option" is a possible value for the
+# Setting.
+# 
+# The json file tells the GUI what Settings and Options to display, but does not
+# store state. The user's chosen configuration of those settings is stored to
+# the Config .ini file.
+#
+# See also https://github.com/BusKill/buskill-app/issues/16
+
+# We define our own BusKillOptionItem, which is an OptionItem that will be used
+# by the BusKillSettingComplexOptions class below
+class BusKillOptionItem(FloatLayout):
+
+	def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
+
+		self.title = title
+		self.desc = desc
+		self.confirmation = confirmation
+		self.icon = icon
+		self.value = value
+		self.parent_option = parent_option
+		self.manager = manager
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
+		super(BusKillOptionItem, self).__init__(**kwargs)
+
+	# this is called when the user clicks on this OptionItem (eg choosing the
+	# 'soft-shutdown' trigger)
+	def on_touch_up( self, touch ):
+
+		# skip this touch event if it wasn't *this* widget that was touched
+		# * https://kivy.org/doc/stable/guide/inputs.html#touch-event-basics
+		if not self.collide_point(*touch.pos):
+			return
+
+		# skip this touch event if they touched on an option that's already the
+		# enabled option
+		if self.parent_option.value == self.value:
+			msg = "DEBUG: Option already equals '" +str(self.value)+ "'. Returning."
+			print( msg ); logger.debug( msg )
+			return
+
+		# does this option have a warning to prompt the user to confirm their
+		# selection before proceeding?
+		if self.confirmation == "":
+			# this option is safe; no confirmation is necessary
+			self.enable_option()
+
+		else:
+			# this option can be dangerous; confirm with user before continuing
+
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
+			 body = self.confirmation,
+			 button='Continue',
+			 continue_function=self.enable_option
+			)
+			self.dialog.b_cancel.text = "Cancel"
+			self.dialog.open()
+		
+	# called when the user has chosen to change the setting to this option
+	def enable_option( self ):
+
+		if self.dialog != None:
+			self.dialog.dismiss()
+
+		# write change to disk in our persistant buskill .ini Config file
+		key = str(self.parent_option.key)
+		value = str(self.value)
+		msg = "DEBUG: User changed config of '" +str(key) +"' to '" +str(value)+ "'"
+		print( msg ); logger.debug( msg )
+
+		Config.set('buskill', key, value)
+		Config.write()
+
+		# change the text of the option's value on the main Settings Screen
+		self.parent_option.value = self.value
+
+		# loop through every available option in the ComplexOption sub-Screen and
+		# change the icon of the radio button (selected vs unselected) as needed
+		for option in self.parent.children:
+
+			# is this the now-currently-set option?
+			if option.value == self.parent_option.value:
+				# this is the currenty-set option
+				# set the radio button icon to "selected"
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+			else:
+				# this is not the currenty-set option
+				# set the radio button icon to "unselected"
+				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+
+# We define our own BusKillSettingItem, which is a SettingItem that will be used
+# by the BusKillSettingComplexOptions class below. Note that we don't have code
+# here because the difference between the SettingItem and our BusKillSettingItem
+# is what's defined in the buskill.kv file. that's to say, it's all visual
+class BusKillSettingItem(kivy.uix.settings.SettingItem):
+	pass
+
+# Our BusKill app has this concept of a SettingItem that has "ComplexOptions"
+#
+# The closeset built-in Kivy SettingsItem type is a SettingOptions
+#  * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html#kivy.uix.settings.SettingOptions
+#
+# SettingOptions just opens a simple modal that allows the user to choose one of
+# many different options for the setting. But for setting a BusKill trigger,
+# we wanted a whole new screen so that we could have more space to tell the user
+# what each trigger does, and also have a help button on the screen to describe
+# what a trigger means. Also, the whole "New Screen for an Option" is more
+# in-line with Material Design.
+#  * https://m1.material.io/patterns/settings.html#settings-usage
+#
+# These are the reasons we create a special BusKillSettingComplexOptions class
+class BusKillSettingComplexOptions(BusKillSettingItem):
+
+	# each of these properties directly cooresponds to the key in the json
+	# dictionary that's loaded with add_json_panel. the json file is what defines
+	# all of our settings that will be displayed on the Settings Screen
+
+	# icon defines the icon that's displayed on the Settings Screen for this
+	# setting
+	icon = ObjectProperty(None)
+
+	# options is a parallel array of short names for different options for this
+	# setting (eg 'lock-screen')
+	options = ListProperty([])
+
+	# options_long is a parallel array of short human-readable descriptions for
+	# different options for this setting (eg 'BusKill will lock your screen')
+	options_long = ListProperty([])
+
+	# options_icons is a parallel array of icons for different options for this
+	# setting. Note that this is distinct from the icon for the setting. the
+	# 'icon' variable defined above is for the setting (eg 'trigger') while the
+	# items in options_icons defines the icons for the options (possible values)
+	# for that setting (eg 'lock-screen' or 'soft-shutdown')
+	options_icons = ListProperty([])
+
+	# confirmation is a parallel array of "confirmation messages" for the
+	# different options for this setting. If a confirmation is set, then the user
+	# will be presented with a popup message asking if they want to proceed
+	# before the app will actually let them choose this option for this setting.
+	# this is useful, for example, before they choose a possibly-dangerous option
+	# (eg 'hard-shutdown'). If this is set to an empty string, then no
+	# confirmation is presented to the user when they select this option
+	confirmation = ListProperty([])
+
+	def on_panel(self, instance, value):
+		if value is None:
+			return
+		self.fbind('on_release', self._choose_settings_screen)
+
+	def _choose_settings_screen(self, instance):
+
+		manager = get_screen_manager(self)
+
+		# create a new screen just for choosing the value of this setting, and
+		# name this new screen "setting_<key>" 
+		screen_name = 'setting_' +self.key
+
+		# did we already create this sub-screen?
+		if not manager.has_screen( screen_name ):
+			# there is no sub-screen for this Complex Option yet; create it
+
+			# create new screen for picking the value for this ComplexOption
+			setting_screen = ComplexOptionsScreen(
+			 name = screen_name
+			)
+		
+			# define the help message that should appear when the user clicks the
+			# help ActionButton on the top-right of the screen
+			setting_screen.set_help_msg( self.desc )
+
+			# set the color of the actionbar in this screen equal to whatever our
+			# setting's screen actionbar is set to (eg blue or red)
+			setting_screen.actionview.background_color = manager.current_screen.actionview.background_color
+
+			# make the text in the actionbar match the 'title' for the setting as
+			# it's defined in the settings json file
+			setting_screen.set_actionbar_title( self.title )
+
+			# loop through all possible values for this ComplexOption, zipping out
+			# data from parrallel arrays in the json file
+			for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
+
+				# create an OptionItem for each of the possible values for this
+				# setting option, and add them to the new ComplexOption sub-screen
+				option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
+				setting_screen.content.add_widget( option_item )
+
+			# add the new ComplexOption sub-screen to the Screen Manager
+			manager.add_widget( setting_screen )
+
+		# change into the sub-screen now
+		manager.transition.direction = 'left'
+		manager.current = screen_name
+
+# We define BusKillSettings (which extends the built-in kivy Settings) so that
+# we can add a new type of Setting = 'commplex-options'). The 'complex-options'
+# type becomes a new 'type' that can be defined in our settings json file
+class BusKillSettings(kivy.uix.settings.Settings):
+
+	def __init__(self, *args, **kargs):
+  		super(BusKillSettings, self).__init__(*args, **kargs)
+  		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
+
+# Kivy's SettingsWithNoMenu is their simpler settings widget that doesn't
+# include a navigation bar between differnt pages of settings. We extend that
+# type with BusKillSettingsWithNoMenu so that we can use our custom
+# BusKillSettings class (defined above) with our new 'complex-options' type
+class BusKillSettingsWithNoMenu(BusKillSettings):
+
+	def __init__(self, *args, **kwargs):
+		self.interface_cls = kivy.uix.settings.ContentPanel
+		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
+
+# The ComplexOptionsScreen is a sub-screen to the Settings Screen. Kivy doesn't
+# have sub-screens for defining options, but that's what's expected in Material
+# Design. We needed more space, so we created ComplexOption-type Settings. And
+# this is the Screen where the user transitions-to to choose the options for a
+# ComplexOption
+class ComplexOptionsScreen(Screen):
+
+	actionview = ObjectProperty(None)
+	settings_content = ObjectProperty(None)
+	actionbar_title = ObjectProperty(None)
+	help_msg = ObjectProperty(None)
+
+	def set_help_msg(self, new_help_msg ):
+		self.help_msg = new_help_msg
+
+	def set_actionbar_title(self, new_title):
+		self.actionbar_title = new_title
+
+	def on_pre_enter(self, *args):
+
+		msg = "DEBUG: User switched to '" +str(self.manager.current_screen.name)+ "' screen"
+		print( msg ); logger.debug( msg )
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# close the navigation drawer on the main screen
+		self.main_screen.nav_drawer.toggle_state()
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
+	def show_help( self ):
+
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=30]\ue88f[/size][/font] ' + str(self.actionbar_title),
+		 body = str(self.help_msg),
+		 button = "",
+		 continue_function=None
+		)
+		self.dialog.b_cancel.text = "OK"
+		self.dialog.open()
+
+# This is our main Screen when the user clicks "Settings" in the nav drawer
+class BusKillSettingsScreen(Screen):
+
+	actionview = ObjectProperty(None)
+
+	def on_pre_enter(self, *args):
+
+		msg = "DEBUG: User switched to 'Settings' screen"
+		print( msg ); logger.debug( msg )
+
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
+		self.bk = self.root_app.bk
+
+		# the "main" screen
+		self.main_screen = self.manager.get_screen('main')
+
+		# close the navigation drawer on the main screen
+		self.main_screen.nav_drawer.toggle_state()
+
+		# we steal (reuse) the instance field referencing the "modal dialog" from
+		# the "main" screen
+		self.dialog = self.main_screen.dialog
+
+		# is the contents of 'settings_content' empty?
+		if self.settings_content.children == []:
+			# we haven't added the settings widget yet; add it now
+
+			# kivy's Settings module is designed to use many different kinds of
+			# "menus" (sidebars) for navigating different sections of the settings.
+			# while this is powerful, it conflicts with the Material Design spec,
+			# so we don't use it. Instead we use BusKillSettingsWithNoMenu, which
+			# inherets kivy's SettingsWithNoMenu and we add sub-screens for
+			# "ComplexOptions"; 
+			s = BusKillSettingsWithNoMenu()
+			s.root_app = self.root_app
+
+			# create a new Kivy SettingsPanel using Config (our buskill.ini config
+			# file) and a set of options to be drawn in the GUI as defined-by
+			# the 'settings_buskill.json' file
+			s.add_json_panel( 'buskill', Config, os.path.join(self.bk.SRC_DIR, 'packages', 'buskill', 'settings_buskill.json') )
+
+			# our BusKillSettingsWithNoMenu object's first child is an "interface"
+			# the add_json_panel() call above auto-pouplated that interface with
+			# a bunch of "ComplexOptions". Let's add those to the screen's contents
+			self.settings_content.add_widget( s )
+
+	# called when the user leaves the Settings screen
+	def on_pre_leave(self):
+		# update runtime 'bk' instance with any settings changes, as needed
+
+		# is the user going back to the main screen or some sub-Settings screen?
+		if self.manager.current == "main":
+			# the user is leaving the Settings screen to go back to the main Screen
+
+			# attempt to re-arm BusKill if the trigger changed
+			self.rearm_if_required()
+
+	# called when the user clicks the "reset" button in the actionbar
+	def reset_defaults(self):
+
+		msg = "Are you sure you want to reset all your settings back to defaults?"
+
+		self.dialog = DialogConfirmation(
+		 title = '[font=mdicons][size=31]\ue002[/size][/font] Warning',
+		 body = msg,
+		 button='Erase Settings',
+		 continue_function=self.reset_defaults2
+		)
+		self.dialog.b_cancel.text = "Cancel"
+		self.dialog.open()
+
+	# called when the user confirms they want to reset their settings
+	def reset_defaults2(self):
+		msg = "DEBUG: User initiated settings reset"
+		print( msg ); logger.debug( msg )
+
+		# close the dialog if it's already opened
+		if self.dialog != None:
+			self.dialog.dismiss()
+
+		# delete all the options saved to the config file
+		for key in Config['buskill']:
+			Config.remove_option( 'buskill', key )
+		Config.write()
+
+		# setup the defaults again to avoid configparser.NoOptionError
+		self.root_app.build_config(Config)
+
+		# refresh all the values on the Settings Screen (and sub-screens)
+		self.refresh_values()
+
+	# updates the values of all the options on the Settings Screen and all
+	# ComplexOptions sub-screens
+	def refresh_values(self):
+
+		# UPDATE SETTINGS SCREEN
+
+		# loop through all the widgets on the Settings Screen
+		for widget in self.settings_content.walk():
+
+			# is this widget a BusKillSettingComplexOptions object?
+			#if isinstance( widget, BusKillSettingComplexOptions ):
+			if isinstance( widget, BusKillSettingComplexOptions ) \
+			 or isinstance( widget, kivy.uix.settings.SettingBoolean ) \
+			 or isinstance( widget, kivy.uix.settings.SettingNumeric ) \
+			 or isinstance( widget, kivy.uix.settings.SettingOptions ) \
+			 or isinstance( widget, kivy.uix.settings.SettingString ) \
+			 or isinstance( widget, kivy.uix.settings.SettingPath ):
+
+				# get the key for this SettingItem
+				key = widget.key
+
+				# get the value that the user has actually set this option to
+				set_value = Config.get('buskill', key)
+
+				# update the value for this SettingItem, which will update the text
+				# in the Label on the Settings Screen
+				widget.value = set_value
+
+		# UPDATE SUB-SETTINGS SCREENS (for ComplexOptions)
+
+		# loop through all of our sub-screens in the Settings screen (that are
+		# used to change the values of ComplexOptions)
+		for screen in self.manager.screens:
+
+			# get the parent layout inside the screen and walk through all of its
+			# child widgets
+			parent_layout = screen.children[0]
+			for widget in screen.walk():
+
+				# is this widget a BusKillOptionItem?
+				if isinstance( widget, BusKillOptionItem ):
+					# yes, this is a radio button for an option; make sure it's set
+					# correctly, depending on if it's selected or not in the config
+
+					# get the title for this option (eg "trigger")
+					title = widget.title
+
+					# get the value that this particular radio button is for
+					# (eg 'soft-shutdown')
+					value = widget.value
+
+					# get the value that the user has actually set this option to
+					set_value = Config.get('buskill', title)
+
+					# first, make sure that the parent of this option matches our
+					# config
+					widget.parent_option.value = set_value
+
+					# is this the now-currently-set option?
+					if value == set_value:
+						# this is the currenty-set option
+						# set the radio button icon to "selected"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+					else:
+						# this is not the currenty-set option
+						# set the radio button icon to "unselected"
+						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+
+	# determine if we need to re-arm BusKill (eg if they changed the trigger
+	# while BusKill is arm, we'd need to re-arm else it'll trigger not what the
+	# user expects it to trigger)
+	def rearm_if_required(self):
+
+		# this changes to true if we have to disarm & arm BusKill again i norder to
+		# apply the settings that the user changed
+		rearm_required = False
+
+		# trigger
+		old_trigger = self.bk.trigger
+		new_trigger = Config.get('buskill', 'trigger')
+
+		# was the trigger just changed by the user?
+		if old_trigger != new_trigger:
+			# the trigger was changed; update the runtime bk instance
+			self.bk.set_trigger( new_trigger )
+
+			# is BusKill currently armed?
+			if self.bk.is_armed == True:
+				# buskill is currently armed; rearming is required to apply the change
+				rearm_required = True
+
+		# is it necessary to disarm and arm BusKill in order to apply the user's
+		# changes to BusKill's settings?
+		if rearm_required:
+			msg = "DEBUG: Re-arm from '" +str(old_trigger)+ "' to '" +str(new_trigger)+ "' trigger?"
+			print( msg ); logger.debug( msg )
+
+
+			msg = "You've made changes to your settings that require disarming & arming again to apply."
+			self.dialog = DialogConfirmation(
+			 title = '[font=mdicons][size=30]\ue92f[/size][/font]  Apply Changes?',
+			 body = msg,
+			 button='Disarm & Arm Now',
+			 continue_function = self.rearm
+			)
+			self.dialog.open()
+
+	# re-arms BusKill
+	def rearm(self):
+
+		# close the dialog if it's already opened
+		if self.dialog != None:
+			self.dialog.dismiss()
+
+		# turn it off and on again
+		self.main_screen.toggle_buskill()
+		self.main_screen.toggle_buskill()
+
+#############
+# DEBUG LOG #
+#############
+
 class DebugLog(Screen):
 
-	debug_log = ObjectProperty(None)
 	debug_header = ObjectProperty(None)
+	actionview = ObjectProperty(None)
 
 	def __init__(self, **kwargs):
 
-		# set local instance fields that reference our global variables
-		global bk
-		self.bk = bk
 		self.show_debug_log_thread = None
 
 		super(DebugLog, self).__init__(**kwargs)
@@ -445,6 +988,13 @@ class DebugLog(Screen):
 
 		msg = "DEBUG: User switched to 'DebugLog' screen"
 		print( msg ); logger.debug( msg )
+
+		# set the bk object to the BusKillApp's bk object
+		# note we can't set this in __init__() because that's too early. the
+		# 'root_app' instance field is manually set by the BusKillApp object
+		# after this Screen instances is created but before it's added with
+		# add_widget()
+		self.bk = self.root_app.bk
 
 		# register the function for clicking the "help" icon at the top
 		self.debug_header.bind( on_ref_press=self.ref_press )
@@ -528,14 +1078,25 @@ class DebugLog(Screen):
 
 		# for privacy reasons, we don't do in-app bug reporting; just point the
 		# user to our documentation
-		self.main_screen.webbrowser_open_url( bk.url_documentation_bug_report )
+		self.main_screen.webbrowser_open_url( self.bk.url_documentation_bug_report )
 
 class BusKillApp(App):
 
-	# instantiate our global BusKill object instance and screen manager so they can
-	# be accessed by other objects for doing Buskill stuff & changing the kivy screen
-	global bk
-	bk = packages.buskill.BusKill()
+	# copied mostly from 'site-packages/kivy/app.py'
+	def __init__(self, bk, **kwargs):
+
+		# instantiate our BusKill object instance so it can be accessed by
+		# other objects for doing Buskill stuff
+		self.bk = bk
+
+		self._app_settings = None
+		self._app_window = None
+		super(App, self).__init__(**kwargs)
+		self.options = kwargs
+		self.built = False
+
+	# instantiate our scren manager instance so it can be accessed by other
+	# objects for changing the kivy screen
 	manager = ScreenManager()
 
 	# register font aiases so we don't have to specify their full file path
@@ -562,13 +1123,19 @@ class BusKillApp(App):
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
-		bk.close()
+		self.bk.close()
+
+	def build_config(self, config):
+
+		Config.read( self.bk.CONF_FILE )
+		Config.setdefaults('buskill', {
+		 'trigger': 'lock-screen',
+		})	
+		Config.set('kivy', 'exit_on_escape', '0')
+		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+		Config.write()
 
 	def build(self):
-
-		# set local instance fields that reference our global variables
-		global bk
-		self.bk = bk
 
 		# this doesn't work in Linux, so instead we just overwrite the built-in
 		# kivy icons with ours, but that's done in the linux build script
@@ -581,8 +1148,32 @@ class BusKillApp(App):
 			# yes, this platform is supported; show the main window
 			Window.bind( on_request_close = self.close )
 
-			self.manager.add_widget( MainWindow(name='main') )
-			self.manager.add_widget( DebugLog(name='debug_log') )
+			# create all the Screens we need for our app
+			screens = [
+			 MainWindow(name='main'),
+			 DebugLog(name='debug_log'),
+			 BusKillSettingsScreen(name='settings'),
+			]
+
+			# loop through each screen created above
+			for screen in screens:
+				msg = "DEBUG: adding screen:|" +str(screen)+ "|"
+				print( msg ); logger.debug( msg )
+
+				# assign an instance field named 'root_app' to each of our Screens
+				# that references <this> BusKillApp object so that we can access
+				# the App's instance fields (like 'bk') from within the Screen.
+				# I know no built-in way to do this, since the root/parent of each
+				# screen is None
+				# 
+				# Note: This must be done *before* adding the Screen to 'manager',
+				# or the 'root_app' instance field will be unavailable in the
+				# Screen's on_pre_load() functions
+				screen.root_app = self
+
+				# add the screen to the Screen Manager
+				self.manager.add_widget( screen )
+
 			return self.manager
 
 		else:

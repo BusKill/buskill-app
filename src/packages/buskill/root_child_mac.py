@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 """
 ::
 
@@ -79,7 +79,7 @@ def trigger_softshutdown_mac_halt():
 
 	try:
 		# try to shutdown with the `halt` command
-		msg = "Attempting to execute `poweroff"
+		msg = "Attempting to execute `halt"
 		logging.info(msg)
 
 		result = subprocess.run(
@@ -160,7 +160,6 @@ while True:
 	if not re.match( "^[A-Za-z_-]+$", command ):
 		msg = "Bad Command Ignored\n"
 
-		#log.write(str(msg)); log.flush()
 		logging.error(msg)
 		sys.stdout.buffer.write( msg.encode(encoding='ascii') )
 		sys.stdout.flush()

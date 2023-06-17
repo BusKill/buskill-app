@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 #import pdb;pdb.set_trace()
 """
 ::
@@ -6,8 +6,8 @@
   File:    main.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2020-06-23
-  Version: 0.1
+  Updated: 2023-06-14
+  Version: 0.2
 
 This is the main wrapper script for launching the BusKill app.
 
@@ -29,6 +29,7 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 ################################################################################
 
 import argparse, logging, sys, multiprocessing, tempfile
+import packages.buskill
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -123,11 +124,13 @@ if __name__ == '__main__':
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
 
+	# instantiate the buskill object
+	global bk
+	bk = packages.buskill.BusKill()
+
 	#############
 	# LAUNCH UI #
 	#############
-
-	global ui
 
 	# did we get any command-line arguments?
 	if len(sys.argv) < 2:
@@ -136,14 +139,17 @@ if __name__ == '__main__':
 		print( "No command-line arguments detected. Launching GUI" )
 		print( "Hint: execute `buskill --help` for command-line usage" )
 
+		# tell kivy to store its data in our buskill DATA_DIR
+		os.environ['KIVY_HOME'] = bk.DATA_DIR
+
 		from buskill_gui import BusKillApp
-		BusKillApp().run()
+		BusKillApp( bk ).run()
 
 	else:
 		# the user passed-in arguments; give 'em the cli
 
 		from buskill_cli import *
-		ret = BusKillCLI()
+		ret = BusKillCLI( bk )
 
 		sys.exit( ret )
 

@@ -1,12 +1,12 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 """
 ::
 
   File:    buskill_cli.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2022-07-06
-  Version: 0.2
+  Updated: 2023-06-16
+  Version: 0.3
 
 This is the code to handle the BusKill app via CLI
 
@@ -20,7 +20,7 @@ For more info, see: https://buskill.in/
 import packages.buskill
 from buskill_version import BUSKILL_VERSION
 
-import argparse, sys, platform
+import argparse, sys, platform, time
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -35,11 +35,32 @@ logger = logging.getLogger( __name__ )
 #                                 FUNCTIONS                                    #
 ################################################################################
 
-def BusKillCLI():
+# blocking function that waits for the usb_handler to return a trigger event
+def trigger_wait( forever ):
+
+	# listen for the trigger event from the child process
+	while True:
+
+		result = bk.check_usb_handler(None)
+		if result != None:
+
+			if not forever:
+				break
+
+		time.sleep(0.01)
+
+	# wait until the asynchronous child process (that executes our
+	# trigger) exits
+	bk.usb_handler.join()
+
+def BusKillCLI( buskill_object ):
 
 	####################
 	# HANDLE ARGUMENTS #
 	####################
+
+	global bk
+	bk = buskill_object
 
 	# we use ArgmentParser to handle the user's command-line arguents
 	parser = argparse.ArgumentParser(
@@ -70,7 +91,6 @@ def BusKillCLI():
 	 help="Choose trigger to execute. See --list-triggers for all possible values.",
 	 metavar='',
 	 choices=['l','lock-screen','s','soft-shutdown'],
-	 default='lock-screen'
 	)
 
 	parser.add_argument(
@@ -109,7 +129,8 @@ def BusKillCLI():
 		print( "Commit timestamp " +str(BUSKILL_VERSION['SOURCE_DATE_EPOCH']) )
 		sys.exit(0)
 
-	bk = packages.buskill.BusKill()
+	#global bk
+	#bk = packages.buskill.BusKill()
 
 	# is the OS that we're running on supported?
 	if not bk.is_platform_supported():
@@ -148,22 +169,20 @@ def BusKillCLI():
 
 		sys.exit(0)
 
-	# attempt to set the trigger
-	try:
-		bk.set_trigger( args.trigger )
-	except RuntimeWarning as e:
-		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
-		print( msg ); logger.error( msg )
-		sys.exit(1)
-
 	# did the user say that we should execute the trigger immediately on startup?
 	if args.run_trigger:
 		try:
-			bk.toggle()
 			bk.set_trigger( args.trigger )
 			confirm = input("Are you sure you want to execute the '" +str(bk.get_trigger())+ "' trigger RIGHT NOW? [Y/N] ")
+
+			# newline after input for cleaner output
+			print()
+
 			if confirm.upper() in ["Y", "YES"]:
 				bk.simulate_hotplug_removal()
+
+				trigger_wait( False )
+
 			else:
 				msg = "INFO: User chose not to execute trigger now. Exiting."
 				print( msg ); logger.info( msg )
@@ -178,8 +197,18 @@ def BusKillCLI():
 		bk.close()
 		sys.exit(0)
 
+	# attempt to set the trigger
+	try:
+		if args.trigger != None:
+			bk.set_trigger( args.trigger )
+	except RuntimeWarning as e:
+		msg = "ERROR: Unable to set the trigger to '" +str(args.trigger)+ "'\n\t" +str(e)
+		print( msg ); logger.error( msg )
+		sys.exit(1)
+
 	if args.arm:
 		bk.toggle()
+		trigger_wait( True )
 
 	else:
 		msg = "Nothing to do."

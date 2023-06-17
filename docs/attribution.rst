@@ -8,7 +8,8 @@ Thank you to the following folks who have contributed to the BusKill project!
  * `cyberkryption <https://twitter.com/cyberkryption>`_
  * `Steven Johnson <https://www.linkedin.com/in/sj2019/>`_
  * `Jacob Neplokh <https://jacobneplokh.com/>`_
- * `Melanie Allen <http://melanieallen.pro/>`_
+ * `Melanie Allen <https://github.com/goldfishlaser>`_
+ * `François Marier <https://fmarier.org/>`_
 
 This project would not have been possible without the following tools and services:
  * `Python <https://www.python.org/>`_
@@ -39,8 +40,9 @@ Similar Projects
 The reader may be interested to investigate the following similar projects:
 
  * `USB Kill <https://github.com/hephaest0s/usbkill>`_
+ * `USB Death <https://github.com/trpt/usbdeath>`_
  * `Silk Guardian <https://github.com/NateBrune/silk-guardian>`_
- * `Day Tripper <https://github.com/maltfield/daytripper>`_
+ * `Day Tripper <https://github.com/dekuNukem/daytripper>`_
  * `USBGuard <https://usbguard.github.io/>`_
  * `suicideCrypt <https://github.com/MonolithInd/suicideCrypt>`_
  * `panic_bcast <https://github.com/qnrq/panic_bcast>`_
@@ -52,3 +54,10 @@ The reader may be interested to investigate the following similar projects:
  * `s53 <https://github.com/BrassHornCommunications/s53>`_
  * `swatd <https://github.com/defuse/swatd>`_
  * `Centry <https://github.com/0xPoly/Centry>`_
+ * `PanicKit <https://guardianproject.info/code/panickit/>`_ & `Ripple <https://guardianproject.info/apps/info.guardianproject.ripple/>`_
+ * `Duress <https://github.com/x13a/Duress>`_
+ * `xxUSBSentinel <https://github.com/thereisnotime/xxUSBSentinel>`_
+ * `lockup <https://github.com/levlesec/lockup>`_
+ * `pam_duress <https://github.com/rafket/pam_duress>`_
+ * `pam_panic <https://github.com/pampanic/pam_panic>`_
+ * `pam_party <https://github.com/x13a/pam-party>`_

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 """
 ::
 
@@ -6,8 +6,8 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2022-07-11
-  Version: 0.4
+  Updated: 2023-06-16
+  Version: 0.5
 
 This is the heart of the buskill app, shared by both the cli and gui
 
@@ -19,7 +19,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, traceback, subprocess
-import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg
+import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg, configparser
 import os.path
 from buskill_version import BUSKILL_VERSION
 from distutils.version import LooseVersion
@@ -169,12 +169,16 @@ if CURRENT_PLATFORM.startswith( 'WIN' ):
 		#    if it's a volume then...
 		#  lParam - what's changed more exactly
 		def hotplugCallbackWin(self, hwnd, message, wparam, lparam):
-	
+			msg = "DEBUG: called hotplubCallbackWin()"
+			print( msg ); logger.debug( msg )
+
 			dev_broadcast_hdr = DEV_BROADCAST_HDR.from_address(lparam)
 	
 			if wparam == DBT_DEVICEREMOVECOMPLETE:
-	
-				self.bk.triggerWin()
+				msg = "DEBUG: Determined USB hotplug event to be a removal"
+				print( msg ); logger.debug( msg )
+
+				self.bk.usb_handler_queue.put( 'trigger' )
 	
 				msg = "hwnd:|" +str(hwnd)+ "|"
 				print( msg ); logger.debug( msg )
@@ -217,6 +221,7 @@ class BusKill:
 		self.ARM_FUNCTION = None
 		self.DISARM_FUNCTION = None
 		self.TRIGGER_FUNCTION = None
+		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
 		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
@@ -228,6 +233,7 @@ class BusKill:
 		self.SRC_DIR = None
 		self.DATA_DIR = None
 		self.CACHE_DIR = None
+		self.CONF_FILE = None
 		self.GNUPGHOME = None
 		self.UPGRADED_FROM = None
 		self.UPGRADED_TO = None
@@ -237,11 +243,12 @@ class BusKill:
 
 		self.is_armed = None
 		self.usb_handler = None
+		self.usb_handler_queue = None
 		self.upgrade_status_msg = None
 		self.upgrade_result = None
+		self.trigger = None
 
 		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
-		self.trigger = 'lock-screen'
 		self.trigger_softshutdown_lin_shutdown_path = None
 		self.trigger_softshutdown_lin_poweroff_path = None
 		self.trigger_softshutdown_lin_systemctl_path = None
@@ -399,9 +406,27 @@ class BusKill:
 		print( msg ); logger.debug( msg )
 
 		# create a data dir in some safe place where we have write access
-		# TODO: move this to main.py so the log file gets put in the CACHE_DIR
-		# (that--or maybe just move the buskill.init() into main.py)
 		self.setupDataDir()
+
+		# path to buskill's config file
+		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
+
+		# does the config file exist already?
+		if not os.path.exists( self.CONF_FILE ):
+			# the config file doesn't exist yet; create it
+
+			# we create our config.ini file now with a "[buskill]" section at the
+			# top to make UX *slightly* better for a user who wants to manually
+			# edit the config file. if we don't do this, then kivy will put it
+			# below its own settings, making the user scroll a lot to find them
+			contents = "[buskill]\n"
+			with open( self.CONF_FILE, 'w' ) as fd:
+				fd.write( contents )
+
+		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
+		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
+		print( msg ); logger.debug( msg )
+
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version
@@ -538,15 +563,15 @@ class BusKill:
 
 				msg = "DEBUG: shutdown binary path:|" \
 				 +str(self.trigger_softshutdown_lin_shutdown_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 				msg = "DEBUG: poweroff binary path:|" \
 				 +str(self.trigger_softshutdown_lin_poweroff_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 				msg = "DEBUG: systemctl binary path:|" \
 				 +str(self.trigger_softshutdown_lin_systemctl_path)+ "|"
-				print( msg ); logger.error( msg )
+				print( msg ); logger.debug( msg )
 
 			#elif self.OS_NAME_SHORT == 'win':
 				# n/a currently there's no checks needed for the soft-shutdown on windows
@@ -817,6 +842,19 @@ class BusKill:
 		# first we choose where our data dir based on where we have write access
 		data_dirs = list()
 
+		# in linux, try to follow Cross-Desktop Group (XDG) standards
+		#  * https://www.freedesktop.org/wiki/Specifications/basedir-spec/
+		if self.OS_NAME_SHORT == 'lin':
+
+			# add every dir in the colon-delimited (:) list of the XDG_DATA_HOME
+			# environment variable
+			if 'XDG_DATA_HOME' in os.environ.keys():
+				for d in os.environ['XDG_DATA_HOME'].split(":"):
+					data_dirs.append( d )
+
+			# and fall-back on the default $HOME/.local/share
+			data_dirs.append( os.path.join( os.path.expanduser('~'), '.local', 'share' ) )
+
 		# first try to create our data dir in the same dir that holds the dir
 		# where the buskill app was installed (and where future updates will be
 		# installed). This may be the BusKill USB drive itself.
@@ -831,6 +869,11 @@ class BusKill:
 		# iterate though our list of potential data dirs and pick the first one
 		# that we can actually write to
 		for data_dir in data_dirs:
+
+			# skip any empty data_dir
+			if data_dir == '' or data_dir == None:
+				continue
+
 			try:
 				testfile = tempfile.TemporaryFile( dir=data_dir )
 				testfile.close()
@@ -867,6 +910,19 @@ class BusKill:
 
 	def toggle(self):
 
+		# has the trigger been set yet?
+		if self.trigger == None:
+			# no trigger has been set yet; let's set it to the default
+
+			# set the default trigger to what's defined in the config file
+			self.config = configparser.ConfigParser()
+			self.config.read( self.CONF_FILE )
+			if self.config.has_option('buskill', 'trigger'):
+				trigger = self.config.get('buskill', 'trigger')
+			else:
+				trigger = 'lock-screen'
+			self.set_trigger( trigger )
+
 		if self.is_armed:
 			msg = "DEBUG: attempting to disarm BusKill"
 			print( msg ); logger.debug( msg )
@@ -884,13 +940,16 @@ class BusKill:
 			print( msg ); logger.info( msg )
 
 		else:
-			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "()"
+			msg = "DEBUG: attempting to arm BusKill via " +str(self.ARM_FUNCTION)+ "() with the '" +str(self.trigger)+ "' trigger"
 			print( msg ); logger.debug( msg )
+
+			# create a queue so that the child can communicate up to the parent
+			if self.usb_handler_queue == None:
+				self.usb_handler_queue = multiprocessing.Queue()
 
 			# launch an asynchronous child process that'll loop and listen for
 			# usb events
-#			self.usb_handler = self.Process(
-			self.usb_handler = multiprocessing.Process(
+			self.usb_handler = self.Process(
 			 target = self.ARM_FUNCTION
 			)
 			self.usb_handler.start()
@@ -918,6 +977,9 @@ class BusKill:
 		msg = "event:|" +str(event)+ "|"
 		print( msg ); logger.debug( msg )
 
+		msg = "usb1.HOTPLUG_EVENT_DEVICE_ARRIVED:|" +str(usb1.HOTPLUG_EVENT_DEVICE_ARRIVED)+ "|"
+		print( msg ); logger.debug( msg )
+
 		msg = "usb1.HOTPLUG_EVENT_DEVICE_LEFT:|" +str(usb1.HOTPLUG_EVENT_DEVICE_LEFT)+ "|"
 		print( msg ); logger.debug( msg )
 
@@ -931,48 +993,55 @@ class BusKill:
 			msg = "calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
-			self.TRIGGER_FUNCTION()
+			self.usb_handler_queue.put( 'trigger' )
+
+	# checks the queue from the child usb_handler process
+	def check_usb_handler( self, dt ):
+
+		# is there a message on the queue?
+		if not self.usb_handler_queue.empty():
+			# the child sent us a message; get it
+			queue_message = self.usb_handler_queue.get()
+
+			msg = "DEBUG: Queue message from child usb_handler (" +str(queue_message)+ ")"
+			print( msg ); logger.error( msg )
+
+			# what did the message from the child say?
+			if queue_message == 'trigger':
+				# the child told us to execute the trigger; do it!
+				self.TRIGGER_FUNCTION()
+				return queue_message
+			else:
+				# no idea what the child said; log it as an error
+				msg = "ERROR: Unknown queue message from child usb_handler"
+				print( msg ); logger.error( msg )
 
 	# simulates a fake hotplug removal event
 	def simulate_hotplug_removal( self ):
 
-		if self.OS_NAME_SHORT == 'lin' or self.OS_NAME_SHORT == 'mac':
+		msg = "INFO: Arming & Simulating USB Removal Event"
+		print( msg ); logger.info( msg )
 
-			self.simulate_hotplug_removal_nix()
-		
-		elif self.OS_NAME_SHORT == 'win':
-
-			self.simulate_hotplug_removal_win()
-
-
-	# simulates a fake hotplug removal event on *nix platforms
-	def simulate_hotplug_removal_nix( self ):
-
-		# call the callback for hotplug events with 'simulation' for both 'context'
-		# and 'event'. The last argument is the constant signifying that the
-		# hotplug event is specifically a *removal* event
-		self.hotplugCallbackNix( 'simulation', 'simulation', usb1.HOTPLUG_EVENT_DEVICE_LEFT )
-
-	# TODO: test this. DBT_DEVICEREMOVALCOMPLETE may not be avaialble and so this
-	# may need to move wayy up (next to the actual hotplugCallbackWin() function's definition
-	def simulate_hotplug_removal_win( self ):
-
-		# call the callback for hotplug events with 'simulation' for 'hwnd',
-		# 'message', and 'lparam'. The second-to-last argument is the constant
-		# signifying that the hotplug event is specifically a *removal* event
-		self.hotplugCallbackWin(
-		 'simulation',
-		 'simulation',
-		 DBT_DEVICEREMOVECOMPLETE,
-		 'simulation'
-		)
+		# let the child process know that we don't need to wait for a USB removal
+		# event to call the trigger function
+		self.SIMULATE_HOTPLUG_REMOVAL = True
+		self.toggle()
 
 	####################
 	# ARMING FUNCTIONS #
 	####################
 
 	# this works for both linux and mac
-	def armNix(self):
+	def armNix( self ):
+
+		# are we just simulating this USB removal?
+		if self.SIMULATE_HOTPLUG_REMOVAL:
+			# we're simulating a removal event
+
+			# and 'event'. The last argument is the constant signifying that the
+			# hotplug event is specifically a *removal* event
+			self.hotplugCallbackNix( 'simulation', 'simulation', usb1.HOTPLUG_EVENT_DEVICE_LEFT )
+			return
 
 		with usb1.USBContext() as context:
 
@@ -1000,7 +1069,27 @@ class BusKill:
 
 		return 0
 
-	def armWin(self):
+	def armWin( self ):
+
+		# are we just simulating this USB removal?
+		if self.SIMULATE_HOTPLUG_REMOVAL:
+			# we're simulating a removal event
+
+			# TODO: test this. DBT_DEVICEREMOVALCOMPLETE may not be avaialble and
+			# so this may need to move wayy up (next to the actual
+			# hotplugCallbackWin() function's definition
+
+			# call the callback for hotplug events with 'simulation' for 'hwnd',
+			# 'message', and 'lparam'. The second-to-last argument is the constant
+			# signifying that the hotplug event is specifically a *removal* event
+			self.hotplugCallbackWin(
+			 'simulation',
+			 'simulation',
+			 DBT_DEVICEREMOVECOMPLETE,
+			 'simulation'
+			)
+
+			return
 
 		w = Notification( self )
 		win32gui.PumpMessages()
@@ -1008,8 +1097,6 @@ class BusKill:
 	#####################
 	# TRIGGER FUNCTIONS #
 	#####################
-
-	# TODO: add other triggers besides lockscreens
 
 	# LINUX
 
@@ -1027,6 +1114,12 @@ class BusKill:
 
 		# first we try to lock with xdg-screensaver
 		self.trigger_lockscreen_lin_xdg()
+
+		# in Cinnamon (Linux Mint) `xdg-screensaver` exists, exits zero, doesn't
+		# throw any errors, and doesn't lock the screen.
+		# * https://en.wikipedia.org/wiki/Cinnamon_(desktop_environment)
+		# * https://github.com/BusKill/buskill-app/issues/64
+		self.trigger_lockscreen_lin_cinnamon()
 
 	# this function will gently shutdown a Linux machine
 	def trigger_softshutdown_lin(self):
@@ -1085,13 +1178,46 @@ class BusKill:
 			print( msg ); logger.debug( msg )
 
 			if result.returncode != 0:
-				# that didn't work; log it and give up :(
+				# that didn't work; log it and try fallback
 				msg = "ERROR: Failed to execute `xscreensaver -lock`! "
 				print( msg ); logger.error(msg)
 
 		except Exception as e:
-			# that didn't work; log it and give up :(
+			# that didn't work; log it and try fallback
 			msg = "ERROR: Failed to execute `xscreensaver -lock`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_lockscreen_lin_cinnamon(self):
+
+		try:
+			# unset PYTHONHOME to fix AppImage fs encoding error
+			#    ModuleNotFoundError: No module named 'encodings'
+			# * https://github.com/BusKill/buskill-app/issues/64#issuecomment-1537221491
+			if 'PYTHONHOME' in os.environ:
+				del os.environ['PYTHONHOME']
+
+			# try to lock the screen with cinnamon-screensaver command
+			msg = "INFO: Attempting to execute `cinnamon-screensaver-command --lock`"
+			print( msg ); logger.debug( msg )
+			result = subprocess.run( ['cinnamon-screensaver-command', '--lock'], capture_output=True, text=True )
+
+			msg = "DEBUG: subprocess returncode|" +str(result.returncode)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stdout|" +str(result.stdout)+ "|"
+			print( msg ); logger.debug( msg )
+
+			msg = "DEBUG: subprocess stderr|" +str(result.stderr)+ "|"
+			print( msg ); logger.debug( msg )
+
+			if result.returncode != 0:
+				# that didn't work; log it and give up :(
+				msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! "
+				print( msg ); logger.error(msg)
+
+		except Exception as e:
+			# that didn't work; log it and give up :(
+			msg = "ERROR: Failed to execute `cinnamon-screensaver-command --lock`! " +str(e)
 			print( msg ); logger.error(msg)
 
 	def trigger_softshutdown_lin_shutdown(self):
@@ -1129,7 +1255,7 @@ class BusKill:
 
 			self.trigger_softshutdown_lin_poweroff()
 
-	def trigger_softshutdown_lin_shutdown(self):
+	def trigger_softshutdown_lin_poweroff(self):
 
 		try:
 			# try to shutdown with the `poweroff` command
@@ -1582,7 +1708,6 @@ class BusKill:
 		# memory and we can't specify a callback when it finishes.
 
 		self.upgrade_process = self.Process(
-#		self.upgrade_process = multiprocessing.Process(
 		 target = self.upgrade
 		)
 		self.upgrade_process.start()
