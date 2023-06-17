@@ -101,12 +101,10 @@ Then click ``Trigger`` and select the action that you want to happen when the Bu
 
 	Some triggers can be dangerous and cause data loss or data corruption. Please make sure you read the warning and accept the risk before choosing a given trigger.
 
-	.. list-table::
-
-		* - .. figure:: /images/buskill_trigger_warning.png
-			:alt: screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger
-			:align: center
-			:target: ../_images/buskill_trigger_warning.png
+	.. figure:: /images/buskill_trigger_warning.png
+		:alt: screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger
+		:align: center
+		:target: ../_images/buskill_trigger_warning.png
 
 Disarming
 ---------
