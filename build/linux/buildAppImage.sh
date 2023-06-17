@@ -116,6 +116,10 @@ fi
 # FIX CONSTANTS #
 #################
 
+# don't let "dubious ownership" limit us from continuing
+# * https://github.com/BusKill/buskill-app/issues/73#issuecomment-1595819955
+git config --global --add safe.directory /root/buskill-app
+
 # https://reproducible-builds.org/docs/source-date-epoch/
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
