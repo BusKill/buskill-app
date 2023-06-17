@@ -34,7 +34,7 @@ jobs:
         set -x
 
         ls -lah
-        pushd "${GITHUB_REPOSITORY}"
+        pushd "buskill-app"
         ls -lah
         build/signRelease.sh"
 
