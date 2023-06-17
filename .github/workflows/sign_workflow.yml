@@ -36,7 +36,7 @@ jobs:
         ls -lah
         pushd "buskill-app"
         ls -lah
-        build/signRelease.sh"
+        build/signRelease.sh
 
       shell: bash
 
