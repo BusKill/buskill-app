@@ -6,7 +6,7 @@ This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](http
 
 # What is BusKill?
 
-The quickest way to understand what BusKill is to watch our 2-minute [BusKill Explainer Video](https://buskill.in/#demo).
+The quickest way to understand BusKill is to watch our 2-minute [BusKill Explainer Video](https://buskill.in/#demo).
 
 | <a href="https://www.buskill.in/#demo"><img src="docs/images/buskill_explainer_video_20211210.gif?raw=true" alt="What is BusKill? (Explainer Video)"></a> |
 |:--:| 
@@ -71,7 +71,7 @@ Thank you to the countless [individuals and other open-source projects](https://
 
 # Press
 
-As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), & [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves).
+As seen on [PCMag](https://www.pcmag.com/news/372806/programmers-usb-cable-can-kill-laptop-if-machine-is-yanked), [Forbes](https://www.forbes.com/sites/daveywinder/2020/01/03/this-20-usb-cable-is-a-dead-mans-switch-for-your-linux-laptop/), [ZDNet](https://www.zdnet.com/article/new-usb-cable-kills-your-linux-laptop-if-stolen-in-a-public-place/), [Tom's Hardware](https://www.tomshardware.com/news/the-buskill-usb-cable-secures-your-laptop-against-thieves), [Tech Crunch](https://techcrunch.com/2021/12/16/buskill-kill-cord-self-destruct-laptop/), [PCWorld](https://www.pcworld.com/article/560619/this-usb-dead-mans-switch-cable-for-laptops-is-one-cat-tug-away-from-catastrophe.html), [Bleeping Computer](https://www.bleepingcomputer.com/news/security/buskill-cable-starts-a-self-destruct-routine-on-stolen-laptops/), [CoinDesk](https://www.coindesk.com/buskill-is-a-diy-tool-to-lock-down-your-laptop), [Heise](https://www.heise.de/news/BusKill-Sicherheitskabel-macht-Notebook-Datentraeger-unbrauchbar-6296117.html), [Golem](https://www.golem.de/news/buskill-magnetisches-kabel-dient-als-killswitch-fuer-notebooks-2112-161861.html), and [Korben](https://korben.info/un-cable-usb-pour-autodetruire-votre-ordinateur-sous-linux-sil-est-vole-voici-buskill.html).
 
 # Contact
 
