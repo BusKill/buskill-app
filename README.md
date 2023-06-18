@@ -2,7 +2,7 @@
 
 # BusKill App
 
-This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](https://www.buskill.in). It works in Linux, Windows, and MacOS.
+This is the codebase for our cross-platform (CLI and) GUI app for [BusKill](https://www.buskill.in). It works in Windows, MacOS, Linux, and QubesOS.
 
 # What is BusKill?
 
