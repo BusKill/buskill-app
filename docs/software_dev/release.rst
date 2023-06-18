@@ -343,6 +343,19 @@ In ``meta.json``, make the following changes:
 
  #. Make sure that this new section's ``url`` keys (and ``SHA256SUMS`` & ``SHA256SUMS.asc`` files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section
 
+Make sure to confirm that your changes to the JSON file have not caused any syntax or corruption of the file with jq or jsonlint.
+
+::
+
+	user@host:~/buskill-app$ sudo apt-get install jq
+	...
+	user@host:~/buskill-app$ 
+
+	user@host:~/buskill-app$ jq . updates/v1/meta.json 1> /dev/null
+	user@host:~/buskill-app$ echo $?
+	0
+	user@host:~/buskill-app$
+
 After updating the ``meta.json`` file, copy it to your airgapped machine and sign it to create ``meta.json.asc``
 
 ::
@@ -429,6 +442,6 @@ Now copy-back the ``meta.json.asc`` file from your airgapped machine to overwrit
 
 Now test that in-app upgrades from the previous version are functioning properly.
 
-Finally, make sure to propogate the ``meta.json`` and ``meta.json.asc`` files to all mirrors.
+Finally, make sure to propogate the ``meta.json`` and ``meta.json.asc`` files to `all mirrors <https://github.com/search?q=repo%3ABusKill%2Fbuskill-app+UPGRADE_MIRRORS+path%3A%2F%5Esrc%5C%2Fpackages%5C%2Fbuskill%5C%2F%2F&type=code>`_.
 
 .. _reproducible: https://github.com/BusKill/buskill-app/issues/3
