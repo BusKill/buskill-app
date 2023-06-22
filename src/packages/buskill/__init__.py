@@ -990,7 +990,7 @@ class BusKill:
 			msg = "INFO: Detected USB removal event"
 			print( msg ); logger.info( msg )
 
-			msg = "calling " +str(self.TRIGGER_FUNCTION)
+			msg = "DEBUG: calling " +str(self.TRIGGER_FUNCTION)
 			print( msg ); logger.debug( msg )
 
 			self.usb_handler_queue.put( 'trigger' )
@@ -1004,7 +1004,7 @@ class BusKill:
 			queue_message = self.usb_handler_queue.get()
 
 			msg = "DEBUG: Queue message from child usb_handler (" +str(queue_message)+ ")"
-			print( msg ); logger.error( msg )
+			print( msg ); logger.debug( msg )
 
 			# what did the message from the child say?
 			if queue_message == 'trigger':
