@@ -15,3 +15,4 @@ This section will describe how to use the BusKill App to arm, disarm, and config
    gui
    cli
    qubes
+   destructive

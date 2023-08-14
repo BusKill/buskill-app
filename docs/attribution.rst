@@ -61,3 +61,4 @@ The reader may be interested to investigate the following similar projects:
  * `pam_duress <https://github.com/rafket/pam_duress>`_
  * `pam_panic <https://github.com/pampanic/pam_panic>`_
  * `pam_party <https://github.com/x13a/pam-party>`_
+ * `AirWatch <https://vandersecurity.com/airwatch>`_
