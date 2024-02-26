@@ -6,8 +6,8 @@
   File:    main.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2023-06-14
-  Version: 0.2
+  Updated: 2024-02-25
+  Version: 0.3
 
 This is the main wrapper script for launching the BusKill app.
 
@@ -19,7 +19,7 @@ For more info, see: https://buskill.in/
 
 # this is needed for supporting Windows 10 with OpenGL < v2.0
 # Example: VirtualBox w/ OpenGL v1.1
-import platform, os
+import platform, os, grp
 CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'WIN' ):
     os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
@@ -66,6 +66,10 @@ if __name__ == '__main__':
 
 	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
+	logging.debug( 'user|' +str(os.getlogin())+ '|' )
+	logging.debug( 'uid|' +str(os.getuid())+ '|' )
+	logging.debug( 'group|' +str(grp.getgrgid( os.getgid() ))+ '|' )
+	logging.debug( 'gid|' +str(os.getgid())+ '|' )
 	logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
 	logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
 	logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )

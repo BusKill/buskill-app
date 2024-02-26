@@ -6,8 +6,8 @@
   Authors: Michael Altfield <michael@buskill.in>
   Co-Auth: Steven Johnson <steven.j2019@protonmail.com>
   Created: 2020-06-23
-  Updated: 2023-06-16
-  Version: 0.5
+  Updated: 2024-02-25
+  Version: 0.6
 
 This is the heart of the buskill app, shared by both the cli and gui
 
@@ -19,7 +19,7 @@ For more info, see: https://buskill.in/
 ################################################################################
 
 import platform, multiprocessing, traceback, subprocess
-import urllib.request, re, json, certifi, sys, os, math, shutil, tempfile, random, gnupg, configparser
+import urllib.request, re, json, certifi, sys, os, grp, pwd, math, shutil, tempfile, random, gnupg, configparser
 import os.path
 from buskill_version import BUSKILL_VERSION
 from distutils.version import LooseVersion
@@ -661,6 +661,21 @@ class BusKill:
 				mode = oct(os.stat(root_child_path).st_mode)[-4:]
 				owner = os.stat(root_child_path).st_uid
 				group = os.stat(root_child_path).st_gid
+
+				msg = "DEBUG: root_child mode:|" +str(mode)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: root_child uid owner:|" +str(owner)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: root_child user owner name:|" +str(pwd.getpwuid(owner))+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: root_child gid owner:|" +str(group)+ "|"
+				print( msg ); logger.debug( msg )
+
+				msg = "DEBUG: root_child group owner name:|" +str(grp.getgrgid(group))+ "|"
+				print( msg ); logger.debug( msg )
 
 				# verify the mode of the file is exactly 0500 (octal)
 				if mode != '0500':
