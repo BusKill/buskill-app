@@ -62,3 +62,4 @@ The reader may be interested to investigate the following similar projects:
  * `pam_panic <https://github.com/pampanic/pam_panic>`_
  * `pam_party <https://github.com/x13a/pam-party>`_
  * `AirWatch <https://vandersecurity.com/airwatch>`_
+ * `swiftGuard <https://github.com/Lennolium/swiftGuard>`_

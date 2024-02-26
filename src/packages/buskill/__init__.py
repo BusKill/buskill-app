@@ -680,8 +680,8 @@ class BusKill:
 					return False
 
 				# verify the file is owned by group = root (or current group)
-				if group != 0 and group != os.getgid():
-					msg = 'ERROR: root_child is not owned by gid=0 nor your group. Refusing to spawn script as root!'
+				if group != 0 and group != 80 and group != os.getgid():
+					msg = 'ERROR: root_child is not owned by gid=0, admin, nor your group. Refusing to spawn script as root!'
 					print( msg ); logger.error( msg )
 					return False
 
