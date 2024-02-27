@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2021-07-06
-# Version: 1.1
+# Updated: 2024-02-26
+# Version: 1.2
 ################################################################################
 
 ################################################################################
@@ -229,9 +229,16 @@ tmpDir="`mktemp -d`" || exit 1
 ${SUDO} chown ${DOWNLOAD_USERNAME}:${CURRENT_GROUP} "${tmpDir}"
 ${SUDO} chmod 0770 "${tmpDir}"
 pushd "${tmpDir}"
-${SUDO} ${SU} -c "${PYTHON} -m pip download python-gnupg"
+
+# changing to use the files on GitHub, since the sigs are no longer available
+# from PyPI
+# * https://github.com/BusKill/buskill-app/issues/78
+#${SUDO} ${SU} -c "${PYTHON} -m pip download python-gnupg"
+#signature_url=`${SUDO} ${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+file_url='https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl'
+signature_url='https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl.asc'
+${SUDO} ${SU} -c "wget \"${file_url}\""
 filename="`ls -1 | head -n1`"
-signature_url=`${SUDO} ${SU} -c "curl -s https://pypi.org/simple/python-gnupg/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
 ${SUDO} ${SU} -c "wget \"${signature_url}\""
 
 mkdir gnupg
