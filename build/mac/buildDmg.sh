@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2021-12-02
-# Version: 0.8
+# Updated: 2024-03-06
+# Version: 0.9
 ################################################################################
 
 ################################################################################
@@ -188,14 +188,21 @@ export all_proxy=''
 #  * https://github.com/BusKill/buskill-app/issues/6#issuecomment-682971392
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
-# TOOO: stick to only one of these
-${PIP_PATH} download python-gnupg
-${PYTHON_PATH} -m pip download python-gnupg
-filename="`ls -1 | head -n1`"
-signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+
+# changing to use the files on GitHub, since the sigs are no longer available
+# from PyPI
+# * https://github.com/BusKill/buskill-app/issues/78
+# TODO: update this to query the GitHub API and grab the latest release
+#${PIP_PATH} download python-gnupg
+#signature_url=`curl -s https://pypi.org/simple/python-gnupg/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+file_url='https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl'
+signature_url='https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl.asc'
+
 #wget "${signature_url}"
 # switching from wget to curl to avoid "dyld Library not loaded" brew issues
 #  * https://github.com/BusKill/buskill-app/issues/70
+curl --remote-name "${file_url}"
+filename="`ls -1 | head -n1`"
 curl --remote-name "${signature_url}"
 
 mkdir gnupg
