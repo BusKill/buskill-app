@@ -272,7 +272,7 @@ pushd "${tmpDir}"
 # TODO: update this to query the GitHub API and grab the latest release
 #${SUDO} ${SU} -c "${PYTHON} -m pip download libusb1"
 #signature_url=`${SUDO} ${SU} -c "curl -s https://pypi.org/simple/libusb1/" | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
-file_url='https://github.com/vpelletier/python-libusb1/releases/download/3.1.0/libusb1-3.1.0-py3-none-any.whl.asc'
+file_url='https://github.com/vpelletier/python-libusb1/releases/download/3.1.0/libusb1-3.1.0-py3-none-any.whl'
 signature_url='https://github.com/vpelletier/python-libusb1/releases/download/3.1.0/libusb1-3.1.0-py3-none-any.whl.asc'
 ${SUDO} ${SU} -c "wget \"${file_url}\""
 filename="`ls -1 | head -n1`"
