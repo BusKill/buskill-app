@@ -147,7 +147,7 @@ $file_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2/pyth
 $signature_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl.asc" | Out-String
 
 # download the latest version of the python-gnupg module
-curl -OutFile $(Split-Path -Leaf ${file_url}) "${file_url}" | Out-String
+curl -OutFile $(Split-Path -Leaf "${file_url}") "${file_url}" | Out-String
 $filename = Get-ChildItem -Name | Select-Object -First 1
 echo $filename | Out-String
 
