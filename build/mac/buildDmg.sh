@@ -240,7 +240,7 @@ signature_url='https://github.com/vpelletier/python-libusb1/releases/download/3.
 #  * https://github.com/BusKill/buskill-app/issues/70
 curl --location --remote-name "${file_url}"
 filename="`ls -1 | head -n1`"
-curl --remote-name "${signature_url}"
+curl --location --remote-name "${signature_url}"
 
 mkdir gnupg
 chmod 0700 gnupg
