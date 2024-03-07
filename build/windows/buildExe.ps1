@@ -11,8 +11,8 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2021-09-25
-# Version: 0.4
+# Updated: 2024-03-06
+# Version: 0.5
 ################################################################################
 
 ######################################
@@ -137,18 +137,23 @@ if ( $? -ne $true ){
 }
 pushd "${tmpDir}"
 
+# changing to use the files on GitHub, since the sigs are no longer available
+# from PyPI
+# * https://github.com/BusKill/buskill-app/issues/78
+# TODO: update this to query the GitHub API and grab the latest release
+#C:\tmp\kivy_venv\Scripts\python.exe -m pip download python-gnupg | Out-String
+#$signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#"
+$file_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl" | Out-String
+$signature_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2/python_gnupg-0.5.2-py2.py3-none-any.whl.asc" | Out-String
+
 # download the latest version of the python-gnupg module
-C:\tmp\kivy_venv\Scripts\python.exe -m pip download python-gnupg | Out-String
+curl "${file_url}" | Out-String
 $filename = Get-ChildItem -Name | Select-Object -First 1
 echo $filename | Out-String
 
 # get the URL to download the detached signature file
-$signature_url = (curl -UseBasicParsing https://pypi.org/simple/python-gnupg/).Content.Split([Environment]::NewLine) | sls -Pattern "https://.*$filename#"
-$signature_url = ($signature_url).matches | select -exp value | Out-String
-$signature_url = ($signature_url).replace( '#', '.asc' ) | Out-String
-echo $signature_url | Out-String
 curl -OutFile "${filename}.asc" "${signature_url}" | Out-String
-ls 
+ls | Out-String
 
 # prepare homedir and keyring for `gpgv`
 mkdir gnupg | Out-String
