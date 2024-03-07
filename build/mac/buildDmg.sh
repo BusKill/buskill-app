@@ -201,9 +201,9 @@ signature_url='https://github.com/vsajip/python-gnupg/releases/download/0.5.2/py
 #wget "${signature_url}"
 # switching from wget to curl to avoid "dyld Library not loaded" brew issues
 #  * https://github.com/BusKill/buskill-app/issues/70
-curl --remote-name "${file_url}"
+curl --location --remote-name "${file_url}"
 filename="`ls -1 | head -n1`"
-curl --remote-name "${signature_url}"
+curl --location --remote-name "${signature_url}"
 
 mkdir gnupg
 chmod 0700 gnupg
@@ -226,12 +226,20 @@ rm -rf "${tmpDir}"
 #  * https://github.com/BusKill/buskill-app/issues/17
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
-${PIP_PATH} download libusb1
-filename="`ls -1 | head -n1`"
-signature_url=`curl -s https://pypi.org/simple/libusb1/ | grep -oE "https://.*${filename}#" | sed 's/#/.asc/'`
+
+# changing to use the files on GitHub, since the sigs are no longer available
+# from PyPI
+# * https://github.com/BusKill/buskill-app/issues/78
+# TODO: update this to query the GitHub API and grab the latest release
+#${PIP_PATH} download libusb1
+file_url='https://github.com/vpelletier/python-libusb1/releases/download/3.1.0/libusb1-3.1.0-py3-none-any.whl'
+signature_url='https://github.com/vpelletier/python-libusb1/releases/download/3.1.0/libusb1-3.1.0-py3-none-any.whl.asc'
+
 #wget "${signature_url}"
 # switching from wget to curl to avoid "dyld Library not loaded" brew issues
 #  * https://github.com/BusKill/buskill-app/issues/70
+curl --location --remote-name "${file_url}"
+filename="`ls -1 | head -n1`"
 curl --remote-name "${signature_url}"
 
 mkdir gnupg
