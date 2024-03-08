@@ -69,8 +69,8 @@ print_debugging_info () {
 	#find /usr/local/Cellar/python -type f | grep -i 'bin/pip3'
 	#find /usr/local/Cellar/python -type f -ipath *bin/python3*
 	#find /usr/local/Cellar/python -type f -ipath *bin/pip3*
-	find /usr/local/Cellar/python -type f -wholename *bin/python3*
-	find /usr/local/Cellar/python -type f -wholename *bin/pip3*
+	find /usr/local/Cellar/python* -type f -wholename *bin/python3*
+	find /usr/local/Cellar/python* -type f -wholename *bin/pip3*
 	brew list
 	brew info python
 	echo $PATH
@@ -140,7 +140,7 @@ brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 
 brew -v uninstall --ignore-dependencies python
 brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
-PYTHON_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
 #ls -lah /usr/local/Cellar/python/
@@ -157,7 +157,7 @@ cat ${PIP_PATH}
 
 # get python essential dependencies
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
-PIP_PATH="`find /usr/local/Cellar/python -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 
 # get more info post-pip install
 #ls -lah /usr/local/Cellar/python/
