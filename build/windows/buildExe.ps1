@@ -149,7 +149,7 @@ $signature_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2
 # download the latest version of the python-gnupg module
 $filename = "$(Split-Path -Leaf "${file_url}")"
 $filename = "${filename}.trim()" # https://stackoverflow.com/a/59218860/1174102
-curl -OutFile $(Split-Path -Leaf "${file_url}") "${file_url}" | Out-String
+curl -OutFile "${filename}" "${file_url}" | Out-String
 echo $filename | Out-String
 
 # get the URL to download the detached signature file
