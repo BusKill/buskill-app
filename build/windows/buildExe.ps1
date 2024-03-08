@@ -148,7 +148,7 @@ $signature_url = "https://github.com/vsajip/python-gnupg/releases/download/0.5.2
 
 # download the latest version of the python-gnupg module
 $filename = "$(Split-Path -Leaf "${file_url}")"
-$filename = "${filename}.trim()" # https://stackoverflow.com/a/59218860/1174102
+$filename = ${filename}.trim() # https://stackoverflow.com/a/59218860/1174102
 curl -OutFile "${filename}" "${file_url}" | Out-String
 echo $filename | Out-String
 
