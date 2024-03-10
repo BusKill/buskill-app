@@ -156,7 +156,7 @@ brew reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
 cat ${PIP_PATH}
 
 # get python essential dependencies
-${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-20.1.1-py2.py3-none-any.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pip-24.0-py3-none-any.whl
 PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 
 # get more info post-pip install

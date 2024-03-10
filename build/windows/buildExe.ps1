@@ -100,7 +100,7 @@ New-Item -Path C:\tmp\python -Type Directory | Out-String
 
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
 
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pip-20.1.1-py2.py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pip-24.0-py3-none-any.whl | Out-String
 C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\wheel-0.34.2-py2.py3-none-any.whl | Out-String
 C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\setuptools-49.1.0-py3-none-any.whl | Out-String
 C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\virtualenv-20.0.26-py2.py3-none-any.whl | Out-String
