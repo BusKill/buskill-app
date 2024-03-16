@@ -61,7 +61,7 @@
 					with_previous: False
 					app_icon: 'images/menu.png'
 					markup: True
-					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
+					title: '[font=RobotoMedium][size=20sp]   BusKill[/size][/font]'
 					on_release: root.toggle_menu()
 
 		NavigationDrawer:
@@ -82,7 +82,7 @@
 					orientation: 'lr-tb'
 				
 					Button:
-						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue923[/size][/font]     [font=RobotoMedium][size=16]Update[/size][/font]'
+						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue923[/size][/font]     [font=RobotoMedium][size=16sp]Update[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -94,7 +94,7 @@
 						on_release: root.upgrade1()
 
 					Button:
-						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue8b8[/size][/font]     [font=RobotoMedium][size=16]Settings[/size][/font]'
+						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue8b8[/size][/font]     [font=RobotoMedium][size=16sp]Settings[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -108,7 +108,7 @@
 							root.manager.current = 'settings'
 
 					Button:
-						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue868[/size][/font]     [font=RobotoMedium][size=16]Debug Log[/size][/font]'
+						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue868[/size][/font]     [font=RobotoMedium][size=16sp]Debug Log[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -122,7 +122,7 @@
 							root.manager.current = 'debug_log'
 
 					Button:
-						text: '[font=Roboto][size=24]  [/size][/font][font=mdicons][size=24]\ue88f[/size][/font]     [font=RobotoMedium][size=16]About[/size][/font]'
+						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue88f[/size][/font]     [font=RobotoMedium][size=16sp]About[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -165,13 +165,13 @@
 						halign: 'center'
 						valign: 'middle'
 						font_name: "Roboto"
-						font_size: 16
+						font_size: '16sp'
 
 					Button:
 						id: toggle_btn
 						text: "Arm"
 						font_name: "Roboto"
-						font_size: 16
+						font_size: '16sp'
 						background_normal: ''
 						background_color: 0.129, 0.588, 0.953, 1
 						size_hint: (1,1)
@@ -203,7 +203,7 @@
 			id: l_title
 			text: root.title
 			font_name: "RobotoMedium"
-			font_size: 20
+			font_size: '20sp'
 			markup: True
 			pos_hint: {'center_x': 0.5}
 			size_hint: None, None
@@ -214,7 +214,7 @@
 			text: root.body
 			text_size: self.size[0], None
 			font_name: "Roboto"
-			font_size: 16
+			font_size: '16sp'
 			markup: True
 			size_hint: 1, None
 			size: self.texture_size
@@ -251,7 +251,7 @@
 	size_hint_x: None
 	width: self.texture_size[0]
 	font_name: "RobotoMono"
-	font_size: dp(12)
+	font_size: '12sp'
 
 <-BusKillSettingsWithNoMenu>:
 	color_main_bg: 0.188, 0.188, 0.188, 1
@@ -306,7 +306,7 @@
 			# mdicons doesn't have a "nbsp" icon, so we hardcode the icon to
 			# something unimportant and then set the alpha to 00 if no icon is
 			# defined for this SettingItem
-			text: ('[font=mdicons][size=40][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=40]' +root.icon+ '[/size][/font]')
+			text: ('[font=mdicons][size=40sp][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=40sp]' +root.icon+ '[/size][/font]')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
@@ -372,7 +372,7 @@
 		Label:
 			id: radio_button_label
 			markup: True
-			text: ('[font=mdicons][size=18]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18]\ue836[/size][/font] ')
+			text: ('[font=mdicons][size=18sp]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18sp]\ue836[/size][/font] ')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
@@ -388,7 +388,7 @@
 		Label:
 			id: icon_label
 			markup: True
-			text: ('[font=mdicons][size=40][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=40]' +root.icon+ '[/size][/font]')
+			text: ('[font=mdicons][size=40sp][color=ffffff00]\ue256[/color][/size][/font]' if root.icon == None else '[font=mdicons][size=40sp]' +root.icon+ '[/size][/font]')
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
@@ -456,7 +456,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18]   {0}[/size][/font]'.format( root.actionbar_title or '' )
+					title: '[font=RobotoMedium][size=18sp]   {0}[/size][/font]'.format( root.actionbar_title or '' )
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'settings'
@@ -464,7 +464,7 @@
 				# Help icon for info about this ComplexOption
 				ActionButton:
 					markup: True
-					text: '[font=mdicons][size=18]\ue8fd[/size][/font]'
+					text: '[font=mdicons][size=18sp]\ue8fd[/size][/font]'
 					title: 'Test'
 					on_release: root.show_help()
 
@@ -515,7 +515,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18]   Settings[/size][/font]'
+					title: '[font=RobotoMedium][size=18sp]   Settings[/size][/font]'
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'main'
@@ -523,7 +523,7 @@
 				# Reset Settings back to defaults
 				ActionButton:
 					markup: True
-					text: '[font=mdicons][size=18]\ue8ba[/size][/font] Reset'
+					text: '[font=mdicons][size=18sp]\ue8ba[/size][/font] Reset'
 					title: 'Test'
 					on_release: root.reset_defaults()
 
@@ -557,7 +557,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18]   Debug Log[/size][/font]'
+					title: '[font=RobotoMedium][size=18sp]   Debug Log[/size][/font]'
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'main'
@@ -578,13 +578,13 @@
 				Label:
 					id: debug_header
 					markup: True
-					text: 'Debug Log Below [font=mdicons][size=18][ref=help_debug_log]\ue8fd[/ref][/size][/font]'
+					text: 'Debug Log Below [font=mdicons][size=18sp][ref=help_debug_log]\ue8fd[/ref][/size][/font]'
 					size_hint: (1,1)
 					text_size: self.size
 					halign: 'center'
 					valign: 'middle'
 					font_name: "Roboto"
-					font_size: 16
+					font_size: '16sp'
 
 				RecycleView:
 					viewclass: 'DebugLogLines'
