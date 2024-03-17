@@ -503,24 +503,35 @@ class CriticalError(BoxLayout):
 # by the BusKillSettingComplexOptions class below
 class BusKillOptionItem(FloatLayout):
 
-	def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
+	#def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
+	def __init__(self, **kwargs):
 
-		self.title = title
-		self.desc = desc
-		self.confirmation = confirmation
-		self.icon = icon
-		self.value = value
-		self.parent_option = parent_option
-		self.manager = manager
+		print( "kwargs:|" +str(kwargs)+ "|" )
+
+		#self.title = kwargs['title']
+		self.title = StringProperty('')
+		print( "title:|" +str(self.title)+ "|" )
+		#self.desc = kwargs['desc']
+		self.desc = StringProperty('')
+		#self.confirmation = kwargs['confirmation']
+		self.confirmation = StringProperty('')
+		#self.icon = kwargs['icon']
+		self.icon = StringProperty('')
+		#self.value = kwargs['value']
+		self.value = StringProperty('')
+		#self.parent_option = kwargs['parent_option']
+		parent_option = StringProperty('')
+		#self.manager = kwargs['manager']
+		manager = ObjectProperty()
 
 		# the "main" screen
-		self.main_screen = self.manager.get_screen('main')
+#		self.main_screen = self.manager.get_screen('main')
 
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
-		self.dialog = self.main_screen.dialog
+#		self.dialog = self.main_screen.dialog
 
-		super(BusKillOptionItem, self).__init__(**kwargs)
+		super(BusKillOptionItem, self).__init__()
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -683,24 +694,32 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
-				option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
+				option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
 				setting_screen.content.add_widget( option_item )
 
 			# handle the "font" option
 			if self.key == 'font':
 				# first we must determine what fonts are available on this system
 
+				option_items = []
 				font_paths = []
 				for fonts_dir_path in LabelBase.get_system_fonts_dir():
 
 					for root, dirs, files in os.walk(fonts_dir_path):
-						for file in files:
+						for file in files[0:10]:
 							if file.lower().endswith(".ttf"):
 								font_path = str(os.path.join(root, file))
+								print(font_path)
 								font_paths.append( font_path )
-								option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
+								#option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
+								#option_item = BusKillOptionItem( title = self.key, value = font_path, desc = 'test desc', confirmation = '', icon = '', parent_option = self, manager = manager )
 
-								setting_screen.content.add_widget( option_item )
+								#setting_screen.content.add_widget( option_item )
+								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
+								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc' } )
+				option_items = option_items[0:2]
+				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
+				setting_screen.rv.data = option_items
 
 			# add the new ComplexOption sub-screen to the Screen Manager
 			manager.add_widget( setting_screen )

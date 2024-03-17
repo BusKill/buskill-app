@@ -430,6 +430,7 @@
 	actionbar: actionbar
 	actionview: actionview
 	content: content
+	rv: rv
 
 	# sets the background from black to grey
 	canvas.before:
@@ -471,11 +472,13 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		ScrollView:
+		RecycleView:
+			viewclass: 'BusKillOptionItem'
 			do_scroll_x: False
+			id: rv
     		container: content
 
-			GridLayout:
+			RecycleGridLayout:
 				id: content
 				cols: 1
 				size_hint_y: None
