@@ -686,9 +686,21 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				option_item = BusKillOptionItem( self.key, value, desc, confirmation, icon, self, manager )
 				setting_screen.content.add_widget( option_item )
 
-			# TODO: change this to actually add fonts that are available
-			option_item = BusKillOptionItem( 'key', 'some_font', 'desc', '', '', self, manager )
-			setting_screen.content.add_widget( option_item )
+			# handle the "font" option
+			if self.key == 'font':
+				# first we must determine what fonts are available on this system
+
+				font_paths = []
+				for fonts_dir_path in LabelBase.get_system_fonts_dir():
+
+					for root, dirs, files in os.walk(fonts_dir_path):
+						for file in files:
+							if file.lower().endswith(".ttf"):
+								font_path = str(os.path.join(root, file))
+								font_paths.append( font_path )
+								option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
+
+								setting_screen.content.add_widget( option_item )
 
 			# add the new ComplexOption sub-screen to the Screen Manager
 			manager.add_widget( setting_screen )
