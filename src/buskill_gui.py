@@ -1099,27 +1099,92 @@ class BusKillApp(App):
 	# objects for changing the kivy screen
 	manager = ScreenManager()
 
+	msg = "DEBUG: Default font = " + str(Config.get('kivy', 'default_font'))
+	print( msg ); logger.debug( msg )
+	
+	msg = "DEBUG: System fonts dir = " + str(LabelBase.get_system_fonts_dir())
+	print( msg ); logger.debug( msg )
+
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
-	LabelBase.register(
-	 "Roboto",
-	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
-	 os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
-	)
-	LabelBase.register(
-	 "RobotoMedium",
-	 #os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
-	 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
-	)
-	LabelBase.register(
-	 "RobotoMono",
-	 os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
-	)
-	LabelBase.register(
-	 "mdicons",
-	 #os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
-	 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
-	)
+	try:
+		LabelBase.register(
+	 	"Roboto",
+	 	#os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
+	 	os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
+		)
+		LabelBase.register(
+	 	"RobotoMedium",
+	 	#os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
+	 	os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
+		)
+		LabelBase.register(
+	 	"RobotoMono",
+	 	os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
+		)
+		LabelBase.register(
+	 	"mdicons",
+	 	#os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
+	 	os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
+		)
+	except Exception as e:
+
+		msg = "INFO: Failed to load fonts (" +str(e) + ")"
+		print( msg ); logger.info( msg )
+
+		try: 
+
+			# find every font file in in all the font dirs
+			font_paths = []
+			for fonts_dir_path in LabelBase.get_system_fonts_dir():
+
+				for root, dirs, files in os.walk(fonts_dir_path):
+					for file in files:
+						if file.lower().endswith(".ttf"):
+							font_paths.append(str(os.path.join(root, file)))
+
+			font_roboto_regular_path = [f for f in font_paths if f.lower().endswith("roboto-regular.ttf")]
+			font_roboto_medium_path = [f for f in font_paths if f.lower().endswith("roboto-medium.ttf")]
+			font_roboto_mono_path = [f for f in font_paths if f.lower().endswith("robotomono-regular.ttf")]
+			font_mdicons_path = [f for f in font_paths if f.lower().endswith("materialicons-regular.ttf")]
+
+			msg = "DEBUG: Found Roboto Regular " + str(font_roboto_regular_path)
+			print( msg ); logger.debug( msg )
+			msg = "DEBUG: Found Roboto Medium " + str(font_roboto_medium_path)
+			print( msg ); logger.debug( msg )
+			msg = "DEBUG: Found Roboto Mono " + str(font_roboto_mono_path)
+			print( msg ); logger.debug( msg )
+			msg = "DEBUG: Found Material Icons " + str(font_mdicons_path)
+			print( msg ); logger.debug( msg )
+
+			# just get the first file we found in all cases
+			font_roboto_regular_path = font_roboto_regular_path[0]
+			font_roboto_medium_path = font_roboto_medium_path[0]
+			font_roboto_mono_path = font_roboto_mono_path[0]
+			font_mdicons_path = font_mdicons_path[0]
+
+			LabelBase.register(
+			 "Roboto",
+			 font_roboto_regular_path
+			)
+			LabelBase.register(
+			 "RobotoMedium",
+			 font_roboto_medium_path
+			)
+			LabelBase.register(
+			 "RobotoMono",
+			 font_roboto_mono_path
+			)
+			LabelBase.register(
+			 "mdicons",
+			 font_mdicons_path
+			)
+
+		except Exception as e:
+
+			msg = "WARNING: Failed to find fonts (" +str(e) + ")"
+			print( msg ); logger.warning( msg )
+
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
