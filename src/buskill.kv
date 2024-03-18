@@ -383,7 +383,8 @@
 		Label:
 			id: radio_button_label
 			markup: True
-			text: ('[font=mdicons][size=18sp]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18sp]\ue836[/size][/font] ')
+			#text: ('[font=mdicons][size=18sp]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18sp]\ue836[/size][/font] ')
+			text: '[font=mdicons][size=18sp]\ue837[/size][/font] '
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
@@ -440,7 +441,7 @@
 
 	actionbar: actionbar
 	actionview: actionview
-#	content: content
+	content: content
 	rv: rv
 
 	# sets the background from black to grey
@@ -486,20 +487,21 @@
 		RV:
 			id: rv
 			data: self.rv_data_list
-			viewclass: 'TwoButtons'
+			#viewclass: 'TwoButtons'
+			viewclass: 'BusKillOptionItem'
 			do_scroll_x: False
     		#container: content
 
-			RecycleBoxLayout:
-				default_size: None, dp(48)
-				default_size_hint: 1, None
-				size_hint_y: None
-				height: self.minimum_height
-				orientation: 'vertical'
-				#id: content
-				#cols: 1
+			RecycleGridLayout:
+				#default_size: None, dp(48)
+				#default_size_hint: 1, None
 				#size_hint_y: None
 				#height: self.minimum_height
+				#orientation: 'vertical'
+				id: content
+				cols: 1
+				size_hint_y: None
+				height: self.minimum_height
 
 <BusKillSettingsScreen>:
 

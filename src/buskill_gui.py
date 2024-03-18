@@ -755,10 +755,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 								#setting_screen.content.add_widget( option_item )
 								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
-								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc' } )
+								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc', 'parent_option': self } )
 				option_items = option_items[0:2]
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
-				setting_screen.rv.add()
+				setting_screen.rv.add(option_items)
 
 			# add the new ComplexOption sub-screen to the Screen Manager
 			manager.add_widget( setting_screen )
@@ -914,10 +914,12 @@ class RV(RecycleView):
         # The data needs to be in this kind of list of dictionary formats.  The RecycleView instances the
         # widgets, and populates them with data from this list.
 
-    def add(self):
+    def add(self, data):
         l = len(self.rv_data_list)
         self.rv_data_list.extend(
-            [{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
+            #[{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
+				data
+			)
 
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
