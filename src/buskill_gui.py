@@ -505,20 +505,11 @@ class CriticalError(BoxLayout):
 class BusKillOptionItem(FloatLayout):
 
 	title = StringProperty('')
-	print( "title:|" +str(title)+ "|" )
-	#self.desc = kwargs['desc']
 	desc = StringProperty('')
-	#self.confirmation = kwargs['confirmation']
 	confirmation = StringProperty('')
-	#self.icon = kwargs['icon']
 	icon = StringProperty('')
-	print( "icon:|" +str(icon)+ "|" )
-	#self.icon = StringProperty('')
-	#self.value = kwargs['value']
 	value = StringProperty('')
-	#self.parent_option = kwargs['parent_option']
 	parent_option = ObjectProperty()
-	#self.manager = kwargs['manager']
 	manager = ObjectProperty()
 
 	#def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
@@ -546,14 +537,17 @@ class BusKillOptionItem(FloatLayout):
 #		#self.manager = kwargs['manager']
 #		manager = ObjectProperty()
 
+		super(BusKillOptionItem, self).__init__(**kwargs)
+
+	def on_manager(self, instance, value):
+		self.manager = value
+
 		# the "main" screen
-#		self.main_screen = self.manager.get_screen('main')
+		self.main_screen = self.manager.get_screen('main')
 
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
-#		self.dialog = self.main_screen.dialog
-
-		super(BusKillOptionItem, self).__init__(**kwargs)
+		self.dialog = self.main_screen.dialog
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
