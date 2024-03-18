@@ -8,6 +8,17 @@
 # Version: 0.3
 ################################################################################
 
+<TwoButtons>:
+# This class is used as the viewclass in the RecycleView
+# The means this widget will be instanced to view one element of data from the data list.
+# The RecycleView data list is a list of dictionaries.  The keys in the dictionary specify the 
+# attributes of the widget.
+    Button:
+        text: root.left_text
+        on_release: print(f'Button {self.text} pressed') 
+    Button:
+        text: root.right_text
+        on_release: print(f'Button {self.text} pressed') 
 
 <CriticalError>:
 
@@ -429,7 +440,7 @@
 
 	actionbar: actionbar
 	actionview: actionview
-	content: content
+#	content: content
 	rv: rv
 
 	# sets the background from black to grey
@@ -472,17 +483,23 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		RecycleView:
-			viewclass: 'BusKillOptionItem'
-			do_scroll_x: False
+		RV:
 			id: rv
-    		container: content
+			data: self.rv_data_list
+			viewclass: 'TwoButtons'
+			do_scroll_x: False
+    		#container: content
 
-			RecycleGridLayout:
-				id: content
-				cols: 1
+			RecycleBoxLayout:
+				default_size: None, dp(48)
+				default_size_hint: 1, None
 				size_hint_y: None
 				height: self.minimum_height
+				orientation: 'vertical'
+				#id: content
+				#cols: 1
+				#size_hint_y: None
+				#height: self.minimum_height
 
 <BusKillSettingsScreen>:
 

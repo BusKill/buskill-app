@@ -66,6 +66,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.actionbar import ActionView
 from kivy.uix.settings import Settings, SettingSpacer
 from kivy.properties import ObjectProperty, StringProperty, ListProperty, BooleanProperty, NumericProperty, DictProperty
+from kivy.uix.recycleview import RecycleView
 
 ################################################################################
 #                                  SETTINGS                                    #
@@ -482,6 +483,23 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
+class TwoButtons(BoxLayout):  # The viewclass definitions, and property definitions.
+   left_text = StringProperty()
+   right_text = StringProperty()
+
+   print( "TwoButtons top" )
+
+   def __init__(self, **kwargs):
+      print( 'init TwoButton' )
+      print( kwargs )
+      print( "self.left_text:|" +str(self.left_text)+ "|" )
+      print( self )
+      print( "\t" + str(dir(self)) )
+      print( self.properties )
+      print( "\t" + str(dir(self.properties)) )
+      super().__init__(**kwargs)
+      #print( "self.left_text:|" +str(self.left_text)+ "|" )
+
 # We heavily use (and expand on) the built-in Kivy Settings modules in BusKill
 # * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html
 #
@@ -503,26 +521,47 @@ class CriticalError(BoxLayout):
 # by the BusKillSettingComplexOptions class below
 class BusKillOptionItem(FloatLayout):
 
+	title = StringProperty('')
+	print( "title:|" +str(title)+ "|" )
+	#self.desc = kwargs['desc']
+	desc = StringProperty('')
+	#self.confirmation = kwargs['confirmation']
+	confirmation = StringProperty('')
+	#self.icon = kwargs['icon']
+	icon = StringProperty('')
+	print( "icon:|" +str(icon)+ "|" )
+	#self.icon = StringProperty('')
+	#self.value = kwargs['value']
+	value = StringProperty('')
+	#self.parent_option = kwargs['parent_option']
+	parent_option = ObjectProperty()
+	#self.manager = kwargs['manager']
+	manager = ObjectProperty()
+
 	#def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
 	def __init__(self, **kwargs):
 
+		print( "self:|" +str(self)+ "|" )
+		print( "\t" +str(dir(self))+ "|" )
 		print( "kwargs:|" +str(kwargs)+ "|" )
 
-		#self.title = kwargs['title']
-		self.title = StringProperty('')
-		print( "title:|" +str(self.title)+ "|" )
-		#self.desc = kwargs['desc']
-		self.desc = StringProperty('')
-		#self.confirmation = kwargs['confirmation']
-		self.confirmation = StringProperty('')
-		#self.icon = kwargs['icon']
-		self.icon = StringProperty('')
-		#self.value = kwargs['value']
-		self.value = StringProperty('')
-		#self.parent_option = kwargs['parent_option']
-		parent_option = StringProperty('')
-		#self.manager = kwargs['manager']
-		manager = ObjectProperty()
+#		#self.title = kwargs['title']
+#		self.title = StringProperty('')
+#		print( "title:|" +str(self.title)+ "|" )
+#		#self.desc = kwargs['desc']
+#		self.desc = StringProperty('')
+#		#self.confirmation = kwargs['confirmation']
+#		self.confirmation = StringProperty('')
+#		#self.icon = kwargs['icon']
+#		self.icon = StringProperty('')
+#		print( "icon:|" +str(self.icon)+ "|" )
+#		#self.icon = StringProperty('')
+#		#self.value = kwargs['value']
+#		self.value = StringProperty('')
+#		#self.parent_option = kwargs['parent_option']
+#		parent_option = StringProperty('')
+#		#self.manager = kwargs['manager']
+#		manager = ObjectProperty()
 
 		# the "main" screen
 #		self.main_screen = self.manager.get_screen('main')
@@ -531,7 +570,7 @@ class BusKillOptionItem(FloatLayout):
 		# the "main" screen
 #		self.dialog = self.main_screen.dialog
 
-		super(BusKillOptionItem, self).__init__()
+		super(BusKillOptionItem, self).__init__(**kwargs)
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -719,7 +758,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc' } )
 				option_items = option_items[0:2]
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
-				setting_screen.rv.data = option_items
+				setting_screen.rv.add()
 
 			# add the new ComplexOption sub-screen to the Screen Manager
 			manager.add_widget( setting_screen )
@@ -743,35 +782,35 @@ class BusKillSettings(kivy.uix.settings.Settings):
 	def on_touch_down( self, touch ):
 		print( "touch_down() of BusKillSettings" )
 		print( self )
-		print( "\t" + str(dir(self) ))
-		print( dir(self.properties) )
-		print( self.cls )
-		print( "\t" + str(dir(self.cls)) )
-		print( self.parent )
-		print( "\t" + str(dir(self.parent)) )
-		print( self.parent.parent )
-		print( "\t" + str(dir(self.parent.parent)) )
-		print( self.children )
-		print( "\t" + str(dir(self.children[0])) )
-		print( "\t" + str(self.children[0].panels) )
-		panels = self.children[0].panels
-		for num,panel in panels.items():
-			print( panel )
-			print( "\t" + str(dir(panel)) )
-			print( panel.title )
-			print( panel.config )
-			print( "\t" + str(dir(panel.config)) )
-			print( "\t" + str(panel.config.filename) )
-			print( "\t" + str(panel.config.keys) )
-			print( "\t\t" + str(dir(panel.config.keys)) )
-			print( "\t" + str(panel.config.options) )
-			print( "\t\t" + str(dir(panel.config.options)) )
-			print( "\t" + str(panel.config.defaults) )
-			print( "\t\t" + str(dir(panel.config.defaults)) )
-			print( panel.title )
-			print( panel.settings )
-		#print( self.current_panel )
-		#print( self.panels )
+#		print( "\t" + str(dir(self) ))
+#		print( dir(self.properties) )
+#		print( self.cls )
+#		print( "\t" + str(dir(self.cls)) )
+#		print( self.parent )
+#		print( "\t" + str(dir(self.parent)) )
+#		print( self.parent.parent )
+#		print( "\t" + str(dir(self.parent.parent)) )
+#		print( self.children )
+#		print( "\t" + str(dir(self.children[0])) )
+#		print( "\t" + str(self.children[0].panels) )
+#		panels = self.children[0].panels
+#		for num,panel in panels.items():
+#			print( panel )
+#			print( "\t" + str(dir(panel)) )
+#			print( panel.title )
+#			print( panel.config )
+#			print( "\t" + str(dir(panel.config)) )
+#			print( "\t" + str(panel.config.filename) )
+#			print( "\t" + str(panel.config.keys) )
+#			print( "\t\t" + str(dir(panel.config.keys)) )
+#			print( "\t" + str(panel.config.options) )
+#			print( "\t\t" + str(dir(panel.config.options)) )
+#			print( "\t" + str(panel.config.defaults) )
+#			print( "\t\t" + str(dir(panel.config.defaults)) )
+#			print( panel.title )
+#			print( panel.settings )
+#		#print( self.current_panel )
+#		#print( self.panels )
 		print( '-----------------------------------------')
 		super(BusKillSettings, self).on_touch_down(touch)
 
@@ -792,29 +831,29 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		print( "touch_down() of BusKillSettingsWithNoMenu" )
 		print( self )
 		print( "\t" + str(dir(self) ))
-		print( dir(self.properties) )
-		print( self.cls )
-		print( "\t" + str(dir(self.cls)) )
-		print( self.parent )
-		print( "\t" + str(dir(self.parent)) )
-		print( self.parent.parent )
-		print( "\t" + str(dir(self.parent.parent)) )
-		print( self.children )
-		print( "\t" + str(dir(self.children[0])) )
-		print( "\t" + str(self.children[0].panels) )
-		panels = self.children[0].panels
-		for num,panel in panels.items():
-			print( panel )
-			print( "\t" + str(dir(panel)) )
-			print( panel.title )
-			print( panel.config )
-			print( "\t" + str(dir(panel.config)) )
-			print( panel.title )
-			print( panel.settings )
-		#print( "\t" + str(dir(self.children[0].panels[0])) )
-		#print( self.current_panel )
-		#print( self.panels )
-		print( '==============================================')
+#		print( dir(self.properties) )
+#		print( self.cls )
+#		print( "\t" + str(dir(self.cls)) )
+#		print( self.parent )
+#		print( "\t" + str(dir(self.parent)) )
+#		print( self.parent.parent )
+#		print( "\t" + str(dir(self.parent.parent)) )
+#		print( self.children )
+#		print( "\t" + str(dir(self.children[0])) )
+#		print( "\t" + str(self.children[0].panels) )
+#		panels = self.children[0].panels
+#		for num,panel in panels.items():
+#			print( panel )
+#			print( "\t" + str(dir(panel)) )
+#			print( panel.title )
+#			print( panel.config )
+#			print( "\t" + str(dir(panel.config)) )
+#			print( panel.title )
+#			print( panel.settings )
+#		#print( "\t" + str(dir(self.children[0].panels[0])) )
+#		#print( self.current_panel )
+#		#print( self.panels )
+#		print( '==============================================')
 		super(BusKillSettingsWithNoMenu, self).on_touch_down( touch )
 
 # The ComplexOptionsScreen is a sub-screen to the Settings Screen. Kivy doesn't
@@ -860,6 +899,26 @@ class ComplexOptionsScreen(Screen):
 		)
 		self.dialog.b_cancel.text = "OK"
 		self.dialog.open()
+
+class RV(RecycleView):
+    rv_data_list = ListProperty()  # A list property is used to hold the data for the recycleview, see the kv code
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.rv_data_list = [{'left_text': f'Left {i}', 'right_text': f'Right {i}'} for i in range(2)]
+        # This list comprehension is used to create the data list for this simple example.
+        # The data created looks like:
+        # [{'left_text': 'Left 0', 'right_text': 'Right 0'}, {'left_text': 'Left 1', 'right_text': 'Right 1'},
+        # {'left_text': 'Left 2', 'right_text': 'Right 2'}, {'left_text': 'Left 3'},...
+        # notice the keys in the dictionary correspond to the kivy properties in the TwoButtons class.
+        # The data needs to be in this kind of list of dictionary formats.  The RecycleView instances the
+        # widgets, and populates them with data from this list.
+
+    def add(self):
+        l = len(self.rv_data_list)
+        self.rv_data_list.extend(
+            [{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
+
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
 class BusKillSettingsScreen(Screen):
