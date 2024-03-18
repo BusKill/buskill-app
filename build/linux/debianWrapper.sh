@@ -10,15 +10,15 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-03
-# Updated: 2022-07-11
-# Version: 0.3
+# Updated: 2024-03-17
+# Version: 0.4
 ################################################################################
 
 ############
 # SETTINGS #
 ############
 
-DOCKER_IMAGE_NAME='debian:buster-slim'
+DOCKER_IMAGE_NAME='debian:bookworm-slim'
 
 #################
 # SANITY CHECKS #
