@@ -733,12 +733,13 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 								font_path = str(os.path.join(root, file))
 								print(font_path)
 								font_paths.append( font_path )
+								font_filename = os.path.basename( font_path )
 								#option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
 								#option_item = BusKillOptionItem( title = self.key, value = font_path, desc = 'test desc', confirmation = '', icon = '', parent_option = self, manager = manager )
 
 								#setting_screen.content.add_widget( option_item )
 								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
-								option_items.append( {'title': 'title', 'value':'value', 'icon':'\ue167', 'desc':'desc', 'parent_option': self, 'manager': manager } )
+								option_items.append( {'title': 'title', 'value': font_filename, 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
 				option_items = option_items
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
