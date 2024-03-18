@@ -759,7 +759,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				option_items = option_items
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
-				setting_screen.rv.add(option_items)
+				setting_screen.rv.data.extend(option_items)
 
 			# add the new ComplexOption sub-screen to the Screen Manager
 			manager.add_widget( setting_screen )
@@ -902,7 +902,7 @@ class ComplexOptionsScreen(Screen):
 		self.dialog.open()
 
 class RV(RecycleView):
-    rv_data_list = ListProperty()  # A list property is used to hold the data for the recycleview, see the kv code
+    #rv_data_list = ListProperty()  # A list property is used to hold the data for the recycleview, see the kv code
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -915,12 +915,12 @@ class RV(RecycleView):
         # The data needs to be in this kind of list of dictionary formats.  The RecycleView instances the
         # widgets, and populates them with data from this list.
 
-    def add(self, data):
-        l = len(self.rv_data_list)
-        self.rv_data_list.extend(
-            #[{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
-				data
-			)
+#    def add(self, data):
+#        l = len(self.rv_data_list)
+#        self.data.extend(
+#            #[{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
+#				data
+#			)
 
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
