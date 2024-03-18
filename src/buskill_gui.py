@@ -716,8 +716,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
-				option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
-				setting_screen.content.add_widget( option_item )
+				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
+				option_item = [{'title': self.key, 'value': value, 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'manager': manager }]
+				#setting_screen.content.add_widget( option_item )
+				setting_screen.rv.data.extend(option_item)
 
 			# handle the "font" option
 			if self.key == 'font':
