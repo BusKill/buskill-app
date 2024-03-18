@@ -154,7 +154,7 @@ ${SUDO} iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 ${SUDO} iptables -A INPUT -j DROP
 ${SUDO} iptables -A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -j ACCEPT
 ${SUDO} iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-${SUDO} iptables -A OUTPUT -m owner --uid-owner 100 -j ACCEPT # apt uid = 100
+${SUDO} iptables -A OUTPUT -m owner --uid-owner 42 -j ACCEPT # apt uid = 100
 
 # TODO: simplify these tests
 ${SUDO} iptables -A OUTPUT -m owner --uid-owner provisioner -j ACCEPT
