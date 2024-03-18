@@ -35,7 +35,7 @@ fi
 # INSTALL DEPENDS #
 ###################
 
-sudo apt-get install -y gifsicle jpegoptim zopfli
+yes | sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install gifsicle jpegoptim zopfli
 
 ##################
 # CHECK SETTINGS #
