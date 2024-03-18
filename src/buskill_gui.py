@@ -483,23 +483,6 @@ class CriticalError(BoxLayout):
 # SETTINGS SCREEN #
 ###################
 
-class TwoButtons(BoxLayout):  # The viewclass definitions, and property definitions.
-   left_text = StringProperty()
-   right_text = StringProperty()
-
-   print( "TwoButtons top" )
-
-   def __init__(self, **kwargs):
-      print( 'init TwoButton' )
-      print( kwargs )
-      print( "self.left_text:|" +str(self.left_text)+ "|" )
-      print( self )
-      print( "\t" + str(dir(self)) )
-      print( self.properties )
-      print( "\t" + str(dir(self.properties)) )
-      super().__init__(**kwargs)
-      #print( "self.left_text:|" +str(self.left_text)+ "|" )
-
 # We heavily use (and expand on) the built-in Kivy Settings modules in BusKill
 # * https://kivy-fork.readthedocs.io/en/latest/api-kivy.uix.settings.html
 #
@@ -900,28 +883,6 @@ class ComplexOptionsScreen(Screen):
 		)
 		self.dialog.b_cancel.text = "OK"
 		self.dialog.open()
-
-class RV(RecycleView):
-    #rv_data_list = ListProperty()  # A list property is used to hold the data for the recycleview, see the kv code
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-#        self.rv_data_list = [{'left_text': f'Left {i}', 'right_text': f'Right {i}'} for i in range(2)]
-        # This list comprehension is used to create the data list for this simple example.
-        # The data created looks like:
-        # [{'left_text': 'Left 0', 'right_text': 'Right 0'}, {'left_text': 'Left 1', 'right_text': 'Right 1'},
-        # {'left_text': 'Left 2', 'right_text': 'Right 2'}, {'left_text': 'Left 3'},...
-        # notice the keys in the dictionary correspond to the kivy properties in the TwoButtons class.
-        # The data needs to be in this kind of list of dictionary formats.  The RecycleView instances the
-        # widgets, and populates them with data from this list.
-
-#    def add(self, data):
-#        l = len(self.rv_data_list)
-#        self.data.extend(
-#            #[{'text': f'Added Left {i}', 'right_text': f'Added Right {i}'} for i in range(l, l + 1)])
-#				data
-#			)
-
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
 class BusKillSettingsScreen(Screen):

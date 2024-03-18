@@ -8,18 +8,6 @@
 # Version: 0.3
 ################################################################################
 
-<TwoButtons>:
-# This class is used as the viewclass in the RecycleView
-# The means this widget will be instanced to view one element of data from the data list.
-# The RecycleView data list is a list of dictionaries.  The keys in the dictionary specify the 
-# attributes of the widget.
-    Button:
-        text: root.left_text
-        on_release: print(f'Button {self.text} pressed') 
-    Button:
-        text: root.right_text
-        on_release: print(f'Button {self.text} pressed') 
-
 <CriticalError>:
 
 	msg: msg
@@ -484,7 +472,7 @@
 				ActionOverflow:
 					overflow_image: 'images/overflow_white.png'
 
-		RV:
+		RecycleView:
 			id: rv
 			#viewclass: 'TwoButtons'
 			viewclass: 'BusKillOptionItem'
