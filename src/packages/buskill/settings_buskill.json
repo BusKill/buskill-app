@@ -12,12 +12,16 @@
 		"options_icons": ["\ue1bf","\ue62a"]
 	},
 	{
+		"type": "title",
+		"title": "Look & Feel"
+	},
+	{
 		"icon": "\ue167",
 		"type": "complex-options",
-		"title": "Font",
+		"title": "Font Face",
 		"desc": "Choose the font in the app",
 		"section": "buskill",
-		"key": "font",
+		"key": "gui_font_face",
 		"options": ["roboto"],
 		"options_long": ["Roboto Font"],
 		"options_icons": ["\ue1bf","\ue62a"]

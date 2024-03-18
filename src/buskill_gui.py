@@ -22,7 +22,7 @@ from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 from buskill_version import BUSKILL_VERSION
 
-import os, sys, re, webbrowser, json
+import os, sys, re, webbrowser, json, operator
 
 import multiprocessing, threading
 from multiprocessing import util
@@ -512,34 +512,15 @@ class BusKillOptionItem(FloatLayout):
 	parent_option = ObjectProperty()
 	manager = ObjectProperty()
 
-	#def __init__(self, title, value, desc, confirmation, icon, parent_option, manager, **kwargs):
 	def __init__(self, **kwargs):
-
-		print( "self:|" +str(self)+ "|" )
-		print( "\t" +str(dir(self))+ "|" )
-		print( "kwargs:|" +str(kwargs)+ "|" )
-
-#		#self.title = kwargs['title']
-#		self.title = StringProperty('')
-#		print( "title:|" +str(self.title)+ "|" )
-#		#self.desc = kwargs['desc']
-#		self.desc = StringProperty('')
-#		#self.confirmation = kwargs['confirmation']
-#		self.confirmation = StringProperty('')
-#		#self.icon = kwargs['icon']
-#		self.icon = StringProperty('')
-#		print( "icon:|" +str(self.icon)+ "|" )
-#		#self.icon = StringProperty('')
-#		#self.value = kwargs['value']
-#		self.value = StringProperty('')
-#		#self.parent_option = kwargs['parent_option']
-#		parent_option = StringProperty('')
-#		#self.manager = kwargs['manager']
-#		manager = ObjectProperty()
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
+	# this is called when the 'manager' Kivy Property changes, which will happen
+	# some short time after __init__() when RecycleView creates instances of
+	# this object
 	def on_manager(self, instance, value):
+
 		self.manager = value
 
 		# the "main" screen
@@ -548,6 +529,15 @@ class BusKillOptionItem(FloatLayout):
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
+
+	def on_parent_option(self, instance, value):
+		print( "WE GOT A PARENT OPTION!!!" )
+		self.radio_button_label.text = 'F'
+		
+		if self.parent_option.value == self.value :
+			self.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+		else:
+			self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -716,27 +706,33 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				setting_screen.rv.data.extend(option_item)
 
 			# handle the "font" option
-			if self.key == 'font':
+			if self.key == 'gui_font_face':
 				# first we must determine what fonts are available on this system
 
 				option_items = []
-				font_paths = []
+				font_paths = set()
 				for fonts_dir_path in LabelBase.get_system_fonts_dir():
 
 					for root, dirs, files in os.walk(fonts_dir_path):
 						for file in files[0:10]:
 							if file.lower().endswith(".ttf"):
 								font_path = str(os.path.join(root, file))
-								print(font_path)
-								font_paths.append( font_path )
-								font_filename = os.path.basename( font_path )
+								#print(font_path)
+								font_paths.add( font_path )
 								#option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
 								#option_item = BusKillOptionItem( title = self.key, value = font_path, desc = 'test desc', confirmation = '', icon = '', parent_option = self, manager = manager )
 
 								#setting_screen.content.add_widget( option_item )
 								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
-								option_items.append( {'title': 'title', 'value': font_filename, 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
-				option_items = option_items
+
+				print( "Found " +str(len(font_paths))+ " font files." )
+
+				for font_path in font_paths:
+					font_filename = os.path.basename( font_path )
+				
+					option_items.append( {'title': 'title', 'value': font_filename, 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
+
+				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
 				setting_screen.rv.data.extend(option_items)
@@ -1320,7 +1316,7 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'trigger': 'lock-screen',
-		 'font': None,
+		 'gui_font_face': None,
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
