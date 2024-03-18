@@ -755,7 +755,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 								#setting_screen.content.add_widget( option_item )
 								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
-								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc', 'parent_option': self } )
+								option_items.append( {'title': 'title', 'value':'value', 'icon':'\ue167', 'desc':'desc', 'parent_option': self, 'manager': manager } )
 				option_items = option_items
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
@@ -906,7 +906,7 @@ class RV(RecycleView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.rv_data_list = [{'left_text': f'Left {i}', 'right_text': f'Right {i}'} for i in range(2)]
+#        self.rv_data_list = [{'left_text': f'Left {i}', 'right_text': f'Right {i}'} for i in range(2)]
         # This list comprehension is used to create the data list for this simple example.
         # The data created looks like:
         # [{'left_text': 'Left 0', 'right_text': 'Right 0'}, {'left_text': 'Left 1', 'right_text': 'Right 1'},
