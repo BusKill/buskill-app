@@ -756,7 +756,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 								#setting_screen.content.add_widget( option_item )
 								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
 								option_items.append( {'title': 'title', 'value':'value', 'icon':'icon', 'desc':'desc', 'parent_option': self } )
-				option_items = option_items[0:2]
+				option_items = option_items
+				print( "len(option_items):|" + str(len(option_items))+ "|" )
 				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
 				setting_screen.rv.add(option_items)
 
