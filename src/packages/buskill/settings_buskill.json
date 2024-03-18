@@ -25,14 +25,6 @@
 		"options": ["roboto"],
 		"options_long": ["Roboto Font"],
 		"options_icons": ["\ue1bf","\ue62a"]
-	},
-	{
-		"type": "path",
-		"title": "Font",
-		"desc": "Choose the font in the app",
-		"section": "buskill",
-		"key": "font",
-		"dirselect": "False"
 	}
 ]
 
