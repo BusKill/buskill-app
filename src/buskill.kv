@@ -474,17 +474,16 @@
 
 		RecycleView:
 			id: rv
-			#viewclass: 'TwoButtons'
 			viewclass: 'BusKillOptionItem'
 			do_scroll_x: False
-    		#container: content
+    		container: content
 
 			RecycleGridLayout:
-				#default_size: None, dp(48)
-				#default_size_hint: 1, None
-				#size_hint_y: None
-				#height: self.minimum_height
-				#orientation: 'vertical'
+				default_size: None, dp(48)
+				default_size_hint: 1, None
+				size_hint_y: None
+				height: self.minimum_height
+				orientation: 'vertical'
 				id: content
 				cols: 1
 				size_hint_y: None
