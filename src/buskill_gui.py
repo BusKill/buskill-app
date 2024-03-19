@@ -588,34 +588,37 @@ class BusKillOptionItem(FloatLayout):
 			print( self.manager.current_screen.rv.data[n]['value'] )
 			if self.manager.current_screen.rv.data[n]['value'] == self.value:
 				if self.parent_option.value == self.value:
-					print( "data:|" +str(self.manager.current_screen.rv.data[n])+ "|" )
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = 'J'
+					# this is the currenty-set option
+					# set the radio button icon to "selected"
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 				else:
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = 'K'
+					# this is not the currenty-set option
+					# set the radio button icon to "unselected"
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 		
-		if self.parent_option.value == self.value:
-			print( "DEBUG: instance values match; setting icon to checked" )
-			# this is the currenty-set option
-			# set the radio button icon to "selected"
-			#instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-			self.radio_button_label.text = 'Y'
-			self.radio_button_icon = 'Y'
-			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-
-		else:
-			# this is not the currenty-set option
-			# set the radio button icon to "unselected"
-			#self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
-			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-			self.radio_button_label.text = 'N'
-			self.radio_button_icon = 'N'
-			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-
+#		if self.parent_option.value == self.value:
+#			print( "DEBUG: instance values match; setting icon to checked" )
+#			# this is the currenty-set option
+#			# set the radio button icon to "selected"
+#			#instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+#			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#			self.radio_button_label.text = 'Y'
+#			self.radio_button_icon = 'Y'
+#			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#
+#		else:
+#			# this is not the currenty-set option
+#			# set the radio button icon to "unselected"
+#			#self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+#			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#			self.radio_button_label.text = 'N'
+#			self.radio_button_icon = 'N'
+#			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#
 		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 
 	# this is called when the 'manager' Kivy Property changes, which will happen
