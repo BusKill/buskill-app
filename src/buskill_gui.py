@@ -514,38 +514,45 @@ class BusKillOptionItem(FloatLayout):
 	manager = ObjectProperty()
 
 	def __init__(self, **kwargs):
-		print( "*********" +str(self)+ "*********" )
-		print( "\t" +str(dir(self)) )
+		print( "called BusKillOptionItem.__init__()" )
+#		print( "*********" +str(self)+ "*********" )
+#		print( "\t" +str(dir(self)) )
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
-	# determines if all the kivy properties have been setup
-	def init1(self):
-		print( "called init1()" )
-		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
-		print( "self.manager:|" +str(self.manager)+ "|" )
-		print( "self.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+		# hack to call another init function, but only *after* all the
+		# Kivy Properties are fully initialized
+		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+		Clock.schedule_once(self.init2,0)
 
-		# are all the Kivy properties setup?
-		if \
-		 self.parent_option != None and \
-		 self.manager != None and \
-		 self.radio_button_icon != None:
-			# the instance is ready to init
-			self.init2()
-		else:
-			print( "\tinstance not yet ready" )
+	# determines if all the kivy properties have been setup
+#	def init1(self):
+#		print( "called init1() for |"+ str(self.value)+ "|" )
+#		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
+#		print( "self.manager:|" +str(self.manager)+ "|" )
+#		print( "self.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#
+#		# are all the Kivy properties setup?
+#		if \
+#		 self.parent_option != None and \
+#		 self.manager != None and \
+#		 self.radio_button_icon != None:
+#			# the instance is ready to init
+#			self.init2()
+#			pass
+#		else:
+#			print( "\tinstance not yet ready" )
 		#print( "self.properties['parent_option']:|" +str(self.properties['parent_option'])+ "|" )
 
 	# this is called when all the kivy properties have been set and the object
 	# is ready
-	def init2(self):
-		print( " called init2() for "+ str(self.value) )
-		print( "called on_parent_option()" )
-		print( "\tself.value:|" +str(self.value)+ "|" )
+	def init2(self, dt):
+		print( "called init2() for |"+ str(self.value)+ "|" )
+#		print( "called on_parent_option()" )
+#		print( "\tself.value:|" +str(self.value)+ "|" )
 #		print( "\tvalue:|" +str(value)+ "|" )
 #		print( "\tvalue.value:|" +str(value.value)+ "|" )
-		print( self.manager)
+#		print( self.manager)
 
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
@@ -554,8 +561,8 @@ class BusKillOptionItem(FloatLayout):
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
 
-		print( self.manager )
-		print( self.manager.current_screen.rv.data )
+#		print( self.manager )
+#		print( self.manager.current_screen.rv.data )
 
 		#self.manager.current_screen.rv.data[0]['
 
@@ -578,8 +585,8 @@ class BusKillOptionItem(FloatLayout):
 #		print( "\t" + str(self.__dict__.items()) )
 #		print( "\t" + str([widget for widget in self.walk()]) )
 #
-		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
-		print( "self.value:|" +str(self.value)+ "|" )
+#		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
+#		print( "self.value:|" +str(self.value)+ "|" )
 
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
@@ -595,9 +602,9 @@ class BusKillOptionItem(FloatLayout):
 					# set the radio button icon to "unselected"
 					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
-		# update all the widgets' properties in the RecycleView to match the
-		# changes that we just made to 'rv.data' above
-		self.manager.current_screen.rv.refresh_from_data()
+		# update RecycleView data in next frame
+		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+		Clock.schedule_once(self.update_rv_data,0)
 		
 #		if self.parent_option.value == self.value:
 #			print( "DEBUG: instance values match; setting icon to checked" )
@@ -627,22 +634,22 @@ class BusKillOptionItem(FloatLayout):
 	# this is called when the 'manager' Kivy Property changes, which will happen
 	# some short time after __init__() when RecycleView creates instances of
 	# this object
-	def on_manager(self, instance, value):
-		self.init1()
-	def on_parent_option(self, instance, value):
-		self.init1()
+#	def on_manager(self, instance, value):
+#		self.init1()
+#	def on_parent_option(self, instance, value):
+#		self.init1()
 
 #	def on_parent_option(self, instance, value):
 
 
 	def on_radio_button_icon(self, instance, value):
 
-		print( "called on_radio_button_icon() for " +str(self.value) )
-		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#		print( "called on_radio_button_icon() for " +str(self.value) )
+#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 		self.radio_button_label.text = value
-		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
 		# don't proceed unless the screen manager has already been set
 		if not self.manager:
@@ -661,6 +668,16 @@ class BusKillOptionItem(FloatLayout):
 					# this is not the currenty-set option
 					# set the radio button icon to "unselected"
 					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+
+	def refresh_view_attrs( self, rv, index, data ):
+
+		print( "OMG SOMETHING CHANGED!!" )
+
+	def update_rv_data(self,dt):
+
+		# update all the widgets' properties in the RecycleView to match the
+		# changes that we just made to 'rv.data' above
+		self.manager.current_screen.rv.refresh_from_data()
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
