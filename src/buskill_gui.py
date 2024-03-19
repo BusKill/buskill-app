@@ -581,11 +581,10 @@ class BusKillOptionItem(FloatLayout):
 		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
 		print( "self.value:|" +str(self.value)+ "|" )
 
+		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		for n in range(0,len(self.manager.current_screen.rv.data)):
-			print( self.manager.current_screen.rv.data[n] )
-			print( self.manager.current_screen.rv.data[n]['value'] )
 			if self.manager.current_screen.rv.data[n]['value'] == self.value:
 				if self.parent_option.value == self.value:
 					# this is the currenty-set option
@@ -638,9 +637,6 @@ class BusKillOptionItem(FloatLayout):
 
 	def on_radio_button_icon(self, instance, value):
 
-		if not self.manager:
-			return
-
 		print( "called on_radio_button_icon() for " +str(self.value) )
 		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
@@ -648,11 +644,14 @@ class BusKillOptionItem(FloatLayout):
 		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
+		# don't proceed unless the screen manager has already been set
+		if not self.manager:
+			return
+
+		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		for n in range(0,len(self.manager.current_screen.rv.data)):
-			print( self.manager.current_screen.rv.data[n] )
-			print( self.manager.current_screen.rv.data[n]['value'] )
 			if self.manager.current_screen.rv.data[n]['value'] == self.value:
 				if self.parent_option.value == self.value:
 					# this is the currenty-set option
@@ -720,11 +719,10 @@ class BusKillOptionItem(FloatLayout):
 		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.value
 
+		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		for n in range(0,len(self.manager.current_screen.rv.data)):
-			print( self.manager.current_screen.rv.data[n] )
-			print( self.manager.current_screen.rv.data[n]['value'] )
 			if self.manager.current_screen.rv.data[n]['value'] == self.value:
 				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
@@ -1166,7 +1164,7 @@ class BusKillSettingsScreen(Screen):
 class RV(RecycleView):
 
 	def __init__(self, *args, **kwargs):
-		super().__init__(**kwargs)
+		super(RV, self).__init__(**kwargs)
 
 #	def refresh_from_layout(self, *largs, **kwargs):
 #		print( "called RV.refresh_from_layout()" )
