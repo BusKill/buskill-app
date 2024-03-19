@@ -504,15 +504,18 @@ class CriticalError(BoxLayout):
 # by the BusKillSettingComplexOptions class below
 class BusKillOptionItem(FloatLayout):
 
+	radio_button_icon = StringProperty('C')
+	icon = StringProperty('')
 	title = StringProperty('')
 	desc = StringProperty('')
 	confirmation = StringProperty('')
-	icon = StringProperty('')
 	value = StringProperty('')
 	parent_option = ObjectProperty()
 	manager = ObjectProperty()
 
 	def __init__(self, **kwargs):
+		print( "*********" +str(self)+ "*********" )
+		print( "\t" +str(dir(self)) )
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
@@ -520,6 +523,9 @@ class BusKillOptionItem(FloatLayout):
 	# some short time after __init__() when RecycleView creates instances of
 	# this object
 	def on_manager(self, instance, value):
+
+#	def on_start(self, **kwargs):
+#		print( "called on_load()" )
 
 		self.manager = value
 
@@ -530,20 +536,75 @@ class BusKillOptionItem(FloatLayout):
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
 
-	def on_parent_option(self, instance, value):
-		print( "called on_parent_option()" )
-		print( "instance.parent_option.value:|" +str(instance.parent_option.value)+ "|" )
-		print( "instance.value:|" +str(instance.value)+ "|" )
+		print( self.manager )
+		print( self.manager.current_screen.rv.data )
+		#self.manager.current_screen.rv.data[0]['
+
+#	def on_parent_option(self, instance, value):
+
+#		print( "called on_parent_option()" )
+#		print( "\tself.value:|" +str(self.value)+ "|" )
+#		print( "\tvalue:|" +str(value)+ "|" )
+#		print( "\tvalue.value:|" +str(value.value)+ "|" )
+#		print( self.manager)
+#		if self.manager == None:
+#			return
+
+#		if self.value == 'soft-shutdown':
+#			return
+#		if self.value == 'lock-screen':
+#			return
+
+#		print( self )
+#		print( "\tself.icon_label:|" +str(self.icon_label.text)+ "|" )
+#		print( "\tself.icon:|" +str(self.icon)+ "|" )
+#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#		print( "\tself.value:|" +str(self.value)+ "|" )
+#		print( "\tself.desc:|" +str(self.desc)+ "|" )
+#		print( "\tself.confirmation:|" +str(self.confirmation)+ "|" )
+#		print( "\t" + str(dir(self)) )
+#		print( "\t" + str(self.__dict__.items()) )
+#		print( "\t" + str([widget for widget in self.walk()]) )
+#
+		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
+#		print( "self.value:|" +str(self.value)+ "|" )
 		
-		if instance.parent_option.value == instance.value :
+		if self.parent_option.value == self.value:
+			print( "DEBUG: instance values match; setting icon to checked" )
 			# this is the currenty-set option
 			# set the radio button icon to "selected"
 			#instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-			instance.radio_button_label.text = 'F'
+			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+			#self.radio_button_label.text = 'Y'
+			self.radio_button_icon = 'Y'
+			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+
+#			for n in range(0,len(self.manager.current_screen.rv.data)):
+#				print( n )
+#				#if item.value == self.value:
 		else:
 			# this is not the currenty-set option
 			# set the radio button icon to "unselected"
-			instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			#self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+			#self.radio_button_label.text = 'N'
+			self.radio_button_icon = 'N'
+			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+
+		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+
+	def on_radio_button_icon(self, instance, value):
+
+		print( "called on_radio_button_icon() for " +str(self.value) )
+		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+		self.radio_button_label.text = value
+		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -712,9 +773,12 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
 				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
-				option_item = [{'title': self.key, 'value': value, 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'manager': manager }]
+				option_item = [{'title': self.key, 'value': value, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'manager': manager }]
 				#setting_screen.content.add_widget( option_item )
+				print( "DEBUG: adding data to rv" )
+				print( "DEBUG: \t" +str(option_item)+ "|" )
 				setting_screen.rv.data.extend(option_item)
+				print( "DEBUG: added data to rv" )
 
 			# handle the "font" option
 			if self.key == 'gui_font_face':

@@ -372,7 +372,8 @@
 			id: radio_button_label
 			markup: True
 			#text: ('[font=mdicons][size=18sp]\ue837[/size][/font] ' if root.parent_option.value == root.value else '[font=mdicons][size=18sp]\ue836[/size][/font] ')
-			text: '[font=mdicons][size=18sp]\ue837[/size][/font] '
+			#text: '[font=mdicons][size=18sp]\ue837[/size][/font] '
+			text: root.radio_button_icon
 			size: self.texture_size
 			size_hint: None, None
 			height: labellayout.height
