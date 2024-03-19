@@ -543,9 +543,19 @@ class BusKillOptionItem(FloatLayout):
 	# 'soft-shutdown' trigger)
 	def on_touch_up( self, touch ):
 
+		print( "STOP TOUCHING ME!" )
+		print( touch )
+		print( "\t" +str(dir(touch)) )
+		print( "touch.__dict__.items():|" +str(touch.__dict__.items())+ "|" )
+
 		# skip this touch event if it wasn't *this* widget that was touched
 		# * https://kivy.org/doc/stable/guide/inputs.html#touch-event-basics
 		if not self.collide_point(*touch.pos):
+			return
+
+		# skip this touch event if it was actually a scroll event
+		# * https://stackoverflow.com/questions/78183125/scrolling-causes-click-on-touch-up-event-on-widgets-in-kivy-recycleview
+		if touch.button != "left":
 			return
 
 		# skip this touch event if they touched on an option that's already the
