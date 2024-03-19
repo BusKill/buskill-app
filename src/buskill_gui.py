@@ -632,14 +632,14 @@ class BusKillOptionItem(FloatLayout):
 #	def on_parent_option(self, instance, value):
 
 
-	def on_radio_button_icon(self, instance, value):
-
-		print( "called on_radio_button_icon() for " +str(self.value) )
-		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-		self.radio_button_label.text = value
-		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#	def on_radio_button_icon(self, instance, value):
+#
+#		print( "called on_radio_button_icon() for " +str(self.value) )
+#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#		self.radio_button_label.text = value
+#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -840,7 +840,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
 				
-					option_items.append( {'title': 'title', 'value': font_filename, 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
+					option_items.append( {'title': 'title', 'value': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
