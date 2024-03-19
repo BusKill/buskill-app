@@ -531,22 +531,23 @@ class BusKillOptionItem(FloatLayout):
 		self.dialog = self.main_screen.dialog
 
 	def on_parent_option(self, instance, value):
-		print( "WE GOT A PARENT OPTION!!!" )
-		self.radio_button_label.text = 'F'
+		print( "called on_parent_option()" )
+		print( "instance.parent_option.value:|" +str(instance.parent_option.value)+ "|" )
+		print( "instance.value:|" +str(instance.value)+ "|" )
 		
-		if self.parent_option.value == self.value :
-			self.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+		if instance.parent_option.value == instance.value :
+			# this is the currenty-set option
+			# set the radio button icon to "selected"
+			#instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+			instance.radio_button_label.text = 'F'
 		else:
-			self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			# this is not the currenty-set option
+			# set the radio button icon to "unselected"
+			instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
 	def on_touch_up( self, touch ):
-
-		print( "STOP TOUCHING ME!" )
-		print( touch )
-		print( "\t" +str(dir(touch)) )
-		print( "touch.__dict__.items():|" +str(touch.__dict__.items())+ "|" )
 
 		# skip this touch event if it wasn't *this* widget that was touched
 		# * https://kivy.org/doc/stable/guide/inputs.html#touch-event-basics
@@ -705,7 +706,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			setting_screen.set_actionbar_title( self.title )
 
 			# loop through all possible values for this ComplexOption, zipping out
-			# data from parrallel arrays in the json file
+			# data from parallel arrays in the json file
 			for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
 
 				# create an OptionItem for each of the possible values for this
@@ -763,42 +764,7 @@ class BusKillSettings(kivy.uix.settings.Settings):
 		super(BusKillSettings, self).__init__(*args, **kargs)
 		super(BusKillSettings, self).register_type('complex-options', BusKillSettingComplexOptions)
 
-		print( "init of BusKillSettings" )
-		print( dir(self) )
-
 	def on_touch_down( self, touch ):
-		print( "touch_down() of BusKillSettings" )
-		print( self )
-#		print( "\t" + str(dir(self) ))
-#		print( dir(self.properties) )
-#		print( self.cls )
-#		print( "\t" + str(dir(self.cls)) )
-#		print( self.parent )
-#		print( "\t" + str(dir(self.parent)) )
-#		print( self.parent.parent )
-#		print( "\t" + str(dir(self.parent.parent)) )
-#		print( self.children )
-#		print( "\t" + str(dir(self.children[0])) )
-#		print( "\t" + str(self.children[0].panels) )
-#		panels = self.children[0].panels
-#		for num,panel in panels.items():
-#			print( panel )
-#			print( "\t" + str(dir(panel)) )
-#			print( panel.title )
-#			print( panel.config )
-#			print( "\t" + str(dir(panel.config)) )
-#			print( "\t" + str(panel.config.filename) )
-#			print( "\t" + str(panel.config.keys) )
-#			print( "\t\t" + str(dir(panel.config.keys)) )
-#			print( "\t" + str(panel.config.options) )
-#			print( "\t\t" + str(dir(panel.config.options)) )
-#			print( "\t" + str(panel.config.defaults) )
-#			print( "\t\t" + str(dir(panel.config.defaults)) )
-#			print( panel.title )
-#			print( panel.settings )
-#		#print( self.current_panel )
-#		#print( self.panels )
-		print( '-----------------------------------------')
 		super(BusKillSettings, self).on_touch_down(touch)
 
 # Kivy's SettingsWithNoMenu is their simpler settings widget that doesn't
@@ -815,32 +781,6 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		print( dir(self) )
 
 	def on_touch_down( self, touch ):
-		print( "touch_down() of BusKillSettingsWithNoMenu" )
-		print( self )
-		print( "\t" + str(dir(self) ))
-#		print( dir(self.properties) )
-#		print( self.cls )
-#		print( "\t" + str(dir(self.cls)) )
-#		print( self.parent )
-#		print( "\t" + str(dir(self.parent)) )
-#		print( self.parent.parent )
-#		print( "\t" + str(dir(self.parent.parent)) )
-#		print( self.children )
-#		print( "\t" + str(dir(self.children[0])) )
-#		print( "\t" + str(self.children[0].panels) )
-#		panels = self.children[0].panels
-#		for num,panel in panels.items():
-#			print( panel )
-#			print( "\t" + str(dir(panel)) )
-#			print( panel.title )
-#			print( panel.config )
-#			print( "\t" + str(dir(panel.config)) )
-#			print( panel.title )
-#			print( panel.settings )
-#		#print( "\t" + str(dir(self.children[0].panels[0])) )
-#		#print( self.current_panel )
-#		#print( self.panels )
-#		print( '==============================================')
 		super(BusKillSettingsWithNoMenu, self).on_touch_down( touch )
 
 # The ComplexOptionsScreen is a sub-screen to the Settings Screen. Kivy doesn't
