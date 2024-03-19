@@ -698,19 +698,34 @@ class BusKillOptionItem(FloatLayout):
 		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.value
 
-		# loop through every available option in the ComplexOption sub-Screen and
-		# change the icon of the radio button (selected vs unselected) as needed
-		for option in self.parent.children:
+		# TODO: have this change the rv.data field instead
 
-			# is this the now-currently-set option?
-			if option.value == self.parent_option.value:
-				# this is the currenty-set option
-				# set the radio button icon to "selected"
-				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+		# loop through all the OptionItems in the RecycleView data and update
+		# the radio button icon to be "checked" or "unchecked" as needed
+		for n in range(0,len(self.manager.current_screen.rv.data)):
+			print( self.manager.current_screen.rv.data[n] )
+			print( self.manager.current_screen.rv.data[n]['value'] )
+			if self.manager.current_screen.rv.data[n]['value'] == self.value:
+				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
 				# this is not the currenty-set option
 				# set the radio button icon to "unselected"
-				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+		self.manager.current_screen.rv.refresh_from_data()
+
+#		# loop through every available option in the ComplexOption sub-Screen and
+#		# change the icon of the radio button (selected vs unselected) as needed
+#		for option in self.parent.children:
+#
+#			# is this the now-currently-set option?
+#			if option.value == self.parent_option.value:
+#				# this is the currenty-set option
+#				# set the radio button icon to "selected"
+#				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+#			else:
+#				# this is not the currenty-set option
+#				# set the radio button icon to "unselected"
+#				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
