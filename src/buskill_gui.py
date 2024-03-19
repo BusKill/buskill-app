@@ -595,6 +595,10 @@ class BusKillOptionItem(FloatLayout):
 					# this is not the currenty-set option
 					# set the radio button icon to "unselected"
 					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+
+		# update all the widgets' properties in the RecycleView to match the
+		# changes that we just made to 'rv.data' above
+		self.manager.current_screen.rv.refresh_from_data()
 		
 #		if self.parent_option.value == self.value:
 #			print( "DEBUG: instance values match; setting icon to checked" )
@@ -632,14 +636,32 @@ class BusKillOptionItem(FloatLayout):
 #	def on_parent_option(self, instance, value):
 
 
-#	def on_radio_button_icon(self, instance, value):
-#
-#		print( "called on_radio_button_icon() for " +str(self.value) )
-#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-#		self.radio_button_label.text = value
-#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+	def on_radio_button_icon(self, instance, value):
+
+		if not self.manager:
+			return
+
+		print( "called on_radio_button_icon() for " +str(self.value) )
+		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+		self.radio_button_label.text = value
+		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+
+		# loop through all the OptionItems in the RecycleView data and update
+		# the radio button icon to be "checked" or "unchecked" as needed
+		for n in range(0,len(self.manager.current_screen.rv.data)):
+			print( self.manager.current_screen.rv.data[n] )
+			print( self.manager.current_screen.rv.data[n]['value'] )
+			if self.manager.current_screen.rv.data[n]['value'] == self.value:
+				if self.parent_option.value == self.value:
+					# this is the currenty-set option
+					# set the radio button icon to "selected"
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+				else:
+					# this is not the currenty-set option
+					# set the radio button icon to "unselected"
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -698,8 +720,6 @@ class BusKillOptionItem(FloatLayout):
 		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.value
 
-		# TODO: have this change the rv.data field instead
-
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		for n in range(0,len(self.manager.current_screen.rv.data)):
@@ -711,21 +731,10 @@ class BusKillOptionItem(FloatLayout):
 				# this is not the currenty-set option
 				# set the radio button icon to "unselected"
 				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
-		self.manager.current_screen.rv.refresh_from_data()
 
-#		# loop through every available option in the ComplexOption sub-Screen and
-#		# change the icon of the radio button (selected vs unselected) as needed
-#		for option in self.parent.children:
-#
-#			# is this the now-currently-set option?
-#			if option.value == self.parent_option.value:
-#				# this is the currenty-set option
-#				# set the radio button icon to "selected"
-#				option.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
-#			else:
-#				# this is not the currenty-set option
-#				# set the radio button icon to "unselected"
-#				option.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+		# update all the widgets' properties in the RecycleView to match the
+		# changes that we just made to 'rv.data' above
+		self.manager.current_screen.rv.refresh_from_data()
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -1153,6 +1162,19 @@ class BusKillSettingsScreen(Screen):
 		# turn it off and on again
 		self.main_screen.toggle_buskill()
 		self.main_screen.toggle_buskill()
+
+class RV(RecycleView):
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(**kwargs)
+
+#	def refresh_from_layout(self, *largs, **kwargs):
+#		print( "called RV.refresh_from_layout()" )
+#		super().__init__()
+
+#	def refresh_from_viewport(self, *largs):
+#		print( "called RV.refresh_from_viewport()" )
+#		super().__init__()
 
 #############
 # DEBUG LOG #
