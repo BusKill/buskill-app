@@ -519,15 +519,33 @@ class BusKillOptionItem(FloatLayout):
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
-	# this is called when the 'manager' Kivy Property changes, which will happen
-	# some short time after __init__() when RecycleView creates instances of
-	# this object
-	def on_manager(self, instance, value):
+	# determines if all the kivy properties have been setup
+	def init1(self):
+		print( "called init1()" )
+		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
+		print( "self.manager:|" +str(self.manager)+ "|" )
+		print( "self.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
-#	def on_start(self, **kwargs):
-#		print( "called on_load()" )
+		# are all the Kivy properties setup?
+		if \
+		 self.parent_option != None and \
+		 self.manager != None and \
+		 self.radio_button_icon != None:
+			# the instance is ready to init
+			self.init2()
+		else:
+			print( "\tinstance not yet ready" )
+		#print( "self.properties['parent_option']:|" +str(self.properties['parent_option'])+ "|" )
 
-		self.manager = value
+	# this is called when all the kivy properties have been set and the object
+	# is ready
+	def init2(self):
+		print( " called init2() for "+ str(self.value) )
+		print( "called on_parent_option()" )
+		print( "\tself.value:|" +str(self.value)+ "|" )
+#		print( "\tvalue:|" +str(value)+ "|" )
+#		print( "\tvalue.value:|" +str(value.value)+ "|" )
+		print( self.manager)
 
 		# the "main" screen
 		self.main_screen = self.manager.get_screen('main')
@@ -538,15 +556,9 @@ class BusKillOptionItem(FloatLayout):
 
 		print( self.manager )
 		print( self.manager.current_screen.rv.data )
+
 		#self.manager.current_screen.rv.data[0]['
 
-#	def on_parent_option(self, instance, value):
-
-#		print( "called on_parent_option()" )
-#		print( "\tself.value:|" +str(self.value)+ "|" )
-#		print( "\tvalue:|" +str(value)+ "|" )
-#		print( "\tvalue.value:|" +str(value.value)+ "|" )
-#		print( self.manager)
 #		if self.manager == None:
 #			return
 
@@ -567,7 +579,19 @@ class BusKillOptionItem(FloatLayout):
 #		print( "\t" + str([widget for widget in self.walk()]) )
 #
 		print( "self.parent_option.value:|" +str(self.parent_option.value)+ "|" )
-#		print( "self.value:|" +str(self.value)+ "|" )
+		print( "self.value:|" +str(self.value)+ "|" )
+
+		# loop through all the OptionItems in the RecycleView data and update
+		# the radio button icon to be "checked" or "unchecked" as needed
+		for n in range(0,len(self.manager.current_screen.rv.data)):
+			print( self.manager.current_screen.rv.data[n] )
+			print( self.manager.current_screen.rv.data[n]['value'] )
+			if self.manager.current_screen.rv.data[n]['value'] == self.value:
+				if self.parent_option.value == self.value:
+					print( "data:|" +str(self.manager.current_screen.rv.data[n])+ "|" )
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = 'J'
+				else:
+					self.manager.current_screen.rv.data[n]['radio_button_icon'] = 'K'
 		
 		if self.parent_option.value == self.value:
 			print( "DEBUG: instance values match; setting icon to checked" )
@@ -576,26 +600,34 @@ class BusKillOptionItem(FloatLayout):
 			#instance.radio_button_label.text = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-			#self.radio_button_label.text = 'Y'
+			self.radio_button_label.text = 'Y'
 			self.radio_button_icon = 'Y'
 			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
-#			for n in range(0,len(self.manager.current_screen.rv.data)):
-#				print( n )
-#				#if item.value == self.value:
 		else:
 			# this is not the currenty-set option
 			# set the radio button icon to "unselected"
 			#self.radio_button_label.text = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-			#self.radio_button_label.text = 'N'
+			self.radio_button_label.text = 'N'
 			self.radio_button_icon = 'N'
 			print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 			print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
 		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+
+	# this is called when the 'manager' Kivy Property changes, which will happen
+	# some short time after __init__() when RecycleView creates instances of
+	# this object
+	def on_manager(self, instance, value):
+		self.init1()
+	def on_parent_option(self, instance, value):
+		self.init1()
+
+#	def on_parent_option(self, instance, value):
+
 
 	def on_radio_button_icon(self, instance, value):
 
