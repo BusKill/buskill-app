@@ -412,7 +412,7 @@
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.value or '', root.desc or '')
 			font_size: '15sp'
 			#text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
-#			text_size: root.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
+			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			size_hint: None, None
 
@@ -489,7 +489,7 @@
 			bar_width: dp(10)
 
 			RecycleGridLayout:
-				default_size: None, dp(48)
+				#default_size: None, dp(48)
 				default_size_hint: 1, None
 				size_hint_y: None
 				height: self.minimum_height
