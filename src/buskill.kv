@@ -378,6 +378,7 @@
 			size_hint: None, None
 			height: labellayout.height
 			#height: dp(300)
+			#height: max( icon_label.texture_size[1], labellayout.height )
 
 # uncomment to debug boundaries
 			canvas.before:
@@ -395,6 +396,7 @@
 			size_hint: None, None
 			height: labellayout.height
 			#height: dp(300)
+			#height: max( icon_label.texture_size[1], labellayout.height )
 
 # uncomment to debug boundaries
 			canvas.before:
@@ -415,8 +417,9 @@
 
 			# set the minimum height of this item so that fat fingers don't have
 			# issues on small touchscreen displays (for better UX)
-			#height: max(self.height, dp(80))
-			height: dp(1000)
+			#height: max(self.height, icon_label.height, dp(80))
+			#height: dp(1000)
+			height: max(self.height, dp(80))
 
 # uncomment to debug boundaries
 			canvas.before:

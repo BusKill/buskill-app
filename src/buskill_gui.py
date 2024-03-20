@@ -546,7 +546,8 @@ class BusKillOptionItem(FloatLayout):
 	def init2(self, dt):
 		print( "called init2() for |"+ str(self.value)+ "|" )
 		print( "\tself.value:|" +str(self.value)+ "|" )
-		print( "\tself.parent_option:|" +str(self.parent_option)+ "|" )
+		#print( "\tself.parent_option:|" +str(self.parent_option)+ "|" )
+		print( "\tself.parent_option.value:|" +str(self.parent_option.value)+ "|" )
 		#print( "\tself.manager:|" +str(self.manager)+ "|" )
 
 		# are all the Kivy properties setup?
@@ -602,8 +603,8 @@ class BusKillOptionItem(FloatLayout):
 				# set the radio button icon to "unselected"
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
-		print( '----------------------------------------')
-		print( BusKillApp.manager.current_screen.rv.data )
+		#print( '----------------------------------------')
+		#print( BusKillApp.manager.current_screen.rv.data )
 
 		# update RecycleView data in next frame
 		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
