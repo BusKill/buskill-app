@@ -378,7 +378,6 @@
 			size_hint: None, None
 			height: labellayout.height
 			#height: dp(300)
-			#height: max( icon_label.texture_size[1], labellayout.height )
 
 # uncomment to debug boundaries
 			canvas.before:
@@ -396,7 +395,6 @@
 			size_hint: None, None
 			height: labellayout.height
 			#height: dp(300)
-			#height: max( icon_label.texture_size[1], labellayout.height )
 
 # uncomment to debug boundaries
 			canvas.before:
@@ -411,16 +409,14 @@
 			markup: True
 			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.value or '', root.desc or '')
 			font_size: '15sp'
-			#text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
 			size_hint: None, None
 
 			# set the minimum height of this item so that fat fingers don't have
 			# issues on small touchscreen displays (for better UX)
-			#height: max(self.height, icon_label.height, dp(80))
-			#height: dp(1000)
 			height: max(self.height, dp(80))
+			#height: dp(1000)
 
 # uncomment to debug boundaries
 			canvas.before:
