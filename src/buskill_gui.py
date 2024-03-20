@@ -505,17 +505,17 @@ class BusKillOptionItem(FloatLayout):
 
 	def __init__(self, **kwargs):
 		print( "called BusKillOptionItem.__init__()" )
-		print( BusKillApp )
-		print( dir(BusKillApp) )
-		print( BusKillApp.get_running_app() )
-		print( dir(BusKillApp.get_running_app()) )
-		print( BusKillApp.manager )
+#		print( BusKillApp )
+#		print( dir(BusKillApp) )
+#		print( BusKillApp.get_running_app() )
+#		print( dir(BusKillApp.get_running_app()) )
+#		print( BusKillApp.manager )
 #		print( "*********" +str(self)+ "*********" )
 #		print( "\t" +str(dir(self)) )
 		print( "\tself.value|" +str(self.value)+ "|" )
 
+		#super(BusKillOptionItem, self).__init__(**kwargs)
 		super(BusKillOptionItem, self).__init__(**kwargs)
-		#super().__init__(**kwargs)
 
 		# hack to call another init function, but only *after* all the
 		# Kivy Properties are fully initialized
@@ -547,7 +547,7 @@ class BusKillOptionItem(FloatLayout):
 		print( "called init2() for |"+ str(self.value)+ "|" )
 		print( "\tself.value:|" +str(self.value)+ "|" )
 		print( "\tself.parent_option:|" +str(self.parent_option)+ "|" )
-		print( "\tself.manager:|" +str(self.manager)+ "|" )
+		#print( "\tself.manager:|" +str(self.manager)+ "|" )
 
 		# are all the Kivy properties setup?
 #		if None in [self.parent_option, self.manager, self.radio_button_icon]:
@@ -593,18 +593,21 @@ class BusKillOptionItem(FloatLayout):
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
-				if self.parent_option.value == self.value:
-					# this is the currenty-set option
-					# set the radio button icon to "selected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-				else:
-					# this is not the currenty-set option
-					# set the radio button icon to "unselected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			if self.parent_option.value == self.value:
+				# this is the currenty-set option
+				# set the radio button icon to "selected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+			else:
+				# this is not the currenty-set option
+				# set the radio button icon to "unselected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+
+		print( '----------------------------------------')
+		print( BusKillApp.manager.current_screen.rv.data )
 
 		# update RecycleView data in next frame
 		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+		BusKillApp.manager.current_screen.rv.refresh_from_data()
 		Clock.schedule_once(self.update_rv_data,0)
 		
 #		if self.parent_option.value == self.value:
