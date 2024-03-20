@@ -78,18 +78,6 @@ from kivy.uix.recycleview import RecycleView
 #                                   CLASSES                                    #
 ################################################################################
 
-# recursive function that checks a given object's parent up the tree until it
-# finds the screen manager, which it returns
-def get_screen_manager(obj):
-
-	if hasattr(obj, 'manager') and obj.manager != None:
-		return obj.manager
-
-	if hasattr(obj, 'parent') and obj.parent != None:
-		return get_screen_manager(obj.parent)
-
-	return None
-
 class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
@@ -139,7 +127,7 @@ class MainWindow(Screen):
 			self.toggle_btn.background_color = self.color_red
 
 			# set the actionview of every actionbar of every screen to red
-			for screen in self.manager.screens:
+			for screen in BusKillApp.manager.screens:
 				for child in screen.actionbar.children:
 					if type(child) == ActionView:
 						child.background_color = self.color_red
@@ -154,7 +142,7 @@ class MainWindow(Screen):
 
 			# set the actionview of every actionbar of every screen back to the
 			# app's primary color
-			for screen in self.manager.screens:
+			for screen in BusKillApp.manager.screens:
 				for child in screen.actionbar.children:
 					if type(child) == ActionView:
 						child.background_color = self.color_primary
@@ -163,7 +151,7 @@ class MainWindow(Screen):
 			Clock.unschedule( self.bk.check_usb_handler )
 
 	def switchToScreen( self, screen ):
-		self.manager.current = screen
+		BusKillApp.manager.current = screen
 
 	def handle_upgrades( self, dt ):
 
@@ -511,7 +499,6 @@ class BusKillOptionItem(FloatLayout):
 	confirmation = StringProperty('')
 	value = StringProperty('')
 	parent_option = ObjectProperty()
-	manager = ObjectProperty()
 
 	def __init__(self, **kwargs):
 		print( "called BusKillOptionItem.__init__()" )
@@ -555,7 +542,7 @@ class BusKillOptionItem(FloatLayout):
 #		print( self.manager)
 
 		# the "main" screen
-		self.main_screen = self.manager.get_screen('main')
+		self.main_screen = BusKillApp.manager.get_screen('main')
 
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
@@ -591,16 +578,16 @@ class BusKillOptionItem(FloatLayout):
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		for n in range(0,len(self.manager.current_screen.rv.data)):
-			if self.manager.current_screen.rv.data[n]['value'] == self.value:
+		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
 				if self.parent_option.value == self.value:
 					# this is the currenty-set option
 					# set the radio button icon to "selected"
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 				else:
 					# this is not the currenty-set option
 					# set the radio button icon to "unselected"
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 		# update RecycleView data in next frame
 		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
@@ -644,6 +631,10 @@ class BusKillOptionItem(FloatLayout):
 
 	def on_radio_button_icon(self, instance, value):
 
+		# don't proceed unless the parent_option property is set
+		if not self.parent_option:
+			return
+
 #		print( "called on_radio_button_icon() for " +str(self.value) )
 #		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 #		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
@@ -651,23 +642,19 @@ class BusKillOptionItem(FloatLayout):
 #		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 #		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
 
-		# don't proceed unless the screen manager has already been set
-		if not self.manager:
-			return
-
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		for n in range(0,len(self.manager.current_screen.rv.data)):
-			if self.manager.current_screen.rv.data[n]['value'] == self.value:
+		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
 				if self.parent_option.value == self.value:
 					# this is the currenty-set option
 					# set the radio button icon to "selected"
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 				else:
 					# this is not the currenty-set option
 					# set the radio button icon to "unselected"
-					self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	def refresh_view_attrs( self, rv, index, data ):
 
@@ -677,7 +664,7 @@ class BusKillOptionItem(FloatLayout):
 
 		# update all the widgets' properties in the RecycleView to match the
 		# changes that we just made to 'rv.data' above
-		self.manager.current_screen.rv.refresh_from_data()
+		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -739,17 +726,17 @@ class BusKillOptionItem(FloatLayout):
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		for n in range(0,len(self.manager.current_screen.rv.data)):
-			if self.manager.current_screen.rv.data[n]['value'] == self.value:
-				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
 				# this is not the currenty-set option
 				# set the radio button icon to "unselected"
-				self.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 		# update all the widgets' properties in the RecycleView to match the
 		# changes that we just made to 'rv.data' above
-		self.manager.current_screen.rv.refresh_from_data()
+		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -813,14 +800,12 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 	def _choose_settings_screen(self, instance):
 
-		manager = get_screen_manager(self)
-
 		# create a new screen just for choosing the value of this setting, and
 		# name this new screen "setting_<key>" 
 		screen_name = 'setting_' +self.key
 
 		# did we already create this sub-screen?
-		if not manager.has_screen( screen_name ):
+		if not BusKillApp.manager.has_screen( screen_name ):
 			# there is no sub-screen for this Complex Option yet; create it
 
 			# create new screen for picking the value for this ComplexOption
@@ -834,7 +819,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 			# set the color of the actionbar in this screen equal to whatever our
 			# setting's screen actionbar is set to (eg blue or red)
-			setting_screen.actionview.background_color = manager.current_screen.actionview.background_color
+			setting_screen.actionview.background_color = BusKillApp.manager.current_screen.actionview.background_color
 
 			# make the text in the actionbar match the 'title' for the setting as
 			# it's defined in the settings json file
@@ -847,7 +832,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
 				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
-				option_item = [{'title': self.key, 'value': value, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'manager': manager }]
+				option_item = [{'title': self.key, 'value': value, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self }]
 				#setting_screen.content.add_widget( option_item )
 				print( "DEBUG: adding data to rv" )
 				print( "DEBUG: \t" +str(option_item)+ "|" )
@@ -879,7 +864,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
 				
-					option_items.append( {'title': 'title', 'value': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self, 'manager': manager } )
+					option_items.append( {'title': 'title', 'value': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
@@ -887,11 +872,11 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				setting_screen.rv.data.extend(option_items)
 
 			# add the new ComplexOption sub-screen to the Screen Manager
-			manager.add_widget( setting_screen )
+			BusKillApp.manager.add_widget( setting_screen )
 
 		# change into the sub-screen now
-		manager.transition.direction = 'left'
-		manager.current = screen_name
+		BusKillApp.manager.transition.direction = 'left'
+		BusKillApp.manager.current = screen_name
 
 # We define BusKillSettings (which extends the built-in kivy Settings) so that
 # we can add a new type of Setting = 'commplex-options'). The 'complex-options'
@@ -941,11 +926,11 @@ class ComplexOptionsScreen(Screen):
 
 	def on_pre_enter(self, *args):
 
-		msg = "DEBUG: User switched to '" +str(self.manager.current_screen.name)+ "' screen"
+		msg = "DEBUG: User switched to '" +str(BusKillApp.manager.current_screen.name)+ "' screen"
 		print( msg ); logger.debug( msg )
 
 		# the "main" screen
-		self.main_screen = self.manager.get_screen('main')
+		self.main_screen = BusKillApp.manager.get_screen('main')
 
 		# close the navigation drawer on the main screen
 		self.main_screen.nav_drawer.toggle_state()
@@ -983,7 +968,7 @@ class BusKillSettingsScreen(Screen):
 		self.bk = self.root_app.bk
 
 		# the "main" screen
-		self.main_screen = self.manager.get_screen('main')
+		self.main_screen = BusKillApp.manager.get_screen('main')
 
 		# close the navigation drawer on the main screen
 		self.main_screen.nav_drawer.toggle_state()
@@ -1020,7 +1005,7 @@ class BusKillSettingsScreen(Screen):
 		# update runtime 'bk' instance with any settings changes, as needed
 
 		# is the user going back to the main screen or some sub-Settings screen?
-		if self.manager.current == "main":
+		if BusKillApp.manager.current == "main":
 			# the user is leaving the Settings screen to go back to the main Screen
 
 			# attempt to re-arm BusKill if the trigger changed
@@ -1092,7 +1077,7 @@ class BusKillSettingsScreen(Screen):
 
 		# loop through all of our sub-screens in the Settings screen (that are
 		# used to change the values of ComplexOptions)
-		for screen in self.manager.screens:
+		for screen in BusKillApp.manager.screens:
 
 			# get the parent layout inside the screen and walk through all of its
 			# child widgets
@@ -1222,7 +1207,7 @@ class DebugLog(Screen):
 		self.debug_header.bind( on_ref_press=self.ref_press )
 
 		# the "main" screen
-		self.main_screen = self.manager.get_screen('main')
+		self.main_screen = BusKillApp.manager.get_screen('main')
 
 		# close the navigation drawer on the main screen
 		self.main_screen.nav_drawer.toggle_state()
@@ -1272,7 +1257,7 @@ class DebugLog(Screen):
 		self.dialog.open()
 
 	def go_back(self):
-		self.manager.switch_to('main')
+		BusKillApp.manager.switch_to('main')
 
 	def ref_press(self, widget, ref):
 
