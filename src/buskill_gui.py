@@ -1163,19 +1163,6 @@ class BusKillSettingsScreen(Screen):
 		self.main_screen.toggle_buskill()
 		self.main_screen.toggle_buskill()
 
-class RV(RecycleView):
-
-	def __init__(self, *args, **kwargs):
-		super(RV, self).__init__(**kwargs)
-
-#	def refresh_from_layout(self, *largs, **kwargs):
-#		print( "called RV.refresh_from_layout()" )
-#		super().__init__()
-
-#	def refresh_from_viewport(self, *largs):
-#		print( "called RV.refresh_from_viewport()" )
-#		super().__init__()
-
 #############
 # DEBUG LOG #
 #############

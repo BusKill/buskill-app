@@ -8,6 +8,8 @@
 # Version: 0.3
 ################################################################################
 
+#:set DEBUG False
+
 <CriticalError>:
 
 	msg: msg
@@ -271,6 +273,7 @@
 	height: self.minimum_height
 
 <-BusKillSettingItem>:
+	#:set DEBUG False
 	size_hint: .25, None
 	height: labellayout.height + dp(10)
 	padding: 6
@@ -282,9 +285,9 @@
 	canvas:
 		Color:
 			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: 0, 1, 0, 1
+			rgba: ('0, 1, 0, 1' if DEBUG == True else '')
 		Rectangle:
-			pos: self.x, self.y + 1
+			pos: (self.x, self.y + 1 if DEBUG == True else default)
 			size: self.size
 		Color:
 			rgb: .2, .2, .2
@@ -485,6 +488,9 @@
 			bar_width: dp(10)
 
 			RecycleGridLayout:
+				# don't specify a default_size; it breaks the heights of the
+				# viewclass objects in a RecycleView
+				#  * https://github.com/kivy/kivy/issues/7197
 				#default_size: None, dp(48)
 				default_size_hint: 1, None
 				size_hint_y: None
