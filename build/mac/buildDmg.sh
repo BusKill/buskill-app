@@ -153,7 +153,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 pushd "${tmpDir}/buskill-app-deps/build/deps"
-sha256sum --strict --check SHA256SUMS
+shasum --algorithm 256 --warn --check SHA256SUMS
 
 # confirm that the checksums of all the files match what's expected in the
 # the signed SHA256SUSM file.
