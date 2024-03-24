@@ -42,6 +42,7 @@ from kivy.compat import string_types, text_type
 from kivy.animation import Animation
 
 from kivy.core.text import LabelBase
+from kivy.core.text import Label as CoreLabel
 from kivy.core.clipboard import Clipboard
 from kivy.core.window import Window
 
@@ -497,7 +498,7 @@ class BusKillOptionItem(FloatLayout):
 	title = StringProperty('')
 	desc = StringProperty('')
 	confirmation = StringProperty('')
-	value = StringProperty('')
+	value = ObjectProperty('')
 	option_human = StringProperty('')
 	parent_option = ObjectProperty()
 
@@ -548,6 +549,11 @@ class BusKillOptionItem(FloatLayout):
 		# we steal (reuse) the instance field referencing the "modal dialog" from
 		# the "main" screen
 		self.dialog = self.main_screen.dialog
+
+#		# if the value is a list, then the first element in the list is our
+#		# "human readable" value for the list (used for default_font)
+#		if type(self.value) == list():
+#			self.option_human: self.value[0]
 
 #		print( self.manager )
 #		print( self.manager.current_screen.rv.data )
@@ -770,6 +776,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	# setting
 	icon = ObjectProperty(None)
 
+	# value_human defines the human-readable value that's displayed on the
+	# Settings Screen for this setting
+	value_human = StringProperty(None)
+
 	# options is a parallel array of short names for different options for this
 	# setting (eg 'lock-screen')
 	options = ListProperty([])
@@ -798,6 +808,35 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	# confirmation is presented to the user when they select this option
 	confirmation = ListProperty([])
 
+	def __init__(self, **kwargs):
+		print( "called BusKillSettingComplexOptions.__init__()" )
+		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
+
+		# hack to call another init function, but only *after* all the
+		# Kivy Properties are fully initialized
+		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+		Clock.schedule_once(self.init2,0)
+
+	# this is called when all the kivy properties have been set and the object
+	# is ready
+	def init2(self, dt):
+		print( "called BusKillSettingComplexOptions.init2() for |"+ str(self.value)+ "|" )
+
+		# is this value actually a list?
+		try: 
+			# this value is a list, which means the first item in the list is our
+			# human-readable value to use in the GUI
+
+			# hack to convert a string of a list to an actual list
+			# * https://stackoverflow.com/a/35461204/1174102
+			value_as_list = json.loads(self.value.replace('\'', '"'))
+			self.value_human = value_as_list[0]
+
+		except Exception as e:
+			#msg = "INFO: Skipped non-list value (" +str(e) + ")"
+			#print( msg ); logger.info( msg )
+			pass
+		
 	def on_panel(self, instance, value):
 		if value is None:
 			return
@@ -839,13 +878,13 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
 				option_item = [{'title': self.key, 'value': value, 'option_human': option_human, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self }]
 				#setting_screen.content.add_widget( option_item )
-				print( "DEBUG: adding data to rv" )
-				print( "DEBUG: \t" +str(option_item)+ "|" )
+				#print( "DEBUG: adding data to rv" )
+				#print( "DEBUG: \t" +str(option_item)+ "|" )
 				setting_screen.rv.data.extend(option_item)
 				print( "DEBUG: added data to rv" )
 
 			# handle the "font" option
-			if self.key == 'gui_font_face':
+			if self.key == 'default_font':
 				# first we must determine what fonts are available on this system
 
 				option_items = []
@@ -869,7 +908,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
 				
-					option_items.append( {'title': 'gui_font_face', 'value': font_path, 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
+					option_items.append( {'title': 'default_font', 'value': [font_filename, font_path, font_path, font_path], 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
@@ -1016,6 +1055,8 @@ class BusKillSettingsScreen(Screen):
 			# attempt to re-arm BusKill if the trigger changed
 			self.rearm_if_required()
 
+			self.refresh_values()
+
 	# called when the user clicks the "reset" button in the actionbar
 	def reset_defaults(self):
 
@@ -1093,17 +1134,26 @@ class BusKillSettingsScreen(Screen):
 			# child widgets
 			parent_layout = screen.children[0]
 			for widget in screen.walk():
+				print( widget )
+
+				# is this widget a Label?
+				if isinstance( widget, Label ):
+					print( "refreshing label:|" +str(widget.text)+ "|" )
+					print( "\t" +str(dir(widget)) )
+					print( "\t text:|" +str(dir(widget.text))+ "|" )
+					print( "\t _label:|" +str(dir(widget._label))+ "|" )
+					widget._label.refresh()
 
 				# is this widget a BusKillOptionItem?
 				if isinstance( widget, BusKillOptionItem ):
 					# yes, this is a radio button for an option; make sure it's set
 					# correctly, depending on if it's selected or not in the config
-					print( widget )
-					print( "\twidget.value:|" +str(widget.value)+ "|" )
-					print( "\twidget.title:|" +str(widget.title)+ "|" )
-					print( "\t" +str(dir(widget)) )
-					print( "\t" +str(widget.__dict__.items()) )
-					print( "\t" +str([thing for thing in widget.walk()]) )
+#					print( widget )
+#					print( "\twidget.value:|" +str(widget.value)+ "|" )
+#					print( "\twidget.title:|" +str(widget.title)+ "|" )
+#					print( "\t" +str(dir(widget)) )
+#					print( "\t" +str(widget.__dict__.items()) )
+#					print( "\t" +str([thing for thing in widget.walk()]) )
 
 					# get the title for this option (eg "trigger")
 					title = widget.title
@@ -1322,20 +1372,19 @@ class BusKillApp(App):
 
 		# did the user set a custom font?
 		default_font = Config.get('kivy', 'default_font')
-		gui_font_face_path = Config.get('buskill', 'gui_font_face')
-		gui_font_face_filename = os.path.basename( gui_font_face_path )
+		#gui_font_face_path = Config.get('buskill', 'gui_font_face')
+		#gui_font_face_filename = os.path.basename( gui_font_face_path )
 
-		if 'Roboto' not in default_font \
-		 or gui_font_face_path not in default_font:
+		if 'Roboto' not in default_font:
 			# the user set a custom font; use it
 
 			# bkmono = "BusKill Mono"; we just overwrite it with the user's font
 			LabelBase.register( "bkmono", gui_font_face_path )
 
 			# TODO; add logic to try to actually find an "italic", "bold", and
-			# "bolditalic" version of the user-selected font
-			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path, gui_font_face_path, gui_font_face_path, gui_font_face_path])
-			Config.write()
+#			# "bolditalic" version of the user-selected font
+#			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path, gui_font_face_path, gui_font_face_path, gui_font_face_path])
+#			Config.write()
 
 		else:
 			# the user did *not* set a custom font; use Roboto
@@ -1395,7 +1444,7 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'trigger': 'lock-screen',
-		 'gui_font_face': 'Roboto',
+#		 'gui_font_face': 'Roboto',
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
