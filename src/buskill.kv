@@ -285,9 +285,11 @@
 	canvas:
 		Color:
 			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: ('0, 1, 0, 1' if DEBUG == True else '')
+			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
+			#rgba: 0, 1, 0, 1
 		Rectangle:
-			pos: (self.x, self.y + 1 if DEBUG == True else default)
+			#pos: (self.x, self.y + 1 if DEBUG == True else default)
+			#pos: self.x, self.y + 1
 			size: self.size
 		Color:
 			rgb: .2, .2, .2
@@ -410,7 +412,7 @@
 		Label:
 			id: labellayout
 			markup: True
-			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.value or '', root.desc or '')
+			text: u'{0}\n[size=13sp][color=999999]{1}[/color][/size]'.format(root.option_human or root.value or '', root.desc or '')
 			font_size: '15sp'
 			text_size: root.width - icon_label.width - radio_button_label.width - (2*root.padding) - (2*root.spacing), None
 			size: self.texture_size
@@ -495,7 +497,7 @@
 				default_size_hint: 1, None
 				size_hint_y: None
 				height: self.minimum_height
-				orientation: 'vertical'
+				orientation: 'lr-tb'
 				id: content
 				cols: 1
 				size_hint_y: None

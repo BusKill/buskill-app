@@ -498,6 +498,7 @@ class BusKillOptionItem(FloatLayout):
 	desc = StringProperty('')
 	confirmation = StringProperty('')
 	value = StringProperty('')
+	option_human = StringProperty('')
 	parent_option = ObjectProperty()
 
 	def __init__(self, **kwargs):
@@ -864,7 +865,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
 				
-					option_items.append( {'title': 'title', 'value': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
+					option_items.append( {'title': 'title', 'value': font_path, 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
