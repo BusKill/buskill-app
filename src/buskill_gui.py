@@ -869,7 +869,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
 				
-					option_items.append( {'title': 'title', 'value': font_path, 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
+					option_items.append( {'title': 'gui_font_face', 'value': font_path, 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
@@ -1040,7 +1040,19 @@ class BusKillSettingsScreen(Screen):
 			self.dialog.dismiss()
 
 		# delete all the options saved to the config file
+		print( "Config['buskill']:|" +str(Config['buskill'].__dict__.items())+ "|" )
 		for key in Config['buskill']:
+			print( "key:|" +str(key)+ "|" )
+
+		for key in Config['buskill']:
+			print( "attempt to delete key:|" +str(key)+ "|" )
+
+#			# is this a "title" entry?
+#			if key == "title":
+#				# this is just a title entry (without a value that can be set); skip
+#				pass
+#			else:
+				# this is not a "title" entry; proceed
 			Config.remove_option( 'buskill', key )
 		Config.write()
 
@@ -1093,6 +1105,12 @@ class BusKillSettingsScreen(Screen):
 				if isinstance( widget, BusKillOptionItem ):
 					# yes, this is a radio button for an option; make sure it's set
 					# correctly, depending on if it's selected or not in the config
+					print( widget )
+					print( "\twidget.value:|" +str(widget.value)+ "|" )
+					print( "\twidget.title:|" +str(widget.title)+ "|" )
+					print( "\t" +str(dir(widget)) )
+					print( "\t" +str(widget.__dict__.items()) )
+					print( "\t" +str([thing for thing in widget.walk()]) )
 
 					# get the title for this option (eg "trigger")
 					title = widget.title
@@ -1301,8 +1319,8 @@ class BusKillApp(App):
 	msg = "DEBUG: Default font = " + str(Config.get('kivy', 'default_font'))
 	print( msg ); logger.debug( msg )
 	
-	msg = "DEBUG: System fonts dir = " + str(LabelBase.get_system_fonts_dir())
-	print( msg ); logger.debug( msg )
+	#msg = "DEBUG: System fonts dir = " + str(LabelBase.get_system_fonts_dir())
+	#print( msg ); logger.debug( msg )
 
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
@@ -1312,8 +1330,10 @@ class BusKillApp(App):
 		# did the user set a custom font?
 		default_font = Config.get('kivy', 'default_font')
 		gui_font_face_path = Config.get('buskill', 'gui_font_face')
+		gui_font_face_filename = os.path.basename( gui_font_face_path )
 
-		if gui_font_face_path not in default_font:
+		if 'Roboto' not in default_font \
+		 or gui_font_face_path not in default_font:
 			# the user set a custom font; use it
 
 			# Set the "BusKill Font" that's used in kivy label's .text markup
@@ -1322,6 +1342,10 @@ class BusKillApp(App):
 			LabelBase.register( "BKFMe", gui_font_face_path )
 			# BKFMo = "Mono", but we just overwrite it with the user's font
 			LabelBase.register( "BKFMo", gui_font_face_path )
+
+			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path])
+			Config.write()
+
 		else:
 			# the user did *not* set a custom font; use Roboto
 
@@ -1337,7 +1361,6 @@ class BusKillApp(App):
 			 "BKFMo",
 			 os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
 			)
-
 		LabelBase.register(
 		 "mdicons",
 		 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
@@ -1411,7 +1434,7 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'trigger': 'lock-screen',
-		 'gui_font_face': None,
+		 'gui_font_face': 'Roboto',
 		})	
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
