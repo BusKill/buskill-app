@@ -774,6 +774,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	# setting (eg 'lock-screen')
 	options = ListProperty([])
 
+	# options_human is a parallel array of short human-readable values for
+	# different options for this setting (eg 'Lock Screen')
+	options_human = ListProperty([])
+
 	# options_long is a parallel array of short human-readable descriptions for
 	# different options for this setting (eg 'BusKill will lock your screen')
 	options_long = ListProperty([])
@@ -828,12 +832,12 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 			# loop through all possible values for this ComplexOption, zipping out
 			# data from parallel arrays in the json file
-			for value, desc, confirmation, icon in zip(self.options, self.options_long, self.confirmation, self.options_icons):
+			for value, option_human, desc, confirmation, icon in zip(self.options, self.options_human, self.options_long, self.confirmation, self.options_icons):
 
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
 				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
-				option_item = [{'title': self.key, 'value': value, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self }]
+				option_item = [{'title': self.key, 'value': value, 'option_human': option_human, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self }]
 				#setting_screen.content.add_widget( option_item )
 				print( "DEBUG: adding data to rv" )
 				print( "DEBUG: \t" +str(option_item)+ "|" )
