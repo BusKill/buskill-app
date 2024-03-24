@@ -1040,20 +1040,13 @@ class BusKillSettingsScreen(Screen):
 			self.dialog.dismiss()
 
 		# delete all the options saved to the config file
-		print( "Config['buskill']:|" +str(Config['buskill'].__dict__.items())+ "|" )
-		for key in Config['buskill']:
-			print( "key:|" +str(key)+ "|" )
+		sections = ['kivy','buskill']
+		for section in sections:
+			for key in Config[section]:
+				print( "attempt to delete key:|" +str(key)+ "|" )
+				Config.remove_option( section, key )
 
-		for key in Config['buskill']:
-			print( "attempt to delete key:|" +str(key)+ "|" )
-
-#			# is this a "title" entry?
-#			if key == "title":
-#				# this is just a title entry (without a value that can be set); skip
-#				pass
-#			else:
-				# this is not a "title" entry; proceed
-			Config.remove_option( 'buskill', key )
+		# save the changes to the .ini config file
 		Config.write()
 
 		# setup the defaults again to avoid configparser.NoOptionError
@@ -1336,31 +1329,22 @@ class BusKillApp(App):
 		 or gui_font_face_path not in default_font:
 			# the user set a custom font; use it
 
-			# Set the "BusKill Font" that's used in kivy label's .text markup
-			LabelBase.register( "BKF", gui_font_face_path )
-			# BKFMe = "Medium/Bold", but we just overwrite it with the user's font
-			LabelBase.register( "BKFMe", gui_font_face_path )
-			# BKFMo = "Mono", but we just overwrite it with the user's font
-			LabelBase.register( "BKFMo", gui_font_face_path )
+			# bkmono = "BusKill Mono"; we just overwrite it with the user's font
+			LabelBase.register( "bkmono", gui_font_face_path )
 
-			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path])
+			# TODO; add logic to try to actually find an "italic", "bold", and
+			# "bolditalic" version of the user-selected font
+			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path, gui_font_face_path, gui_font_face_path, gui_font_face_path])
 			Config.write()
 
 		else:
 			# the user did *not* set a custom font; use Roboto
 
 			LabelBase.register(
-			 "BKF",
-			 os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
-			)
-			LabelBase.register(
-			 "BKFMe",
-			 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
-			)
-			LabelBase.register(
-			 "BKFMo",
+			 "bkmono",
 			 os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
 			)
+
 		LabelBase.register(
 		 "mdicons",
 		 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
@@ -1382,48 +1366,25 @@ class BusKillApp(App):
 						if file.lower().endswith(".ttf"):
 							font_paths.append(str(os.path.join(root, file)))
 
-			font_roboto_regular_path = [f for f in font_paths if f.lower().endswith("roboto-regular.ttf")]
-			font_roboto_medium_path = [f for f in font_paths if f.lower().endswith("roboto-medium.ttf")]
 			font_roboto_mono_path = [f for f in font_paths if f.lower().endswith("robotomono-regular.ttf")]
 			font_mdicons_path = [f for f in font_paths if f.lower().endswith("materialicons-regular.ttf")]
 
-			msg = "DEBUG: Found Roboto Regular " + str(font_roboto_regular_path)
-			print( msg ); logger.debug( msg )
-			msg = "DEBUG: Found Roboto Medium " + str(font_roboto_medium_path)
-			print( msg ); logger.debug( msg )
 			msg = "DEBUG: Found Roboto Mono " + str(font_roboto_mono_path)
 			print( msg ); logger.debug( msg )
 			msg = "DEBUG: Found Material Icons " + str(font_mdicons_path)
 			print( msg ); logger.debug( msg )
 
 			# just get the first file we found in all cases
-			font_roboto_regular_path = font_roboto_regular_path[0]
-			font_roboto_medium_path = font_roboto_medium_path[0]
 			font_roboto_mono_path = font_roboto_mono_path[0]
 			font_mdicons_path = font_mdicons_path[0]
 
-			LabelBase.register(
-			 "BKF",
-			 font_roboto_regular_path
-			)
-			LabelBase.register(
-			 "BKFMe",
-			 font_roboto_medium_path
-			)
-			LabelBase.register(
-			 "BKFMo",
-			 font_roboto_mono_path
-			)
-			LabelBase.register(
-			 "mdicons",
-			 font_mdicons_path
-			)
+			LabelBase.register( "bkmono", font_roboto_mono_path )
+			LabelBase.register( "mdicons", font_mdicons_path )
 
 		except Exception as e:
 
 			msg = "WARNING: Failed to find fonts (" +str(e) + ")"
 			print( msg ); logger.warning( msg )
-
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
