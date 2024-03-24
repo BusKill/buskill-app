@@ -4,8 +4,8 @@
 #          For more info, see: https://buskill.in/
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-23
-# Updated: 2023-06-14
-# Version: 0.3
+# Updated: 2024-03-24
+# Version: 0.4
 ################################################################################
 
 #:set DEBUG False
@@ -62,7 +62,7 @@
 					with_previous: False
 					app_icon: 'images/menu.png'
 					markup: True
-					title: '[font=RobotoMedium][size=20sp]   BusKill[/size][/font]'
+					title: '[font=BKFMe][size=20sp]   BusKill[/size][/font]'
 					on_release: root.toggle_menu()
 
 		NavigationDrawer:
@@ -83,7 +83,7 @@
 					orientation: 'lr-tb'
 				
 					Button:
-						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue923[/size][/font]     [font=RobotoMedium][size=16sp]Update[/size][/font]'
+						text: '[font=BKF][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue923[/size][/font]     [font=BKFMe][size=16sp]Update[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -95,7 +95,7 @@
 						on_release: root.upgrade1()
 
 					Button:
-						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue8b8[/size][/font]     [font=RobotoMedium][size=16sp]Settings[/size][/font]'
+						text: '[font=BKF][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue8b8[/size][/font]     [font=BKFMe][size=16sp]Settings[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -109,7 +109,7 @@
 							root.manager.current = 'settings'
 
 					Button:
-						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue868[/size][/font]     [font=RobotoMedium][size=16sp]Debug Log[/size][/font]'
+						text: '[font=BKF][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue868[/size][/font]     [font=BKFMe][size=16sp]Debug Log[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -123,7 +123,7 @@
 							root.manager.current = 'debug_log'
 
 					Button:
-						text: '[font=Roboto][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue88f[/size][/font]     [font=RobotoMedium][size=16sp]About[/size][/font]'
+						text: '[font=BKF][size=24sp]  [/size][/font][font=mdicons][size=24sp]\ue88f[/size][/font]     [font=BKFMe][size=16sp]About[/size][/font]'
 						markup: True
 						halign: 'left'
 						valign: 'center'
@@ -165,13 +165,13 @@
 						text_size: self.size
 						halign: 'center'
 						valign: 'middle'
-						font_name: "Roboto"
+						font_name: "BKF"
 						font_size: '20sp'
 
 					Button:
 						id: toggle_btn
 						text: "Arm"
-						font_name: "RobotoMedium"
+						font_name: "BKFMe"
 						font_size: '40sp'
 						background_normal: ''
 						background_color: 0.129, 0.588, 0.953, 1
@@ -203,7 +203,7 @@
 		Label:
 			id: l_title
 			text: root.title
-			font_name: "RobotoMedium"
+			font_name: "BKFMe"
 			font_size: '20sp'
 			markup: True
 			pos_hint: {'center_x': 0.5}
@@ -214,7 +214,7 @@
 			id: l_body
 			text: root.body
 			text_size: self.size[0], None
-			font_name: "Roboto"
+			font_name: "BKF"
 			font_size: '16sp'
 			markup: True
 			size_hint: 1, None
@@ -251,7 +251,7 @@
 	text: "Loading Log. Please wait."
 	size_hint_x: None
 	width: self.texture_size[0]
-	font_name: "RobotoMono"
+	font_name: "BKFMo"
 	font_size: '12sp'
 
 <-BusKillSettingsWithNoMenu>:
@@ -273,7 +273,6 @@
 	height: self.minimum_height
 
 <-BusKillSettingItem>:
-	#:set DEBUG False
 	size_hint: .25, None
 	height: labellayout.height + dp(10)
 	padding: 6
@@ -357,7 +356,8 @@
 	canvas:
 		Color:
 			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: 0, 1, 0, 1
+			#rgba: 0, 1, 0, 1
+			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
 		Rectangle:
 			pos: self.x, self.y + 1
 			size: self.size
@@ -466,7 +466,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18sp]   {0}[/size][/font]'.format( root.actionbar_title or '' )
+					title: '[font=BKFMe][size=18sp]   {0}[/size][/font]'.format( root.actionbar_title or '' )
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'settings'
@@ -537,7 +537,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18sp]   Settings[/size][/font]'
+					title: '[font=BKFMe][size=18sp]   Settings[/size][/font]'
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'main'
@@ -579,7 +579,7 @@
 					with_previous: False
 					app_icon: 'images/arrow_back_white.png'
 					markup: True
-					title: '[font=RobotoMedium][size=18sp]   Debug Log[/size][/font]'
+					title: '[font=BKFMe][size=18sp]   Debug Log[/size][/font]'
 					on_release:
 						root.manager.transition.direction = 'right'
 						root.manager.current = 'main'
@@ -605,7 +605,7 @@
 					text_size: self.size
 					halign: 'center'
 					valign: 'middle'
-					font_name: "Roboto"
+					font_name: "BKF"
 					font_size: '16sp'
 
 				RecycleView:

@@ -1307,25 +1307,42 @@ class BusKillApp(App):
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
 	try:
+
+
+		# did the user set a custom font?
+		default_font = Config.get('kivy', 'default_font')
+		gui_font_face_path = Config.get('buskill', 'gui_font_face')
+
+		if gui_font_face_path not in default_font:
+			# the user set a custom font; use it
+
+			# Set the "BusKill Font" that's used in kivy label's .text markup
+			LabelBase.register( "BKF", gui_font_face_path )
+			# BKFMe = "Medium/Bold", but we just overwrite it with the user's font
+			LabelBase.register( "BKFMe", gui_font_face_path )
+			# BKFMo = "Mono", but we just overwrite it with the user's font
+			LabelBase.register( "BKFMo", gui_font_face_path )
+		else:
+			# the user did *not* set a custom font; use Roboto
+
+			LabelBase.register(
+			 "BKF",
+			 os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
+			)
+			LabelBase.register(
+			 "BKFMe",
+			 os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
+			)
+			LabelBase.register(
+			 "BKFMo",
+			 os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
+			)
+
 		LabelBase.register(
-	 	"Roboto",
-	 	#os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Regular.ttf' ), 
-	 	os.path.join( 'fonts', 'Roboto-Regular.ttf' ), 
+		 "mdicons",
+		 os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
 		)
-		LabelBase.register(
-	 	"RobotoMedium",
-	 	#os.path.join( bk.EXE_DIR, 'fonts', 'Roboto-Medium.ttf' ),
-	 	os.path.join( 'fonts', 'Roboto-Medium.ttf' ),
-		)
-		LabelBase.register(
-	 	"RobotoMono",
-	 	os.path.join( 'fonts', 'RobotoMono-Regular.ttf' ),
-		)
-		LabelBase.register(
-	 	"mdicons",
-	 	#os.path.join( bk.EXE_DIR, 'fonts', 'MaterialIcons-Regular.ttf' ),
-	 	os.path.join( 'fonts', 'MaterialIcons-Regular.ttf' ),
-		)
+
 	except Exception as e:
 
 		msg = "INFO: Failed to load fonts (" +str(e) + ")"
@@ -1363,15 +1380,15 @@ class BusKillApp(App):
 			font_mdicons_path = font_mdicons_path[0]
 
 			LabelBase.register(
-			 "Roboto",
+			 "BKF",
 			 font_roboto_regular_path
 			)
 			LabelBase.register(
-			 "RobotoMedium",
+			 "BKFMe",
 			 font_roboto_medium_path
 			)
 			LabelBase.register(
-			 "RobotoMono",
+			 "BKFMo",
 			 font_roboto_mono_path
 			)
 			LabelBase.register(
