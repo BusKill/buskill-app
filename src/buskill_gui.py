@@ -1174,6 +1174,15 @@ class BusKillSettingsScreen(Screen):
 				# in the Label on the Settings Screen
 				widget.value = set_value
 
+				# also update the value_human, if needed
+				try: 
+					# hack to convert a string of a list to an actual list
+					# * https://stackoverflow.com/a/35461204/1174102
+					value_as_list = json.loads(set_value.replace('\'', '"'))
+					widget.value_human = value_as_list[0]
+				except Exception as e:
+					pass
+
 		# UPDATE SUB-SETTINGS SCREENS (for ComplexOptions)
 
 		# loop through all of our sub-screens in the Settings screen (that are
@@ -1184,15 +1193,15 @@ class BusKillSettingsScreen(Screen):
 			# child widgets
 			parent_layout = screen.children[0]
 			for widget in screen.walk():
-				print( widget )
+				#print( widget )
 
 				# is this widget a Label?
 				if isinstance( widget, Label ):
-					print( "refreshing label:|" +str(widget.text)+ "|" )
-					print( "\tlabel.font_family:|" +str(widget.font_family)+ "|" )
-					print( "\t" +str(dir(widget)) )
-					print( "\t text:|" +str(dir(widget.text))+ "|" )
-					print( "\t _label:|" +str(dir(widget._label))+ "|" )
+					#print( "refreshing label:|" +str(widget.text)+ "|" )
+					#print( "\tlabel.font_family:|" +str(widget.font_family)+ "|" )
+					#print( "\t" +str(dir(widget)) )
+					#print( "\t text:|" +str(dir(widget.text))+ "|" )
+					#print( "\t _label:|" +str(dir(widget._label))+ "|" )
 
 					if widget.font_family != 'mdicons':
 						# is this value actually a list?
