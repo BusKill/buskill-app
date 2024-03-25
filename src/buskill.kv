@@ -279,20 +279,20 @@
 	icon_label: icon_label
 
 # uncomment to debug boundaries
-	canvas:
-		Color:
-			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
-			#rgba: 0, 1, 0, 1
-		Rectangle:
-			#pos: (self.x, self.y + 1 if DEBUG == True else default)
-			#pos: self.x, self.y + 1
-			size: self.size
-		Color:
-			rgb: .2, .2, .2
-		Rectangle:
-			pos: self.x, self.y - 2
-			size: self.width, 1
+#	canvas:
+#		Color:
+#			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+#			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
+#			#rgba: 0, 1, 0, 1
+#		Rectangle:
+#			#pos: (self.x, self.y + 1 if DEBUG == True else default)
+#			#pos: self.x, self.y + 1
+#			size: self.size
+#		Color:
+#			rgb: .2, .2, .2
+#		Rectangle:
+#			pos: self.x, self.y - 2
+#			size: self.width, 1
 
 	StackLayout:
 		pos: root.pos
@@ -313,12 +313,12 @@
 			height: labellayout.height
 
 # uncomment to debug boundaries
-			canvas.before:
-				Color:
-					rgba: 0, 0, 1, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+#			canvas.before:
+#				Color:
+#					rgba: 0, 0, 1, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: labellayout
@@ -335,12 +335,12 @@
 			height: max(self.height, dp(50))
 
 # uncomment to debug boundaries
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 <BusKillOptionItem>:
 	size_hint: .25, None
@@ -352,19 +352,19 @@
 	radio_button_label: radio_button_label
 
 # uncomment to debug boundaries
-	canvas:
-		Color:
-			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
-			#rgba: 0, 1, 0, 1
-			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
-		Rectangle:
-			pos: self.x, self.y + 1
-			size: self.size
-		Color:
-			rgb: .2, .2, .2
-		Rectangle:
-			pos: self.x, self.y - 2
-			size: self.width, 1
+#	canvas:
+#		Color:
+#			#rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+#			#rgba: 0, 1, 0, 1
+#			rgba: (0, 1, 0, 1 if DEBUG == True else 0, 0, 0, 0)
+#		Rectangle:
+#			pos: self.x, self.y + 1
+#			size: self.size
+#		Color:
+#			rgb: .2, .2, .2
+#		Rectangle:
+#			pos: self.x, self.y - 2
+#			size: self.width, 1
 
 	StackLayout:
 		pos: root.pos
@@ -384,12 +384,12 @@
 			#height: dp(300)
 
 # uncomment to debug boundaries
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: icon_label
@@ -401,12 +401,12 @@
 			#height: dp(300)
 
 # uncomment to debug boundaries
-			canvas.before:
-				Color:
-					rgba: 0, 0, 1, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+#			canvas.before:
+#				Color:
+#					rgba: 0, 0, 1, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 		Label:
 			id: labellayout
@@ -423,12 +423,12 @@
 			#height: dp(1000)
 
 # uncomment to debug boundaries
-			canvas.before:
-				Color:
-					rgba: 1, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+#			canvas.before:
+#				Color:
+#					rgba: 1, 0, 0, 1
+#				Rectangle:
+#					pos: self.pos
+#					size: self.size
 
 <ComplexOptionsScreen>:
 

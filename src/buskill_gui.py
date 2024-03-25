@@ -763,6 +763,29 @@ class BusKillOptionItem(FloatLayout):
 		# changes that we just made to 'rv.data' above
 		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
+		# UPDATE FONTS ON ALL LABELS EVERYWHERE
+		# TODO: combine this loop and the other 1 into one function
+
+		for screen in BusKillApp.manager.screens:
+			for widget in screen.walk():
+
+				# is this widget a Label?
+				if isinstance( widget, Label ):
+
+					if widget.font_family != 'mdicons':
+						# is this value actually a list?
+						try: 
+							# this value is a list, which means the first item in the
+							# list is our human-readable value to use in the GUI
+
+							# hack to convert a string of a list to an actual list
+							# * https://stackoverflow.com/a/35461204/1174102
+							font_filepath = self.value[1]
+							widget.font_name = font_filepath
+
+						except Exception as e:
+							pass
+
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
 # here because the difference between the SettingItem and our BusKillSettingItem
@@ -1145,22 +1168,22 @@ class BusKillSettingsScreen(Screen):
 	# ComplexOptions sub-screens
 	def refresh_values(self):
 
-		import kivy.config
-		print( "running update_config()" )
-		print( "defaults:|" +str(dir(Config.defaults()))+ "|" )
-		print( "defaults:|" +str(Config.defaults().items())+ "|" )
-		print( "defaults:|" +str(Config.defaults().__dict__.items())+ "|" )
-		#print( "defaults:|" +str(Config.defaults().pop('default_font'))+ "|" )
-		print( "defaults:|" +str(Config.defaults().items())+ "|" )
-		print( "defaults:|" +str(Config.defaults().keys())+ "|" )
-		print( "defaults:|" +str(Config.defaults().values())+ "|" )
-		Config.update_config( self.bk.CONF_FILE, overwrite = True )
-		Config.write()
-		print( "running read()" )
-		Config.read( self.bk.CONF_FILE )
-		print( "running adddefaultsection()" )
-		Config.adddefaultsection('kivy')
-		Config.write()
+#		import kivy.config
+#		print( "running update_config()" )
+#		print( "defaults:|" +str(dir(Config.defaults()))+ "|" )
+#		print( "defaults:|" +str(Config.defaults().items())+ "|" )
+#		print( "defaults:|" +str(Config.defaults().__dict__.items())+ "|" )
+#		#print( "defaults:|" +str(Config.defaults().pop('default_font'))+ "|" )
+#		print( "defaults:|" +str(Config.defaults().items())+ "|" )
+#		print( "defaults:|" +str(Config.defaults().keys())+ "|" )
+#		print( "defaults:|" +str(Config.defaults().values())+ "|" )
+#		Config.update_config( self.bk.CONF_FILE, overwrite = True )
+#		Config.write()
+#		print( "running read()" )
+#		Config.read( self.bk.CONF_FILE )
+#		print( "running adddefaultsection()" )
+#		Config.adddefaultsection('kivy')
+#		Config.write()
 		#default_font = Config.getdefault('kivy','default_font','idk')
 		#Config.set('kivy','default_font',default_font)
 		#Config.write()
@@ -1208,42 +1231,6 @@ class BusKillSettingsScreen(Screen):
 			# child widgets
 			parent_layout = screen.children[0]
 			for widget in screen.walk():
-				#print( widget )
-
-				# is this widget a Label?
-				if isinstance( widget, Label ):
-					#print( "refreshing label:|" +str(widget.text)+ "|" )
-					#print( "\tlabel.font_family:|" +str(widget.font_family)+ "|" )
-					#print( "\t" +str(dir(widget)) )
-					#print( "\t text:|" +str(dir(widget.text))+ "|" )
-					#print( "\t _label:|" +str(dir(widget._label))+ "|" )
-
-					if widget.font_family != 'mdicons':
-						# is this value actually a list?
-						try: 
-							# this value is a list, which means the first item in the list is our
-							# human-readable value to use in the GUI
-
-							# hack to convert a string of a list to an actual list
-							# * https://stackoverflow.com/a/35461204/1174102
-							default_font = Config.get('kivy','default_font')
-#							print( "\t\tdefault_font:|" +str(default_font)+ "|" )
-							value_as_list = json.loads(default_font.replace('\'', '"'))
-							font_filepath = value_as_list[1]
-#							print( "\t\tfont_filepath:|" +str(font_filepath)+ "|" )
-
-#$							print( "updating widget font_family:|" +str(font_filepath)+ "|" )
-#							widget.font_family = font_filepath
-#							print( "updating widget font_name:|" +str(font_filepath)+ "|" )
-							widget.font_name = font_filepath
-#							print( "made it to the end!" )
-
-						except Exception as e:
-							msg = "INFO: Skipped non-list value (" +str(e) + ")"
-							print( msg ); logger.info( msg )
-							#pass
-
-#					widget._label.refresh()
 
 				# is this widget a BusKillOptionItem?
 				if isinstance( widget, BusKillOptionItem ):
@@ -1279,6 +1266,31 @@ class BusKillSettingsScreen(Screen):
 						# this is not the currenty-set option
 						# set the radio button icon to "unselected"
 						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+
+		# UPDATE FONTS ON ALL LABELS EVERYWHERE
+		# TODO: combine this loop and the other 1 into one function
+
+		for screen in BusKillApp.manager.screens:
+			for widget in screen.walk():
+
+				# is this widget a Label?
+				if isinstance( widget, Label ):
+
+					if widget.font_family != 'mdicons':
+						# is this value actually a list?
+						try: 
+							# this value is a list, which means the first item in the
+							# list is our human-readable value to use in the GUI
+
+							# hack to convert a string of a list to an actual list
+							# * https://stackoverflow.com/a/35461204/1174102
+							default_font = Config.get('kivy','default_font')
+							value_as_list = json.loads(default_font.replace('\'', '"'))
+							font_filepath = value_as_list[1]
+							widget.font_name = font_filepath
+
+						except Exception as e:
+							pass
 
 	# determine if we need to re-arm BusKill (eg if they changed the trigger
 	# while BusKill is arm, we'd need to re-arm else it'll trigger not what the
