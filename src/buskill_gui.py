@@ -585,9 +585,13 @@ class BusKillOptionItem(FloatLayout):
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
+		print( "update rv.data in BusKillOptionItem.init2()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
-				if self.parent_option.value == self.value:
+			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
+			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|"+ str(type(self.parent_option.value)) )
+			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
+				if str(self.parent_option.value) == str(self.value):
+					print( "\t WE FOUND A MATCH!" )
 					# this is the currenty-set option
 					# set the radio button icon to "selected"
 					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
@@ -656,9 +660,12 @@ class BusKillOptionItem(FloatLayout):
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
+		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
-				if self.parent_option.value == self.value:
+			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
+				if str(self.parent_option.value) == str(self.value):
 					# this is the currenty-set option
 					# set the radio button icon to "selected"
 					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
@@ -741,8 +748,11 @@ class BusKillOptionItem(FloatLayout):
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
+		print( "update rv.data in BusKillOptionItem.enable_option()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
+			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
 				# this is not the currently-set option
@@ -933,8 +943,13 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
+
+					# TODO TODO: strip '.ttf' from the option_human value
+					font_human = font_filename
+					if font_filename.endswith('.ttf'):
+						font_human = font_filename[:-4]
 				
-					option_items.append( {'title': 'default_font', 'value': [font_filename, font_path, font_path, font_path], 'option_human': font_filename, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
+					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
