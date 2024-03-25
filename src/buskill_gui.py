@@ -642,6 +642,10 @@ class BusKillOptionItem(FloatLayout):
 		if not self.parent_option:
 			return
 
+		# don't proceed unless we're in the Settings screen
+		if BusKillApp.manager.current_screen != "settings":
+			return
+
 #		print( "called on_radio_button_icon() for " +str(self.value) )
 #		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
 #		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
@@ -1084,8 +1088,12 @@ class BusKillSettingsScreen(Screen):
 		sections = ['kivy','buskill']
 		for section in sections:
 			for key in Config[section]:
-				print( "attempt to delete key:|" +str(key)+ "|" )
-				Config.remove_option( section, key )
+#				print( "attempt to delete key:|" +str(key)+ "|" )
+				try:
+					Config.remove_option( section, key )
+				except Exception as e:
+					msg = "DEBUG: Skipped reset of key. (" +str(e) + ")"
+					print( msg ); logger.debug( msg )
 
 		# save the changes to the .ini config file
 		Config.write()
@@ -1099,6 +1107,26 @@ class BusKillSettingsScreen(Screen):
 	# updates the values of all the options on the Settings Screen and all
 	# ComplexOptions sub-screens
 	def refresh_values(self):
+
+		import kivy.config
+		print( "running update_config()" )
+		print( "defaults:|" +str(dir(Config.defaults()))+ "|" )
+		print( "defaults:|" +str(Config.defaults().items())+ "|" )
+		print( "defaults:|" +str(Config.defaults().__dict__.items())+ "|" )
+		#print( "defaults:|" +str(Config.defaults().pop('default_font'))+ "|" )
+		print( "defaults:|" +str(Config.defaults().items())+ "|" )
+		print( "defaults:|" +str(Config.defaults().keys())+ "|" )
+		print( "defaults:|" +str(Config.defaults().values())+ "|" )
+		Config.update_config( self.bk.CONF_FILE, overwrite = True )
+		Config.write()
+		print( "running read()" )
+		Config.read( self.bk.CONF_FILE )
+		print( "running adddefaultsection()" )
+		Config.adddefaultsection('kivy')
+		Config.write()
+		#default_font = Config.getdefault('kivy','default_font','idk')
+		#Config.set('kivy','default_font',default_font)
+		#Config.write()
 
 		# UPDATE SETTINGS SCREEN
 
@@ -1118,7 +1146,7 @@ class BusKillSettingsScreen(Screen):
 				key = widget.key
 
 				# get the value that the user has actually set this option to
-				set_value = Config.get('buskill', key)
+				set_value = Config.get(widget.section, key)
 
 				# update the value for this SettingItem, which will update the text
 				# in the Label on the Settings Screen
@@ -1139,10 +1167,37 @@ class BusKillSettingsScreen(Screen):
 				# is this widget a Label?
 				if isinstance( widget, Label ):
 					print( "refreshing label:|" +str(widget.text)+ "|" )
+					print( "\tlabel.font_family:|" +str(widget.font_family)+ "|" )
 					print( "\t" +str(dir(widget)) )
 					print( "\t text:|" +str(dir(widget.text))+ "|" )
 					print( "\t _label:|" +str(dir(widget._label))+ "|" )
-					widget._label.refresh()
+
+					if widget.font_family != 'mdicons':
+						# is this value actually a list?
+						try: 
+							# this value is a list, which means the first item in the list is our
+							# human-readable value to use in the GUI
+
+							# hack to convert a string of a list to an actual list
+							# * https://stackoverflow.com/a/35461204/1174102
+							default_font = Config.get('kivy','default_font')
+#							print( "\t\tdefault_font:|" +str(default_font)+ "|" )
+							value_as_list = json.loads(default_font.replace('\'', '"'))
+							font_filepath = value_as_list[1]
+#							print( "\t\tfont_filepath:|" +str(font_filepath)+ "|" )
+
+#$							print( "updating widget font_family:|" +str(font_filepath)+ "|" )
+#							widget.font_family = font_filepath
+#							print( "updating widget font_name:|" +str(font_filepath)+ "|" )
+							widget.font_name = font_filepath
+#							print( "made it to the end!" )
+
+						except Exception as e:
+							msg = "INFO: Skipped non-list value (" +str(e) + ")"
+							print( msg ); logger.info( msg )
+							#pass
+
+#					widget._label.refresh()
 
 				# is this widget a BusKillOptionItem?
 				if isinstance( widget, BusKillOptionItem ):
@@ -1163,7 +1218,7 @@ class BusKillSettingsScreen(Screen):
 					value = widget.value
 
 					# get the value that the user has actually set this option to
-					set_value = Config.get('buskill', title)
+					set_value = Config.get(widget.parent_option.section, title)
 
 					# first, make sure that the parent of this option matches our
 					# config
@@ -1190,7 +1245,7 @@ class BusKillSettingsScreen(Screen):
 
 		# trigger
 		old_trigger = self.bk.trigger
-		new_trigger = Config.get('buskill', 'trigger')
+		new_trigger = Config.get('buskill', 'buskill_trigger')
 
 		# was the trigger just changed by the user?
 		if old_trigger != new_trigger:
@@ -1443,9 +1498,19 @@ class BusKillApp(App):
 
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
-		 'trigger': 'lock-screen',
-#		 'gui_font_face': 'Roboto',
+		 'buskill_trigger': 'lock-screen',
 		})	
+
+		# TODO: don't hard-code this, pull it from kivy/config.py
+		# * https://stackoverflow.com/questions/78216476/how-to-get-kivy-to-set-its-defaults-in-the-config-at-runtime
+		Config.setdefault('kivy', 'default_font', [
+		 'Roboto',
+		 'data/fonts/Roboto-Regular.ttf',
+		 'data/fonts/Roboto-Italic.ttf',
+		 'data/fonts/Roboto-Bold.ttf',
+		 'data/fonts/Roboto-BoldItalic.ttf']
+		)
+
 		Config.set('kivy', 'exit_on_escape', '0')
 		Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 		Config.write()
@@ -1498,5 +1563,5 @@ class BusKillApp(App):
 			print( msg ); logger.error( msg )
 
 			crit = CriticalError()
-			crit.showError( buskill.ERR_PLATFORM_NOT_SUPPORTED )
+			cirit.showError( buskill.ERR_PLATFORM_NOT_SUPPORTED )
 			return crit

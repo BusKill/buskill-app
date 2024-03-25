@@ -5,7 +5,7 @@
 		"title": "Trigger",
 		"desc": "Choose what happens when BusKill's cable is disconnected",
 		"section": "buskill",
-		"key": "trigger",
+		"key": "buskill_trigger",
 		"options": ["lock-screen", "soft-shutdown"],
 		"options_human": ["lock-screen","soft-shutdown"],
 		"options_long": ["BusKill will lock your screen", "BusKill will immediately initiate a soft shutdown sequence, May cause data loss!"],
