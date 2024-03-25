@@ -722,17 +722,21 @@ class BusKillOptionItem(FloatLayout):
 		if self.dialog != None:
 			self.dialog.dismiss()
 
-		# write change to disk in our persistant buskill .ini Config file
+		# write change to disk in our persistent buskill .ini Config file
 		key = str(self.parent_option.key)
 		value = str(self.value)
 		msg = "DEBUG: User changed config of '" +str(key) +"' to '" +str(value)+ "'"
 		print( msg ); logger.debug( msg )
 
-		Config.set('buskill', key, value)
+		Config.set(self.parent_option.section, key, value)
 		Config.write()
 
 		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.value
+
+		print( "type(self.value):|" +str(type(self.value))+" |" )
+		if type(self.value) == type(list()):
+			self.parent_option.value_human = self.value[0]
 
 		# TODO combine this loop and the other 2 into one function
 		# loop through all the OptionItems in the RecycleView data and update
@@ -741,7 +745,7 @@ class BusKillOptionItem(FloatLayout):
 			if BusKillApp.manager.current_screen.rv.data[n]['value'] == self.value:
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
-				# this is not the currenty-set option
+				# this is not the currently-set option
 				# set the radio button icon to "unselected"
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
@@ -840,6 +844,24 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			#msg = "INFO: Skipped non-list value (" +str(e) + ")"
 			#print( msg ); logger.info( msg )
 			pass
+
+#	def on_value(self, instance, value):
+#		# if we update the value, then also attempt to update the value_human
+#
+#		# is this value actually a list?
+#		try: 
+#			# this value is a list, which means the first item in the list is our
+#			# human-readable value to use in the GUI
+#
+#			# hack to convert a string of a list to an actual list
+#			# * https://stackoverflow.com/a/35461204/1174102
+#			value_as_list = json.loads(self.value.replace('\'', '"'))
+#			self.value_human = value_as_list[0]
+#
+#		except Exception as e:
+#			#msg = "INFO: Skipped non-list value (" +str(e) + ")"
+#			#print( msg ); logger.info( msg )
+#			pass
 		
 	def on_panel(self, instance, value):
 		if value is None:
