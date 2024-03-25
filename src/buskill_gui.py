@@ -587,8 +587,8 @@ class BusKillOptionItem(FloatLayout):
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.init2()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
-			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|"+ str(type(self.parent_option.value)) )
+			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
+			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
 			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
 				if str(self.parent_option.value) == str(self.value):
 					print( "\t WE FOUND A MATCH!" )
@@ -662,8 +662,8 @@ class BusKillOptionItem(FloatLayout):
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
-			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
 			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
 				if str(self.parent_option.value) == str(self.value):
 					# this is the currenty-set option
@@ -750,8 +750,8 @@ class BusKillOptionItem(FloatLayout):
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.enable_option()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
-			print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
 			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 			else:
@@ -763,28 +763,30 @@ class BusKillOptionItem(FloatLayout):
 		# changes that we just made to 'rv.data' above
 		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
-		# UPDATE FONTS ON ALL LABELS EVERYWHERE
-		# TODO: combine this loop and the other 1 into one function
+		if key == 'default_font':
 
-		for screen in BusKillApp.manager.screens:
-			for widget in screen.walk():
+			# UPDATE FONTS ON ALL LABELS EVERYWHERE
+			# TODO: combine this loop and the other 1 into one function
 
-				# is this widget a Label?
-				if isinstance( widget, Label ):
+			for screen in BusKillApp.manager.screens:
+				for widget in screen.walk():
 
-					if widget.font_family != 'mdicons':
-						# is this value actually a list?
-						try: 
-							# this value is a list, which means the first item in the
-							# list is our human-readable value to use in the GUI
+					# is this widget a Label?
+					if isinstance( widget, Label ):
 
-							# hack to convert a string of a list to an actual list
-							# * https://stackoverflow.com/a/35461204/1174102
-							font_filepath = self.value[1]
-							widget.font_name = font_filepath
+						if widget.font_family != 'mdicons':
+							# is this value actually a list?
+							try: 
+								# this value is a list, which means the first item in the
+								# list is our human-readable value to use in the GUI
 
-						except Exception as e:
-							pass
+								# hack to convert a string of a list to an actual list
+								# * https://stackoverflow.com/a/35461204/1174102
+								font_filepath = self.value[1]
+								widget.font_name = font_filepath
+
+							except Exception as e:
+								pass
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -1223,49 +1225,98 @@ class BusKillSettingsScreen(Screen):
 
 		# UPDATE SUB-SETTINGS SCREENS (for ComplexOptions)
 
-		# loop through all of our sub-screens in the Settings screen (that are
-		# used to change the values of ComplexOptions)
+		# TODO combine this loop and the other 3 into one function
+		# loop through all the OptionItems in the RecycleView data and update
+		# the radio button icon to be "checked" or "unchecked" as needed
+		print( "update rv.data in BusKillSettingsScreen.refresh_values()" )
 		for screen in BusKillApp.manager.screens:
+			print( str(type(screen)) )
+			if isinstance( screen, ComplexOptionsScreen):
 
-			# get the parent layout inside the screen and walk through all of its
-			# child widgets
-			parent_layout = screen.children[0]
-			for widget in screen.walk():
+				#for widget in screen.settings_content.walk():
+				for widget in screen.walk():
+					print( str(type(widget)) )
 
-				# is this widget a BusKillOptionItem?
-				if isinstance( widget, BusKillOptionItem ):
-					# yes, this is a radio button for an option; make sure it's set
-					# correctly, depending on if it's selected or not in the config
-#					print( widget )
-#					print( "\twidget.value:|" +str(widget.value)+ "|" )
-#					print( "\twidget.title:|" +str(widget.title)+ "|" )
-#					print( "\t" +str(dir(widget)) )
-#					print( "\t" +str(widget.__dict__.items()) )
-#					print( "\t" +str([thing for thing in widget.walk()]) )
+					# is this widget a BusKillSettingComplexOptions object?
+					if isinstance( widget, BusKillOptionItem ):
+						print( str(dir(widget)))
+						print( str(dir(widget.parent_option)))
 
-					# get the title for this option (eg "trigger")
-					title = widget.title
+						# get the title for this option (eg "trigger")
+						title = widget.title
+						print( "title:|" +str(title)+ "|" )
 
-					# get the value that this particular radio button is for
-					# (eg 'soft-shutdown')
-					value = widget.value
+						# get the value that the user has actually set this option to
+						set_value = Config.get(widget.parent_option.section, title)
+						print( "section:|" +str(widget.parent_option.section)+ "|" )
+						print( "set_value:|" +str(set_value)+ "|" )
 
-					# get the value that the user has actually set this option to
-					set_value = Config.get(widget.parent_option.section, title)
+						# we only need the first OptionItem to get the key & value
+						# for all of them; break out of this loop of widgets on the
+						# ComplexOptionsScreen
+						break
 
-					# first, make sure that the parent of this option matches our
-					# config
-					widget.parent_option.value = set_value
-
-					# is this the now-currently-set option?
-					if value == set_value:
-						# this is the currenty-set option
-						# set the radio button icon to "selected"
-						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+				# loop through all of the rv.data and update the radio_button_icon
+				# to match the updated key & value that was determined above
+				for n in range(0,len(screen.rv.data)):
+					print( "testing if |" +str(screen.rv.data[n]['value'])+ "| == |" +str(set_value)+ "|" )
+					print( "testing if |" +str(type(screen.rv.data[n]['value']))+ "| == |" +str(type(set_value))+ "|" )
+					if str(screen.rv.data[n]['value']) == str(set_value):
+						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
 					else:
-						# this is not the currenty-set option
+						# this is not the currently-set option
 						# set the radio button icon to "unselected"
-						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
+						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+
+				# update all the widgets' properties in the RecycleView to match the
+				# changes that we just made to 'rv.data' above
+				screen.rv.refresh_from_data()
+
+#		# loop through all of our sub-screens in the Settings screen (that are
+#		# used to change the values of ComplexOptions)
+#		for screen in BusKillApp.manager.screens:
+#
+#			# get the parent layout inside the screen and walk through all of its
+#			# child widgets
+#			parent_layout = screen.children[0]
+#			for widget in screen.walk():
+#
+##				# is this widget a BusKillOptionItem?
+##				if isinstance( widget, BusKillOptionItem ):
+##					# yes, this is a radio button for an option; make sure it's set
+##					# correctly, depending on if it's selected or not in the config
+##					print( widget )
+##					print( "\twidget.value:|" +str(widget.value)+ "|" )
+##					print( "\twidget.title:|" +str(widget.title)+ "|" )
+##					print( "\t" +str(dir(widget)) )
+##					print( "\t" +str(widget.__dict__.items()) )
+##					print( "\t" +str([thing for thing in widget.walk()]) )
+#
+#					# get the title for this option (eg "trigger")
+#					title = widget.title
+#
+#					# get the value that this particular radio button is for
+#					# (eg 'soft-shutdown')
+#					value = widget.value
+#
+#					# get the value that the user has actually set this option to
+#					set_value = Config.get(widget.parent_option.section, title)
+#
+#					print( "check if |" +str(value)+ "| == |" +str(set_value)+ "|" )
+#
+#					# first, make sure that the parent of this option matches our
+#					# config
+#					widget.parent_option.value = set_value
+#
+#					# is this the now-currently-set option?
+#					if str(value) == str(set_value):
+#						# this is the currenty-set option
+#						# set the radio button icon to "selected"
+#						widget.radio_button_label.text = "[font=mdicons][size=18]\ue837[/size][/font] "
+#					else:
+#						# this is not the currenty-set option
+#						# set the radio button icon to "unselected"
+#						widget.radio_button_label.text = "[font=mdicons][size=18]\ue836[/size][/font] "
 
 		# UPDATE FONTS ON ALL LABELS EVERYWHERE
 		# TODO: combine this loop and the other 1 into one function
