@@ -131,6 +131,7 @@ fi
 #  * https://github.com/BusKill/buskill-app/issues/2
 #brew update
 
+# fetch signed dependencies from 'buskill-app-deps' repo
 tmpDir="`mktemp -d`" || exit 1
 pushd "${tmpDir}"
 # (temporarily) re-enable internet access
@@ -150,7 +151,7 @@ gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpD
 if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
-fi
+ei
 
 pushd "${tmpDir}/buskill-app-deps/build/deps"
 shasum --algorithm 256 --warn --check SHA256SUMS
@@ -174,10 +175,21 @@ cacheDir=`brew --cache`
 ls -lah ${cacheDir}
 
 # install os-level depends
-brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+#brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+brew reinstall wget-1.24.5.ventura.bottle.tar.gz
+
+brew reinstall wget-1.24.5.rb
+
+brew --cache
+export HOMEBREW_CACHE='build/deps/'
+brew --cache
+brew reinstall wget-1.24.5.rb
+export HOMEBREW_CACHE=''
+brew --cache
 
 brew -v uninstall --ignore-dependencies python
-brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+#brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+brew -v reinstall build/deps/python-3.12.ventura.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
@@ -211,7 +223,8 @@ ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-in
 #find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
 
 # install kivy and all other python dependencies with pip
-${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+#${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp311-cp311-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-2.3.0-cp312-cp312-macosx_10_9_universal2.whl
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pyinstaller-4.7.tar.gz
 
 # INSTALL LATEST PIP PACKAGES
