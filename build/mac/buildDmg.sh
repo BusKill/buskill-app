@@ -180,6 +180,7 @@ ls -lah ${cacheDir}
 ${BREW} reinstall --verbose wget-1.24.5.ventura.bottle.tar.gz
 
 ${BREW} reinstall --verbose ./wget-1.24.5.rb
+${BREW} install --verbose ./wget-1.24.5.rb
 ${BREW} reinstall --verbose wget
 
 ${BREW} uninstall --verbose --ignore-dependencies python
