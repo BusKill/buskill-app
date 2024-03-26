@@ -151,7 +151,7 @@ gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpD
 if [[ $? -ne 0 ]]; then
 	echo "ERROR: Invalid PGP signature!"
 	exit 1
-ei
+fi
 
 pushd "${tmpDir}/buskill-app-deps/build/deps"
 shasum --algorithm 256 --warn --check SHA256SUMS
