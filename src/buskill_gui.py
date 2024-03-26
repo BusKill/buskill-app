@@ -79,6 +79,36 @@ from kivy.uix.recycleview import RecycleView
 #                                   CLASSES                                    #
 ################################################################################
 
+def update_font_recursive(widget):
+	if isinstance(widget, Label):
+
+		default_font = Config.get('kivy', 'default_font')
+
+		# is this value actually a list?
+		if type(default_font) == type(list()):
+			font_name = default_font[0]
+			font_path = default_font[1]
+		else:
+			# the default_font setting is not a list; it's probably a string that
+			# represents a list
+
+			try: 
+				# hack to convert a string of a list to an actual list
+				# * https://stackoverflow.com/a/35461204/1174102
+				default_font = json.loads(default_font.replace('\'', '"'))
+				font_name = default_font[0]
+				font_path = default_font[1]
+
+			except Exception as e:
+				pass
+
+		print( "type(font):|" +str(type(font_name))+ "|" )
+		widget.font_name = font_name
+		print( "updated widget:|" +str(widget)+ "| to font:|" +str(font_name)+ "|")
+	elif hasattr(widget, 'children'):
+		for child in widget.children:
+			update_font_recursive(child)
+
 class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
@@ -589,16 +619,15 @@ class BusKillOptionItem(FloatLayout):
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
 			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
 			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
-			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
-				if str(self.parent_option.value) == str(self.value):
-					print( "\t WE FOUND A MATCH!" )
-					# this is the currenty-set option
-					# set the radio button icon to "selected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-				else:
-					# this is not the currenty-set option
-					# set the radio button icon to "unselected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			if str(self.parent_option.value) == str(self.value):
+				print( "\t WE FOUND A MATCH!" )
+				# this is the currenty-set option
+				# set the radio button icon to "selected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+			else:
+				# this is not the currenty-set option
+				# set the radio button icon to "unselected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 		# update RecycleView data in next frame
 		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
@@ -664,15 +693,14 @@ class BusKillOptionItem(FloatLayout):
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
 			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
 			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
-			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
-				if str(self.parent_option.value) == str(self.value):
-					# this is the currenty-set option
-					# set the radio button icon to "selected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-				else:
-					# this is not the currenty-set option
-					# set the radio button icon to "unselected"
-					BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+			if str(self.parent_option.value) == str(self.value):
+				# this is the currenty-set option
+				# set the radio button icon to "selected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+			else:
+				# this is not the currenty-set option
+				# set the radio button icon to "unselected"
+				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	def refresh_view_attrs( self, rv, index, data ):
 
@@ -763,13 +791,37 @@ class BusKillOptionItem(FloatLayout):
 		# changes that we just made to 'rv.data' above
 		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
+		print( "key:|" +str(key)+ "|" )
 		if key == 'default_font':
 
 			# UPDATE FONTS ON ALL LABELS EVERYWHERE
-			# TODO: combine this loop and the other 1 into one function
+			print( "BusKillApp:|" +str(BusKillApp)+ "|" )
+			print( "\t" +str(dir(BusKillApp))+ "|" )
+			print( "BusKillApp.get_running_app():|" +str(BusKillApp.get_running_app())+ "|" )
+			print( "\t._running_app|" +str(BusKillApp._running_app)+ "|" )
+			print( "\t|" +str(dir(BusKillApp.get_running_app()))+ "|" )
+			update_font_recursive(BusKillApp.get_running_app().root)
 
+			# TODO: combine this loop and the other 1 into one function
 			for screen in BusKillApp.manager.screens:
-				for widget in screen.walk():
+				print( "screen:|" +str(screen)+ "|" )
+
+				# get all of the widgets on this screen
+				widgets = [widget for widget in screen.walk()]
+
+				print( "len1:|" +str(len(widgets))+ "|" )
+				print( "hasattr( screen, 'dialog' ):|" +str(hasattr(screen,'dialog'))+ "|" )
+				# add any other orphaned widgets, such as our dialog modal widget
+				if hasattr( screen, 'dialog' ) and screen.dialog != None:
+				#if hasattr( screen, 'dialog' ):
+					print( "screen.dialog:|" +str(screen.dialog)+ "|" )
+					print( "screen.dialog.walk():|" +str([widget for widget in screen.dialog.walk()])+ "|" )
+					widgets = widgets + [widget for widget in screen.dialog.walk()]
+
+				print( "len2:|" +str(len(widgets))+ "|" )
+
+				for widget in widgets:
+					print( "widget:|" +str(widget)+ "|" )
 
 					# is this widget a Label?
 					if isinstance( widget, Label ):
@@ -782,11 +834,17 @@ class BusKillOptionItem(FloatLayout):
 
 								# hack to convert a string of a list to an actual list
 								# * https://stackoverflow.com/a/35461204/1174102
+								print( str(type(self.value)) )
 								font_filepath = self.value[1]
+								print( "font_name0:|" +str(widget.font_name)+ "|" )
 								widget.font_name = font_filepath
+								print( "font_name1:|" +str(widget.font_name)+ "|" )
 
 							except Exception as e:
-								pass
+								msg = "INFO: Skipped non-list value (" +str(e) + ")"
+								print( msg ); logger.info( msg )
+								#pass
+
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -1011,7 +1069,7 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
 
 		print( "init of BusKillSettingsWithNoMenu" )
-		print( dir(self) )
+		#print( dir(self) )
 
 	def on_touch_down( self, touch ):
 		super(BusKillSettingsWithNoMenu, self).on_touch_down( touch )
@@ -1239,8 +1297,8 @@ class BusKillSettingsScreen(Screen):
 
 					# is this widget a BusKillSettingComplexOptions object?
 					if isinstance( widget, BusKillOptionItem ):
-						print( str(dir(widget)))
-						print( str(dir(widget.parent_option)))
+						#print( str(dir(widget)))
+						#print( str(dir(widget.parent_option)))
 
 						# get the title for this option (eg "trigger")
 						title = widget.title
@@ -1515,7 +1573,7 @@ class BusKillApp(App):
 
 		self._app_settings = None
 		self._app_window = None
-		super(App, self).__init__(**kwargs)
+		super(BusKillApp, self).__init__(**kwargs)
 		self.options = kwargs
 		self.built = False
 
