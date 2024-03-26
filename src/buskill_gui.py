@@ -617,9 +617,10 @@ class BusKillOptionItem(FloatLayout):
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.init2()" )
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
+			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
 			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
-			if str(self.parent_option.value) == str(self.value):
+			#if str(self.parent_option.value) == str(self.value):
+			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
 				print( "\t WE FOUND A MATCH!" )
 				# this is the currenty-set option
 				# set the radio button icon to "selected"
@@ -693,7 +694,8 @@ class BusKillOptionItem(FloatLayout):
 		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
 			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
 			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
-			if str(self.parent_option.value) == str(self.value):
+			#if str(self.parent_option.value) == str(self.value):
+			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
 				# this is the currenty-set option
 				# set the radio button icon to "selected"
 				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
