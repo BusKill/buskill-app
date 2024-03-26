@@ -20,7 +20,7 @@ set -x
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
 APP_NAME='buskill'
-BREW='/usr/local/bin/brew --verbose'
+BREW='/usr/local/bin/brew'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
@@ -177,15 +177,14 @@ ls -lah ${cacheDir}
 
 # install os-level depends
 #brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
-${BREW} reinstall wget-1.24.5.ventura.bottle.tar.gz
+${BREW} reinstall --verbose wget-1.24.5.ventura.bottle.tar.gz
 
-${BREW} reinstall ./wget-1.24.5.rb
-${BREW} reinstall wget
-${BREW} reinstall wget
+${BREW} reinstall --verbose ./wget-1.24.5.rb
+${BREW} reinstall --verbose wget
 
-${BREW} uninstall --ignore-dependencies python
+${BREW} uninstall --verbose --ignore-dependencies python
 #brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
-${BREW} reinstall build/deps/python-3.12.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/python-3.12.ventura.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 
 # get more info immediately post-python install
@@ -193,15 +192,15 @@ PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | 
 #find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
 
 #${BREW} reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
-${BREW} reinstall build/deps/libmodplug-0.8.9.0.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/libmodplug-0.8.9.0.ventura.bottle.tar.gz
 #${BREW} reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
-${BREW} reinstall build/deps/sdl2-2.30.1.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/sdl2-2.30.1.ventura.bottle.tar.gz
 #${BREW} reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
-${BREW} reinstall build/deps/sdl2_image-2.8.2_1.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/sdl2_image-2.8.2_1.ventura.bottle.tar.gz
 #${BREW} reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
-${BREW} reinstall build/deps/sdl2_mixer-2.8.0.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/sdl2_mixer-2.8.0.ventura.bottle.tar.gz
 #${BREW} reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
-${BREW} reinstall build/deps/sdl2_ttf-2.22.0.ventura.bottle.tar.gz
+${BREW} reinstall --verbose build/deps/sdl2_ttf-2.22.0.ventura.bottle.tar.gz
 
 # check contents of pip binary
 cat ${PIP_PATH}
