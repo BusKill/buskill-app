@@ -183,6 +183,8 @@ ${BREW} reinstall --debug --verbose wget-1.24.5.ventura.bottle.tar.gz
 
 ${BREW} reinstall --debug --verbose ./wget-1.24.5.rb
 ${BREW} install --debug --verbose ./wget-1.24.5.rb
+${BREW} reinstall --debug --verbose build/deps/wget-1.24.5.rb
+${BREW} install --debug --verbose build/deps/wget-1.24.5.rb
 ${BREW} reinstall --debug --verbose wget
 
 ${BREW} uninstall --debug --verbose --ignore-dependencies python
