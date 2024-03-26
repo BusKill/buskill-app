@@ -19,6 +19,7 @@ set -x
 
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+VENV_PATH="/tmp/venv"
 APP_NAME='buskill'
 BREW='/usr/local/bin/brew'
 
@@ -43,6 +44,7 @@ export HOMEBREW_NO_INSTALL_FROM_API=1
 export HOMEBREW_NO_INSTALL_UPGRADE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
+export HOMEBREW_CURL_RETRIES=0
 export HOMEBREW_CURLRC="`pwd`/build/deps/.curlrc"
 
 ################################################################################
@@ -181,18 +183,17 @@ ls -lah ${cacheDir}
 # install os-level depends
 #brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 ${BREW} reinstall --debug --verbose wget-1.24.5.ventura.bottle.tar.gz
-${BREW} reinstall --debug --verbose build/deps/wget-1.24.5.ventura.bottle.tar.gz
-
-${BREW} reinstall --debug --verbose ./wget-1.24.5.rb
-${BREW} install --debug --verbose ./wget-1.24.5.rb
-${BREW} reinstall --debug --verbose build/deps/wget-1.24.5.rb
-${BREW} install --debug --verbose build/deps/wget-1.24.5.rb
-${BREW} reinstall --debug --verbose wget
 
 ${BREW} uninstall --debug --verbose --ignore-dependencies python
 #brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
 ${BREW} reinstall --debug --verbose build/deps/python-3.12.ventura.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+
+# create python virtual environment 
+# * https://github.com/BusKill/buskill-app/issues/78#issuecomment-2021558890
+mkdir "${VENV_PATH}"
+${PYTHON_PATH} -m virtualenv "${VENV_PATH}"
+PYTHON_PATH="${VENV_PATH}/bin/python"
 
 # get more info immediately post-python install
 #ls -lah /usr/local/Cellar/python/
