@@ -179,7 +179,9 @@ ls -lah ${cacheDir}
 #brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 ${BREW} reinstall wget-1.24.5.ventura.bottle.tar.gz
 
-${BREW} reinstall wget-1.24.5.rb
+${BREW} reinstall ./wget-1.24.5.rb
+${BREW} reinstall wget
+${BREW} reinstall wget
 
 ${BREW} uninstall --ignore-dependencies python
 #brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
