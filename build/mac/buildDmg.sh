@@ -180,6 +180,7 @@ ls -lah ${cacheDir}
 # install os-level depends
 #brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
 ${BREW} reinstall --debug --verbose wget-1.24.5.ventura.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/wget-1.24.5.ventura.bottle.tar.gz
 
 ${BREW} reinstall --debug --verbose ./wget-1.24.5.rb
 ${BREW} install --debug --verbose ./wget-1.24.5.rb
