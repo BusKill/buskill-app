@@ -40,6 +40,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # poisoning our builds
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_FROM_API=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
 
