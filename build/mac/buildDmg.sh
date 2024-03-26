@@ -43,6 +43,7 @@ export HOMEBREW_NO_INSTALL_FROM_API=1
 export HOMEBREW_NO_INSTALL_UPGRADE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
+export HOMEBREW_CURLRC="`pwd`/build/deps/.curlrc"
 
 ################################################################################
 #                                  FUNCTIONS                                   #
