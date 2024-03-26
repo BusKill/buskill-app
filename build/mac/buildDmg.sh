@@ -39,6 +39,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # authentication and integrity checks and could be a vector for MITM attacks
 # poisoning our builds
 export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_FROM_API=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
 
