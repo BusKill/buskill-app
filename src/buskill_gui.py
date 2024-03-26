@@ -814,6 +814,10 @@ class BusKillOptionItem(FloatLayout):
 				print( "len1:|" +str(len(widgets))+ "|" )
 				print( "hasattr( screen, 'dialog' ):|" +str(hasattr(screen,'dialog'))+ "|" )
 				# add any other orphaned widgets, such as our dialog modal widget
+				# TODO: figure out why dialog's Labels aren't actually getting their
+				# fonts updated at runtime
+				#  * https://github.com/BusKill/buskill-app/issues/55
+				#  * https://stackoverflow.com/a/78216308/1174102
 				if hasattr( screen, 'dialog' ) and screen.dialog != None:
 				#if hasattr( screen, 'dialog' ):
 					print( "screen.dialog:|" +str(screen.dialog)+ "|" )
@@ -1014,7 +1018,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 					for root, dirs, files in os.walk(fonts_dir_path):
 						for file in files[0:10]:
-							if file.lower().endswith(".ttf"):
+							if file.lower().endswith(".ttf") \
+							 or file.lower().endswith(".otf"):
 								font_path = str(os.path.join(root, file))
 								#print(font_path)
 								font_paths.add( font_path )
@@ -1031,7 +1036,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 					# TODO TODO: strip '.ttf' from the option_human value
 					font_human = font_filename
-					if font_filename.endswith('.ttf'):
+					if font_filename.lower().endswith('.ttf') \
+					 or font_filename.lower().endswith('.otf'):
 						font_human = font_filename[:-4]
 				
 					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
