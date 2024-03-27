@@ -1248,7 +1248,7 @@ class BusKillApp(App):
 	for fonts_dir_path in LabelBase.get_system_fonts_dir():
 
 		for root, dirs, files in os.walk(fonts_dir_path):
-			for file in files[0:10]:
+			for file in files:
 				if file.lower().endswith(".ttf") \
 				 or file.lower().endswith(".otf"):
 					font_path = str(os.path.join(root, file))
