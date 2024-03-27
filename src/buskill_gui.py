@@ -780,22 +780,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			if self.key == 'default_font':
 				# first we must determine what fonts are available on this system
 
-				# TODO: find fonts at runtime and code reuse
 				option_items = []
-				font_paths = set()
-				for fonts_dir_path in LabelBase.get_system_fonts_dir():
-
-					for root, dirs, files in os.walk(fonts_dir_path):
-						for file in files[0:10]:
-							if file.lower().endswith(".ttf") \
-							 or file.lower().endswith(".otf"):
-								font_path = str(os.path.join(root, file))
-								font_paths.add( font_path )
-
-				msg = "DEBUG: Found " +str(len(font_paths))+ " font files."
-				print( msg ); logger.debug( msg )
-
-				for font_path in font_paths:
+				for font_path in BusKillApp.font_paths:
 					font_filename = os.path.basename( font_path )
 
 					font_human = font_filename
@@ -1253,27 +1239,28 @@ class DebugLog(Screen):
 
 class BusKillApp(App):
 
-	# copied mostly from 'site-packages/kivy/app.py'
-	def __init__(self, bk, **kwargs):
-
-		# instantiate our BusKill object instance so it can be accessed by
-		# other objects for doing Buskill stuff
-		self.bk = bk
-
-		self._app_settings = None
-		self._app_window = None
-		super(BusKillApp, self).__init__(**kwargs)
-		self.options = kwargs
-		self.built = False
-
-	# instantiate our scren manager instance so it can be accessed by other
+	# instantiate our screen manager instance so it can be accessed by other
 	# objects for changing the kivy screen
 	manager = ScreenManager()
+
+	# FONTS
+	font_paths = set()
+	for fonts_dir_path in LabelBase.get_system_fonts_dir():
+
+		for root, dirs, files in os.walk(fonts_dir_path):
+			for file in files[0:10]:
+				if file.lower().endswith(".ttf") \
+				 or file.lower().endswith(".otf"):
+					font_path = str(os.path.join(root, file))
+					font_paths.add( font_path )
+
+	msg = "DEBUG: Found " +str(len(font_paths))+ " font files."
+	print( msg ); logger.debug( msg )
 
 	msg = "DEBUG: Default font = " + str(Config.get('kivy', 'default_font'))
 	print( msg ); logger.debug( msg )
 	
-	# register font aiases so we don't have to specify their full file path
+	# register font aliases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
 	try:
 
@@ -1282,13 +1269,21 @@ class BusKillApp(App):
 		if 'Roboto' not in default_font:
 			# the user set a custom font; use it
 
+			try: 
+				# hack to convert a string of a list to an actual list
+				# * https://stackoverflow.com/a/35461204/1174102
+				default_font = json.loads(default_font.replace('\'', '"'))
+				font_name = default_font[0]
+				font_path = default_font[1]
+
+			except Exception as e:
+				pass
+
 			# bkmono = "BusKill Mono"; we just overwrite it with the user's font
-			LabelBase.register( "bkmono", gui_font_face_path )
+			LabelBase.register( "bkmono", default_font[1] )
 
 			# TODO; add logic to try to actually find an "italic", "bold", and
-#			# "bolditalic" version of the user-selected font
-#			Config.set('kivy', 'default_font', [gui_font_face_filename, gui_font_face_path, gui_font_face_path, gui_font_face_path, gui_font_face_path])
-#			Config.write()
+			# "bolditalic" version of the user-selected font
 
 		else:
 			# the user did *not* set a custom font; use Roboto
@@ -1310,16 +1305,6 @@ class BusKillApp(App):
 
 		try: 
 
-			# TODO: code reuse (combine this with the other one above)
-			# find every font file in in all the font dirs
-			font_paths = []
-			for fonts_dir_path in LabelBase.get_system_fonts_dir():
-
-				for root, dirs, files in os.walk(fonts_dir_path):
-					for file in files:
-						if file.lower().endswith(".ttf"):
-							font_paths.append(str(os.path.join(root, file)))
-
 			font_roboto_mono_path = [f for f in font_paths if f.lower().endswith("robotomono-regular.ttf")]
 			font_mdicons_path = [f for f in font_paths if f.lower().endswith("materialicons-regular.ttf")]
 
@@ -1339,6 +1324,19 @@ class BusKillApp(App):
 
 			msg = "WARNING: Failed to find fonts (" +str(e) + ")"
 			print( msg ); logger.warning( msg )
+
+	# copied mostly from 'site-packages/kivy/app.py'
+	def __init__(self, bk, **kwargs):
+
+		# instantiate our BusKill object instance so it can be accessed by
+		# other objects for doing Buskill stuff
+		self.bk = bk
+
+		self._app_settings = None
+		self._app_window = None
+		super(BusKillApp, self).__init__(**kwargs)
+		self.options = kwargs
+		self.built = False
 
 	# does rapid-fire UI-agnostic cleanup stuff when the GUI window is closed
 	def close( self, *args ):
