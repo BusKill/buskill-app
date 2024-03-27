@@ -76,7 +76,7 @@ from kivy.uix.recycleview import RecycleView
 # n/a
 
 ################################################################################
-#                                   CLASSES                                    #
+#                                  FUNCTIONS                                   #
 ################################################################################
 
 def update_font_recursive(widget):
@@ -108,6 +108,10 @@ def update_font_recursive(widget):
 	elif hasattr(widget, 'children'):
 		for child in widget.children:
 			update_font_recursive(child)
+
+################################################################################
+#                                   CLASSES                                    #
+################################################################################
 
 class MainWindow(Screen):
 
@@ -531,6 +535,7 @@ class BusKillOptionItem(FloatLayout):
 	value = ObjectProperty('')
 	option_human = StringProperty('')
 	parent_option = ObjectProperty()
+	screen = ObjectProperty()
 
 	def __init__(self, **kwargs):
 		print( "called BusKillOptionItem.__init__()" )
@@ -616,23 +621,25 @@ class BusKillOptionItem(FloatLayout):
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.init2()" )
-		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
-			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
-			#if str(self.parent_option.value) == str(self.value):
-			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
-				print( "\t WE FOUND A MATCH!" )
-				# this is the currenty-set option
-				# set the radio button icon to "selected"
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-			else:
-				# this is not the currenty-set option
-				# set the radio button icon to "unselected"
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+		self.screen.update_data()
 
-		# update RecycleView data in next frame
-		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
-		Clock.schedule_once(self.update_rv_data,0)
+#		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+#			print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
+#			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
+#			#if str(self.parent_option.value) == str(self.value):
+#			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
+#				print( "\t WE FOUND A MATCH!" )
+#				# this is the currenty-set option
+#				# set the radio button icon to "selected"
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+#			else:
+#				# this is not the currenty-set option
+#				# set the radio button icon to "unselected"
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+#
+#		# update RecycleView data in next frame
+#		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+#		Clock.schedule_once(self.update_rv_data,0)
 		
 #		if self.parent_option.value == self.value:
 #			print( "DEBUG: instance values match; setting icon to checked" )
@@ -691,18 +698,20 @@ class BusKillOptionItem(FloatLayout):
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
-		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
-			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
-			#if str(self.parent_option.value) == str(self.value):
-			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
-				# this is the currenty-set option
-				# set the radio button icon to "selected"
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-			else:
-				# this is not the currenty-set option
-				# set the radio button icon to "unselected"
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+		self.screen.update_data()
+
+#		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+#			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+#			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+#			#if str(self.parent_option.value) == str(self.value):
+#			if str(self.parent_option.value) == str(BusKillApp.manager.current_screen.rv.data[n]['value']):
+#				# this is the currenty-set option
+#				# set the radio button icon to "selected"
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+#			else:
+#				# this is not the currenty-set option
+#				# set the radio button icon to "unselected"
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
 	def refresh_view_attrs( self, rv, index, data ):
 
@@ -779,19 +788,21 @@ class BusKillOptionItem(FloatLayout):
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillOptionItem.enable_option()" )
-		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
-			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
-			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
-			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-			else:
-				# this is not the currently-set option
-				# set the radio button icon to "unselected"
-				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+		self.screen.update_data()
 
-		# update all the widgets' properties in the RecycleView to match the
-		# changes that we just made to 'rv.data' above
-		BusKillApp.manager.current_screen.rv.refresh_from_data()
+#		for n in range(0,len(BusKillApp.manager.current_screen.rv.data)):
+#			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "|" )
+#			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "|" )
+#			if str(BusKillApp.manager.current_screen.rv.data[n]['value']) == str(self.value):
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+#			else:
+#				# this is not the currently-set option
+#				# set the radio button icon to "unselected"
+#				BusKillApp.manager.current_screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+#
+#		# update all the widgets' properties in the RecycleView to match the
+#		# changes that we just made to 'rv.data' above
+#		BusKillApp.manager.current_screen.rv.refresh_from_data()
 
 		print( "key:|" +str(key)+ "|" )
 		if key == 'default_font':
@@ -806,13 +817,13 @@ class BusKillOptionItem(FloatLayout):
 
 			# TODO: combine this loop and the other 1 into one function
 			for screen in BusKillApp.manager.screens:
-				print( "screen:|" +str(screen)+ "|" )
+				#print( "screen:|" +str(screen)+ "|" )
 
 				# get all of the widgets on this screen
 				widgets = [widget for widget in screen.walk()]
 
-				print( "len1:|" +str(len(widgets))+ "|" )
-				print( "hasattr( screen, 'dialog' ):|" +str(hasattr(screen,'dialog'))+ "|" )
+				#print( "len1:|" +str(len(widgets))+ "|" )
+				#print( "hasattr( screen, 'dialog' ):|" +str(hasattr(screen,'dialog'))+ "|" )
 				# add any other orphaned widgets, such as our dialog modal widget
 				# TODO: figure out why dialog's Labels aren't actually getting their
 				# fonts updated at runtime
@@ -820,14 +831,14 @@ class BusKillOptionItem(FloatLayout):
 				#  * https://stackoverflow.com/a/78216308/1174102
 				if hasattr( screen, 'dialog' ) and screen.dialog != None:
 				#if hasattr( screen, 'dialog' ):
-					print( "screen.dialog:|" +str(screen.dialog)+ "|" )
-					print( "screen.dialog.walk():|" +str([widget for widget in screen.dialog.walk()])+ "|" )
+					#print( "screen.dialog:|" +str(screen.dialog)+ "|" )
+					#print( "screen.dialog.walk():|" +str([widget for widget in screen.dialog.walk()])+ "|" )
 					widgets = widgets + [widget for widget in screen.dialog.walk()]
 
-				print( "len2:|" +str(len(widgets))+ "|" )
+				#print( "len2:|" +str(len(widgets))+ "|" )
 
 				for widget in widgets:
-					print( "widget:|" +str(widget)+ "|" )
+					#print( "widget:|" +str(widget)+ "|" )
 
 					# is this widget a Label?
 					if isinstance( widget, Label ):
@@ -840,11 +851,11 @@ class BusKillOptionItem(FloatLayout):
 
 								# hack to convert a string of a list to an actual list
 								# * https://stackoverflow.com/a/35461204/1174102
-								print( str(type(self.value)) )
+								#print( str(type(self.value)) )
 								font_filepath = self.value[1]
-								print( "font_name0:|" +str(widget.font_name)+ "|" )
+								#print( "font_name0:|" +str(widget.font_name)+ "|" )
 								widget.font_name = font_filepath
-								print( "font_name1:|" +str(widget.font_name)+ "|" )
+								#print( "font_name1:|" +str(widget.font_name)+ "|" )
 
 							except Exception as e:
 								msg = "INFO: Skipped non-list value (" +str(e) + ")"
@@ -1001,7 +1012,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
 				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
-				option_item = [{'title': self.key, 'value': value, 'option_human': option_human, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self }]
+				option_item = [{'title': self.key, 'value': value, 'option_human': option_human, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'screen': setting_screen }]
 				#setting_screen.content.add_widget( option_item )
 				#print( "DEBUG: adding data to rv" )
 				#print( "DEBUG: \t" +str(option_item)+ "|" )
@@ -1040,7 +1051,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 					 or font_filename.lower().endswith('.otf'):
 						font_human = font_filename[:-4]
 				
-					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self } )
+					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self, 'screen': setting_screen } )
 
 				option_items.sort(key=operator.itemgetter('value'))
 				print( "len(option_items):|" + str(len(option_items))+ "|" )
@@ -1125,6 +1136,63 @@ class ComplexOptionsScreen(Screen):
 		)
 		self.dialog.b_cancel.text = "OK"
 		self.dialog.open()
+
+	# update all of data dict in this Screen's RecycleView so that all of the
+	# widgets get updated on changes (eg the "radio button" icon)
+	def update_data(self):
+		print( "update rv.data in ComplexOptionsScreen.update_data()" )
+
+		# GET INFO
+		this_value = None
+		set_value = None
+
+		# get all of the widgets on this screen
+		widgets = [widget for widget in self.walk()]
+
+		# loop through all of the widgets until we get our first OptionItem
+		for widget in widgets:
+			print( widget )
+
+			# is this widget a BusKillOptionItem object?
+			if isinstance( widget, BusKillOptionItem ):
+
+				# get the title for this option (eg "trigger")
+				title = widget.title
+
+				# get the value that the user has actually set this option to
+				set_value = Config.get(widget.parent_option.section, title)
+
+				break
+
+		# UPDATE DATA
+
+		# loop through every dict of OptionItem data in the Recycle View's list
+		# of dicts
+		for n in range(0,len(self.rv.data)):
+
+			# get the value for this specific OptionItem
+			this_value = self.rv.data[n]['value']
+
+			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
+			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
+
+			print( "testing if |" +str(this_value)+ "| == |" +str(set_value)+ "|" )
+			print( "testing if |" +str(type(this_value))+ "| == |" +str(type(set_value))+ "|" )
+
+			#if str(self.parent_option.value) == str(self.value):
+			if str(this_value) == str(set_value):
+				print( "\t WE FOUND A MATCH!" )
+				# this is the currently-set option
+				# set the radio button icon to "selected"
+				self.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+			else:
+				# this is not the currently-set option
+				# set the radio button icon to "unselected"
+				self.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+
+		# update RecycleView data in next frame
+		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
+		Clock.schedule_once(self.rv.refresh_from_data,0)
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
 class BusKillSettingsScreen(Screen):
@@ -1295,48 +1363,59 @@ class BusKillSettingsScreen(Screen):
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
 		print( "update rv.data in BusKillSettingsScreen.refresh_values()" )
+
+		# loop through every screen
 		for screen in BusKillApp.manager.screens:
-			print( str(type(screen)) )
+
+			# is this screen a ComplexOptionsScreen?
 			if isinstance( screen, ComplexOptionsScreen):
 
-				#for widget in screen.settings_content.walk():
-				for widget in screen.walk():
-					print( str(type(widget)) )
+				# this screen is a ComplexOptionsScreen with a RecycleView of
+				# OptionItem widgets whoose radio buttons we need to update
+				screen.update_data()
 
-					# is this widget a BusKillSettingComplexOptions object?
-					if isinstance( widget, BusKillOptionItem ):
-						#print( str(dir(widget)))
-						#print( str(dir(widget.parent_option)))
-
-						# get the title for this option (eg "trigger")
-						title = widget.title
-						print( "title:|" +str(title)+ "|" )
-
-						# get the value that the user has actually set this option to
-						set_value = Config.get(widget.parent_option.section, title)
-						print( "section:|" +str(widget.parent_option.section)+ "|" )
-						print( "set_value:|" +str(set_value)+ "|" )
-
-						# we only need the first OptionItem to get the key & value
-						# for all of them; break out of this loop of widgets on the
-						# ComplexOptionsScreen
-						break
-
-				# loop through all of the rv.data and update the radio_button_icon
-				# to match the updated key & value that was determined above
-				for n in range(0,len(screen.rv.data)):
-					print( "testing if |" +str(screen.rv.data[n]['value'])+ "| == |" +str(set_value)+ "|" )
-					print( "testing if |" +str(type(screen.rv.data[n]['value']))+ "| == |" +str(type(set_value))+ "|" )
-					if str(screen.rv.data[n]['value']) == str(set_value):
-						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
-					else:
-						# this is not the currently-set option
-						# set the radio button icon to "unselected"
-						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
-
-				# update all the widgets' properties in the RecycleView to match the
-				# changes that we just made to 'rv.data' above
-				screen.rv.refresh_from_data()
+#		for screen in BusKillApp.manager.screens:
+#			print( str(type(screen)) )
+#			if isinstance( screen, ComplexOptionsScreen):
+#
+#				#for widget in screen.settings_content.walk():
+#				for widget in screen.walk():
+#					print( str(type(widget)) )
+#
+#					# is this widget a BusKillSettingComplexOptions object?
+#					if isinstance( widget, BusKillOptionItem ):
+#						#print( str(dir(widget)))
+#						#print( str(dir(widget.parent_option)))
+#
+#						# get the title for this option (eg "trigger")
+#						title = widget.title
+#						print( "title:|" +str(title)+ "|" )
+#
+#						# get the value that the user has actually set this option to
+#						set_value = Config.get(widget.parent_option.section, title)
+#						print( "section:|" +str(widget.parent_option.section)+ "|" )
+#						print( "set_value:|" +str(set_value)+ "|" )
+#
+#						# we only need the first OptionItem to get the key & value
+#						# for all of them; break out of this loop of widgets on the
+#						# ComplexOptionsScreen
+#						break
+#
+#				# loop through all of the rv.data and update the radio_button_icon
+#				# to match the updated key & value that was determined above
+#				for n in range(0,len(screen.rv.data)):
+#					print( "testing if |" +str(screen.rv.data[n]['value'])+ "| == |" +str(set_value)+ "|" )
+#					print( "testing if |" +str(type(screen.rv.data[n]['value']))+ "| == |" +str(type(set_value))+ "|" )
+#					if str(screen.rv.data[n]['value']) == str(set_value):
+#						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
+#					else:
+#						# this is not the currently-set option
+#						# set the radio button icon to "unselected"
+#						screen.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
+#
+#				# update all the widgets' properties in the RecycleView to match the
+#				# changes that we just made to 'rv.data' above
+#				screen.rv.refresh_from_data()
 
 #		# loop through all of our sub-screens in the Settings screen (that are
 #		# used to change the values of ComplexOptions)
