@@ -80,8 +80,6 @@ from kivy.uix.recycleview import RecycleView
 ################################################################################
 
 def update_font_recursive(widget):
-	print( "called update_font_recursive(" +str(widget)+ ")" )
-	print( "\t" +str(type(widget))+ "|" )
 
 	# is widget actually a list of widgets?
 	if type(widget) == type(list()) \
@@ -114,18 +112,12 @@ def update_font_recursive(widget):
 				font_path = default_font[1]
 
 			except Exception as e:
-				msg = "INFO: Skipped non-list value (" +str(e) + ")"
-				print( msg ); logger.info( msg )
-				#pass
+				pass
 
-		print( "type(font):|" +str(type(font_name))+ "|" )
 		widget.font_name = font_path
-		print( "updated widget:|" +str(widget)+ "| to font:|" +str(font_name)+ "|")
 	elif hasattr(widget, 'children'):
 		for child in widget.children:
 			update_font_recursive(child)
-	else:
-		print( "END OF THE LINE!" )
 
 ################################################################################
 #                                   CLASSES                                    #
@@ -556,9 +548,7 @@ class BusKillOptionItem(FloatLayout):
 	screen = ObjectProperty()
 
 	def __init__(self, **kwargs):
-		print( "called BusKillOptionItem.__init__()" )
-#		print( "*********" +str(self)+ "*********" )
-#		print( "\t" +str(dir(self)) )
+		#print( "called BusKillOptionItem.__init__()" )
 
 		super(BusKillOptionItem, self).__init__(**kwargs)
 
@@ -571,7 +561,7 @@ class BusKillOptionItem(FloatLayout):
 	# is ready
 	# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
 	def init2(self, dt):
-		print( "called init2() for |"+ str(self.value)+ "|" )
+		#print( "called init2() for |"+ str(self.value)+ "|" )
 
 		# the "main" screen
 		self.main_screen = BusKillApp.manager.get_screen('main')
@@ -582,30 +572,7 @@ class BusKillOptionItem(FloatLayout):
 
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		print( "update rv.data in BusKillOptionItem.init2()" )
 		self.screen.update_data()
-
-#	def on_radio_button_icon(self, instance, value):
-#
-#		# don't proceed unless the parent_option property is set
-#		if not self.parent_option:
-#			return
-#
-#		# don't proceed unless we're in the Settings screen
-#		if BusKillApp.manager.current_screen != "settings":
-#			return
-#
-##		print( "called on_radio_button_icon() for " +str(self.value) )
-##		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-##		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-#		self.radio_button_label.text = value
-##		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-##		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-#
-#		# loop through all the OptionItems in the RecycleView data and update
-#		# the radio button icon to be "checked" or "unchecked" as needed
-#		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
-#		self.screen.update_data()
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -624,7 +591,7 @@ class BusKillOptionItem(FloatLayout):
 		# skip this touch event if they touched on an option that's already the
 		# enabled option
 		if self.parent_option.value == self.value:
-			msg = "DEBUG: Option already equals '" +str(self.value)+ "'. Returning."
+			msg="DEBUG: Option already equals '" +str(self.value)+ "'. Returning."
 			print( msg ); logger.debug( msg )
 			return
 
@@ -670,7 +637,6 @@ class BusKillOptionItem(FloatLayout):
 
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		print( "update rv.data in BusKillOptionItem.enable_option()" )
 		self.screen.update_data()
 
 		# was the font what was just updated by the user?
@@ -744,7 +710,6 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	confirmation = ListProperty([])
 
 	def __init__(self, **kwargs):
-		print( "called BusKillSettingComplexOptions.__init__()" )
 		super(BusKillSettingComplexOptions, self).__init__(**kwargs)
 
 		# hack to call another init function, but only *after* all the
@@ -755,7 +720,6 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 	# this is called when all the kivy properties have been set and the object
 	# is ready
 	def init2(self, dt):
-		print( "called BusKillSettingComplexOptions.init2() for |"+ str(self.value)+ "|" )
 
 		# is this value actually a list?
 		try: 
@@ -768,28 +732,8 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 			self.value_human = value_as_list[0]
 
 		except Exception as e:
-			#msg = "INFO: Skipped non-list value (" +str(e) + ")"
-			#print( msg ); logger.info( msg )
 			pass
 
-#	def on_value(self, instance, value):
-#		# if we update the value, then also attempt to update the value_human
-#
-#		# is this value actually a list?
-#		try: 
-#			# this value is a list, which means the first item in the list is our
-#			# human-readable value to use in the GUI
-#
-#			# hack to convert a string of a list to an actual list
-#			# * https://stackoverflow.com/a/35461204/1174102
-#			value_as_list = json.loads(self.value.replace('\'', '"'))
-#			self.value_human = value_as_list[0]
-#
-#		except Exception as e:
-#			#msg = "INFO: Skipped non-list value (" +str(e) + ")"
-#			#print( msg ); logger.info( msg )
-#			pass
-		
 	def on_panel(self, instance, value):
 		if value is None:
 			return
@@ -828,18 +772,15 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 
 				# create an OptionItem for each of the possible values for this
 				# setting option, and add them to the new ComplexOption sub-screen
-				#option_item = BusKillOptionItem( title = self.key, value = value, desc = desc, confirmation = confirmation, icon = icon, parent_option = self, manager = manager )
+				# via the ComplexOptionsScreen's Recycle View 'data' field
 				option_item = [{'title': self.key, 'value': value, 'option_human': option_human, 'radio_button_icon':'U', 'icon':icon, 'desc': desc, 'confirmation': confirmation, 'parent_option': self, 'screen': setting_screen }]
-				#setting_screen.content.add_widget( option_item )
-				#print( "DEBUG: adding data to rv" )
-				#print( "DEBUG: \t" +str(option_item)+ "|" )
 				setting_screen.rv.data.extend(option_item)
-				print( "DEBUG: added data to rv" )
 
 			# handle the "font" option
 			if self.key == 'default_font':
 				# first we must determine what fonts are available on this system
 
+				# TODO: find fonts at runtime and code reuse
 				option_items = []
 				font_paths = set()
 				for fonts_dir_path in LabelBase.get_system_fonts_dir():
@@ -849,15 +790,10 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 							if file.lower().endswith(".ttf") \
 							 or file.lower().endswith(".otf"):
 								font_path = str(os.path.join(root, file))
-								#print(font_path)
 								font_paths.add( font_path )
-								#option_item = BusKillOptionItem( self.key, font_path, 'desc', '', '', self, manager )
-								#option_item = BusKillOptionItem( title = self.key, value = font_path, desc = 'test desc', confirmation = '', icon = '', parent_option = self, manager = manager )
 
-								#setting_screen.content.add_widget( option_item )
-								#setting_screen.rv.data = [{'text': str(x)} for x in range(4)]
-
-				print( "Found " +str(len(font_paths))+ " font files." )
+				msg = "DEBUG: Found " +str(len(font_paths))+ " font files."
+				print( msg ); logger.debug( msg )
 
 				for font_path in font_paths:
 					font_filename = os.path.basename( font_path )
@@ -870,8 +806,6 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self, 'screen': setting_screen } )
 
 				option_items.sort(key=operator.itemgetter('value'))
-				print( "len(option_items):|" + str(len(option_items))+ "|" )
-				print( "DEBUG: adding data:|" +str(option_items)+ "|" )
 				setting_screen.rv.data.extend(option_items)
 
 			# add the new ComplexOption sub-screen to the Screen Manager
@@ -903,9 +837,6 @@ class BusKillSettingsWithNoMenu(BusKillSettings):
 		self.interface_cls = kivy.uix.settings.ContentPanel
 		super(BusKillSettingsWithNoMenu,self).__init__( *args, **kwargs )
 
-		print( "init of BusKillSettingsWithNoMenu" )
-		#print( dir(self) )
-
 	def on_touch_down( self, touch ):
 		super(BusKillSettingsWithNoMenu, self).on_touch_down( touch )
 
@@ -929,7 +860,8 @@ class ComplexOptionsScreen(Screen):
 
 	def on_pre_enter(self, *args):
 
-		msg = "DEBUG: User switched to '" +str(BusKillApp.manager.current_screen.name)+ "' screen"
+		msg = "DEBUG: User switched to '" \
+		 +str(BusKillApp.manager.current_screen.name)+ "' screen"
 		print( msg ); logger.debug( msg )
 
 		# the "main" screen
@@ -945,7 +877,8 @@ class ComplexOptionsScreen(Screen):
 	def show_help( self ):
 
 		self.dialog = DialogConfirmation(
-		 title = '[font=mdicons][size=30]\ue88f[/size][/font] ' + str(self.actionbar_title),
+		 title = '[font=mdicons][size=30]\ue88f[/size][/font] ' \
+		  + str(self.actionbar_title),
 		 body = str(self.help_msg),
 		 button = "",
 		 continue_function=None
@@ -956,7 +889,6 @@ class ComplexOptionsScreen(Screen):
 	# update all of data dict in this Screen's RecycleView so that all of the
 	# widgets get updated on changes (eg the "radio button" icon)
 	def update_data(self):
-		print( "update rv.data in ComplexOptionsScreen.update_data()" )
 
 		# GET INFO
 		this_value = None
@@ -967,7 +899,6 @@ class ComplexOptionsScreen(Screen):
 
 		# loop through all of the widgets until we get our first OptionItem
 		for widget in widgets:
-			print( widget )
 
 			# is this widget a BusKillOptionItem object?
 			if isinstance( widget, BusKillOptionItem ):
@@ -989,15 +920,7 @@ class ComplexOptionsScreen(Screen):
 			# get the value for this specific OptionItem
 			this_value = self.rv.data[n]['value']
 
-			#print( "testing if |" +str(BusKillApp.manager.current_screen.rv.data[n]['value'])+ "| == |" +str(self.value)+ "| == |" +str(self.parent_option.value)+ "|" )
-			#print( "testing if |" +str(type(BusKillApp.manager.current_screen.rv.data[n]['value']))+ "| == |" +str(type(self.value))+ "| == |"+ str(type(self.parent_option.value))+ "|" )
-
-			print( "testing if |" +str(this_value)+ "| == |" +str(set_value)+ "|" )
-			print( "testing if |" +str(type(this_value))+ "| == |" +str(type(set_value))+ "|" )
-
-			#if str(self.parent_option.value) == str(self.value):
 			if str(this_value) == str(set_value):
-				print( "\t WE FOUND A MATCH!" )
 				# this is the currently-set option
 				# set the radio button icon to "selected"
 				self.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue837[/size][/font] ' 
@@ -1100,7 +1023,6 @@ class BusKillSettingsScreen(Screen):
 		sections = ['kivy','buskill']
 		for section in sections:
 			for key in Config[section]:
-#				print( "attempt to delete key:|" +str(key)+ "|" )
 				try:
 					Config.remove_option( section, key )
 				except Exception as e:
@@ -1120,33 +1042,12 @@ class BusKillSettingsScreen(Screen):
 	# ComplexOptions sub-screens
 	def refresh_values(self):
 
-#		import kivy.config
-#		print( "running update_config()" )
-#		print( "defaults:|" +str(dir(Config.defaults()))+ "|" )
-#		print( "defaults:|" +str(Config.defaults().items())+ "|" )
-#		print( "defaults:|" +str(Config.defaults().__dict__.items())+ "|" )
-#		#print( "defaults:|" +str(Config.defaults().pop('default_font'))+ "|" )
-#		print( "defaults:|" +str(Config.defaults().items())+ "|" )
-#		print( "defaults:|" +str(Config.defaults().keys())+ "|" )
-#		print( "defaults:|" +str(Config.defaults().values())+ "|" )
-#		Config.update_config( self.bk.CONF_FILE, overwrite = True )
-#		Config.write()
-#		print( "running read()" )
-#		Config.read( self.bk.CONF_FILE )
-#		print( "running adddefaultsection()" )
-#		Config.adddefaultsection('kivy')
-#		Config.write()
-		#default_font = Config.getdefault('kivy','default_font','idk')
-		#Config.set('kivy','default_font',default_font)
-		#Config.write()
-
 		# UPDATE SETTINGS SCREEN
 
 		# loop through all the widgets on the Settings Screen
 		for widget in self.settings_content.walk():
 
 			# is this widget a BusKillSettingComplexOptions object?
-			#if isinstance( widget, BusKillSettingComplexOptions ):
 			if isinstance( widget, BusKillSettingComplexOptions ) \
 			 or isinstance( widget, kivy.uix.settings.SettingBoolean ) \
 			 or isinstance( widget, kivy.uix.settings.SettingNumeric ) \
@@ -1174,10 +1075,8 @@ class BusKillSettingsScreen(Screen):
 					pass
 
 		# UPDATE SUB-SETTINGS SCREENS (for ComplexOptions)
-
 		# loop through all the OptionItems in the RecycleView data and update
 		# the radio button icon to be "checked" or "unchecked" as needed
-		print( "update rv.data in BusKillSettingsScreen.refresh_values()" )
 
 		# loop through every screen
 		for screen in BusKillApp.manager.screens:
@@ -1220,7 +1119,6 @@ class BusKillSettingsScreen(Screen):
 		if rearm_required:
 			msg = "DEBUG: Re-arm from '" +str(old_trigger)+ "' to '" +str(new_trigger)+ "' trigger?"
 			print( msg ); logger.debug( msg )
-
 
 			msg = "You've made changes to your settings that require disarming & arming again to apply."
 			self.dialog = DialogConfirmation(
@@ -1375,19 +1273,12 @@ class BusKillApp(App):
 	msg = "DEBUG: Default font = " + str(Config.get('kivy', 'default_font'))
 	print( msg ); logger.debug( msg )
 	
-	#msg = "DEBUG: System fonts dir = " + str(LabelBase.get_system_fonts_dir())
-	#print( msg ); logger.debug( msg )
-
 	# register font aiases so we don't have to specify their full file path
 	# when setting font names in our kivy language .kv files
 	try:
 
-
 		# did the user set a custom font?
 		default_font = Config.get('kivy', 'default_font')
-		#gui_font_face_path = Config.get('buskill', 'gui_font_face')
-		#gui_font_face_filename = os.path.basename( gui_font_face_path )
-
 		if 'Roboto' not in default_font:
 			# the user set a custom font; use it
 
@@ -1419,6 +1310,7 @@ class BusKillApp(App):
 
 		try: 
 
+			# TODO: code reuse (combine this with the other one above)
 			# find every font file in in all the font dirs
 			font_paths = []
 			for fonts_dir_path in LabelBase.get_system_fonts_dir():
