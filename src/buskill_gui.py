@@ -5,8 +5,8 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2023-06-16
-  Version: 0.4
+  Updated: 2024-03-27
+  Version: 0.5
 
 This is the code to launch the BusKill GUI app
 
@@ -80,6 +80,20 @@ from kivy.uix.recycleview import RecycleView
 ################################################################################
 
 def update_font_recursive(widget):
+	print( "called update_font_recursive(" +str(widget)+ ")" )
+	print( "\t" +str(type(widget))+ "|" )
+
+	# is widget actually a list of widgets?
+	if type(widget) == type(list()) \
+	 or isinstance(widget, kivy.properties.ObservableList):
+		# they sent us a list of widgets; call ourselves for each
+		for w in widget:
+			update_font_recursive(w)
+
+	# TODO: figure out why dialog's Label fonts aren't being updated
+	if hasattr(widget, 'dialog'):
+		update_font_recursive(widget.dialog)
+
 	if isinstance(widget, Label):
 
 		default_font = Config.get('kivy', 'default_font')
@@ -100,14 +114,18 @@ def update_font_recursive(widget):
 				font_path = default_font[1]
 
 			except Exception as e:
-				pass
+				msg = "INFO: Skipped non-list value (" +str(e) + ")"
+				print( msg ); logger.info( msg )
+				#pass
 
 		print( "type(font):|" +str(type(font_name))+ "|" )
-		widget.font_name = font_name
+		widget.font_name = font_path
 		print( "updated widget:|" +str(widget)+ "| to font:|" +str(font_name)+ "|")
 	elif hasattr(widget, 'children'):
 		for child in widget.children:
 			update_font_recursive(child)
+	else:
+		print( "END OF THE LINE!" )
 
 ################################################################################
 #                                   CLASSES                                    #
@@ -549,27 +567,9 @@ class BusKillOptionItem(FloatLayout):
 		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
 		Clock.schedule_once(self.init2,0)
 
-	# determines if all the kivy properties have been setup
-#	def init1(self):
-#		print( "called init1() for |"+ str(self.value)+ "|" )
-#		print( "self.parent_option:|" +str(self.parent_option)+ "|" )
-#		print( "self.manager:|" +str(self.manager)+ "|" )
-#		print( "self.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-#
-#		# are all the Kivy properties setup?
-#		if \
-#		 self.parent_option != None and \
-#		 self.manager != None and \
-#		 self.radio_button_icon != None:
-#			# the instance is ready to init
-#			self.init2()
-#			pass
-#		else:
-#			print( "\tinstance not yet ready" )
-		#print( "self.properties['parent_option']:|" +str(self.properties['parent_option'])+ "|" )
-
 	# this is called when all the kivy properties have been set and the object
 	# is ready
+	# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
 	def init2(self, dt):
 		print( "called init2() for |"+ str(self.value)+ "|" )
 
@@ -585,27 +585,27 @@ class BusKillOptionItem(FloatLayout):
 		print( "update rv.data in BusKillOptionItem.init2()" )
 		self.screen.update_data()
 
-	def on_radio_button_icon(self, instance, value):
-
-		# don't proceed unless the parent_option property is set
-		if not self.parent_option:
-			return
-
-		# don't proceed unless we're in the Settings screen
-		if BusKillApp.manager.current_screen != "settings":
-			return
-
-#		print( "called on_radio_button_icon() for " +str(self.value) )
-#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-		self.radio_button_label.text = value
-#		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
-#		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
-
-		# loop through all the OptionItems in the RecycleView data and update
-		# the radio button icon to be "checked" or "unchecked" as needed
-		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
-		self.screen.update_data()
+#	def on_radio_button_icon(self, instance, value):
+#
+#		# don't proceed unless the parent_option property is set
+#		if not self.parent_option:
+#			return
+#
+#		# don't proceed unless we're in the Settings screen
+#		if BusKillApp.manager.current_screen != "settings":
+#			return
+#
+##		print( "called on_radio_button_icon() for " +str(self.value) )
+##		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+##		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#		self.radio_button_label.text = value
+##		print( "\tself.radio_button_label:|" +str(self.radio_button_label.text)+ "|" )
+##		print( "\tself.radio_button_icon:|" +str(self.radio_button_icon)+ "|" )
+#
+#		# loop through all the OptionItems in the RecycleView data and update
+#		# the radio button icon to be "checked" or "unchecked" as needed
+#		print( "update rv.data in BusKillOptionItem.on_radio_button_icon()" )
+#		self.screen.update_data()
 
 	# this is called when the user clicks on this OptionItem (eg choosing the
 	# 'soft-shutdown' trigger)
@@ -655,7 +655,7 @@ class BusKillOptionItem(FloatLayout):
 		# write change to disk in our persistent buskill .ini Config file
 		key = str(self.parent_option.key)
 		value = str(self.value)
-		msg = "DEBUG: User changed config of '" +str(key) +"' to '" +str(value)+ "'"
+		msg="DEBUG: User changed config of '" +str(key)+ "' to '" +str(value)+ "'"
 		print( msg ); logger.debug( msg )
 
 		Config.set(self.parent_option.section, key, value)
@@ -664,7 +664,7 @@ class BusKillOptionItem(FloatLayout):
 		# change the text of the option's value on the main Settings Screen
 		self.parent_option.value = self.value
 
-		print( "type(self.value):|" +str(type(self.value))+" |" )
+		# also handle the case where there's a human-readable value to set
 		if type(self.value) == type(list()):
 			self.parent_option.value_human = self.value[0]
 
@@ -673,63 +673,12 @@ class BusKillOptionItem(FloatLayout):
 		print( "update rv.data in BusKillOptionItem.enable_option()" )
 		self.screen.update_data()
 
-		print( "key:|" +str(key)+ "|" )
+		# was the font what was just updated by the user?
 		if key == 'default_font':
+			# the user changed the font; now we need to change the widgets' font
 
-			# UPDATE FONTS ON ALL LABELS EVERYWHERE
-			print( "BusKillApp:|" +str(BusKillApp)+ "|" )
-			print( "\t" +str(dir(BusKillApp))+ "|" )
-			print( "BusKillApp.get_running_app():|" +str(BusKillApp.get_running_app())+ "|" )
-			print( "\t._running_app|" +str(BusKillApp._running_app)+ "|" )
-			print( "\t|" +str(dir(BusKillApp.get_running_app()))+ "|" )
-			update_font_recursive(BusKillApp.get_running_app().root)
-
-			# TODO: combine this loop and the other 1 into one function
-			for screen in BusKillApp.manager.screens:
-				#print( "screen:|" +str(screen)+ "|" )
-
-				# get all of the widgets on this screen
-				widgets = [widget for widget in screen.walk()]
-
-				#print( "len1:|" +str(len(widgets))+ "|" )
-				#print( "hasattr( screen, 'dialog' ):|" +str(hasattr(screen,'dialog'))+ "|" )
-				# add any other orphaned widgets, such as our dialog modal widget
-				# TODO: figure out why dialog's Labels aren't actually getting their
-				# fonts updated at runtime
-				#  * https://github.com/BusKill/buskill-app/issues/55
-				#  * https://stackoverflow.com/a/78216308/1174102
-				if hasattr( screen, 'dialog' ) and screen.dialog != None:
-				#if hasattr( screen, 'dialog' ):
-					#print( "screen.dialog:|" +str(screen.dialog)+ "|" )
-					#print( "screen.dialog.walk():|" +str([widget for widget in screen.dialog.walk()])+ "|" )
-					widgets = widgets + [widget for widget in screen.dialog.walk()]
-
-				#print( "len2:|" +str(len(widgets))+ "|" )
-
-				for widget in widgets:
-					#print( "widget:|" +str(widget)+ "|" )
-
-					# is this widget a Label?
-					if isinstance( widget, Label ):
-
-						if widget.font_family != 'mdicons':
-							# is this value actually a list?
-							try: 
-								# this value is a list, which means the first item in the
-								# list is our human-readable value to use in the GUI
-
-								# hack to convert a string of a list to an actual list
-								# * https://stackoverflow.com/a/35461204/1174102
-								#print( str(type(self.value)) )
-								font_filepath = self.value[1]
-								#print( "font_name0:|" +str(widget.font_name)+ "|" )
-								widget.font_name = font_filepath
-								#print( "font_name1:|" +str(widget.font_name)+ "|" )
-
-							except Exception as e:
-								msg = "INFO: Skipped non-list value (" +str(e) + ")"
-								print( msg ); logger.info( msg )
-								#pass
+			# update fonts on all labels everywhere
+			update_font_recursive(BusKillApp.manager.screens)
 
 # We define our own BusKillSettingItem, which is a SettingItem that will be used
 # by the BusKillSettingComplexOptions class below. Note that we don't have code
@@ -1240,30 +1189,8 @@ class BusKillSettingsScreen(Screen):
 				# OptionItem widgets whoose radio buttons we need to update
 				screen.update_data()
 
-		# UPDATE FONTS ON ALL LABELS EVERYWHERE
-		# TODO: combine this loop and the other 1 into one function
-
-		for screen in BusKillApp.manager.screens:
-			for widget in screen.walk():
-
-				# is this widget a Label?
-				if isinstance( widget, Label ):
-
-					if widget.font_family != 'mdicons':
-						# is this value actually a list?
-						try: 
-							# this value is a list, which means the first item in the
-							# list is our human-readable value to use in the GUI
-
-							# hack to convert a string of a list to an actual list
-							# * https://stackoverflow.com/a/35461204/1174102
-							default_font = Config.get('kivy','default_font')
-							value_as_list = json.loads(default_font.replace('\'', '"'))
-							font_filepath = value_as_list[1]
-							widget.font_name = font_filepath
-
-						except Exception as e:
-							pass
+		# update fonts on all labels everywhere
+		update_font_recursive(BusKillApp.manager.screens)
 
 	# determine if we need to re-arm BusKill (eg if they changed the trigger
 	# while BusKill is arm, we'd need to re-arm else it'll trigger not what the
