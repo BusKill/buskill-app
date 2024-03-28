@@ -18,6 +18,10 @@ set -x
 # SETTINGS #
 ############
 
+# WARNING: If you update this then you *must* update build/deps/docker.io
+#          If you do not update ^ this, then docker will happily download
+#          malicious code that could be used to poison our builds!
+# * https://security.stackexchange.com/q/238916/213165
 DOCKER_IMAGE_NAME='debian:bookworm-slim'
 
 #################

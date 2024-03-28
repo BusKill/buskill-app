@@ -92,6 +92,50 @@ Write-Output 'INFO: Beginning execution'
 # INSTALL DEPENDS #
 ###################
 
+# securely download depends from our buskill-app-deps repo
+$tmpDir = Join-Path $Env:Temp $(New-Guid)
+echo "${tmpDir}"
+New-Item -Path "${tmpDir}" -Type Directory | Out-String
+if ( $? -ne $true ){
+	echo "ERROR: Failed to create tmpDir" | Out-String
+	exit 1 | Out-String
+}
+pushd "${tmpDir}"
+git clone https://github.com/BusKill/buskill-app-deps.git
+
+# prepare homedir and keyring for `gpgv`
+mkdir gnupg | Out-String
+popd | Out-String
+gpg --homedir "${tmpDir}\gnupg" --import "build\deps\buskill.asc" | Out-String
+ls "${tmpDir}\gnupg" | Out-String
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+gpgv --homedir "${tmpDir}\gnupg" --keyring "pubring.kbx" "${tmpDir}\buskill-app-deps\build\deps\SHA256SUMS.asc" "${tmpDir}\buskill-app-deps\build\deps\SHA256SUMS" | Out-String
+if ( $? -ne $true -or $LastExitCode -ne 0 ){
+	echo "ERROR: Invalid PGP signature!" | Out-String
+	exit 1 | Out-String
+}
+
+pushd "${tmpDir}/buskill-app-deps/build/deps"
+# TODO make this actually work https://github.com/BusKill/buskill-app/issues/76
+sha256sum --strict --check SHA256SUMS
+
+# confirm that the checksums of all the files match what's expected in the
+# the signed SHA256SUSM file.
+if ( $? -ne $true -or $LastExitCode -ne 0 ){
+	echo "ERROR: Invalid checksums!" | Out-String
+	exit 1 | Out-String
+}
+
+# copy all the now-verified files to our actual repo
+popd
+cat "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS" | while read line; do
+	file_path="${tmpDir}/buskill-app-deps/build/deps/$(echo $line | cut -d' ' -f2)"
+	cp ${file_path} build/deps/
+done
+
 # See https://docs.python.org/3.7/using/windows.html#installing-without-ui
 Write-Output 'INFO: Installing python'
 New-Item -Path C:\tmp -Type Directory | Out-String

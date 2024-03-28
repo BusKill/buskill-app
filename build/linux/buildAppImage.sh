@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2024-03-06
-# Version: 1.2
+# Updated: 2024-03-22
+# Version: 1.3
 ################################################################################
 
 ################################################################################
@@ -111,6 +111,42 @@ else
 	#${SUDO} apt-get update || exit 1
 	${SUDO} apt-get -y install ${APT_PACKAGES}
 fi
+
+# get the app's dependencies
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+git clone https://github.com/BusKill/buskill-app-deps.git
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/buskill.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS.asc" "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+
+pushd "${tmpDir}/buskill-app-deps/build/deps"
+sha256sum --strict --check SHA256SUMS
+
+# confirm that the checksums of all the files match what's expected in the
+# the signed SHA256SUSM file.
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid checksums!"
+	exit 1
+fi
+
+# copy all the now-verified files to our actual repo
+popd
+cat "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS" | while read line; do
+	file_path="${tmpDir}/buskill-app-deps/build/deps/$(echo $line | cut -d' ' -f2)"
+	cp ${file_path} build/deps/
+done
 
 #################
 # FIX CONSTANTS #

@@ -9,8 +9,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-06-24
-# Updated: 2024-03-06
-# Version: 0.9
+# Updated: 2024-03-22
+# Version: 1.0
 ################################################################################
 
 ################################################################################
@@ -19,7 +19,9 @@ set -x
 
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
 PIP_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/pip3* | sort -n | uniq | head -n1`"
+VENV_PATH="/tmp/venv"
 APP_NAME='buskill'
+BREW='/usr/local/bin/brew'
 
 PYTHON_VERSION="`${PYTHON_PATH} --version | cut -d' ' -f2`"
 PYTHON_EXEC_VERSION="`echo ${PYTHON_VERSION} | cut -d. -f1-2`"
@@ -38,8 +40,12 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # authentication and integrity checks and could be a vector for MITM attacks
 # poisoning our builds
 export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALL_FROM_API=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
 export all_proxy='http://example.com:9999'
 export HOMEBREW_CACHE="`pwd`/build/deps/"
+export HOMEBREW_CURL_RETRIES=0
+export HOMEBREW_CURLRC="`pwd`/build/deps/.curlrc"
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -131,26 +137,78 @@ fi
 #  * https://github.com/BusKill/buskill-app/issues/2
 #brew update
 
+# fetch signed dependencies from 'buskill-app-deps' repo
+tmpDir="`mktemp -d`" || exit 1
+pushd "${tmpDir}"
+# (temporarily) re-enable internet access
+export all_proxy=''
+git clone https://github.com/BusKill/buskill-app-deps.git
+export all_proxy='http://example.com:9999'
+
+mkdir gnupg
+chmod 0700 gnupg
+popd
+gpg --homedir "${tmpDir}/gnupg" --import "build/deps/buskill.asc"
+gpgv --homedir "${tmpDir}/gnupg" --keyring "${tmpDir}/gnupg/pubring.kbx" "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS.asc" "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS"
+
+# confirm that the signature is valid. `gpgv` would exit 2 if the signature
+# isn't in our keyring (so we are effectively pinning it), it exits 1 if there's
+# any BAD signatures, and exits 0 "if everything is fine"
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid PGP signature!"
+	exit 1
+fi
+
+pushd "${tmpDir}/buskill-app-deps/build/deps"
+shasum --algorithm 256 --warn --check SHA256SUMS
+
+# confirm that the checksums of all the files match what's expected in the
+# the signed SHA256SUSM file.
+if [[ $? -ne 0 ]]; then
+	echo "ERROR: Invalid checksums!"
+	exit 1
+fi
+
+# copy all the now-verified files to our actual repo
+popd
+cat "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS" | while read line; do
+	file_path="${tmpDir}/buskill-app-deps/build/deps/$(echo $line | cut -d' ' -f2)"
+	cp ${file_path} build/deps/
+done
+
 # copy all our brew depends into the brew cache dir
 cacheDir=`brew --cache`
 ls -lah ${cacheDir}
 
 # install os-level depends
-brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+#brew reinstall build/deps/wget-1.20.3_2.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose wget-1.24.5.ventura.bottle.tar.gz
 
-brew -v uninstall --ignore-dependencies python
-brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+${BREW} uninstall --debug --verbose --ignore-dependencies python
+#brew -v reinstall build/deps/python-3.7.8.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/python-3.12.ventura.bottle.tar.gz
 PYTHON_PATH="`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`"
+
+# create python virtual environment 
+# * https://github.com/BusKill/buskill-app/issues/78#issuecomment-2021558890
+mkdir "${VENV_PATH}"
+${PYTHON_PATH} -m virtualenv "${VENV_PATH}"
+PYTHON_PATH="${VENV_PATH}/bin/python"
 
 # get more info immediately post-python install
 #ls -lah /usr/local/Cellar/python/
 #find /usr/local/Cellar/python/ -type f -wholename *bin/python3*
 
-brew reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
-brew reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
-brew reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
+#${BREW} reinstall build/deps/libmodplug-0.8.9.0.catalina.bottle.1.tar.gz
+${BREW} reinstall --debug --verbose build/deps/libmodplug-0.8.9.0.ventura.bottle.tar.gz
+#${BREW} reinstall build/deps/sdl2-2.0.12_1.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/sdl2-2.30.1.ventura.bottle.tar.gz
+#${BREW} reinstall build/deps/sdl2_image-2.0.5.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/sdl2_image-2.8.2_1.ventura.bottle.tar.gz
+#${BREW} reinstall build/deps/sdl2_mixer-2.0.4.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/sdl2_mixer-2.8.0.ventura.bottle.tar.gz
+#${BREW} reinstall build/deps/sdl2_ttf-2.0.15.catalina.bottle.tar.gz
+${BREW} reinstall --debug --verbose build/deps/sdl2_ttf-2.22.0.ventura.bottle.tar.gz
 
 # check contents of pip binary
 cat ${PIP_PATH}
@@ -173,7 +231,8 @@ ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-in
 #find /usr/local/Cellar/python/ -type f -wholename *bin/pip3*
 
 # install kivy and all other python dependencies with pip
-${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp37-cp37m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+#${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-1.11.1-cp311-cp311-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/Kivy-2.3.0-cp312-cp312-macosx_10_9_universal2.whl
 ${PIP_PATH} install --ignore-installed --upgrade --cache-dir build/deps/ --no-index --find-links file://`pwd`/build/deps/ build/deps/pyinstaller-4.7.tar.gz
 
 # INSTALL LATEST PIP PACKAGES

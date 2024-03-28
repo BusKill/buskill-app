@@ -45,13 +45,13 @@ ${PYTHON} -m pip install --upgrade pip==24.0
 ${PYTHON} -m pip download --no-cache-dir kivy==2.3.0 pyinstaller==6.5.0 altgraph==0.17.4 macholib==1.16.3 future==1.0.0 pefile==2023.2.7 pywin32-ctypes==0.2.2 setuptools==69.1.1 wheel==0.42.0 virtualenv==20.25.1
 
 # pip (platform-specific binaries/wheels)
-${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-2.30-cp37-cp37m-win_amd64.whl#'`
+${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-2.30-cp312-cp312-win_amd64.whl#'`
 ${WGET} `${CURL} -s https://pypi.org/simple/kivy/ | grep -oE 'https://.*Kivy-2.3.0-cp37-cp37m-macosx_10_9_x86_64.whl#'`
 ${WGET} `${CURL} -s https://pypi.org/simple/pypiwin32/ | grep -oE 'https://.*pypiwin32-223-py3-none-any.whl#'`
-${WGET} `${CURL} -s https://pypi.org/simple/pywin32/ | grep -oE 'https://.*pywin32-306-cp37-cp37m-win_amd64.whl#'`
-${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-sdl2/ | grep -oE 'https://.*kivy_deps.sdl2-0.7.0-cp37-cp37m-win_amd64.whl#'`
-${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-glew/ | grep -oE 'https://.*kivy_deps.glew-0.3.1-cp37-cp37m-win_amd64.whl#'`
-${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-angle/ | grep -oE 'https://.*kivy_deps.angle-0.4.0-cp37-cp37m-win_amd64.whl#'`
+${WGET} `${CURL} -s https://pypi.org/simple/pywin32/ | grep -oE 'https://.*pywin32-306-cp312-cp312-win_amd64.whl#'`
+${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-sdl2/ | grep -oE 'https://.*kivy_deps.sdl2-0.7.0-cp312-cp312-win_amd64.whl#'`
+${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-glew/ | grep -oE 'https://.*kivy_deps.glew-0.3.1-cp312-cp312-win_amd64.whl#'`
+${WGET} `${CURL} -s https://pypi.org/simple/kivy-deps-angle/ | grep -oE 'https://.*kivy_deps.angle-0.4.0-cp312-cp312-win_amd64.whl#'`
 
 # misc linux
 ${WGET} https://github.com/niess/python-appimage/releases/download/python3.12/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage
