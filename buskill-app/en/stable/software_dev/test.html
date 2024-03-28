@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Testing buskill-app &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Documentation" href="documentation.html" />
+    <link rel="prev" title="Building buskill-app" href="build.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                stable
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Software Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="autodoc.html">API Reference (buskill-app)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="depends.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html">Building buskill-app</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Testing buskill-app</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">MacOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html">Release Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotfix.html">Hotfix Workflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Software Developer Guide</a> &raquo;</li>
+        
+      <li>Testing buskill-app</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/software_dev/test.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="testing-buskill-app">
+<span id="test-app"></span><h1>Testing buskill-app<a class="headerlink" href="#testing-buskill-app" title="Permalink to this headline">¶</a></h1>
+<p>This section documents how to test the BusKill App.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<blockquote>
+<div><p>Currently we don’t have any automated tests. While we’d like to change that, it’s not clear how to simulate USB hotplug events in automated tests. Progress on this research can be found here:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/issues/32">https://github.com/BusKill/buskill-app/issues/32</a></p></li>
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/issues/38">https://github.com/BusKill/buskill-app/issues/38</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/74090470/simulating-a-hotplug-event-with-libusb-test-debugging">https://stackoverflow.com/questions/74090470/simulating-a-hotplug-event-with-libusb-test-debugging</a></p></li>
+</ul>
+</div>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>Because of how easy it is to quickly “install” and launch various Linux distributions in a new docker container, Linux is the easiest platform on which to test the BusKill app.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<blockquote>
+<div><p>Currently it’s not possible to automate these tests on GitHub because nested virtualization is not available on shared GitHub Runners. For more info, see</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/issues/32#issuecomment-1207248758">https://github.com/BusKill/buskill-app/issues/32#issuecomment-1207248758</a></p></li>
+<li><p><a class="reference external" href="https://github.com/actions/runner-images/issues/183">https://github.com/actions/runner-images/issues/183</a></p></li>
+</ul>
+</div>
+<p>On a machine that supports nested virtualization (eg your laptop), execute the following commands to launch the BusKill app in CLI mode on a dozen or so different Linux distributions (Note: Replace BUSKILL_RELEASE_URL with a link to the release you’d like to test).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo apt-get install docker.io
+sudo bash -c &#39;gpasswd -a &quot;${SUDO_USER}&quot; docker&#39;
+su - `whoami`
+
+BUSKILL_RELEASE_URL=&#39;https://github.com/BusKill/buskill-app/releases/download/3309700248_linux/buskill-lin-v0.6.0-x86_64.tbz&#39;
+DOCKER_IMAGES=&#39;ubuntu:14.04 ubuntu:16.04 ubuntu:18.04 ubuntu:20.04 ubuntu:22.04 debian:oldstable-slim debian:stable-slim fedora:35 fedora:36 fedora:37&#39;
+
+tmpDir=`mktemp -d`
+pushd &quot;${tmpDir}&quot;
+
+wget &quot;${BUSKILL_RELEASE_URL}&quot;
+tar -xjvf buskill-lin-*.tbz
+buskill_release_dir=`find &quot;${tmpDir}&quot; -mindepth 1 -maxdepth 1 -type d`
+
+# create script for this iteration of the loop
+cat &gt; &quot;runInDockerContainer.sh&quot; &lt;&lt;EOF
+#!/bin/bash
+apt-get update
+apt-get install -y libfuse2 libusb-1.0-0-dev
+/root/buskill-app/buskill-*/buskill-*.AppImage --arm
+EOF
+chmod +x runInDockerContainer.sh
+
+for image in ${DOCKER_IMAGES}; do
+
+        # create script for this iteration of the loop
+        script_path=&quot;${image}.sh&quot;
+        cat &gt; &quot;${script_path}&quot; &lt;&lt;EOF
+        echo ${image}
+
+        cd &quot;${buskill_release_dir}&quot;
+        export DOCKER_CONTENT_TRUST=1
+        docker run --privileged --rm --net host -v /run/udev/control:/run/udev/control -v &quot;`pwd`:/root/buskill-app&quot; -it ${image} /root/buskill-app/runInDockerContainer.sh
+
+        read waiting
+EOF
+        chmod +x &quot;${script_path}&quot;
+
+        x-terminal-emulator -e bash ${script_path} &amp;
+done
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>Linux users can test on Windows by running Windows in a VM. Microsoft provides free downloads of Windows 10 for 90-days for testing purposes, which can be found here:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise">https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise</a></p></li>
+</ul>
+</div></blockquote>
+<p>If you’re struggling to get USB passthrough to work in you VM software (eg Xen, VMWare, VirtualBox, etc), you can instead create a “Virtual Hard Drive” using built-in Microsoft tools. Mounting the VHD will cause a USB Hotplug event. Removing the VHD will cause a USB Hotplug Removal event, which will simulate the removal of the BusKill cable and cause the BusKill app to execute the trigger.</p>
+<p>To create a new VHD on Windows 10:</p>
+<ol class="arabic simple">
+<li><p>Click inside “Type here to search”</p></li>
+<li><p>Type “Disk Management”</p></li>
+<li><p>Click on “Create and format hard disk partitions”</p></li>
+<li><p>On the new window, click “Action” -&gt; “Create VHD”</p></li>
+<li><p>Click “Browse”</p></li>
+<li><p>Type “BusKill” for “Location” to create a file named “BusKill.vhd”</p></li>
+<li><p>Click “Save”</p></li>
+<li><p>Type “10” for “Virtual hard disk size” (to create a 10 MB VHD)</p></li>
+<li><p>Click “OK”</p></li>
+<li><p>Click “Action” -&gt; “Attach VHD”</p></li>
+<li><p>Click “Browse”</p></li>
+<li><p>Click “BusKill.vhd”</p></li>
+<li><p>Click “Open”</p></li>
+<li><p>Click “OK”</p></li>
+<li><p>Scroll-down in the bottom-half of the “Disk Management” window, and right-click the left part of the new 10 MB “Unknown” disk. Select “Initalize Disk”</p></li>
+<li><p>Click “OK”</p></li>
+<li><p>Right-click the right part of the new disk (9 MB Unallocated). Select “New Simple Volume”.</p></li>
+<li><p>Click “Next”. Click “Next”. Click “Next”. Click “Next”. Click “Finish”.</p></li>
+<li><p>Open Windows Explorer and go to “This PC”. You’ll see a “New Volume”.</p></li>
+</ol>
+<p>You can now open the BusKill app and arm it. If you eject the “New Volume” (right click it and select “Eject”, then the BusKill app will execute the configured trigger.</p>
+<p>You can re-attach the VHD by opening “Disk Management” and going to “Action” -&gt; “Attach VHD”</p>
+</div>
+<div class="section" id="macos">
+<h2>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h2>
+<p>Apple is very hostile to developers, and they don’t make it easy run MacOS in a VM on Linux.</p>
+<p>If you know of a way to:</p>
+<ol class="arabic simple">
+<li><p>Easily run MacOS in a VM, and/or</p></li>
+<li><p>Simulate USB hotplug events in a headless machine running MacOS</p></li>
+</ol>
+<p>…then please do <a class="reference external" href="https://buskill.in/contact/">contact us</a>.</p>
+<p>Fortunately, the BusKill project is <a class="reference external" href="https://www.macstadium.com/opensource">sponsored by Mac Stadium</a>. They donated a Mac Mini to us, which runs in their cloud. We tunnel VNC through SSH and use it to test the BusKill app.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We don’t know of any way to simulate USB Hotplug events on MacOS, so we just use the <code class="docutils literal notranslate"><span class="pre">--run-trigger</span></code> argument to the BusKill app to confirm that our triggers on MacOS work.</p>
+</div>
+<p>If you have a machine running MacOS, one simple thing you can do to <a class="reference internal" href="../contributing.html#contributing"><span class="std std-ref">help the BusKill project</span></a> is offer to test new releases on MacOS. If you’d like to help us test BusKill on MacOS, please <a class="reference external" href="https://buskill.in/contact/">contact us</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="documentation.html" class="btn btn-neutral float-right" title="Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="build.html" class="btn btn-neutral float-left" title="Building buskill-app" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: stable
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/stable/buskill-docs_en_stable.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/stable/buskill-docs_en_stable.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

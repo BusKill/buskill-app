@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>(optional) Initialize USB Storage &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Software Developer Guide" href="../software_dev/index.html" />
+    <link rel="prev" title="Assembly of components" href="assembly.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Hardware Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bom.html">Bill of Materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Assembly of components</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">(optional) Initialize USB Storage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows-10">Windows 10</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#step-1-assemble-cable">Step 1: Assemble Cable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-2-plug-into-computer">Step 2: Plug Into Computer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-3-format">Step 3: Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-4-download-verify-extract-archive">Step 4: Download, Verify, Extract Archive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-4-copy-files">Step 4: Copy Files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-4-safely-eject">Step 4: Safely Eject</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-5-verify-integrity">Step 5: Verify Integrity</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">MacOS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../software_dev/index.html">Software Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Hardware Developer Guide</a> &raquo;</li>
+        
+      <li>(optional) Initialize USB Storage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/hardware_dev/storage.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="optional-initialize-usb-storage">
+<span id="usb-storage-initialization"></span><h1>(optional) Initialize USB Storage<a class="headerlink" href="#optional-initialize-usb-storage" title="Permalink to this headline">¶</a></h1>
+<p>This section will describe how format the USB storage drive and put the BusKill software on it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The BusKill software cannot run on the USB drive. It must be run from your computer.</p>
+<p>As such, this is an <strong>optional</strong> step. It’s documented here as a guide for how Alt Shift International prepares the USB Storage Drives when selling BusKill kits to customers. Having the software on the USB drive simply makes it easier for the end-user (so they can just copy the software from the USB drive to their computer instead of downloading it from the Internet).</p>
+<p>If you’re building a BusKill cable for your own use, you should probably <strong>skip this step and just</strong> <a class="reference internal" href="../software_usr/download.html#download-app"><span class="std std-ref">Download the app</span></a>.</p>
+</div>
+<div class="section" id="windows-10">
+<h2>Windows 10<a class="headerlink" href="#windows-10" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-assemble-cable">
+<h3>Step 1: Assemble Cable<a class="headerlink" href="#step-1-assemble-cable" title="Permalink to this headline">¶</a></h3>
+<p>If you haven’t yet, <a class="reference internal" href="assembly.html#hardware-assembly"><span class="std std-ref">assemble the BusKill cable</span></a></p>
+</div>
+<div class="section" id="step-2-plug-into-computer">
+<h3>Step 2: Plug Into Computer<a class="headerlink" href="#step-2-plug-into-computer" title="Permalink to this headline">¶</a></h3>
+<p>Plug the assembled BusKill Cable (with the USB drive attached <em>through</em> the Magnetic breakaway) into your computer</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_plug_in.jpg"><img alt="picture showing the fully-assembled BusKill cable with the USB Storage Drive connected to the magnetic breakaway connected to a laptop's USB port" src="../_images/buskill_usb_storage_plug_in.jpg" /></a>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By plugging in the USB Storage Drive into the computer <em>via</em> the magnetic breakaway cable (as opposed to plugging the USB Storage Drive directly into the machine), you also verify the functionality of the cable’s pinout.</p>
+</div>
+</div>
+<div class="section" id="step-3-format">
+<span id="format-usb-drive"></span><h3>Step 3: Format<a class="headerlink" href="#step-3-format" title="Permalink to this headline">¶</a></h3>
+<p>Open Windows Explorer (Start -&gt; File Explorer)</p>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_open_file_explorer.png" src="../_images/buskill_usb_storage_win_open_file_explorer.png" />
+</div>
+<p>Click on “This PC”</p>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_click_this_pc.png" src="../_images/buskill_usb_storage_win_click_this_pc.png" />
+</div>
+<p>Under <code class="docutils literal notranslate"><span class="pre">Devices</span> <span class="pre">and</span> <span class="pre">drives</span></code>, right-click on the USB drive and choose <code class="docutils literal notranslate"><span class="pre">Format</span></code></p>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_click_format.png" src="../_images/buskill_usb_storage_win_click_format.png" />
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make absolutely sure you’ve selected the correct drive!!</p>
+<p>If you select the <strong>wrong drive</strong>, it may result in <strong>irrevocable deletion of all your data!</strong></p>
+<p>If you’re not sure, unplug the BusKill cable and plug it back in again. The drive will disappear and reappear. <strong>Make absolutely sure you’re choosing the BusKill USB Storage Drive</strong> before proceeding with the format.</p>
+</div>
+<p>In the new window:</p>
+<ol class="arabic simple">
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">system</span></code> to <code class="docutils literal notranslate"><span class="pre">FAT32</span></code></p></li>
+<li><p>Leave the <code class="docutils literal notranslate"><span class="pre">Allocation</span> <span class="pre">unit</span> <span class="pre">size</span></code> at the default <code class="docutils literal notranslate"><span class="pre">4096</span> <span class="pre">bytes</span></code></p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">Volume</span> <span class="pre">label</span></code>, type <code class="docutils literal notranslate"><span class="pre">BusKill</span></code></p></li>
+<li><p>Leave the <code class="docutils literal notranslate"><span class="pre">Quick</span> <span class="pre">Format</span></code> option checked</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Start</span></code></p></li>
+</ol>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_format_options.png" src="../_images/buskill_usb_storage_win_format_options.png" />
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure the <code class="docutils literal notranslate"><span class="pre">Volume</span> <span class="pre">label</span></code> is <code class="docutils literal notranslate"><span class="pre">BusKill</span></code> with an upper-case <code class="docutils literal notranslate"><span class="pre">B</span></code> and <code class="docutils literal notranslate"><span class="pre">K</span></code> – not <code class="docutils literal notranslate"><span class="pre">Buskill</span></code> nor <code class="docutils literal notranslate"><span class="pre">buskill</span></code>.</p>
+</div>
+<p>Double-check that you’ve selected the <strong>correct drive</strong> before clicking <code class="docutils literal notranslate"><span class="pre">OK</span></code> in the WARNING prompt. If you proceed with formatting the wrong drive, it will immediately lead to <strong>loss of all your data</strong> on that drive.</p>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_format_warning.png" src="../_images/buskill_usb_storage_win_format_warning.png" />
+</div>
+<p>After the format completes, close the windows.</p>
+<div class="figure align-center">
+<img alt="../_images/buskill_usb_storage_win_format_complete.png" src="../_images/buskill_usb_storage_win_format_complete.png" />
+</div>
+<p>In the File Explorer, you should now see a drive named <code class="docutils literal notranslate"><span class="pre">BusKill</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_open_new_file_explorer_window.png"><img alt="screenshot shows the USB Drive under &quot;This PC&quot; is named &quot;BUSKILL&quot;" src="../_images/buskill_usb_storage_win_this_pc_now_says_buskill_label_on_drive.png" /></a>
+</div>
+</div>
+<div class="section" id="step-4-download-verify-extract-archive">
+<h3>Step 4: Download, Verify, Extract Archive<a class="headerlink" href="#step-4-download-verify-extract-archive" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You only need to do this step once. If you’ve already downloaded, verified, and extracted the archive to your computer, then skip this step</p>
+</div>
+<p>You should have already received:</p>
+<ol class="arabic simple">
+<li><p>A download link to the “usbRoot” compressed archive and</p></li>
+<li><p>A SHA256 Hash for this file</p></li>
+</ol>
+<p>Download the archive using the provided link and put it in your <code class="docutils literal notranslate"><span class="pre">Downloads</span></code> folder. This archive contains the files that will be extracted onto the newly formatted USB Storage Drive.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Advanced users can build the .zip archive themselves using docker by checking out the git repo and executing the following script.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/blob/dev/build/usb/debianWrapper.sh">https://github.com/BusKill/buskill-app/blob/dev/build/usb/debianWrapper.sh</a></p></li>
+</ul>
+</div>
+<p>Open a new File Explorer Window (File -&gt; New Window) and open your Downloads folder. Find the .zip archive.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_open_new_file_explorer_window.png"><img alt="screenshot shows how to open a new File Explorer Window (File -&gt; New Window)" src="../_images/buskill_usb_storage_win_open_new_file_explorer_window.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_click_downloads.png"><img alt="screenshot shows where to click &quot;Downloads&quot;" src="../_images/buskill_usb_storage_win_click_downloads.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Before extracting the archive’s contents, check the integrity of the compressed archive via its SHA256 checksum. This is the “hash” or “checksum” that you should have received with the download link.</p>
+<p>Check the integrity of the archive in PowerShell (Start -&gt; Windows PowerShell).</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_open_powershell.png"><img alt="screenshot shows how to open Windows PowerShell (Start -&gt; PowerShell)" src="../_images/buskill_usb_storage_win_open_powershell.png" /></a>
+</div>
+<p>Type the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Get</span><span class="o">-</span><span class="n">FileHash</span> <span class="n">Downloads</span>\<span class="n">buskill</span><span class="o">*.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_get_filehash.png"><img alt="screenshot shows the SHA256 output from the File-GetHash command" src="../_images/buskill_usb_storage_win_get_filehash.png" /></a>
+</div>
+<p>Check that the <code class="docutils literal notranslate"><span class="pre">Hash</span></code> exactly matches the hash provided along with the download link.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do <em>not</em> proceed if the hash doesn’t match.</p>
+<p>If the hash does not match, it’s an indication that the compressed archive is corrupted. This means the <strong>software won’t work for the customer</strong>, so this is a critical QA step.</p>
+</div>
+<p>If the hash matches, close the PowerShell window and extract its contents.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_close_powershell.png"><img alt="screenshot shows how to close the PowerShell window (click the &quot;X&quot;)" src="../_images/buskill_usb_storage_win_close_powershell.png" /></a>
+</div>
+<p>Right-click on the archive and click <code class="docutils literal notranslate"><span class="pre">Extract</span> <span class="pre">All...</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_extract_all.png"><img alt="screenshot shows" src="../_images/buskill_usb_storage_win_extract_all.png" /></a>
+</div>
+<p>Click <code class="docutils literal notranslate"><span class="pre">Extract</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_extract.png"><img alt="screenshot shows the &quot;Extract Compressed (Zipped) Folders&quot; wizard and highlights the &quot;Extract&quot; button to proceed" src="../_images/buskill_usb_storage_win_extract.png" /></a>
+</div>
+</div>
+<div class="section" id="step-4-copy-files">
+<h3>Step 4: Copy Files<a class="headerlink" href="#step-4-copy-files" title="Permalink to this headline">¶</a></h3>
+<p>In the extracted archive’s directory, enter the <code class="docutils literal notranslate"><span class="pre">usbRoot</span></code> directory.</p>
+<p>Double-click <code class="docutils literal notranslate"><span class="pre">usbRoot</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_click_usbRoot.png"><img alt="screenshot shows the extracted archive's contents root with one folder titled &quot;usbRoot&quot;" src="../_images/buskill_usb_storage_win_click_usbRoot.png" /></a>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not copy the <code class="docutils literal notranslate"><span class="pre">usbRoot</span></code> folder to the USB Storage Drive. Copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">usbRoot</span></code> folder to the USB Storage Drive.</p>
+</div>
+<p>Click <code class="docutils literal notranslate"><span class="pre">Home</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">All</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_select_all.png"><img alt="screenshot shows the process to click Home -&gt; Select All" src="../_images/buskill_usb_storage_win_select_all.png" /></a>
+</div>
+<p>Click <code class="docutils literal notranslate"><span class="pre">Home</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Copy</span> <span class="pre">to</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Choose</span> <span class="pre">location...</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_copy_to.png"><img alt="screenshot shows the process to click Home -&gt; Copy to -&gt; Choose location..." src="../_images/buskill_usb_storage_win_copy_to.png" /></a>
+</div>
+<p>Under <code class="docutils literal notranslate"><span class="pre">This</span> <span class="pre">PC</span></code> select the <code class="docutils literal notranslate"><span class="pre">BUSKILL</span></code> USB Storage Drive and click <code class="docutils literal notranslate"><span class="pre">Copy</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_copy_to_usb.png"><img alt="screenshot shows the &quot;Copy Items&quot; popup window and &quot;BUSKILL&quot; selected as the destination, with the &quot;Copy&quot; button selected" src="../_images/buskill_usb_storage_win_copy_to_usb.png" /></a>
+</div>
+<p>When the copy finishes, close the top two File Explorer windows</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_close_window_1.png"><img alt="screenshot shows three File Explorer windows with the &quot;X&quot; highlighted on the top-most window" src="../_images/buskill_usb_storage_win_close_window_1.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_close_window_2.png"><img alt="screenshot shows two File Explorer windows with the &quot;X&quot; highlighted on the top-most window" src="../_images/buskill_usb_storage_win_close_window_2.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="step-4-safely-eject">
+<h3>Step 4: Safely Eject<a class="headerlink" href="#step-4-safely-eject" title="Permalink to this headline">¶</a></h3>
+<p>Right-click on the <code class="docutils literal notranslate"><span class="pre">BUSKILL</span></code> USB Storage Drive and click <code class="docutils literal notranslate"><span class="pre">Eject</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_eject.png"><img alt="screenshot shows the right-click menu for the &quot;BUSKILL&quot; drive and the &quot;Eject&quot; option highlighted" src="../_images/buskill_usb_storage_win_eject.png" /></a>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do <em>not</em> simply remove the USB Storage Drive from your computer without first ejecting it as shown above!!</p>
+<p>Physically removing the drive from the computer before clicking <code class="docutils literal notranslate"><span class="pre">Eject</span></code> can cause data to not be written, even after the copy finishes successfully.</p>
+<p>If the data isn’t fully written to the disk before it’s removed, the software on the USB Storage Drive could be corrupt. This means the <strong>software won’t work for the customer</strong>, so this is a <strong>critical QA step</strong>.</p>
+</div>
+<p>Wait until the drive disappears from the File Explorer window.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_physically_remove.png"><img alt="screenshot shows that the USB Drive named &quot;BusKill&quot; is no longer visible in the File Explorer window" src="../_images/buskill_usb_storage_win_physically_remove.png" /></a>
+</div>
+<p>After the drive is no longer visible, physically remove the USB Storage Drive.</p>
+</div>
+<div class="section" id="step-5-verify-integrity">
+<h3>Step 5: Verify Integrity<a class="headerlink" href="#step-5-verify-integrity" title="Permalink to this headline">¶</a></h3>
+<p>Plug the BusKill Cable into the computer again.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_plug_in.jpg"><img alt="picture showing the fully-assembled BusKill cable with the USB Storage Drive connected to the magnetic breakaway connected to a laptop's USB port" src="../_images/buskill_usb_storage_plug_in.jpg" /></a>
+</div>
+<p>Double-click the <code class="docutils literal notranslate"><span class="pre">BUSKILL</span></code> drive when it appears</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_open_new_file_explorer_window.png"><img alt="screenshot shows the USB Drive under &quot;This PC&quot; is named &quot;BUSKILL&quot;" src="../_images/buskill_usb_storage_win_this_pc_now_says_buskill_label_on_drive.png" /></a>
+</div>
+<p>Double-click <code class="docutils literal notranslate"><span class="pre">provision</span></code></p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_click_provision.png"><img alt="screenshot shows the file &quot;provision&quot; selected at the root of the USB Storage Drive" src="../_images/buskill_usb_storage_win_click_provision.png" /></a>
+</div>
+<p>If the window says <code class="docutils literal notranslate"><span class="pre">FAIL</span></code>, then something is wrong with the drive. Go back to the <a class="reference internal" href="#format-usb-drive"><span class="std std-ref">Format</span></a> step above and retry.</p>
+<p>If the window says <code class="docutils literal notranslate"><span class="pre">PASS</span></code> then everything worked. Close the command prompt window and safely eject the drive.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_pass.png"><img alt="screenshot shows how to close the command prompt window, with the &quot;X&quot; on the top-right highlighted" src="../_images/buskill_usb_storage_win_pass.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_storage_win_eject.png"><img alt="screenshot shows the right-click menu for the &quot;BUSKILL&quot; drive and the &quot;Eject&quot; option highlighted" src="../_images/buskill_usb_storage_win_eject.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>After the drive is no longer visible, physically remove the USB Storage Drive.</p>
+</div>
+</div>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+<div class="section" id="macos">
+<h2>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../software_dev/index.html" class="btn btn-neutral float-right" title="Software Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="assembly.html" class="btn btn-neutral float-left" title="Assembly of components" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: v0.7.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/v0.7.0/buskill-docs_en_v0.7.0.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/v0.7.0/buskill-docs_en_v0.7.0.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

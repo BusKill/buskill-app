@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Building buskill-app &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Testing buskill-app" href="test.html" />
+    <link rel="prev" title="Dependencies" href="depends.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Software Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="autodoc.html">API Reference (buskill-app)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="depends.html">Dependencies</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building buskill-app</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">MacOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">Testing buskill-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html">Release Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotfix.html">Hotfix Workflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Software Developer Guide</a> &raquo;</li>
+        
+      <li>Building buskill-app</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/software_dev/build.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-buskill-app">
+<span id="build-app"></span><h1>Building buskill-app<a class="headerlink" href="#building-buskill-app" title="Permalink to this headline">¶</a></h1>
+<p>This section documents how to build the BusKill App.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our build scripts are designed to be run on GitHub’s shared runners – disposable cloud instances. Therefore, our build scripts may make system-wide package changes and they may not cleanup at the end of their execution.</p>
+<p>We recommend that you execute these on a fresh disposable VM and take a snapshot before proceeding.</p>
+</div>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>Our build script is executed on GitHub’s shared runners, which use Ubuntu. For better reproducibility, the build script itself is executed inside a wrapper script that installs and executes the build script in a debian docker container. For more information, see:</p>
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources">list of Ubuntu versions in GitHub’s documentation</a></p></li>
+<li><p>Our <a class="reference external" href="https://github.com/BusKill/buskill-app/actions?query=workflow%3Abuild">build logs</a></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">su</span> <span class="o">-</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">BusKill</span><span class="o">/</span><span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">/</span>
+<span class="n">build</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">debianWrapper</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When first setting up your build environment, it may be helpful to reference our <a class="reference external" href="https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L12-L22">GitHub build workflow for Linux</a>.</p>
+</div>
+<p>After you’ve successfully built the app once, you can iterate more quickly by using the python binary used to build the AppImage to execute the <code class="docutils literal notranslate"><span class="pre">src/main.py</span></code> script directly. Call it with no arguments to execute it in GUI mode. If you add arguments, it will execute in CLI mode. For example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@buskill:~/sandbox/buskill-app$ /tmp/kivy_appdir/opt/python*/bin/python* src/main.py --help
+buskill version {&#39;VERSION&#39;: &#39;&#39;, &#39;GITHUB_REF&#39;: &#39;&#39;, &#39;GITHUB_SHA&#39;: &#39;&#39;, &#39;SOURCE_DATE_EPOCH&#39;: &#39;&#39;}
+usage: buskill [-h] [--version] [-v] [-a] [-l] [-U]
+
+App for arming and configuring BusKill. For help, see https://docs.buskill.in
+
+optional arguments:
+-h, --help           show this help message and exit
+--version            print version and exit.
+-v, --verbose        increase output verbosity
+-a, --arm            Arms BusKill
+-U, --upgrade        Download &amp; upgrade latest version of BusKill
+user@buskill:~/sandbox/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>Our build script is executed on GitHub’s shared runners. For more information on the specific version of Windows you should use for best results, see:</p>
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources">list of Windows versions in GitHub’s documentation</a></p></li>
+<li><p>Our <a class="reference external" href="https://github.com/BusKill/buskill-app/actions?query=workflow%3Abuild">build logs</a></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When first setting up your build environment, it may be helpful to reference our <a class="reference external" href="https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L68-L73">GitHub build workflow for Windows</a>.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">BusKill</span><span class="o">/</span><span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">/</span>
+<span class="n">build</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">buildExe</span><span class="o">.</span><span class="n">ps1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<blockquote>
+<div><p>Run the <code class="docutils literal notranslate"><span class="pre">build\windows\buildExe.ps1</span></code> script from inside a powershell.</p>
+</div></blockquote>
+<p>If you get Permission Denied issues, open a new PowerShell as root (Open as Administrator), and enter the following commands</p>
+<blockquote>
+<div><p>Set-ExecutionPolicy Unrestricted
+Set-ExecutionPolicy -Scope CurrentUser Unrestricted</p>
+<blockquote>
+<div><p>And in general, we recommend using cygwin when building on Windows.</p>
+</div></blockquote>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="macos">
+<h2>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h2>
+<p>Our build script is executed on GitHub’s shared runners. For more information on the specific version of MacOS you should use for best results, see:</p>
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://docs.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources">list of MacOS versions in GitHub’s documentation</a></p></li>
+<li><p>Our <a class="reference external" href="https://github.com/BusKill/buskill-app/actions?query=workflow%3Abuild">build logs</a></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">su</span> <span class="o">-</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">BusKill</span><span class="o">/</span><span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">buskill</span><span class="o">-</span><span class="n">app</span><span class="o">/</span>
+<span class="n">build</span><span class="o">/</span><span class="n">mac</span><span class="o">/</span><span class="n">buildDmg</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When first setting up your build environment, it may be helpful to reference our <a class="reference external" href="https://github.com/BusKill/buskill-app/blob/master/.github/workflows/build.yml#L118-L127">GitHub build workflow for MacOS</a>.</p>
+</div>
+<p>After you’ve successfully built the app once, you can iterate more quickly by using the python binary that was used to build the MacOS release with PyInstaller to execute the <code class="docutils literal notranslate"><span class="pre">src/main.py</span></code> script directly. Call it with no arguments to execute it in GUI mode. If you add arguments, it will execute in CLI mode. For example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host buskill-app % bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+bash-3.2$
+
+bash-3.2$ cd sandbox/buskill-app
+bash-3.2$ grep &#39;PYTHON_PATH=&#39; build/mac/buildDmg.sh | head -n1
+PYTHON_PATH=&quot;`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`&quot;
+bash-3.2$ PYTHON_PATH=&quot;`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`&quot;
+bash-3.2$
+
+bash-3.2$ $PYTHON_PATH src/main.py --help
+===============================================================================
+INFO: Writing to log file &#39;/var/folders/kx/2fp3kfgj4dj7rx9s5mlb52640000gp/T/buskill.log&#39;
+buskill version {&#39;VERSION&#39;: &#39;&#39;, &#39;GITHUB_REF&#39;: &#39;&#39;, &#39;GITHUB_SHA&#39;: &#39;&#39;, &#39;SOURCE_DATE_EPOCH&#39;: &#39;&#39;}
+usb1.__version__:|1.8|
+usage: buskill [-h] [--version] [--list-triggers] [-v] [-t] [-T] [-a] [-U]
+
+App for arming and configuring BusKill. For help, see https://docs.buskill.in
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --version          print version and exit.
+  --list-triggers    List all available triggers.
+  -v, --verbose      increase output verbosity
+  -t , --trigger     Choose trigger to execute. See --list-triggers for all
+                     possible values.
+  -T, --run-trigger  Immediately execute the trigger on start
+  -a, --arm          Arms BusKill
+  -U, --upgrade      Download &amp; upgrade latest version of BusKill
+bash-3.2$
+</pre></div>
+</div>
+<p>And (also after you’ve already successfully built the app once), you can iterate faster yet still build the <code class="docutils literal notranslate"><span class="pre">.app</span></code> dir with compiled binaries by executing PyInstaller directly. For example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host ~ % bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+bash-3.2$ cd sandbox/buskill-app/pyinstaller/
+bash-3.2$
+
+bash-3.2$ grep &#39;PYTHON_PATH=&#39; ../build/mac/buildDmg.sh | head -n1
+PYTHON_PATH=&quot;`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`&quot;
+bash-3.2$ PYTHON_PATH=&quot;`find /usr/local/Cellar/python* -type f -wholename *bin/python3* | sort -n | uniq | head -n1`&quot;
+bash-3.2$
+
+bash-3.2$ $PYTHON_PATH -m PyInstaller -y --clean --windowed buskill.spec
+...
+34250 INFO: Building BUNDLE BUNDLE-00.toc completed successfully.
+bash-3.2$
+
+bash-3.2$ dist/buskill-dev.app/Contents/MacOS/buskill --help
+===============================================================================
+INFO: Writing to log file &#39;/var/folders/kx/2fp3kfgj4dj7rx9s5mlb52640000gp/T/buskill.log&#39;
+buskill version {&#39;VERSION&#39;: &#39;&#39;, &#39;GITHUB_REF&#39;: &#39;&#39;, &#39;GITHUB_SHA&#39;: &#39;&#39;, &#39;SOURCE_DATE_EPOCH&#39;: &#39;&#39;}
+usb1.__version__:|1.8|
+usage: buskill [-h] [--version] [--list-triggers] [-v] [-t] [-T] [-a] [-U]
+
+App for arming and configuring BusKill. For help, see https://docs.buskill.in
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --version          print version and exit.
+  --list-triggers    List all available triggers.
+  -v, --verbose      increase output verbosity
+  -t , --trigger     Choose trigger to execute. See --list-triggers for all
+                     possible values.
+  -T, --run-trigger  Immediately execute the trigger on start
+  -a, --arm          Arms BusKill
+  -U, --upgrade      Download &amp; upgrade latest version of BusKill
+bash-3.2$
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="test.html" class="btn btn-neutral float-right" title="Testing buskill-app" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="depends.html" class="btn btn-neutral float-left" title="Dependencies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: v0.7.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/v0.7.0/buskill-docs_en_v0.7.0.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/v0.7.0/buskill-docs_en_v0.7.0.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

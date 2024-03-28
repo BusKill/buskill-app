@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>BusKill App: Graphical User Interface &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="BusKill App: Command-Line Interface" href="cli.html" />
+    <link rel="prev" title="Opening The BusKill App" href="execute.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                stable
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Software User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="download.html">Downloading The BusKill App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signature.html">Verifying the Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="execute.html">Opening The BusKill App</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BusKill App: Graphical User Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arming">Arming</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#trigger-selector">Trigger Selector</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#disarming">Disarming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating">Updating</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">BusKill App: Command-Line Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_dev/index.html">Software Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Software User Guide</a> &raquo;</li>
+        
+      <li>BusKill App: Graphical User Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/software_usr/gui.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="buskill-app-graphical-user-interface">
+<span id="gui"></span><h1>BusKill App: Graphical User Interface<a class="headerlink" href="#buskill-app-graphical-user-interface" title="Permalink to this headline">¶</a></h1>
+<p>This page will describe how to use the BusKill app in GUI mode.</p>
+<div class="section" id="arming">
+<h2>Arming<a class="headerlink" href="#arming" title="Permalink to this headline">¶</a></h2>
+<p>BusKill always starts in the disarmed state.</p>
+<p>When BusKill is disarmed, events will never be triggered–even if the BusKill cable is unplugged.</p>
+<div class="figure align-center" id="id1">
+<a class="reference external image-reference" href="../_images/buskill_app_lin_arm2.gif"><img alt="Screenshot of BusKill in Linux" src="../_images/buskill_app_lin_arm2.gif" style="width: 200px;" /></a>
+<p class="caption"><span class="caption-text">Click the <code class="docutils literal notranslate"><span class="pre">Arm</span></code> button</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>To arm BusKill, click the <code class="docutils literal notranslate"><span class="pre">Arm</span></code> button. BusKill can be armed whether or not the cable is plugged-in. Plugging-in the BusKill cable never triggers any BusKill events, regardless of whether or not BusKill is armed or disarmed.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_lin_disarmed1.jpg"><img alt="screenshot of the buskill-app in the disarmed state" src="../_images/buskill_app_lin_disarmed1.jpg" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_win_disarmed1.jpg"><img alt="screenshot of the buskill-app in the disarmed state" src="../_images/buskill_app_win_disarmed1.jpg" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_mac_disarmed1.jpg"><img alt="screenshot of the buskill-app in the disarmed state" src="../_images/buskill_app_mac_disarmed1.jpg" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="trigger-selector">
+<h3>Trigger Selector<a class="headerlink" href="#trigger-selector" title="Permalink to this headline">¶</a></h3>
+<p>You can change what action the BusKill app takes when the BusKill cable is disconnected by changing the <code class="docutils literal notranslate"><span class="pre">trigger</span></code> setting.</p>
+<p>To change the <code class="docutils literal notranslate"><span class="pre">trigger</span></code> setting, open the app menu and click <code class="docutils literal notranslate"><span class="pre">Settings</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_open_menu.png"><img alt="screenshot shows the app running with the hamburger menu in the top-left highlighted" src="../_images/buskill_open_menu.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_settings_1.png"><img alt="screenshot shows the app running with the navigration drawer open, and the &quot;Settings&quot; option selected" src="../_images/buskill_settings_1.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Then click <code class="docutils literal notranslate"><span class="pre">Trigger</span></code> and select the action that you want to happen when the BusKill cable is disconnected (for example, “soft-shutdown”)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_settings_trigger_1.png"><img alt="screenshot shows the app running on the Settings screen with a list of settings to configure" src="../_images/buskill_settings_trigger_1.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_settings_trigger_2.png"><img alt="screenshot shows the app running with a list of triggers to select" src="../_images/buskill_settings_trigger_2.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some triggers can be dangerous and cause data loss or data corruption. Please make sure you read the warning and accept the risk before choosing a given trigger.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_trigger_warning.png"><img alt="screenshot shows a confiration dialog presented to the user asking them if they are sure they want to enable this trigger" src="../_images/buskill_trigger_warning.png" /></a>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="disarming">
+<h2>Disarming<a class="headerlink" href="#disarming" title="Permalink to this headline">¶</a></h2>
+<p>When BusKill is armed, removing the BusKill cable will cause the screen to lock. Removing the cable does not disarm BusKill. Removing the cable subsequent times will continue to cause the screen lock trigger to be executed.</p>
+<p>BusKill can be disarmed by closing the window or clicking the <code class="docutils literal notranslate"><span class="pre">Disarm</span></code> button.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_lin_armed1.jpg"><img alt="screenshot of the buskill-app in the armed state" src="../_images/buskill_app_lin_armed1.jpg" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_win_armed1.jpg"><img alt="screenshot of the buskill-app in the armed state" src="../_images/buskill_app_win_armed1.jpg" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_app_mac_armed1.jpg"><img alt="screenshot of the buskill-app in the armed state" src="../_images/buskill_app_mac_armed1.jpg" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="updating">
+<span id="gui-update"></span><h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<p>You can upgrade the BusKill app to the latest version within the app itself.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The update process is secure and censorship-resistant. First, it downloads a <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file (enumerating available releases) from a random mirror. If a new update is available, it downloads it to the same directory as your existing application. If the download was successful, it exits and launches the new version. If the new version launches successfully, it deletes the old version.</p>
+<p>All downloaded files (both the <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file and the portable application itself) are cryptographically signed with a 4096-bit RSA key. The PGP signature is checked immediately after download. If the signature is invalid, then the downloaded files are immediately wiped and the user is warned.</p>
+</div>
+<p>To update the app, open the app menu and click <code class="docutils literal notranslate"><span class="pre">Update</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_open_menu.png"><img alt="screenshot shows the app running with the hamburger menu in the top-left highlighted" src="../_images/buskill_open_menu.png" /></a>
+</div>
+</td>
+<td><div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_usb_update_1.png"><img alt="screenshot shows the app running with the navigration drawer open, and the &quot;Update&quot; option selected" src="../_images/buskill_update_1.png" /></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For privacy reasons, our software doesn’t have any built-in <a class="reference external" href="https://en.wikipedia.org/wiki/Telemetry#Software">telemetry</a>. If you select an action that will cause the software to query the Internet, we will inform you and ask for confirmation before proceeding.</p>
+<p>Though all file downloads are encrypted over https, your DNS lookups may not be encrypted. This means that someone eavesdropping on your internet connection may be able to see that you’re using BusKill if you do an in-app update.</p>
+<p>Please consider using <a class="reference external" href="https://en.wikipedia.org/wiki/DNS_over_HTTPS">encrypted DNS</a>, or a <a class="reference external" href="https://www.privacyguides.org/vpn/">VPN software</a> that tunnels your DNS requests.</p>
+</div>
+<p>The app will warn you that it is about to access the Internet, which could alert <a class="reference external" href="https://en.wikipedia.org/wiki/Alice_and_Bob">Eve</a> that you’re using BusKill software (see above). If you accept these risks, click <code class="docutils literal notranslate"><span class="pre">Check</span> <span class="pre">Update</span></code> to proceed with checking for a new version of the app.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../_images/buskill_update_2.png"><img alt="screenshot showing the app running with a modal titled &quot;Check for Updates?&quot; and the &quot;Check Updates&quot; button is highlighted" src="../_images/buskill_update_2.png" /></a>
+</div>
+<p>Depending on your internet connection, the update could take several minutes to download.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cli.html" class="btn btn-neutral float-right" title="BusKill App: Command-Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="execute.html" class="btn btn-neutral float-left" title="Opening The BusKill App" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: stable
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/stable/buskill-docs_en_stable.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/stable/buskill-docs_en_stable.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>buskill_cli &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_dev/index.html">Software Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>buskill_cli</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for buskill_cli</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3.7</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">::</span>
+
+<span class="sd">  File:    buskill_cli.py</span>
+<span class="sd">  Authors: Michael Altfield &lt;michael@buskill.in&gt;</span>
+<span class="sd">  Created: 2020-06-23</span>
+<span class="sd">  Updated: 2020-06-23</span>
+<span class="sd">  Version: 0.1</span>
+
+<span class="sd">This is the code to handle the BusKill app via CLI</span>
+
+<span class="sd">For more info, see: https://buskill.in/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                   IMPORTS                                    #</span>
+<span class="c1">################################################################################</span>
+
+<span class="kn">import</span> <span class="nn">buskill</span>
+<span class="kn">import</span> <span class="nn">argparse</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">platform</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span> <span class="vm">__name__</span> <span class="p">)</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                  SETTINGS                                    #</span>
+<span class="c1">################################################################################</span>
+
+<span class="c1"># n/a</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                                 FUNCTIONS                                    #</span>
+<span class="c1">################################################################################</span>
+
+<div class="viewcode-block" id="BusKillCLI"><a class="viewcode-back" href="../software_dev/autodoc.html#buskill_cli.BusKillCLI">[docs]</a><span class="k">def</span> <span class="nf">BusKillCLI</span><span class="p">():</span>
+
+	<span class="c1">####################</span>
+	<span class="c1"># HANDLE ARGUMENTS #</span>
+	<span class="c1">####################</span>
+
+	<span class="c1"># we use ArgmentParser to handle the user&#39;s command-line arguents</span>
+	<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+	 <span class="n">prog</span> <span class="o">=</span> <span class="s2">&quot;buskill&quot;</span><span class="p">,</span>
+	 <span class="n">description</span>  <span class="o">=</span> <span class="s1">&#39;App for arming and configuring BusKill.&#39;</span>
+	<span class="p">)</span>
+
+	<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+	 <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+	 <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">,</span>
+	 <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span>
+	<span class="p">)</span>
+
+	<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+	 <span class="s2">&quot;-a&quot;</span><span class="p">,</span> <span class="s2">&quot;--arm&quot;</span><span class="p">,</span>
+	 <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Arms BusKill&quot;</span><span class="p">,</span>
+	 <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span>
+	<span class="p">)</span>
+
+	<span class="c1"># process command-line arguments</span>
+	<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+	<span class="c1">#############</span>
+	<span class="c1"># MAIN BODY #</span>
+	<span class="c1">#############</span>
+
+	<span class="n">buskill</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+	<span class="c1"># is the OS that we&#39;re running on supported?</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">buskill</span><span class="o">.</span><span class="n">isPlatformSupported</span><span class="p">():</span>
+		<span class="c1"># the current platform isn&#39;t supported; show critical error window</span>
+
+		<span class="n">msg</span> <span class="o">=</span> <span class="n">buskill</span><span class="o">.</span><span class="n">ERR_PLATFORM_NOT_SUPPORTED</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">arm</span><span class="p">:</span>
+		<span class="n">buskill</span><span class="o">.</span><span class="n">toggle</span><span class="p">()</span>
+
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Nothing to do.&quot;</span>
+		<span class="nb">print</span><span class="p">(</span> <span class="n">msg</span> <span class="p">);</span> <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span>
+
+	<span class="k">return</span> <span class="mi">0</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: v0.1.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/v0.1.0/buskill-docs_en_v0.1.0.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/v0.1.0/buskill-docs_en_v0.1.0.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

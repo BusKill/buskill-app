@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Hotfix Workflow &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Security" href="../security/index.html" />
+    <link rel="prev" title="Release Workflow" href="release.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                font_setting
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Software Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="autodoc.html">API Reference (buskill-app)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="depends.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html">Building buskill-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">Testing buskill-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html">Release Workflow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hotfix Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#determine-version-number">Determine Version Number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-hotfix-branch">Create Hotfix Branch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finalize-release">Finalize Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tag">Tag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-sign-and-upload">Build, Sign, and Upload</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Software Developer Guide</a> &raquo;</li>
+        
+      <li>Hotfix Workflow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/software_dev/hotfix.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hotfix-workflow">
+<span id="hotfix"></span><h1>Hotfix Workflow<a class="headerlink" href="#hotfix-workflow" title="Permalink to this headline">¶</a></h1>
+<p>This section will describe how to create a hotfix to a previous release.</p>
+<div class="section" id="determine-version-number">
+<h2>Determine Version Number<a class="headerlink" href="#determine-version-number" title="Permalink to this headline">¶</a></h2>
+<p>The first thing you must do before creating a hotfix to a previous release is determine the new (<a class="reference external" href="https://semver.org/">semantic</a>) version number.</p>
+<p>In this example, we’ll be using <code class="docutils literal notranslate"><span class="pre">v3.2.1</span></code>. That’s</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a <code class="docutils literal notranslate"><span class="pre">MAJOR</span></code> version <code class="docutils literal notranslate"><span class="pre">3</span></code>,</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">MINOR</span></code> version <code class="docutils literal notranslate"><span class="pre">2</span></code>, and</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> version <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>For this workflow, we assume that the previous release that we need to patch was <code class="docutils literal notranslate"><span class="pre">v3.2.0</span></code>, and we’ll be creating a hotfix <code class="docutils literal notranslate"><span class="pre">v3.2.1</span></code>. The <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> version must always be one higher than the previous release that we’re patching.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    v 3 . 2 . 1 ⭠ PATCH
+MAJOR ⮥   ⮤ MINOR
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-hotfix-branch">
+<h2>Create Hotfix Branch<a class="headerlink" href="#create-hotfix-branch" title="Permalink to this headline">¶</a></h2>
+<p>In our project, we only put production-ready stable code in the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch. No commits should occur in <code class="docutils literal notranslate"><span class="pre">master</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch and feature-specific branches are branched-off from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch or <code class="docutils literal notranslate"><span class="pre">master</span></code> directly.</p>
+<p>Since your hotfix applies to an old release and there may have since been changes to <code class="docutils literal notranslate"><span class="pre">dev</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> that we don’t want to backport just for the hotfix, we should create a hotfix-specific branch from the previous release branch.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git checkout -b v3.2.1 refs/heads/v3.2.0
+Switched to a new branch &#39;v3.2.1&#39;
+userhost:~/buskill-app$
+
+user@host:~/buskill-app$ git push origin v3.2.1
+Total 0 (delta 0), reused 0 (delta 0)
+remote:
+remote: Create a pull request for &#39;v3.2.1&#39; on GitHub by visiting:
+remote:      https://github.com/BusKill/buskill-app/pull/new/v3.2.0
+remote:
+To github.com:BusKill/buskill-app.git
+* [new branch]      v3.2.1 -&gt; v3.2.1
+user@host:~/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="finalize-release">
+<h2>Finalize Release<a class="headerlink" href="#finalize-release" title="Permalink to this headline">¶</a></h2>
+<p>After applying your patch to the new <code class="docutils literal notranslate"><span class="pre">v3.2.1</span></code> branch, make sure to also</p>
+<ol class="arabic simple">
+<li><p>Update CHANGELOG</p></li>
+<li><p>Test</p></li>
+<li><p>Update documentation</p></li>
+</ol>
+<p>Then commit the changes and push to github. Do <em>not</em> merge the hotfix branch with any other branch.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app/$ vim CHANGELOG
+user@host:~/buskill-app/$ git commit -am &#39;updated changelog for new release&#39;
+user@host:~/buskill-app/$ git push
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="tag">
+<h2>Tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h2>
+<p>Create a tag for the new hotfix release, and push that to github.com</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git branch -l
+  dev
+  master
+  v3.2.0
+* v3.2.1
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git tag v3.2.1
+
+user@host:~/buskill-app$ git push origin refs/tags/v3.2.1
+Total 0 (delta 0), reused 0 (delta 0)
+To github.com:BusKill/buskill-app.git
+ * [new tag]         v3.2.1 -&gt; v3.2.1
+user@host:~/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-sign-and-upload">
+<h2>Build, Sign, and Upload<a class="headerlink" href="#build-sign-and-upload" title="Permalink to this headline">¶</a></h2>
+<p>To build, sign, and upload the hotfix release, follow the same steps in the <a class="reference internal" href="release.html#release-build"><span class="std std-ref">Release Workflow</span></a> documentation.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../security/index.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="release.html" class="btn btn-neutral float-left" title="Release Workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: font_setting
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/font_setting/buskill-docs_en_font_setting.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/font_setting/buskill-docs_en_font_setting.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

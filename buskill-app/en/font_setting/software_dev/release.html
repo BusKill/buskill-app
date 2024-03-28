@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Release Workflow &mdash; BusKill version documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favico_150b.202002.png"/>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hotfix Workflow" href="hotfix.html" />
+    <link rel="prev" title="Documentation" href="documentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/buskill_202007_200px.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                font_setting
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">What is BusKill?:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware_usr/index.html">Hardware User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_usr/index.html">Software User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware_dev/index.html">Hardware Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Software Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="autodoc.html">API Reference (buskill-app)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="depends.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html">Building buskill-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">Testing buskill-app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#determine-version-number">Determine Version Number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-release-branch">Create Release Branch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finalize-release">Finalize Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test">Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tag">Tag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-sign">Build &amp; Sign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload">Upload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-updates-repo-metadata">Update updates repo metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hotfix.html">Hotfix Workflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">More:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../security/index.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution.html">Attribution</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BusKill</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Software Developer Guide</a> &raquo;</li>
+        
+      <li>Release Workflow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/buskill/buskill-app/blob/master/docs/software_dev/release.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="release-workflow">
+<span id="release"></span><h1>Release Workflow<a class="headerlink" href="#release-workflow" title="Permalink to this headline">¶</a></h1>
+<p>This section will describe how to create a new release.</p>
+<div class="section" id="determine-version-number">
+<h2>Determine Version Number<a class="headerlink" href="#determine-version-number" title="Permalink to this headline">¶</a></h2>
+<p>The first thing you must do before creating a new release is determine the new (<a class="reference external" href="https://semver.org/">semantic</a>) version number.</p>
+<p>In this example, we’ll be using <code class="docutils literal notranslate"><span class="pre">v3.2.0</span></code>. That’s</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a <code class="docutils literal notranslate"><span class="pre">MAJOR</span></code> version <code class="docutils literal notranslate"><span class="pre">3</span></code>,</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">MINOR</span></code> version <code class="docutils literal notranslate"><span class="pre">2</span></code>, and</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> version <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>For this workflow, the <code class="docutils literal notranslate"><span class="pre">PATCH</span></code> version must always be <code class="docutils literal notranslate"><span class="pre">0</span></code>, and it should only be incremented for hotfixes to previous releases–which is a <a class="reference internal" href="hotfix.html#hotfix"><span class="std std-ref">distinct workflow</span></a> from what’s documented here.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    v 3 . 2 . 0 ⭠ PATCH
+MAJOR ⮥   ⮤ MINOR
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-release-branch">
+<h2>Create Release Branch<a class="headerlink" href="#create-release-branch" title="Permalink to this headline">¶</a></h2>
+<p>In our project, we only put production-ready stable code in the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch. No commits should occur in <code class="docutils literal notranslate"><span class="pre">master</span></code>. Most commits should be made in the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch (or in a feature-specific branch, then merged into <code class="docutils literal notranslate"><span class="pre">dev</span></code>).</p>
+<p>After a set of features to be included in your new release are finished, create a new release branch from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch. Push this new branch to github.com</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git checkout dev
+Switched to branch &#39;dev&#39;
+user@host:~/buskill-app$ git checkout -b v3.2.0
+Switched to a new branch &#39;v3.2.0&#39;
+user@host:~/buskill-app$
+user@host:~/buskill-app$ git push origin v3.2.0
+Total 0 (delta 0), reused 0 (delta 0)
+remote:
+remote: Create a pull request for &#39;v3.2.0&#39; on GitHub by visiting:
+remote:      https://github.com/BusKill/buskill-app/pull/new/v3.2.0
+remote:
+To github.com:BusKill/buskill-app.git
+* [new branch]      v3.2.0 -&gt; v3.2.0
+user@host:~/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="finalize-release">
+<h2>Finalize Release<a class="headerlink" href="#finalize-release" title="Permalink to this headline">¶</a></h2>
+<p>At this point, all of your features for the new release should already be finished, but there are some release-specific changes that may need to be committed, such as:</p>
+<ol class="arabic simple">
+<li><p>Updating CHANGELOG</p></li>
+<li><p>Testing &amp; minor patches</p></li>
+<li><p>Updating documentation</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app/$ vim CHANGELOG
+user@host:~/buskill-app/$ git commit -am &#39;updated changelog for new release&#39;
+user@host:~/buskill-app/$
+</pre></div>
+</div>
+</div>
+<div class="section" id="test">
+<h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
+<p>Before release, <a class="reference internal" href="test.html#test-app"><span class="std std-ref">thoroughly test the code</span></a> in your new release branch and commit directly to this branch.</p>
+<p>When testing is finished, merge all the commits into both the <code class="docutils literal notranslate"><span class="pre">master</span></code> and <code class="docutils literal notranslate"><span class="pre">dev</span></code> branches.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git branch -l
+  dev
+  master
+* v3.2.0
+user@host:~/buskill-app$ git checkout dev
+Switched to branch &#39;dev&#39;
+user@host:~/buskill-app$ git pull origin dev
+From github.com:BusKill/buskill-app
+ * branch            dev        -&gt; FETCH_HEAD
+Already up to date.
+
+user@host:~/buskill-app$ git merge refs/heads/v3.2.0
+Updating f9e692a..3c1a6d5
+Fast-forward
+ docs/software_dev/index.rst   |  2 +-
+ docs/software_dev/release.rst | 54 +++++++++++++++++++++++++++++++++++++++++++
+ docs/software_dev/repo.rst    |  6 -----
+ 3 files changed, 55 insertions(+), 7 deletions(-)
+ create mode 100644 docs/software_dev/release.rst
+ delete mode 100644 docs/software_dev/repo.rst
+
+user@host:~/buskill-app$ git checkout master
+Switched to branch &#39;master&#39;
+Your branch is up to date with &#39;origin/master&#39;.
+user@host:~/buskill-app$ git pull origin master
+From github.com:BusKill/buskill-app
+ * branch            master     -&gt; FETCH_HEAD
+Already up to date.
+
+user@host:~/buskill-app$ git merge refs/heads/v3.2.0
+Updating ab223f3..3c1a6d5
+Fast-forward
+ docs/_extensions/affiliatelinks.py  |  66 ++++++++++++++++++++++++++++
+ docs/attribution.rst                |   1 +
+ docs/conf.py                        |  13 ++++++
+ docs/contributing.rst               |   3 +-
+ docs/hardware_dev/assembly.rst      |   7 +++
+ docs/hardware_dev/bom.rst           |  83 ++++++++++++++++++++++++++++++++++++
+ docs/hardware_dev/index.rst         |   7 ++-
+ docs/images/buskill_cable_usb_a.jpg | Bin 0 -&gt; 457480 bytes
+ docs/index.rst                      |   7 +++
+ docs/software_dev/index.rst         |   2 +-
+ docs/software_dev/release.rst       |  54 +++++++++++++++++++++++
+ docs/software_dev/repo.rst          |   6 ---
+ 12 files changed, 239 insertions(+), 10 deletions(-)
+ create mode 100644 docs/_extensions/affiliatelinks.py
+ create mode 100644 docs/hardware_dev/assembly.rst
+ create mode 100644 docs/hardware_dev/bom.rst
+ create mode 100644 docs/images/buskill_cable_usb_a.jpg
+ create mode 100644 docs/software_dev/release.rst
+ delete mode 100644 docs/software_dev/repo.rst
+
+user@host:~/buskill-app$ git checkout v3.2.0
+Switched to branch &#39;v3.2.0&#39;
+
+user@host:~/buskill-app$ git push
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 2.10 KiB | 63.00 KiB/s, done.
+Total 6 (delta 3), reused 0 (delta 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:BusKill/buskill-app.git
+   f9e692a..3c1a6d5  dev -&gt; dev
+   ab223f3..3c1a6d5  master -&gt; master
+   f9e692a..3c1a6d5  v3.2.0 -&gt; v3.2.0
+user@host:~/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="tag">
+<h2>Tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h2>
+<p>After you’ve merged your release branch into the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch, create a tag for the new release in the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch, and push that to github.com</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git checkout master
+Switched to branch &#39;master&#39;
+Your branch is up to date with &#39;origin/master&#39;.
+
+user@host:~/buskill-app$ git tag v3.2.0
+
+user@host:~/buskill-app$ git push origin refs/tags/v3.2.0
+Total 0 (delta 0), reused 0 (delta 0)
+To github.com:BusKill/buskill-app.git
+ * [new tag]         v3.2.0 -&gt; v3.2.0
+user@host:~/buskill-app$
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-sign">
+<span id="release-build"></span><h2>Build &amp; Sign<a class="headerlink" href="#build-sign" title="Permalink to this headline">¶</a></h2>
+<p>For Linux, use the docker <a class="reference external" href="https://github.com/BusKill/buskill-app/blob/master/build/linux/debianWrapper.sh">build script wrapper</a> to build the new release locally on your machine in a a Debian docker container as root. Get the sha256 checksum of the new AppImage and confirm that it matches the AppImage built by GitHub’s CI process. If it doesn’t, don’t proceed with signing it. Our Linux releases should be fully <a class="reference external" href="https://github.com/BusKill/buskill-app/issues/3">reproducible</a>.</p>
+<p>When downloading the AppImage from the repo’s GitHub releases page, make sure the commits and branches exactly match your local build, else the checksum will differ because the contents of <code class="docutils literal notranslate"><span class="pre">buskill_version.py</span></code> will have a distinct <code class="docutils literal notranslate"><span class="pre">GITHUB_REF</span></code>, <code class="docutils literal notranslate"><span class="pre">GITHUB_SHA</span></code>, and <code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@disp2781:~$ sudo su -
+root@disp2781:~#
+
+root@disp2781:~# git clone --single-branch --branch v3.2.0 https://github.com/BusKill/buskill-app.git
+Cloning into &#39;buskill-app&#39;...
+remote: Enumerating objects: 21, done.
+...
+root@disp2781:~# cd buskill-app
+root@disp2781:~/buskill-app# git branch -l
+* v3.2.0
+root@disp2781:~/buskill-app#
+
+root@disp2781:~/buskill-app# build/linux/debianWrapper.sh
+...
+root@disp2781:~/buskill-app#
+
+root@disp2781:~/buskill-app# sha256sum dist/*/*.AppImage
+66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  buskill-lin-v3.2.0-x86_64/buskill-v3.2.0.AppImage
+root@disp2781:~/buskill-app#
+
+root@disp2781:~/buskill-app# cd ..
+root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_linux/buskill-lin-v3.2.0-x86_64.tbz
+...
+root@disp2781:~# tar -xjf buskill-lin-v3.2.0-x86_64.tbz
+root@disp2781:~# sha256sum */*.AppImage
+66ebab6c980d49d20526a184981ba36b34bdc18dea40a5b2ff995b281eebfe9d  buskill-lin-v3.2.0-x86_64/buskill-v3.2.0.AppImage
+root@disp2781:~#
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For Windows &amp; MacOS, there is an <a class="reference external" href="https://github.com/BusKill/buskill-app/issues/3">upstream issue with reproducibility in PyInstaller</a>, so we have to choose to trust our local build or the GitHub CI build.</p>
+</div>
+<p>After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_windows/buskill-win-v3.2.0-x86_64.zip
+...
+root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_windows/SHA256SUMS
+...
+root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_windows/SHA256SUMS.asc
+...
+root@disp2781:~# gpg --verify SHA256SUMS.asc
+gpg: Signature made Fri 31 Jul 2020 03:43:43 PM +0545
+gpg:                using RSA key 0B90809464D7B7A50E1871DE7DE9F38ADB5B1E8A
+gpg: Good signature from &quot;BusKill Pre-Releases Signing Key 2020.07 &lt;pre-releases@buskill.in&gt;&quot; [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
+     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
+root@disp2781:~#
+
+root@disp2781:~# sha256sum -c SHA256SUMS
+buskill-win-v3.2.0-x86_64.zip: OK
+root@disp2781:~#
+
+root@disp2781:~# rm SHA256SUMS*
+root@disp2781:~#
+
+root@disp2781:~# wget https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_mac/buskill-mac-v3.2.0-x86_64.dmg
+...
+root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_mac/SHA256SUMS
+...
+root@disp2781:~# curl --location --remote-name https://github.com/BusKill/buskill-app/releases/download/&lt;epoch_seconds&gt;_mac/SHA256SUMS.asc
+...
+root@disp2781:~# gpg --verify SHA256SUMS.asc
+gpg: Signature made Fri 31 Jul 2020 03:43:43 PM +0545
+gpg:                using RSA key 0B90809464D7B7A50E1871DE7DE9F38ADB5B1E8A
+gpg: Good signature from &quot;BusKill Pre-Releases Signing Key 2020.07 &lt;pre-releases@buskill.in&gt;&quot; [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 713D 4A49 60EE 849B AE3B  41BA BE75 DB07 E34A FBC1
+     Subkey fingerprint: 0B90 8094 64D7 B7A5 0E18  71DE 7DE9 F38A DB5B 1E8A
+root@disp2781:~# sha256sum -c SHA256SUMS
+buskill-mac-v3.2.0-x86_64.dmg: OK
+root@disp2781:~#
+</pre></div>
+</div>
+<p>Finally, download and verify the authenticity of the source tarball against your local repo. Then sign it for downstream (eg <a class="reference external" href="https://github.com/BusKill/buskill-app/issues/53">Debian</a>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $HOME/Downloads
+wget https://github.com/BusKill/buskill-app/archive/refs/tags/v3.2.0.tar.gz
+tar -xzf v3.2.0.tar.gz
+cd $HOME/sandbox/buskill-app
+git checkout refs/tags/v3.2.0
+diff -rq . $HOME/Downloads/buskill-app-3.2.0/
+</pre></div>
+</div>
+<p>Make sure the only differences is the existence of some files in your local repo that are not present in the <a class="reference external" href="https://github.com/BusKill/buskill-app/issues/53#issuecomment-1366041678">minimized</a> tarball. Do <em>not</em> proceed if there’s any files that exist in both that are not identical.</p>
+<p>Once you’ve verified the authenticity of everything above, move the 4 files to your dragon-protected basement-safe laptop, generate a new checksum file with all three platforms’ releases, and sign it with the gpg release key.</p>
+<p>After verifying the reproducibility of the Linux build, download the Windows and MacOS builds from the corresponding GitHub release and verify their pre-release signatures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@vault:~$ ls
+buskill-lin-v3.2.0-x86_64.tbz  buskill-win-v3.2.0-x86_64.zip
+buskill-mac-v3.2.0-x86_64.dmg  v3.2.0.tar.gz
+user@vault:~$
+
+user@vault:~$ sha256sum * &gt; SHA256SUMS
+user@vault:~$
+
+user@vault:~$ gpg --default-key &#39;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&#39; --armor -b SHA256SUMS
+gpg: using &quot;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&quot; as default secret key for signing
+user@vault:~$
+
+user@vault:~$ gpg --default-key &#39;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&#39; --armor -b v*.tar.gz*
+gpg: using &quot;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&quot; as default secret key for signing
+user@vault:~$
+
+user@vault:~$ ls
+buskill-lin-v3.2.0-x86_64.tbz  SHA256SUMS.asc
+buskill-mac-v3.2.0-x86_64.dmg  v3.2.0.tar.gz
+buskill-win-v3.2.0-x86_64.zip  v3.2.0.tar.gz.asc
+SHA256SUMS
+user@vault:~$
+</pre></div>
+</div>
+</div>
+<div class="section" id="upload">
+<h2>Upload<a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h2>
+<p>Copy all of the above files off your airgapped machine.</p>
+<p>Finally, upload the files to the tag’s release using the github.com WUI</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/releases/tag/v3.2.0">https://github.com/BusKill/buskill-app/releases/tag/v3.2.0</a></p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="update-updates-repo-metadata">
+<h2>Update updates repo metadata<a class="headerlink" href="#update-updates-repo-metadata" title="Permalink to this headline">¶</a></h2>
+<p>At this point, users will be able to download v3.2.0 of the BusKill app from github.com, but existing users will not be able to click the update button in the app to upgrade their existing install to the latest version.</p>
+<p>For apps to be able to know about the new version, we must update the <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file on the <code class="docutils literal notranslate"><span class="pre">UPGRADE_MIRRORS</span></code> hard-coded into the app:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json">https://raw.githubusercontent.com/BusKill/buskill-app/master/updates/v1/meta.json</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json">https://gitlab.com/buskill/buskill-app/-/raw/master/updates/v1/meta.json</a></p></li>
+<li><p><a class="reference external" href="https://repo.buskill.in/buskill-app/v1/meta.json">https://repo.buskill.in/buskill-app/v1/meta.json</a></p></li>
+<li><p><a class="reference external" href="https://repo.michaelaltfield.net/buskill-app/v1/meta.json">https://repo.michaelaltfield.net/buskill-app/v1/meta.json</a></p></li>
+</ol>
+<p>First, update the file in the github repo in the v3.2.0 branch.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git checkout v3.2.0
+warning: refname &#39;v3.2.0&#39; is ambiguous.
+Switched to branch &#39;v3.2.0&#39;
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git pull origin v3.2.0
+From github.com:BusKill/buskill-app
+* tag               v3.2.0     -&gt; FETCH_HEAD
+Already up to date.
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ vim updates/v1/meta.json
+</pre></div>
+</div>
+<p>Edit the file by hand. In the future, we’ll switch to tuf when it’s safe to do so</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395">https://github.com/BusKill/buskill-app/issues/6#issuecomment-671087395</a></p></li>
+<li><p><a class="reference external" href="https://github.com/theupdateframework/tuf/issues/1109">https://github.com/theupdateframework/tuf/issues/1109</a></p></li>
+</ul>
+</div></blockquote>
+<p>In <code class="docutils literal notranslate"><span class="pre">meta.json</span></code>, make the following changes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">latest</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">buskill-app</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">stable</span></code> to the latest version (eg <code class="docutils literal notranslate"><span class="pre">v3.2.0</span></code>).</p></li>
+<li><p>Add a new dictionary section to <code class="docutils literal notranslate"><span class="pre">updates</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">buskill-app</span></code> with a value the same as the latest version that was set to <code class="docutils literal notranslate"><span class="pre">stable</span></code> in the previous step</p></li>
+<li><p>Make sure that this new section’s <code class="docutils literal notranslate"><span class="pre">url</span></code> keys (and <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">SHA256SUMS.asc</span></code> files) contain a single-element array with the URL to download the latest build from github.com, as was uploaded in the previous section</p></li>
+</ol>
+</div></blockquote>
+<p>Make sure to confirm that your changes to the JSON file have not caused any syntax or corruption of the file with jq or jsonlint.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ sudo apt-get install jq
+...
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ jq . updates/v1/meta.json 1&gt; /dev/null
+user@host:~/buskill-app$ echo $?
+0
+user@host:~/buskill-app$
+</pre></div>
+</div>
+<p>After updating the <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file, copy it to your airgapped machine and sign it to create <code class="docutils literal notranslate"><span class="pre">meta.json.asc</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@vault:~$ gpg --default-key &#39;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&#39; --armor -b meta.json
+gpg: using &quot;E0AF FF57 DC00 FBE0 5635  8761 4AE2 1E19 36CE 786A&quot; as default secret key for signing
+user@vault:~$
+
+user@vault:~$ ls
+meta.json  meta.json.asc
+user@vault:~$
+</pre></div>
+</div>
+<p>Now copy-back the <code class="docutils literal notranslate"><span class="pre">meta.json.asc</span></code> file from your airgapped machine to overwrite the existing <code class="docutils literal notranslate"><span class="pre">meta.json.asc</span></code> file in your <code class="docutils literal notranslate"><span class="pre">buskill-app</span></code> sandbox. Commit, merge, and push.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@host:~/buskill-app$ git branch -l
+  dev
+  master
+* v3.2.0
+user@host:~/buskill-app/$
+
+user@host:~/buskill-app/$ git commit -am &#39;updated meta.json to latest version for in-app updates&#39;
+[v3.2.0 daa5241] updated meta.json to latest version for in-app updates
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git checkout dev
+Switched to branch &#39;dev&#39;
+Your branch is up to date with &#39;origin/dev&#39;.
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git pull origin dev
+From github.com:BusKill/buskill-app
+ * branch            dev        -&gt; FETCH_HEAD
+Already up to date.
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git merge refs/heads/v3.2.0
+Updating 352f0e5..daa5241
+Fast-forward
+ updates/v1/meta.json          |  8  +-
+ updates/v1/meta.json.asc      |  16 ++++
+ 2 files changed, 24 insertions(+), 8 deletions(-)
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git checkout master
+Switched to branch &#39;master&#39;
+Your branch is up to date with &#39;origin/master&#39;.
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git pull origin master
+From github.com:BusKill/buskill-app
+ * branch            master     -&gt; FETCH_HEAD
+Already up to date.
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git merge refs/heads/v3.2.0
+Updating 352f0e5..daa5241
+Fast-forward
+ updates/v1/meta.json          |  8  +-
+ updates/v1/meta.json.asc      |  16 ++++
+ 2 files changed, 24 insertions(+), 8 deletions(-)
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git checkout v3.2.0
+warning: refname &#39;v3.2.0&#39; is ambiguous.
+Switched to branch &#39;v3.2.0&#39;
+user@host:~/buskill-app$
+
+user@host:~/buskill-app$ git push
+Enumerating objects: 23, done.
+Counting objects: 100% (23/23), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (13/13), done.
+Writing objects: 100% (14/14), 4.20 KiB | 860.00 KiB/s, done.
+Total 14 (delta 8), reused 0 (delta 0)
+remote: Resolving deltas: 100% (8/8), completed with 8 local objects.
+To github.com:BusKill/buskill-app.git
+   352f0e5..daa5241  dev -&gt; dev
+   352f0e5..daa5241  master -&gt; master
+   caaf2e8..daa5241  v3.2.0 -&gt; v3.2.0
+user@host:~/buskill-app$
+</pre></div>
+</div>
+<p>Now test that in-app upgrades from the previous version are functioning properly.</p>
+<p>Finally, make sure to propogate the <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> and <code class="docutils literal notranslate"><span class="pre">meta.json.asc</span></code> files to <a class="reference external" href="https://github.com/search?q=repo%3ABusKill%2Fbuskill-app+UPGRADE_MIRRORS+path%3A%2F%5Esrc%5C%2Fpackages%5C%2Fbuskill%5C%2F%2F&amp;type=code">all mirrors</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="hotfix.html" class="btn btn-neutral float-right" title="Hotfix Workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="documentation.html" class="btn btn-neutral float-left" title="Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Michael Altfield and the BusKill team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Alternate Versions</span>
+      v: font_setting
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/buskill-app/en/dev/">dev</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/buskill-app/en/font_setting/">font_setting</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/buskill-app/en/stable/">stable</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.2.1/">v0.2.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.0/">v0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.3.1/">v0.3.1</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.4.0/">v0.4.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.5.0/">v0.5.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.6.0/">v0.6.0</a></dd>
+          
+        
+          
+          <dd><a href="/buskill-app/en/v0.7.0/">v0.7.0</a></dd>
+          
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+          <dd><a href="/buskill-app/en/font_setting/buskill-docs_en_font_setting.pdf">pdf</a></dd>
+        
+          <dd><a href="/buskill-app/en/font_setting/buskill-docs_en_font_setting.epub">epub</a></dd>
+        
+      </dl>
+      
+      
+      <hr/>
+      Free theme by <a href="http://www.readthedocs.org">Read the Docs</a>.
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
