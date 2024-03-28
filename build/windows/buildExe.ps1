@@ -11,7 +11,7 @@ Set-PSDebug -Trace 1
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-31
-# Updated: 2024-03-06
+# Updated: 2024-03-27
 # Version: 0.5
 ################################################################################
 
@@ -48,6 +48,8 @@ $env:SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
 #################
 # FIX CONSTANTS #
 #################
+
+$REPO_PATH="$(pwd)"
 
 # fill-in some constants if this script is not being run on GitHub
 if ( ! $env:GITHUB_REF ){ 
@@ -119,35 +121,34 @@ if ( $? -ne $true -or $LastExitCode -ne 0 ){
 }
 
 pushd "${tmpDir}/buskill-app-deps/build/deps"
-# TODO make this actually work https://github.com/BusKill/buskill-app/issues/76
-sha256sum --strict --check SHA256SUMS
 
 # confirm that the checksums of all the files match what's expected in the
 # the signed SHA256SUSM file.
-if ( $? -ne $true -or $LastExitCode -ne 0 ){
-	echo "ERROR: Invalid checksums!" | Out-String
-	exit 1 | Out-String
-}
-
-# copy all the now-verified files to our actual repo
-popd
-cat "${tmpDir}/buskill-app-deps/build/deps/SHA256SUMS" | while read line; do
-	file_path="${tmpDir}/buskill-app-deps/build/deps/$(echo $line | cut -d' ' -f2)"
-	cp ${file_path} build/deps/
-done
+Get-Content -Path SHA256SUMS |
+	% {$Hash, $_, $File = $_.Split(" ", 3);
+	if ($Hash) {
+		[PSCustomObject]@{Path=$File;
+		Result=if ((Get-FileHash -Path $File -Algorithm SHA256).Hash -eq $Hash) {
+			# this file's hash matches our signed digest; copy it to our repo dir
+			cp "$REPO_PATH\build\deps\"
+		} else {
+			"FAILED"
+		}
+	}}} | Format-List | Out-String
 
 # See https://docs.python.org/3.7/using/windows.html#installing-without-ui
 Write-Output 'INFO: Installing python'
 New-Item -Path C:\tmp -Type Directory | Out-String
 New-Item -Path C:\tmp\python -Type Directory | Out-String
-.\build/deps/python-3.7.8-amd64.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
+#.\build/deps/python-3.7.8-amd64.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
+.\build/deps/python-3.12.2-amd64.exe /passive TargetDir=C:\tmp\python IncludePip=1 | Out-String
 
 Write-Output 'INFO: Installing pip, setuptools, and virtualenv' | Out-String
 
 C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\pip-24.0-py3-none-any.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\wheel-0.34.2-py2.py3-none-any.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\setuptools-49.1.0-py3-none-any.whl | Out-String
-C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\virtualenv-20.0.26-py2.py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\wheel-0.42.0-py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\setuptools-69.1.1-py3-none-any.whl | Out-String
+C:\tmp\python\python.exe -m pip install --ignore-installed --upgrade --cache-dir .\build\deps\ --no-index --find-links .\build\deps\ .\build\deps\virtualenv-20.25.1-py3-none-any.whl | Out-String
 
 Write-Output 'INFO: Installing Python Depends'
 New-Item -Path C:\tmp\kivy_venv -Type Directory | Out-String
