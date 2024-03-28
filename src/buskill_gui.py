@@ -79,6 +79,8 @@ from kivy.uix.recycleview import RecycleView
 #                                  FUNCTIONS                                   #
 ################################################################################
 
+# TODO: figure out why dialog's Label fonts aren't being updated
+# TODO: update this to also update RecycleView's data dicts
 def update_font_recursive(widget):
 
 	# is widget actually a list of widgets?
@@ -88,7 +90,6 @@ def update_font_recursive(widget):
 		for w in widget:
 			update_font_recursive(w)
 
-	# TODO: figure out why dialog's Label fonts aren't being updated
 	if hasattr(widget, 'dialog'):
 		update_font_recursive(widget.dialog)
 
@@ -788,7 +789,7 @@ class BusKillSettingComplexOptions(BusKillSettingItem):
 					if font_filename.lower().endswith('.ttf') \
 					 or font_filename.lower().endswith('.otf'):
 						font_human = font_filename[:-4]
-				
+
 					option_items.append( {'title': 'default_font', 'value': [font_human, font_path, font_path, font_path], 'option_human': font_human, 'radio_button_icon': 'U', 'icon':'\ue167', 'desc':'', 'parent_option': self, 'screen': setting_screen } )
 
 				option_items.sort(key=operator.itemgetter('value'))
