@@ -92,11 +92,13 @@ Q: How can I get updates about BusKill?
 
 You can `signup for our BusKill email newsletter <https://www.buskill.in/#newsletter>`_ or follow us on any of the following social media profiles:
 
+* Mastodon `BusKillin@Mastodon.social <https://mastodon.social/@BusKillin>`_
 * Twitter `@BusKillin <https://twitter.com/buskillin>`_
 * Facebook `@BusKill.in <https://www.facebook.com/BusKill.in/>`_
-* Mastodon `BusKillin@Mastodon.social <https://mastodon.social/@BusKillin>`_
-* GitHub `BusKill <https://github.com/BusKill>`_
+* LinkedIn `@BusKill <https://www.linkedin.com/company/buskill/>`_
 * YouTube `BusKill <https://www.youtube.com/channel/UC5Njxb027m2OmrocrH33oew/about>`_
+* PeerTube `@BusKill@MakerTube.net <https://makertube.net/c/buskill/>`_
+* GitHub `BusKill <https://github.com/BusKill>`_
 
 .. _faq_support:
 
