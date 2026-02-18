@@ -69,3 +69,4 @@ The reader may be interested to investigate the following similar projects:
  * `AirWatch <https://vandersecurity.com/airwatch>`_
  * `swiftGuard <https://github.com/Lennolium/swiftGuard>`_
  * `gokill <https://github.com/k4lipso/gokill>`_
+ * `DeadManSwitch <https://github.com/BlackSnufkin/DeadManSwitch>`_
