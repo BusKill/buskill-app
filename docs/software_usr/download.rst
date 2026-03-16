@@ -3,6 +3,11 @@
 Downloading The BusKill App
 ===========================
 
+This section of the documentation will describe how new users can download the BusKill app.
+
+GitHub (All Platforms)
+----------------------
+
 The BusKill projects uses GitHub as our forge.
 
 To download the latest version of the BusKill app, click the ``Latest`` button under ``Releases`` on our repository's home page:
@@ -30,5 +35,14 @@ Then you'll want to click to download three files:
 .. note::
 
 	If you'd like to download our source code and build our app yourself, see :ref:`build_app`
+
+Linux
+-----
+
+Linux users on Debian-based systems (eg Debian, Linux Mint, Ubuntu, Kali, TAILS, etc) can install buskill directly with ``apt``
+
+::
+
+   apt install buskill
 
 .. _buskill-app_repo: https://github.com/BusKill/buskill-app
