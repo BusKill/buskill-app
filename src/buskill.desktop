@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=BusKill
+Comment=Laptop Kill Cord
+Exec=/usr/bin/buskill
+Terminal=false
+Type=Application
+Categories=System;Security
+Keywords=buskill;kill cord;killcord;security;lock;shutdown;wipe;encrypt;emergency;dead man switch
+
