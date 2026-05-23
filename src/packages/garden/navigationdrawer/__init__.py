@@ -515,7 +515,8 @@ class NavigationDrawer(StencilView):
                             touch.x <=
                             (self.x + self.touch_accept_width))
             if not valid_region:
-                self._main_panel.on_touch_down(touch)
+                if col_main:
+                    self._main_panel.on_touch_down(touch)
                 return False
         else:
             if col_side and not self._main_above:

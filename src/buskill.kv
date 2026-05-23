@@ -7,7 +7,7 @@
 # Updated: 2023-06-14
 # Version: 0.3
 ################################################################################
-
+#:import BusKillNavigationDrawer buskill_gui
 
 <CriticalError>:
 
@@ -64,7 +64,7 @@
 					title: '[font=RobotoMedium][size=20]   BusKill[/size][/font]'
 					on_release: root.toggle_menu()
 
-		NavigationDrawer:
+		BusKillNavigationDrawer:
 			id: nav_drawer
 			anim_type: 'slide_above_simple'
 			side_panel_width: min( dp(300), 0.8*self.width )

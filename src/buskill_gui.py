@@ -89,6 +89,41 @@ def get_screen_manager(obj):
 
 	return None
 
+class BusKillNavigationDrawer(NavigationDrawer):
+    """Fixes issue #43: nav drawer swipe gesture works on all screens.
+
+    Root cause: Kivy dispatches on_touch_down to children first. Child
+    screens (Settings, DebugLog, etc.) consume the touch before the
+    NavigationDrawer can detect the left-edge swipe gesture.
+
+    Fix: grab left-edge touches before dispatching to children.
+    """
+
+    def on_touch_down(self, touch):
+        if not self.collide_point(*touch.pos):
+            return super().on_touch_down(touch)
+
+        if self._anim_progress < 0.001:
+            if touch.x <= self.touch_accept_width:
+                self._touch = touch
+                touch.grab(self)
+                self._start_touch_x = touch.x
+                self._start_time = touch.time_start
+                super().on_touch_down(touch)
+                return True
+
+        return super().on_touch_down(touch)
+
+    def on_touch_move(self, touch):
+        if touch.grab_current is self:
+            return super().on_touch_move(touch)
+        return super().on_touch_move(touch)
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            return super().on_touch_up(touch)
+        return super().on_touch_up(touch)
+
 class MainWindow(Screen):
 
 	toggle_btn = ObjectProperty(None)
