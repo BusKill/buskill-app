@@ -248,7 +248,7 @@ class BusKill:
 		self.upgrade_result = None
 		self.trigger = None
 
-		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown']
+		self.SUPPORTED_TRIGGERS = ['lock-screen', 'soft-shutdown', 'veracrypt-self-destruct']
 		self.trigger_softshutdown_lin_shutdown_path = None
 		self.trigger_softshutdown_lin_poweroff_path = None
 		self.trigger_softshutdown_lin_systemctl_path = None
@@ -581,6 +581,12 @@ class BusKill:
 
 				self.spawn_root_child()
 
+		# the veracrypt-self-destruct trigger requires a root child process
+		elif trigger == 'veracrypt-self-destruct':
+
+			if self.OS_NAME_SHORT == 'win':
+				self.spawn_root_child()
+
 		self.trigger = trigger
 		msg = "INFO: BusKill 'trigger' set to '" +str(self.trigger)+ "'"
 		print( msg ); logger.info( msg )
@@ -614,8 +620,79 @@ class BusKill:
 			print( msg ); logger.error( msg )
 
 		elif self.OS_NAME_SHORT == 'win':
-			msg = "ERROR: root_child_win.py not yet implemented"
-			print( msg ); logger.error( msg )
+
+			# is the root child process already started?
+			if self.root_child == None:
+				# the root child process hasn't been started; start it
+				msg = "DEBUG: No root_child detected. Attempting to spawn one."
+				print( msg ); logger.debug( msg )
+
+				msg = "INFO: You have requested BusKill to do something that requires elevated privliges on your platform. BusKill will now attempt to spawn a child process."
+				print( msg ); logger.info( msg )
+
+				# was BusKill called as a binary or a script?
+				if self.EXECUTED_AS_SCRIPT == False:
+					# this execution was a binary
+
+					# let's call the root child binary
+					root_child_path = self.SRC_DIR +os.sep+ 'root_child_win.exe'
+
+					# and we'll be calling the binary directly
+					exe = [root_child_path, self.LOG_FILE_PATH]
+
+				else:
+					# this execution was a script; let's call the root child script
+					root_child_path = self.SRC_DIR +os.sep+ 'packages' +os.sep+ 'buskill' +os.sep+ 'root_child_win.py'
+
+					# and we'll pass the script as an argument to the python
+					# interpreter
+					exe = [sys.executable, root_child_path, self.LOG_FILE_PATH]
+
+				msg = "DEBUG: root_child_path:|" +str(root_child_path)+ "|"
+				print( msg ); logger.debug( msg )
+
+				# SANITY CHECKS
+
+				# verify the root child file exists
+				if not os.path.exists( root_child_path ):
+					msg = 'ERROR: root_child file does not exist at "' +str(root_child_path)+ '". Refusing to proceed!'
+					print( msg ); logger.error( msg )
+					return False
+
+				# verify the "file" isn't actually a symlink
+				if os.path.islink( root_child_path ):
+					msg = 'ERROR: root_child is a link. Refusing to spawn script!'
+					print( msg ); logger.error( msg )
+					return False
+
+				# on Windows, we spawn the root child process directly via
+				# subprocess.Popen with stdin/stdout pipes for communication.
+				# The child process itself is responsible for any privilege
+				# escalation it may need (e.g. for VeraCrypt operations).
+				msg = "DEBUG: Attempting to spawn root child (" +str(exe)+ ")"
+				print( msg ); logger.debug( msg )
+
+				try:
+					process = subprocess.Popen(
+					 exe,
+					 stdin=subprocess.PIPE,
+					 stdout=subprocess.PIPE,
+					 stderr=subprocess.PIPE
+					)
+
+					if self.root_child == None:
+						self.root_child = dict()
+					self.root_child['process'] = process
+
+					msg = "DEBUG: Root child spawned successfully! pid:|" +str(process.pid)+ "|"
+					print( msg ); logger.debug( msg )
+
+					return True
+
+				except Exception as e:
+					msg = 'ERROR: Failed to spawn root child process! ' +str(e)
+					print( msg ); logger.error( msg )
+					return False
 
 		elif self.OS_NAME_SHORT == 'mac':
 
@@ -1325,7 +1402,9 @@ class BusKill:
 
 	def triggerWin(self):
 
-		if self.trigger == 'soft-shutdown':
+		if self.trigger == 'veracrypt-self-destruct':
+			self.trigger_veracrypt_selfdestruct_win()
+		elif self.trigger == 'soft-shutdown':
 			self.trigger_softshutdown_win()
 		else:
 			self.trigger_lockscreen_win()
@@ -1373,6 +1452,29 @@ class BusKill:
 		except Exception as e:
 			# that didn't work; log it and give up :(
 			msg = "ERROR: Failed to execute `shutdown /s /f /t /1`! " +str(e)
+			print( msg ); logger.error(msg)
+
+	def trigger_veracrypt_selfdestruct_win(self):
+
+		msg = "DEBUG: BusKill veracrypt-self-destruct trigger executing now"
+		print( msg ); logger.debug( msg )
+
+		try:
+			# send the 'veracrypt-self-destruct' command to the root child process
+			msg = "DEBUG: Attempting to send 'veracrypt-self-destruct' command to root child"
+			print( msg ); logger.debug( msg )
+
+			command = "veracrypt-self-destruct\n".encode(encoding="ascii")
+			self.root_child['process'].stdin.write( command )
+			self.root_child['process'].stdin.flush()
+
+			result = self.root_child['process'].stdout.readline().decode('ascii').strip()
+
+			msg = "DEBUG: Response from root-child:|" +str(result)+ "|"
+			print( msg ); logger.debug( msg )
+
+		except Exception as e:
+			msg = "ERROR: Failed to send 'veracrypt-self-destruct' command to root child \n\t" +str(e)
 			print( msg ); logger.error(msg)
 
 	# MAC
