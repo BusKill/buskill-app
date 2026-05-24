@@ -50,7 +50,11 @@ if __name__ == '__main__':
 
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
-	log_file_path = os.path.join( tempfile.gettempdir(), 'buskill.log' )
+
+    # Fix for global logging in /tmp/buskill.log
+    # Changed it from a global log to user cache log 
+	buskill = packages.buskill.BusKill()
+	log_file_path = os.path.join(buskill.CACHE_DIR, 'buskill.log')
 
 	logging.basicConfig(
 	 filename = log_file_path,

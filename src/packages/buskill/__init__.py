@@ -224,7 +224,8 @@ class BusKill:
 		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
+		# Fallback for script execution where logger handlers are not yet initialized
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else None
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
@@ -407,6 +408,18 @@ class BusKill:
 
 		# create a data dir in some safe place where we have write access
 		self.setupDataDir()
+        
+        # CACHE_DIR is initialized inside setupDataDir().
+        # When running BusKill directly from source, logger handlers
+        # may not yet be configured, so initialize the fallback
+        # logfile path only after setupDataDir() has completed.
+		if self.LOG_FILE_PATH is None:
+			self.LOG_FILE_PATH = os.path.join(self.CACHE_DIR, 'buskill.log')
+			logging.basicConfig(
+                filename=self.LOG_FILE_PATH,
+                level=logging.DEBUG,
+                format='%(asctime)s %(levelname)s %(message)s'
+            )
 
 		# path to buskill's config file
 		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
