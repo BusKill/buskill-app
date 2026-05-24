@@ -4,7 +4,7 @@ Thank you for your interest in contributing to BusKill
 
 ## Pull requests
 
-To contribute code to BusKill, first agree to our [Contributor Assignment Agreement](https://github.com/BusKill/buskill-app/blob/master/CCA.md)
+To contribute code to BusKill, first agree to our [Contributor Assignment Agreement](https://github.com/BusKill/buskill-app/blob/master/CAA.md)
 
 Next:
 
