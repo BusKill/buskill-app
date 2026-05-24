@@ -31,7 +31,7 @@ It is expressly forbidden to contribute to BusKill any content that has been cre
 
 ## Attribution
 
-This document's contents is based on content from the following:
+This document's contents is derived from content from the following:
 
  * Tommy-Carlos Williams' [Encryptr CONTRIBUTING.md](https://github.com/SpiderOak/Encryptr/blob/819f28bab09012372eef702c27c33450a8ce2c5e/CONTRIBUTING.md)
  * Gentoo's [AI policy](https://wiki.gentoo.org/index.php?title=Project:Council/AI_policy&oldid=1419700)
