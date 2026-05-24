@@ -21,9 +21,9 @@ It is expressly forbidden to contribute to BusKill any content that has been cre
 
 ### Rationale
 
-#. **Copyright concerns.** At this point, the regulations concerning copyright of generated contents are still emerging worldwide. Using such material could pose a danger of copyright violations, but it could also weaken Gentoo claims to copyright and void the guarantees given by copyleft licensing.
-#. **Quality concerns.** Popular LLMs are really great at generating plausibly looking, but meaningless content. They are capable of providing good assistance if you are careful enough, but we can't really rely on that. At this point, they pose both the risk of lowering the quality of Gentoo projects, and of requiring an unfair human effort from developers and users to review contributions and detect the mistakes resulting from the use of AI.
-#. **Ethical concerns.** The business side of AI boom is creating serious ethical concerns. Among them:
+1. **Copyright concerns.** At this point, the regulations concerning copyright of generated contents are still emerging worldwide. Using such material could pose a danger of copyright violations, but it could also weaken Gentoo claims to copyright and void the guarantees given by copyleft licensing.
+2. **Quality concerns.** Popular LLMs are really great at generating plausibly looking, but meaningless content. They are capable of providing good assistance if you are careful enough, but we can't really rely on that. At this point, they pose both the risk of lowering the quality of Gentoo projects, and of requiring an unfair human effort from developers and users to review contributions and detect the mistakes resulting from the use of AI.
+3. **Ethical concerns.** The business side of AI boom is creating serious ethical concerns. Among them:
   - Commercial AI projects are frequently indulging in blatant copyright violations to train their models.
   - Their operations are causing concerns about the huge use of energy and water.
   - The advertising and use of AI models has caused a significant harm to employees and reduction of service quality.
