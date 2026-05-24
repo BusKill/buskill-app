@@ -13,7 +13,7 @@ Next:
 - Create a new feature branch (git checkout -b fix-for-that-thing)
 - Commit your fix/feature (git commit -am "fixes that thing")
 - Push to the branch (git push origin fix-for-that-thing)
-- Open a [Pull Request](https://github.com/devgeeks/BusKill/pulls)
+- Open a Pull Request
 
 ## AI policy
 
