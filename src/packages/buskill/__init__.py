@@ -224,9 +224,7 @@ class BusKill:
 		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
-        # Adding a fallback logic as there was an issue of out of bound indexing when the program didn't yet have a user specific writtable cache 
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handler else None
-		
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
@@ -412,18 +410,6 @@ class BusKill:
 
 		# create a data dir in some safe place where we have write access
 		self.setupDataDir()
-
-		# Safety feature: initilaing the writable log file only after the above function is executed 
-		# ie; after finding some safe place where there will to write access 
-		# In this case it is user cache
-		if self.LOG_FILE_PATH is None:
-			self.LOG_FILE_PATH = os.path.join( self.CACHE_DIR , 'buskill.log' )
-			logging.basicConfig(
-                    filename=self.LOG_FILE_PATH,
-                    level=logging.DEBUG,
-                    format='%(ascitime)s %(levelname)s %(message)s'
-            )
-
 		# path to buskill's config file
 		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
 

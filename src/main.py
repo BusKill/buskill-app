@@ -55,18 +55,30 @@ if __name__ == '__main__':
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
 
-    # Removing the universal log file logic that generates the file in /tmp dir
-    # Changing the location of the log file to the user specific cache thus preventing the file permission error 
-	buskill = packages.buskill.BusKill()
-	log_file_path = os.path.join( buskill.CACHE_DIR, 'buskill.log' )
+	# 
+	log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
 
-	logging.basicConfig(
-	 filename = log_file_path,
-	 filemode = 'a',
-	 format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-	 datefmt = '%H:%M:%S',
-	 level = logging.DEBUG
-	)
+	try: 
+		logging.basicConfig(
+	 		filename = log_file_path,
+	 		filemode = 'a',
+	 		format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+	 		datefmt = '%H:%M:%S',
+	 		level = logging.DEBUG
+		)
+	except PermissionError:
+		from datetime import datetime
+		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+		fallback_log = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
+
+		logging.basicConfig(
+			filename = fallback_log,
+			filemode='a',
+			format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+	 		datefmt = '%H:%M:%S',
+	 		level = logging.DEBUG
+		)
+
 	msg = "==============================================================================="
 	print( msg ); logging.info( msg )
 	msg = "INFO: Writing to log file '" +str(log_file_path)+ "'"
