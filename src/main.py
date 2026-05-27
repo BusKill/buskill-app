@@ -33,6 +33,7 @@ if CURRENT_PLATFORM.startswith( 'LINUX' ) or CURRENT_PLATFORM.startswith( 'DARWI
 ################################################################################
 
 import argparse, logging, sys, multiprocessing, tempfile
+from datetime import datetime
 import packages.buskill
 
 ################################################################################
@@ -68,7 +69,6 @@ if __name__ == '__main__':
 	 		level = logging.DEBUG
 		)
 	except PermissionError:
-		from datetime import datetime
 		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 		fallback_log = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
 
