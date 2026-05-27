@@ -69,13 +69,12 @@ if __name__ == '__main__':
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
 
-	# adding a fallback log to avoid PermissionError
-	# This creates a new file that appends the timestamp to the log file
-	log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
-
 	try: 
+		log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
 		start_logging(log_file_path)
 	except PermissionError:
+		# adding a fallback log to avoid PermissionError
+		# This creates a new file that appends the timestamp to the log file
 		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 		log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
 		
