@@ -44,6 +44,19 @@ import packages.buskill
 from buskill_version import BUSKILL_VERSION
 
 ################################################################################
+#                                  FUNCTIONS                                   #
+################################################################################
+
+def start_logging(file_name):
+	logging.basicConfig(
+	 		filename = file_name,
+	 		filemode = 'a',
+	 		format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+	 		datefmt = '%H:%M:%S',
+	 		level = logging.DEBUG
+		)
+
+################################################################################
 #                                  MAIN BODY                                   #
 ################################################################################
 
@@ -61,24 +74,12 @@ if __name__ == '__main__':
 	log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
 
 	try: 
-		logging.basicConfig(
-	 		filename = log_file_path,
-	 		filemode = 'a',
-	 		format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-	 		datefmt = '%H:%M:%S',
-	 		level = logging.DEBUG
-		)
+		start_logging(log_file_path)
 	except PermissionError:
 		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-		fallback_log = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
-
-		logging.basicConfig(
-			filename = fallback_log,
-			filemode='a',
-			format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-	 		datefmt = '%H:%M:%S',
-	 		level = logging.DEBUG
-		)
+		log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
+		
+		start_logging(log_file_path)
 
 	msg = "==============================================================================="
 	print( msg ); logging.info( msg )
