@@ -33,6 +33,7 @@ if CURRENT_PLATFORM.startswith( 'LINUX' ) or CURRENT_PLATFORM.startswith( 'DARWI
 ################################################################################
 
 import argparse, logging, sys, multiprocessing, tempfile
+from datetime import datetime
 import packages.buskill
 
 ################################################################################
@@ -41,6 +42,19 @@ import packages.buskill
 
 #BUSKILL_VERSION = '0.1'
 from buskill_version import BUSKILL_VERSION
+
+################################################################################
+#                                  FUNCTIONS                                   #
+################################################################################
+
+def start_logging(file_name):
+	logging.basicConfig(
+	 		filename = file_name,
+	 		filemode = 'a',
+	 		format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+	 		datefmt = '%H:%M:%S',
+	 		level = logging.DEBUG
+		)
 
 ################################################################################
 #                                  MAIN BODY                                   #
@@ -54,15 +68,18 @@ if __name__ == '__main__':
 
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
-	log_file_path = os.path.join( tempfile.gettempdir(), 'buskill.log' )
 
-	logging.basicConfig(
-	 filename = log_file_path,
-	 filemode = 'a',
-	 format = '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-	 datefmt = '%H:%M:%S',
-	 level = logging.DEBUG
-	)
+	try: 
+		log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
+		start_logging(log_file_path)
+	except PermissionError:
+		# adding a fallback log to avoid PermissionError
+		# This creates a new file that appends the timestamp to the log file
+		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+		log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
+		
+		start_logging(log_file_path)
+
 	msg = "==============================================================================="
 	print( msg ); logging.info( msg )
 	msg = "INFO: Writing to log file '" +str(log_file_path)+ "'"

@@ -410,7 +410,6 @@ class BusKill:
 
 		# create a data dir in some safe place where we have write access
 		self.setupDataDir()
-
 		# path to buskill's config file
 		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
 
