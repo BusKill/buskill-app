@@ -224,7 +224,11 @@ class BusKill:
 		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
+
+		# BusKill class was always initialised after finding the log file path Therefore in the new setup we are initialising it before the log file path is found
+		# This will prevent it from out of index error 
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else Non
+		
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None

@@ -68,17 +68,32 @@ if __name__ == '__main__':
 
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
+	
+	# instantiate the buskill object EARLY
+	# Moved to top so that DATA_DIR path can be found from the buskill class
+	global bk
+	bk = packages.buskill.BusKill()
 
-	try: 
-		log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
+	# sys argument fr persistent log
+	# Can be moved to buskill_cli using reference from https://stackoverflow.com/questions/6255050/python-thinking-of-a-module-and-its-variables-as-a-singleton-clean-approach 
+	persistent_debug = '--debug' in sys.argv 
+
+	if persistent_debug:
+		# Initialising new location for the log file
+		log_file_path = os.path.join( bk.DATA_DIR , 'buskill.log')
 		start_logging(log_file_path)
-	except PermissionError:
-		# adding a fallback log to avoid PermissionError
-		# This creates a new file that appends the timestamp to the log file
-		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-		log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
-		
-		start_logging(log_file_path)
+	else:	
+		try: 
+			log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
+			start_logging(log_file_path)
+		except PermissionError:
+			# adding a fallback log to avoid PermissionError
+			# This creates a new file that appends the timestamp to the log file
+			timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+			log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
+			start_logging(log_file_path)
+	
+	bk.LOG_FILE_PATH = log_file_path
 
 	msg = "==============================================================================="
 	print( msg ); logging.info( msg )
@@ -152,10 +167,6 @@ if __name__ == '__main__':
 
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
-
-	# instantiate the buskill object
-	global bk
-	bk = packages.buskill.BusKill()
 
 	#############
 	# LAUNCH UI #
