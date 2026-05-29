@@ -227,7 +227,7 @@ class BusKill:
 
 		# BusKill class was always initialised after finding the log file path Therefore in the new setup we are initialising it before the log file path is found
 		# This will prevent it from out of index error 
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else Non
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else None
 		
 		self.EXE_PATH = None
 		self.EXE_DIR = None
