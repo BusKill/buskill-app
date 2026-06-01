@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
 	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
-	logging.debug( 'user|' +str(os.getlogin())+ '|' )
+	#logging.debug( 'user|' +str(os.getlogin())+ '|' )
 	logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
 	logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
 	logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )

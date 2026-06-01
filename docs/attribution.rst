@@ -13,6 +13,7 @@ Thank you to the following folks who have contributed to the BusKill project!
  * `François Marier <https://fmarier.org/>`_
  * `samxplogs <https://www.youtube.com/@samxplogs>`_
  * Wessel klein Snakenborg and `NovaCustom <https://novacustom.com/>`_
+ * `Raihan Shamnad <https://www.linkedin.com/in/raihan-shamnad-487b64326>`_
 
 This project would not have been possible without the following tools and services:
  * `Python <https://www.python.org/>`_
