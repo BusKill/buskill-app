@@ -19,7 +19,7 @@ For more info, see: https://buskill.in/
 
 # this is needed for supporting Windows 10 with OpenGL < v2.0
 # Example: VirtualBox w/ OpenGL v1.1
-import platform, os
+import platform, os, getpass
 CURRENT_PLATFORM = platform.system().upper()
 if CURRENT_PLATFORM.startswith( 'WIN' ):
     os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
@@ -87,7 +87,14 @@ if __name__ == '__main__':
 
 	logging.debug( 'BUSKILL_VERSION|' +str(BUSKILL_VERSION)+ '|' )
 	logging.debug( 'os.environ|' +str(os.environ)+ '|' )
-	#logging.debug( 'user|' +str(os.getlogin())+ '|' )
+
+    # WARNING: getpass.getuser() just gets the username from the environment
+    # variables, so it's *NOT SAFE* to be used for authentication. Here we're
+    # just logging, so it's safe.
+    #  * https://github.com/BusKill/buskill-app/issues/120#issuecomment-4569592405
+    #  * https://stackoverflow.com/questions/47444178/difference-between-os-getlogin-and-os-environ-for-getting-username
+    #  * https://docs.python.org/3/library/getpass.html#getpass.getuser
+	logging.debug( 'user|' +str(getpass.getuser())+ '|' )
 	logging.debug( 'sys.argv|' +str(sys.argv)+ '|' )
 	logging.debug( 'sys.builtin_modules_names|' +str(sys.builtin_module_names)+ '|' )
 	logging.debug( 'sys.executable|' +str(sys.executable)+ '|' )
