@@ -146,7 +146,7 @@ def BusKillCLI( buskill_object ):
 		print( "Supported triggers include:" )
 		for trigger in bk.SUPPORTED_TRIGGERS:
 			print( "\t" +str(trigger))
-		sys.exit(0)
+		sys.exit(1)
 
 	# did the user ask us to do a software upgrade?
 	if args.upgrade:
