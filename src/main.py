@@ -74,11 +74,7 @@ if __name__ == '__main__':
 	global bk
 	bk = packages.buskill.BusKill()
 
-	# sys argument fr persistent log
-	# Can be moved to buskill_cli using reference from https://stackoverflow.com/questions/6255050/python-thinking-of-a-module-and-its-variables-as-a-singleton-clean-approach 
-	persistent_debug = '--debug' in sys.argv 
-
-	if persistent_debug:
+	if bk.persistent_log:
 		# Initialising new location for the log file
 		log_file_path = os.path.join( bk.DATA_DIR , 'buskill.log')
 		start_logging(log_file_path)

@@ -111,13 +111,6 @@ def BusKillCLI( buskill_object ):
 	 action="store_true"
 	)
 
-	# These arguments do not play a major role other than showing its use case 
-	# Can initialise the persistent debug from here using the stack-overflow reference https://stackoverflow.com/questions/6255050/python-thinking-of-a-module-and-its-variables-as-a-singleton-clean-approach
-	parser.add_argument(
-	 "-d","--debug",
-	 help="To initiate persistent log"
-	)
-
 	# process command-line arguments
 	args = parser.parse_args()
 
