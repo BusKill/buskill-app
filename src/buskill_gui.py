@@ -5,8 +5,8 @@
   File:    buskill_gui.py
   Authors: Michael Altfield <michael@buskill.in>
   Created: 2020-06-23
-  Updated: 2024-03-27
-  Version: 0.5
+  Updated: 2026-06-02
+  Version: 0.6
 
 This is the code to launch the BusKill GUI app
 
@@ -22,7 +22,7 @@ from packages.garden.navigationdrawer import NavigationDrawer
 from packages.garden.progressspinner import ProgressSpinner
 from buskill_version import BUSKILL_VERSION
 
-import os, sys, re, webbrowser, json, operator
+import os, sys, re, webbrowser, json, operator, importlib
 
 import multiprocessing, threading
 from multiprocessing import util
@@ -1404,6 +1404,16 @@ class BusKillApp(App):
 		self.bk.close()
 
 	def build_config(self, config):
+
+		# this is a hack that executes the orphaned code in kivy/config.py
+		# which sets all the default config files for a new kivy config file.
+		# if we omit it, kivy may cause a fatal error because some expected keys
+		# are missing. we have to use importlib.reload() to force it to run again,
+		# else it'll do nothing. For more info, see:
+		#  * https://stackoverflow.com/questions/79950555/how-to-force-re-import-of-from-x-import-y-statement-in-python
+		#  * https://stackoverflow.com/questions/437589/how-do-i-unload-reload-a-python-module
+		#  * https://github.com/BusKill/buskill-app/issues/123
+		importlib.reload( kivy.config )
 
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
