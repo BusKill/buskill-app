@@ -229,7 +229,7 @@ class BusKill:
 		# This will prevent it from out of index error 
 		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else None
 		# Default value as False, because if no one updates the config.ini file then reverting back to old file path
-		self.persistent_log = False
+		self.PERSISTENT_LOG = False
 		
 		self.EXE_PATH = None
 		self.EXE_DIR = None
@@ -458,7 +458,7 @@ class BusKill:
 		self.config.read( self.CONF_FILE )
 
 		if self.config.has_option('buskill', 'persistent_log'):
-			self.persistent_log = self.config.getboolean(
+			self.PERSISTENT_LOG = self.config.getboolean(
 				'buskill',
 				'persistent_log'
 			)

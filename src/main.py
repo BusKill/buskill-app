@@ -74,7 +74,7 @@ if __name__ == '__main__':
 	global bk
 	bk = packages.buskill.BusKill()
 
-	if bk.persistent_log:
+	if bk.PERSISTENT_LOG:
 		# Initialising new location for the log file
 		log_file_path = os.path.join( bk.DATA_DIR , 'buskill.log')
 		start_logging(log_file_path)
