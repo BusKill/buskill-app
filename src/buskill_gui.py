@@ -1029,7 +1029,7 @@ class DebugLog(Screen):
 		lines = []
 		for line in self.debug_log_contents.splitlines(keepends=False):
 			lines.append({'text': line})
-		self.rv.data = lines
+		Clock.schedule_once(lambda dt: setattr(self.rv, 'data', lines), 0)
 
 	def copy_debug_log( self ):
 
