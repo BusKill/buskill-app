@@ -916,9 +916,8 @@ class ComplexOptionsScreen(Screen):
 				# set the radio button icon to "unselected"
 				self.rv.data[n]['radio_button_icon'] = '[font=mdicons][size=18sp]\ue836[/size][/font] '
 
-		# update RecycleView data in next frame
-		# * https://stackoverflow.com/questions/49935190/kivy-how-to-initialize-the-viewclass-of-the-recycleview-dynamically
-		Clock.schedule_once(self.rv.refresh_from_data,0)
+		# trigger RecycleView refresh by replacing data list
+		self.rv.data = list(self.rv.data)
 
 # This is our main Screen when the user clicks "Settings" in the nav drawer
 class BusKillSettingsScreen(Screen):
