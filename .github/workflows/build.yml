@@ -21,7 +21,7 @@ jobs:
       run: "sudo build/linux/debianWrapper.sh"
       shell: bash
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: buskill-linux-x86_64
         path: dist/
@@ -74,7 +74,7 @@ jobs:
       run: "build/windows/buildExe.ps1"
       shell: powershell -Command "& '{0}'"
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: buskill-windows-x86_64
         path: dist/
@@ -122,7 +122,7 @@ jobs:
       run: "build/mac/buildDmg.sh"
       shell: bash
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: buskill-mac-x86_64
         path: dist/
