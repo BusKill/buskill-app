@@ -74,20 +74,18 @@ if __name__ == '__main__':
 	global bk
 	bk = packages.buskill.BusKill()
 
-	if bk.PERSISTENT_LOG:
-		# Initialising new location for the log file
-		log_file_path = os.path.join( bk.DATA_DIR , 'buskill.log')
+	# Decision whether to write to DATA_DIR or TEMP file 
+	log_dir = bk.DATA_DIR if bk.PERSISTENT_LOG else tempfile.gettempdir()
+
+	try: 
+		log_file_path = os.path.join( log_dir , 'buskill.log' )
 		start_logging(log_file_path)
-	else:	
-		try: 
-			log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
-			start_logging(log_file_path)
-		except PermissionError:
-			# adding a fallback log to avoid PermissionError
-			# This creates a new file that appends the timestamp to the log file
-			timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-			log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
-			start_logging(log_file_path)
+	except PermissionError:
+		# adding a fallback log to avoid PermissionError
+		# This creates a new file that appends the timestamp to the log file
+		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+		log_file_path = os.path.join( log_dir , f'buskill.{timestamp}.log')
+		start_logging(log_file_path)
 	
 	bk.LOG_FILE_PATH = log_file_path
 
