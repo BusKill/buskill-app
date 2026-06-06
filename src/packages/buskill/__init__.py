@@ -476,8 +476,8 @@ class BusKill:
 				print( msg ); logger.debug( msg )
 
 			self.usb_handler.join()
-		except:
-			pass
+		except Exception as e:
+                    logger.debug("Failed to join usb_handler: %s", e)
 		try:
 
 			# if we don't kill this child process on exit, the UI will freeze
@@ -489,14 +489,14 @@ class BusKill:
 				print( msg ); logger.debug( msg )
 
 			self.upgrade_process.join()
-		except:
-			pass
+		except Exception as e:
+                    logger.debug("Failed to join upgrade_process: %s", e)
 
 		try:
 			# delete cache dir
 			self.wipeCache()
-		except:
-			pass
+		except Exception as e:
+                    logger.debug("Failed to wipe cache: %s", e)
 
 	def is_platform_supported(self):
 
@@ -892,8 +892,8 @@ class BusKill:
 		try:
 			msg = "INFO: using DATA_DIR:|" +str(self.DATA_DIR)+ "|"
 			print( msg ); logger.info( msg )
-		except:
-			msg = "WARNING: Unable to write to any DATA_DIR; not using one"
+		except Exception as e:
+                    logger.warning("Unable to write to any DATA_DIR: %s", e)
 			print( msg ); logger.warn( msg )
 			self.DATA_DIR = ''
 			return
@@ -932,8 +932,8 @@ class BusKill:
 			try:
 				self.usb_handler.kill()
 				self.usb_handler.join()
-			except:
-				pass
+			except Exception as e:
+                            logger.debug("Failed to kill/join usb_handler: %s", e)
 
 			self.is_armed = False
 			msg = "INFO: BusKill is disarmed."
@@ -1598,8 +1598,8 @@ class BusKill:
 			dmg_mnt_path = os.path.join( self.CACHE_DIR, 'dmg_mnt' )
 			if os.path.exists( dmg_mnt_path ) and self.OS_NAME_SHORT == 'mac':
 				subprocess.run( ['umount', dmg_mnt_path] )
-		except:
-			pass
+		except Exception as e:
+                    logger.debug("Failed to unmount dmg: %s", e)
 
 		if os.path.exists( self.CACHE_DIR ):
 			shutil.rmtree( self.CACHE_DIR )
@@ -1607,8 +1607,8 @@ class BusKill:
 		try:
 			os.makedirs( self.CACHE_DIR, mode=0o700 )
 			os.chmod( self.DATA_DIR, mode=0o0700 )
-		except:
-			pass
+		except Exception as e:
+                    logger.debug("Failed to create/chmod cache dir: %s", e)
 
 	# Takes the path (as a string) to a SHA256SUMS file and a list of paths to
 	# local files. Returns true only if all files' checksums are present in the
@@ -1864,7 +1864,8 @@ class BusKill:
 		try:
 			with open( os.path.join(APP_DIR, 'KEYS'), 'r' ) as fd:
 				KEYS = fd.read()
-		except:
+		except Exception as e:
+                    logger.debug("Failed to read KEYS from APP_DIR, trying parent dir: %s", e)
 			# fall-back to one dir up if we're executing from 'src/'
 			with open( os.path.join( os.path.split(APP_DIR)[0], 'KEYS'), 'r' ) as fd:
 				KEYS = fd.read()
