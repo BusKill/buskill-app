@@ -224,7 +224,13 @@ class BusKill:
 		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
+
+		# BusKill class was always initialised after finding the log file path Therefore in the new setup we are initialising it before the log file path is found
+		# This will prevent it from out of index error 
+		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename if logger.root.handlers else None
+		# Default value as False, because if no one updates the config.ini file then reverting back to old file path
+		self.PERSISTENT_LOG = False
+		
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
@@ -429,6 +435,8 @@ class BusKill:
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
 		print( msg ); logger.debug( msg )
 
+		# running the config option only after the implimentation of the config file
+		self.getConfigOption()
 
 		# handle conditions where this version was already upgraded by a newer
 		# version or if this is a version that upgraded an older version
@@ -441,6 +449,20 @@ class BusKill:
 	#  * https://bugs.python.org/issue34034
 	#  * https://docs.python.org/3/library/pickle.html#object.__reduce__
 	#  * https://docs.python.org/3/library/pickle.html#object.__getstate__
+	
+
+	# Old config file reading option only exist after the toggling between the arm and disarm functionality
+	# Created a new function to get config option for persistent log file
+	def getConfigOption(self):
+		self.config = configparser.ConfigParser()
+		self.config.read( self.CONF_FILE )
+
+		if self.config.has_option('buskill', 'persistent_log'):
+			self.PERSISTENT_LOG = self.config.getboolean(
+				'buskill',
+				'persistent_log'
+			)
+	
 	def __getstate__(self):
 
 		state = self.__dict__.copy()

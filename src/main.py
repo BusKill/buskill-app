@@ -68,17 +68,26 @@ if __name__ == '__main__':
 
 	# TODO: disable logging by default; enable it with an argument
 	# TODO: be able to override the path to the log file with an env var or argument value; make these just the defaults
+	
+	# instantiate the buskill object EARLY
+	# Moved to top so that DATA_DIR path can be found from the buskill class
+	global bk
+	bk = packages.buskill.BusKill()
+
+	# Decision whether to write to DATA_DIR or TEMP file 
+	log_dir = bk.DATA_DIR if bk.PERSISTENT_LOG else tempfile.gettempdir()
 
 	try: 
-		log_file_path = os.path.join( tempfile.gettempdir() , 'buskill.log' )
+		log_file_path = os.path.join( log_dir , 'buskill.log' )
 		start_logging(log_file_path)
 	except PermissionError:
 		# adding a fallback log to avoid PermissionError
 		# This creates a new file that appends the timestamp to the log file
 		timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-		log_file_path = os.path.join( tempfile.gettempdir() , f'buskill.{timestamp}.log')
-		
+		log_file_path = os.path.join( log_dir , f'buskill.{timestamp}.log')
 		start_logging(log_file_path)
+	
+	bk.LOG_FILE_PATH = log_file_path
 
 	msg = "==============================================================================="
 	print( msg ); logging.info( msg )
@@ -159,10 +168,6 @@ if __name__ == '__main__':
 
 	msg = "buskill version " +str(BUSKILL_VERSION)
 	print( msg ); logging.info( msg )
-
-	# instantiate the buskill object
-	global bk
-	bk = packages.buskill.BusKill()
 
 	#############
 	# LAUNCH UI #
