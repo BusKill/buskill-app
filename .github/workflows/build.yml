@@ -10,7 +10,7 @@ on:
 jobs:
 
   linux:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, ubuntu-latest-arm]
     #container: debian:buster-slim
 
     steps:

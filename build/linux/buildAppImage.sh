@@ -11,8 +11,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2024-07-26
-# Version: 1.4
+# Updated: 2026-06-07
+# Version: 1.5
 ################################################################################
 
 ################################################################################
@@ -43,7 +43,7 @@ if [ $INODE_NUM -gt 3 ]; then
 	SUDO=''
 fi
 
-APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg file gnupg squashfs-tools'
+APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsync curl wget gnupg file gnupg squashfs-tools coreutils'
 
 ################################################################################
 #                                  FUNCTIONS                                   #
@@ -52,6 +52,7 @@ APT_PACKAGES='iptables git python3-pip python3-setuptools python3-virtualenv rsy
 print_debugging_info () {
 	date
 	uname -a
+	arch
 	cat /etc/issue
 	which gpg
 	gpg --version
@@ -231,8 +232,17 @@ rm -rf /tmp/squashfs4.4
 
 # We use this python-appimage release as a base for building our own python
 # AppImage. We only have to add our code and depends to it.
-#cp build/deps/python3.12.8-cp37-cp37m-manylinux2014_x86_64.AppImage /tmp/python.AppImage
-cp build/deps/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage /tmp/python.AppImage
+
+# what architecture are we on?
+if [[ "$(arch)" == "x86_64" ]]; then
+	# This computer is x86_64; use that arch's AppImage
+	source_appimage_path = 'build/deps/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage'
+else
+	echo "ERROR: Unknown CPU Architecture ($(arch))"
+	exit 1
+fi
+
+cp $source_appimage_path /tmp/python.AppImage
 chmod +x /tmp/python.AppImage
 pushd /tmp
 /tmp/python.AppImage --appimage-extract
