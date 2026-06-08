@@ -427,7 +427,7 @@ class BusKill:
 			# top to make UX *slightly* better for a user who wants to manually
 			# edit the config file. if we don't do this, then kivy will put it
 			# below its own settings, making the user scroll a lot to find them
-			contents = "[buskill]\n"
+			contents = "[buskill]\npersistent_log = False\n" # Updating the config option
 			with open( self.CONF_FILE, 'w' ) as fd:
 				fd.write( contents )
 
