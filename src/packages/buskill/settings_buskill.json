@@ -14,6 +14,23 @@
 	},
 	{
 		"type": "title",
+		"title": "Buskill Complex Settings Option"
+	},
+	{
+		"icon": "",
+		"type": "complex-options",
+		"title": "Persistent Logging",
+		"desc": "DO you want to store the log ?",
+		"section": "buskill",
+		"key": "persistent_log",
+		"options": ["True","False"],
+		"options_human": ["True","False"],
+		"options_long": ["Log file will be not deleted after your system restarts","Log file will be deleted once you restart the computer"],
+		"confirmation": ["Please restart the app so the changes can be implimented","Please restart the app so the changes can be implimented"],
+		"options_icons": ["",""]
+	},
+	{
+		"type": "title",
 		"title": "Look & Feel"
 	},
 	{
