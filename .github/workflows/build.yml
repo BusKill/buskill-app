@@ -10,9 +10,7 @@ on:
 jobs:
 
   linux:
-    #runs-on: [ubuntu-latest, ubuntu-latest-arm]
-    #runs-on: ubuntu-latest
-    runs-on: ubuntu-latest-arm
+    #runs-on: [ubuntu-latest, ubuntu-24.04-arm]
     #container: debian:buster-slim
 
     steps:
@@ -114,7 +112,7 @@ jobs:
       shell: bash
 
   mac:
-    runs-on: macos-13
+    runs-on: macos-15-intel
 
     steps:
 
