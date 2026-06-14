@@ -237,6 +237,9 @@ rm -rf /tmp/squashfs4.4
 if [[ "$(arch)" == "x86_64" ]]; then
 	# This computer is x86_64; use that arch's AppImage
 	source_appimage_path = 'build/deps/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage'
+elif [[ "$(arch)" == "aarch64" ]]; then
+	# This computer is arm64; use that arch's AppImage
+	source_appimage_path = 'build/deps/python3.12.12-cp312-cp312-manylinux2014_aarch64.AppImage'
 else
 	echo "ERROR: Unknown CPU Architecture ($(arch))"
 	exit 1
