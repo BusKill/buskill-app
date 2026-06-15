@@ -13,11 +13,7 @@
 		"options_icons": ["\ue1bf","\ue62a"]
 	},
 	{
-		"type": "title",
-		"title": "Buskill Complex Settings Option"
-	},
-	{
-		"icon": "",
+		"icon": "\ue873",
 		"type": "complex-options",
 		"title": "Persistent Logging",
 		"desc": "DO you want to store the log ?",
@@ -27,7 +23,7 @@
 		"options_human": ["True","False"],
 		"options_long": ["Log file will be not deleted after your system restarts","Log file will be deleted once you restart the computer"],
 		"confirmation": ["Please restart the app so the changes can be implimented","Please restart the app so the changes can be implimented"],
-		"options_icons": ["",""]
+		"options_icons": ["\ue161","\ue5cd"]
 	},
 	{
 		"type": "title",

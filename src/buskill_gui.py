@@ -1418,6 +1418,7 @@ class BusKillApp(App):
 		Config.read( self.bk.CONF_FILE )
 		Config.setdefaults('buskill', {
 		 'buskill_trigger': 'lock-screen',
+		 'persistent_log': 'False'
 		})	
 
 		# TODO: don't hard-code this, pull it from kivy/config.py
