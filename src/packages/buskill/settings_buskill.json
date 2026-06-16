@@ -16,7 +16,7 @@
 		"icon": "\ue873",
 		"type": "complex-options",
 		"title": "Persistent Logging",
-		"desc": "DO you want to store the log ?",
+		"desc": "Do you want to store the log file persistently (keeping the data after your computer reboots)?",
 		"section": "buskill",
 		"key": "persistent_log",
 		"options": ["True","False"],
