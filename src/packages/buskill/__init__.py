@@ -419,6 +419,12 @@ class BusKill:
 		# path to buskill's config file
 		self.CONF_FILE = os.path.join( self.DATA_DIR, "config.ini" )
 
+		# Setting up universal default value for both GUI and CLI config options
+		self.DEFAULT_CONF = {
+		 'buskill_trigger': 'lock-screen',
+		 'persistent_log': self.PERSISTENT_LOG
+		}
+
 		# does the config file exist already?
 		if not os.path.exists( self.CONF_FILE ):
 			# the config file doesn't exist yet; create it
@@ -427,9 +433,19 @@ class BusKill:
 			# top to make UX *slightly* better for a user who wants to manually
 			# edit the config file. if we don't do this, then kivy will put it
 			# below its own settings, making the user scroll a lot to find them
-			contents = "[buskill]\npersistent_log = False\n" # Updating the config option
+			contents = "[buskill]\n"
 			with open( self.CONF_FILE, 'w' ) as fd:
 				fd.write( contents )
+
+			# For CLI and GUI config option Initialising it when the config.ini file is created 
+			# So when ever any new config option is to be added only have to add it to self.DEFAULT_CONF dict
+			# This will only run once when user either runs CLI or GUI
+			# The users who run the CLI can change the file manually and still the user change persist 
+			config = configparser.ConfigParser()
+			config.read( self.CONF_FILE )
+			config['buskill'] = self.DEFAULT_CONF
+			with open(self.CONF_FILE, 'w') as fd:
+				config.write(fd)
 
 		msg = "DEBUG: CACHE_DIR:|" +str(self.CACHE_DIR)+  "|\n"
 		msg = "DEBUG: CONF_FILE:|" +str(self.CONF_FILE)+  "|\n"
