@@ -1992,9 +1992,14 @@ class BusKill:
 		# the only reason the SOURCE_DATE_EPOCH would be missing is if we're executing
 		# the python files directly (eg we're testing) and we can just get it from git
 		if BUSKILL_VERSION['SOURCE_DATE_EPOCH'] == '':
+			# derive the repo root dynamically: buskill/__init__.py lives at
+			# <repo>/src/packages/buskill/__init__.py, so go up 4 levels
+			repo_root = os.path.abspath(
+			 os.path.join( os.path.dirname(__file__), '..', '..', '..' )
+			)
 			result = subprocess.run( [
 			 'git',
-			 '--git-dir=/home/user/sandbox/buskill-app/.git',
+			 '-C', repo_root,
 			 'log',
 			 '-1',
 			 '--pretty=%ct'
