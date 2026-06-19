@@ -476,8 +476,9 @@ class BusKill:
 				print( msg ); logger.debug( msg )
 
 			self.usb_handler.join()
-		except:
-			pass
+		except Exception as e:
+			msg = "DEBUG: Ignoring exception while stopping usb_handler: " +str(e)
+			print( msg ); logger.debug( msg )
 		try:
 
 			# if we don't kill this child process on exit, the UI will freeze
@@ -489,14 +490,16 @@ class BusKill:
 				print( msg ); logger.debug( msg )
 
 			self.upgrade_process.join()
-		except:
-			pass
+		except Exception as e:
+			msg = "DEBUG: Ignoring exception while stopping upgrade_process: " +str(e)
+			print( msg ); logger.debug( msg )
 
 		try:
 			# delete cache dir
 			self.wipeCache()
-		except:
-			pass
+		except Exception as e:
+			msg = "DEBUG: Ignoring exception while wiping cache: " +str(e)
+			print( msg ); logger.debug( msg )
 
 	def is_platform_supported(self):
 
@@ -892,7 +895,7 @@ class BusKill:
 		try:
 			msg = "INFO: using DATA_DIR:|" +str(self.DATA_DIR)+ "|"
 			print( msg ); logger.info( msg )
-		except:
+		except Exception as e:
 			msg = "WARNING: Unable to write to any DATA_DIR; not using one"
 			print( msg ); logger.warn( msg )
 			self.DATA_DIR = ''
@@ -932,8 +935,9 @@ class BusKill:
 			try:
 				self.usb_handler.kill()
 				self.usb_handler.join()
-			except:
-				pass
+			except Exception as e:
+				msg = "DEBUG: Ignoring exception while disarming usb_handler: " +str(e)
+				print( msg ); logger.debug( msg )
 
 			self.is_armed = False
 			msg = "INFO: BusKill is disarmed."
@@ -1598,8 +1602,9 @@ class BusKill:
 			dmg_mnt_path = os.path.join( self.CACHE_DIR, 'dmg_mnt' )
 			if os.path.exists( dmg_mnt_path ) and self.OS_NAME_SHORT == 'mac':
 				subprocess.run( ['umount', dmg_mnt_path] )
-		except:
-			pass
+		except Exception as e:
+			msg = "DEBUG: Ignoring exception while unmounting dmg: " +str(e)
+			print( msg ); logger.debug( msg )
 
 		if os.path.exists( self.CACHE_DIR ):
 			shutil.rmtree( self.CACHE_DIR )
@@ -1607,8 +1612,9 @@ class BusKill:
 		try:
 			os.makedirs( self.CACHE_DIR, mode=0o700 )
 			os.chmod( self.DATA_DIR, mode=0o0700 )
-		except:
-			pass
+		except Exception as e:
+			msg = "DEBUG: Ignoring exception while creating cache dir: " +str(e)
+			print( msg ); logger.debug( msg )
 
 	# Takes the path (as a string) to a SHA256SUMS file and a list of paths to
 	# local files. Returns true only if all files' checksums are present in the
@@ -1864,7 +1870,7 @@ class BusKill:
 		try:
 			with open( os.path.join(APP_DIR, 'KEYS'), 'r' ) as fd:
 				KEYS = fd.read()
-		except:
+		except FileNotFoundError:
 			# fall-back to one dir up if we're executing from 'src/'
 			with open( os.path.join( os.path.split(APP_DIR)[0], 'KEYS'), 'r' ) as fd:
 				KEYS = fd.read()
