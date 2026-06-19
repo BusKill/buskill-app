@@ -224,7 +224,8 @@ class BusKill:
 		self.SIMULATE_HOTPLUG_REMOVAL = False
 
 		self.EXECUTED_AS_SCRIPT = None
-		self.LOG_FILE_PATH = logger.root.handlers[0].baseFilename
+		handler = logger.root.handlers[0] if logger.root.handlers else None
+		self.LOG_FILE_PATH = getattr(handler, 'baseFilename', None)
 		self.EXE_PATH = None
 		self.EXE_DIR = None
 		self.EXE_FILE = None
