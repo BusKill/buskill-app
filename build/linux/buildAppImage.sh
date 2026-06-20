@@ -11,7 +11,7 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2026-06-07
+# Updated: 2026-06-20
 # Version: 1.5
 ################################################################################
 
@@ -237,9 +237,11 @@ rm -rf /tmp/squashfs4.4
 if [[ "$(arch)" == "x86_64" ]]; then
 	# This computer is x86_64; use that arch's AppImage
 	source_appimage_path='build/deps/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage'
+	source_appimagetool_path='build/deps/appimagetool-x86_64.AppImage'
 elif [[ "$(arch)" == "aarch64" ]]; then
 	# This computer is arm64; use that arch's AppImage
 	source_appimage_path='build/deps/python3.12.12-cp312-cp312-manylinux2014_aarch64.AppImage'
+	source_appimagetool_path='build/deps/appimagetool-aarch64.AppImage'
 else
 	echo "ERROR: Unknown CPU Architecture ($(arch))"
 	exit 1
@@ -448,47 +450,6 @@ for item in $(echo "${unnecessary}"); do
 	done
 
 done
-
-########################
-# PREPARE APPIMAGETOOL #
-########################
-
-cp build/deps/appimagetool-x86_64.AppImage /tmp/appimagetool.AppImage
-chmod +x /tmp/appimagetool.AppImage
-
-cp build/deps/squashfs4.4.tar.gz /tmp/
-
-pushd /tmp
-
-# The latest stable appimagetool uses an old version of mksquashfs (v4.3),
-# which does not support reproducible builds. Here we build the latest
-# squashfs-tools (v4.4) and hack appimagetools to use it. For more info, see:
-#  * https://github.com/BusKill/buskill-app/issues/3
-tar -xzvf squashfs4.4.tar.gz
-pushd squashfs4.4/squashfs-tools
-${SUDO} apt-get -y install zlib1g-dev make
-make
-popd
-
-/tmp/appimagetool.AppImage --appimage-extract
-mv /tmp/squashfs-root /tmp/appimagetool_appdir
-mv /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs.orig
-
-cat > /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs <<EOF
-#!/bin/sh
-
-export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}"
-
-# the new version of mksquashfs no longer supports the '-mkfs-fixed-time'
-# argument, so we remove it
-args=\$(echo "\$@" | sed -e 's/-mkfs-fixed-time 0//')
-args=\$(echo "\$@" | sed -e 's/-mkfs-time 0//')
-$(which mksquashfs) \$args
-EOF
-
-chmod +x /tmp/appimagetool_appdir/usr/lib/appimagekit/mksquashfs
-
-popd # leave /tmp
 
 ##################
 # BUILD APPIMAGE #
