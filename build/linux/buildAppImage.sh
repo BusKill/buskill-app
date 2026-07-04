@@ -62,8 +62,11 @@ print_debugging_info () {
 	which python
 	python --version
 	python -m pip list
+	ls -lah /tmp/
 	ls -lah /tmp/kivy_appdir/opt/python*/bin/python*
 	ls -lah "/tmp/kivy_appdir/opt/python3.12/lib/python3.12/site-packages/"
+	ls -lah /tmp/squashfs-root
+	ls -lah /tmp/appimagetool_appdir
 	/tmp/kivy_appdir/opt/python*/bin/python* --version
 	/tmp/kivy_appdir/opt/python*/bin/python* -m pip list
 	dpkg --list --no-pager || dpkg --list # fucking Ubuntu
@@ -469,8 +472,17 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 # create the AppImage from kivy AppDir
 chmod +x ${source_appimagetool_path}
 #${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+ls -lah /tmp/
+ls -lah /tmp/squashfs-root
+ls -lah /tmp/appimagetool_appdir
 ${source_appimagetool_path} --appimage-extract
+ls -lah /tmp/
+ls -lah /tmp/squashfs-root
+ls -lah /tmp/appimagetool_appdir
 mv /tmp/squashfs-root /tmp/appimagetool_appdir
+ls -lah /tmp/
+ls -lah /tmp/squashfs-root
+ls -lah /tmp/appimagetool_appdir
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
