@@ -232,6 +232,7 @@ rm -f /tmp/pyhon.AppImage
 rm -f /tmp/appimagetool.AppImage
 rm -f /tmp/squashfs4.4.tar.gz
 rm -rf /tmp/kivy_appdir
+rm -rf /tmp/appimagetool_appdir
 rm -rf /tmp/squashfs4.4
 
 # We use this python-appimage release as a base for building our own python
@@ -472,6 +473,9 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 # create the AppImage from kivy AppDir
 chmod +x ${source_appimagetool_path}
 #${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+pushd tmp
+rm -rf /tmp/squashfs-root
+rm -rf /tmp/appimagetool_appdir
 ls -lah /tmp/
 ls -lah /tmp/squashfs-root
 ls -lah /tmp/appimagetool_appdir
@@ -483,6 +487,7 @@ mv /tmp/squashfs-root /tmp/appimagetool_appdir
 ls -lah /tmp/
 ls -lah /tmp/squashfs-root
 ls -lah /tmp/appimagetool_appdir
+popd
 /tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
