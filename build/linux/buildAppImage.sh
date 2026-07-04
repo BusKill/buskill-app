@@ -70,6 +70,8 @@ print_debugging_info () {
 	whoami
 	env
 	du -sh dist/*
+	lsmod
+	apt-cache search fuse
 }
 
 ################################################################################
