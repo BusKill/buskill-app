@@ -11,7 +11,7 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2026-06-20
+# Updated: 2026-07-04
 # Version: 1.5
 ################################################################################
 
@@ -227,7 +227,6 @@ rm -f /tmp/pyhon.AppImage
 rm -f /tmp/appimagetool.AppImage
 rm -f /tmp/squashfs4.4.tar.gz
 rm -rf /tmp/kivy_appdir
-rm -rf /tmp/appimagetool_appdir
 rm -rf /tmp/squashfs4.4
 
 # We use this python-appimage release as a base for building our own python
@@ -466,7 +465,7 @@ ${SUDO} chmod 0755 /tmp/kivy_appdir/opt/python*/bin/python*
 mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
-/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
 ########################
