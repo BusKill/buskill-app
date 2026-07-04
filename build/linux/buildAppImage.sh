@@ -471,7 +471,8 @@ ${SUDO} chmod 0755 /tmp/kivy_appdir/opt/python*/bin/python*
 mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
-chmod +x ${source_appimagetool_path}
+cp ${source_appimagetool_path} /tmp/appimagetool.AppImage
+chmod +x /tmp/appimagetool.AppImage
 #${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 pushd /tmp
 rm -rf /tmp/squashfs-root
@@ -479,7 +480,7 @@ rm -rf /tmp/appimagetool_appdir
 ls -lah /tmp/
 ls -lah /tmp/squashfs-root
 ls -lah /tmp/appimagetool_appdir
-${source_appimagetool_path} --appimage-extract
+/tmp/appimagetool.AppImage --appimage-extract
 ls -lah /tmp/
 ls -lah /tmp/squashfs-root
 ls -lah /tmp/appimagetool_appdir
