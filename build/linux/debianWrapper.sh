@@ -10,8 +10,8 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-10-03
-# Updated: 2024-03-17
-# Version: 0.4
+# Updated: 2026-07-04
+# Version: 0.5
 ################################################################################
 
 ############
@@ -86,7 +86,7 @@ fi
 # docker container
 rm -rf /tmp/kivy_appdir
 
-docker run --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" ${DOCKER_IMAGE_NAME} /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
+docker run --privileged --rm --cap-add "NET_ADMIN" -v "`pwd`:/root/buskill-app" -v "/tmp/kivy_appdir:/tmp/kivy_appdir" ${DOCKER_IMAGE_NAME} /bin/bash -c "cd /root/buskill-app && build/linux/buildAppImage.sh"
 
 ###########
 # CLEANUP #
