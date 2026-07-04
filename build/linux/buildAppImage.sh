@@ -465,6 +465,7 @@ ${SUDO} chmod 0755 /tmp/kivy_appdir/opt/python*/bin/python*
 mkdir -p "dist/${ARCHIVE_DIR}"
 
 # create the AppImage from kivy AppDir
+chmod +x ${source_appimagetool_path}
 ${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
