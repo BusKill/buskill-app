@@ -11,7 +11,7 @@ set -x
 #
 # Authors: Michael Altfield <michael@buskill.in>
 # Created: 2020-05-30
-# Updated: 2026-07-04
+# Updated: 2026-07-19
 # Version: 1.5
 ################################################################################
 
@@ -243,10 +243,12 @@ if [[ "$(arch)" == "x86_64" ]]; then
 	# This computer is x86_64; use that arch's AppImage
 	source_appimage_path='build/deps/python3.12.2-cp312-cp312-manylinux2014_x86_64.AppImage'
 	source_appimagetool_path='build/deps/appimagetool-x86_64.AppImage'
+	source_appimagetool_runtime_path='build/deps/runtime-x86_64'
 elif [[ "$(arch)" == "aarch64" ]]; then
 	# This computer is arm64; use that arch's AppImage
 	source_appimage_path='build/deps/python3.12.12-cp312-cp312-manylinux2014_aarch64.AppImage'
 	source_appimagetool_path='build/deps/appimagetool-aarch64.AppImage'
+	source_appimagetool_runtime_path='build/deps/runtime-aarch64'
 else
 	echo "ERROR: Unknown CPU Architecture ($(arch))"
 	exit 1
@@ -474,6 +476,7 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 cp ${source_appimagetool_path} /tmp/appimagetool.AppImage
 chmod +x /tmp/appimagetool.AppImage
 #${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+${source_appimagetool_path} --runtime-file "${source_appimagetool_runtime_path}" --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 pushd /tmp
 rm -rf /tmp/squashfs-root
 rm -rf /tmp/appimagetool_appdir
@@ -489,7 +492,7 @@ ls -lah /tmp/
 ls -lah /tmp/squashfs-root
 ls -lah /tmp/appimagetool_appdir
 popd
-/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+#/tmp/appimagetool_appdir/AppRun --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 sha256sum "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 
 ########################
