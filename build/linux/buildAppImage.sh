@@ -476,7 +476,7 @@ mkdir -p "dist/${ARCHIVE_DIR}"
 cp ${source_appimagetool_path} /tmp/appimagetool.AppImage
 chmod +x /tmp/appimagetool.AppImage
 #${source_appimagetool_path} --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
-${source_appimagetool_path} --runtime-file "${source_appimagetool_runtime_path}" --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
+/tmp/appimagetool.AppImage --runtime-file "${source_appimagetool_runtime_path}" --no-appstream "/tmp/kivy_appdir" "dist/${ARCHIVE_DIR}/${APP_NAME}-${VERSION}.AppImage"
 pushd /tmp
 rm -rf /tmp/squashfs-root
 rm -rf /tmp/appimagetool_appdir
