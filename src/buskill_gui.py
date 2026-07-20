@@ -527,6 +527,16 @@ class DialogConfirmation(ModalView):
 		else:
 			self.b_continue.text = self.button
 
+		# Update fonts after the dialog has been fully built 
+		# Also adding a new debug message to see if it gets updated or not
+		Clock.schedule_once(
+			lambda dt: (
+				print(f"DEBUG: Updating fonts for dialog {self}"),
+				update_font_recursive(self)
+			),
+			0
+		)
+
 class CriticalError(BoxLayout):
 
 	msg = ObjectProperty(None)
