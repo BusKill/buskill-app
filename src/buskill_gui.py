@@ -1416,9 +1416,7 @@ class BusKillApp(App):
 		importlib.reload( kivy.config )
 
 		Config.read( self.bk.CONF_FILE )
-		Config.setdefaults('buskill', {
-		 'buskill_trigger': 'lock-screen',
-		})	
+		Config.setdefaults('buskill', self.bk.DEFAULT_CONF) # For more config option in future, only have to update the DEFAULT_CONF value in __init__.py
 
 		# TODO: don't hard-code this, pull it from kivy/config.py
 		# * https://stackoverflow.com/questions/78216476/how-to-get-kivy-to-set-its-defaults-in-the-config-at-runtime
