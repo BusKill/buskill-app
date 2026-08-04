@@ -224,8 +224,12 @@ autodoc_default_options = {
 ############################
 html_context['display_lower_left'] = True
 
-from git import Repo
-repo = Repo( search_parent_directories=True )
+try:
+    from git import Repo
+    repo = Repo( search_parent_directories=True )
+except ImportError as e:
+    print(f"Warning: {e}. GitPython may not be installed or accessible.")
+    repo = None
 
 if 'current_version' in os.environ:
 	# get the current_version env var set by updatePages.sh
