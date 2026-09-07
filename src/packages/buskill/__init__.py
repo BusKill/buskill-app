@@ -2121,14 +2121,43 @@ class BusKill:
 		# the only reason the SOURCE_DATE_EPOCH would be missing is if we're executing
 		# the python files directly (eg we're testing) and we can just get it from git
 		if BUSKILL_VERSION['SOURCE_DATE_EPOCH'] == '':
-			result = subprocess.run( [
-			 'git',
-			 '--git-dir=/home/user/sandbox/buskill-app/.git',
-			 'log',
-			 '-1',
-			 '--pretty=%ct'
-			], capture_output = True )
-			BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = int( result.stdout )
+			try:
+				# allow override for tests/odd layouts (points at the '.git' dir itself)
+				git_dir = os.environ.get( 'BUSKILL_GIT_DIR', '' )
+				if git_dir != '' and os.path.isdir( os.path.join( git_dir, '.git' ) ):
+					git_dir = os.path.join( git_dir, '.git' )
+				if git_dir == '':
+					# search upwards from this file (src/packages/buskill/__init__.py)
+					# for a '.git' dir (exists() covers worktrees where .git is a file)
+					search_dir = os.path.abspath( os.path.dirname( __file__ ) )
+					while True:
+						candidate = os.path.join( search_dir, '.git' )
+						if os.path.exists( candidate ):
+							git_dir = candidate
+							break
+						parent = os.path.dirname( search_dir )
+						if parent == search_dir:
+							break
+						search_dir = parent
+				if git_dir != '' and os.path.exists( git_dir ):
+					result = subprocess.run( [
+					 'git',
+					 '--git-dir=' +str(git_dir),
+					 'log',
+					 '-1',
+					 '--pretty=%ct'
+					], capture_output = True, timeout = 10 )
+					if result.returncode == 0 and result.stdout:
+						BUSKILL_VERSION['SOURCE_DATE_EPOCH'] = int( result.stdout.strip() )
+					else:
+						msg = 'DEBUG: Unable to determine SOURCE_DATE_EPOCH from git; continuing without it'
+						print( msg ); logger.debug( msg )
+				else:
+					msg = 'DEBUG: Unable to determine SOURCE_DATE_EPOCH from git (.git not found); continuing without it'
+					print( msg ); logger.debug( msg )
+			except Exception as e:
+				msg = 'DEBUG: Unable to determine SOURCE_DATE_EPOCH from git (' +str(e)+ '); continuing without it'
+				print( msg ); logger.debug( msg )
 
 		# check metadata to see if there's a newer version than what we're running
 		latestRelease = metadata['latest']['buskill-app']['stable']
